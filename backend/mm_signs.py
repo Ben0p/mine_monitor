@@ -122,7 +122,8 @@ def restAPI(ip):
     with requests.Session() as session:
         try:
             response = session.get(do_xml, auth=(user, passw), timeout=1)
-            tree = ElementTree.fromstring(response.content)
+            # Placeholder for xml response
+            ElementTree.fromstring(response.content)
             return(True)
         except:
             return(False)
@@ -156,6 +157,7 @@ def saveJSON(signs, fileout):
 
 def getAll(filein, fileout):
     '''
+    Main function
     '''
 
     # Generate array of signs with location and IP
@@ -164,8 +166,9 @@ def getAll(filein, fileout):
     # For each sign...
     for sign in signs:
         # Check if online
-        sign['ONLINE'] = ping(sign['IP'])[0]
-        sign['LATENCY'] = ping(sign['IP'])[1]
+        online = ping(sign['IP'])
+        sign['ONLINE'] = online[0]
+        sign['LATENCY'] = online[1]
         if sign['ONLINE']:
             # Check if REST API available
             sign['REST'] = restAPI(sign['IP'])
