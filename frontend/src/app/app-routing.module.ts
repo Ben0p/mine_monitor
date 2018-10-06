@@ -14,6 +14,10 @@ const routes: Routes = [
     path: 'signs',
     component: SignsComponent
   },
+  {
+    path: 'signs/:ip',
+    component: SignsComponent
+  },
   { 
     path: '**', 
     component: HomeComponent 
