@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 // Components
 import { HomeComponent } from './home/home.component';
 import { SignsComponent } from './signs/signs.component';
+import { SignDetailComponent } from './sign-detail/sign-detail.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,7 @@ const routes: Routes = [
   },
   {
     path: 'signs/:ip',
-    component: SignsComponent
+    component: SignDetailComponent
   },
   { 
     path: '**', 

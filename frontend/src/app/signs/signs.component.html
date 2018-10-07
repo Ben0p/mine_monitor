@@ -1,7 +1,7 @@
 <div class="signs">
   <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
     <div flex-gt-lg="15" *ngFor="let sign of signs$">
-      <mat-card class="card" [style.cursor]="sign.REST ? 'pointer' : 'default' " (click)="!sign.REST || toggle(sign.IP)">
+      <mat-card class="card" routerLink="{{sign.IP}}">
         <mat-card-header>
           <div mat-card-avatar class="header-image"></div>
           <mat-card-title>

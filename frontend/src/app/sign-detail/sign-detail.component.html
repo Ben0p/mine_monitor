@@ -1,0 +1,40 @@
+<p>
+  <br>
+  {{ip}}
+  <br>
+  All Clear: {{outputs.all_clear}}
+  <br>
+  Emergency: {{outputs.emergency}}
+  <br>
+  Lightning: {{outputs.lightning}}
+  <br>
+  A: {{outputs.a}}
+  <br>
+  B: {{outputs.b}}
+  <br>
+  C: {{outputs.c}}
+</p>
+<div>
+  <h2>Set Outputs</h2>
+  <div>
+    <label>All Clear:
+      <input [(ngModel)]="outputStates.all_clear" placeholder="All Clear"/>
+    </label><br>
+    <label>Emergency:
+      <input [(ngModel)]="outputStates.emergency" placeholder="Emergency"/>
+    </label><br>
+    <label>Lightning:
+      <input [(ngModel)]="outputStates.lightning" placeholder="Lightning"/>
+    </label><br>
+    <label>A:
+      <input [(ngModel)]="outputStates.a" placeholder="A"/>
+    </label><br>
+    <label>B:
+      <input [(ngModel)]="outputStates.b" placeholder="B"/>
+    </label><br>
+    <label>C:
+      <input [(ngModel)]="outputStates.c" placeholder="C"/>
+    </label><br>
+  </div>
+  <button (click)="setOutputs()">Send</button>
+</div>

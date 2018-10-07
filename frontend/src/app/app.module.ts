@@ -6,6 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
 
 // Material
 import { MaterialModule } from './material';
@@ -14,6 +15,7 @@ import { MaterialModule } from './material';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { SignsComponent } from './signs/signs.component';
+import { SignDetailComponent } from './sign-detail/sign-detail.component';
 
 
 
@@ -21,7 +23,8 @@ import { SignsComponent } from './signs/signs.component';
   declarations: [
     AppComponent,
     HomeComponent,
-    SignsComponent
+    SignsComponent,
+    SignDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +33,8 @@ import { SignsComponent } from './signs/signs.component';
     MaterialModule,
     FlexLayoutModule,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
