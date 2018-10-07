@@ -11,7 +11,6 @@ import { Router } from '@angular/router';
 export class SignsComponent implements OnInit {
 
   signs$: Object;
-
   interval: any;
 
   constructor(private data: DataService, private router: Router) { }

@@ -1,40 +1,224 @@
-<p>
-  <br>
-  {{ip}}
-  <br>
-  All Clear: {{outputs.all_clear}}
-  <br>
-  Emergency: {{outputs.emergency}}
-  <br>
-  Lightning: {{outputs.lightning}}
-  <br>
-  A: {{outputs.a}}
-  <br>
-  B: {{outputs.b}}
-  <br>
-  C: {{outputs.c}}
-</p>
-<div>
-  <h2>Set Outputs</h2>
-  <div>
-    <label>All Clear:
-      <input [(ngModel)]="outputStates.all_clear" placeholder="All Clear"/>
-    </label><br>
-    <label>Emergency:
-      <input [(ngModel)]="outputStates.emergency" placeholder="Emergency"/>
-    </label><br>
-    <label>Lightning:
-      <input [(ngModel)]="outputStates.lightning" placeholder="Lightning"/>
-    </label><br>
-    <label>A:
-      <input [(ngModel)]="outputStates.a" placeholder="A"/>
-    </label><br>
-    <label>B:
-      <input [(ngModel)]="outputStates.b" placeholder="B"/>
-    </label><br>
-    <label>C:
-      <input [(ngModel)]="outputStates.c" placeholder="C"/>
-    </label><br>
+<div class="signs">
+  <div class="container" fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
+    <div flex-gt-lg="15" *ngFor="let sign of signs$">
+      <div *ngIf="sign.IP == ip">
+        <mat-card class="card">
+          <mat-card-header>
+            <div mat-card-avatar class="header-image"></div>
+            <mat-card-title>
+              <h3>{{ sign.LOCATION }}</h3>
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms - WEB</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <!-- Offline image if offline -->
+            <img class="offline" src="../../assets/img/offline.png" *ngIf="!sign.ONLINE" />
+            <div class="controls" *ngIf="sign.ONLINE">
+              <div>
+                All Clear
+                <br>
+                <mat-slide-toggle [checked]="outputs.all_clear" (change)="onChange($event, 'all_clear')">
+                </mat-slide-toggle>
+              
+                <br>
+                Emergency
+                <br>
+                <mat-slide-toggle [checked]="outputs.emergency" (change)="onChange($event, 'emergency')">
+                </mat-slide-toggle>
+
+                <br>
+                Lightning
+                <br>
+                <mat-slide-toggle [checked]="outputs.lightning" (change)="onChange($event, 'lightning')">
+                </mat-slide-toggle>
+                <br>
+
+                <br>
+                A
+                <mat-slide-toggle [checked]="outputs.a" (change)="onChange($event, 'a')">
+                </mat-slide-toggle>
+                &nbsp;&nbsp;
+
+                B
+                <mat-slide-toggle [checked]="outputs.b" (change)="onChange($event, 'b')">
+                </mat-slide-toggle>
+                &nbsp;&nbsp;
+
+                C
+                <mat-slide-toggle [checked]="outputs.c" (change)="onChange($event, 'c')">
+                </mat-slide-toggle>
+                <br>
+                <br>
+              </div>
+            </div>
+
+            <!-- If a Sign -->
+            <div class="sign" *ngIf="sign.SIGN">
+
+              <table style="width: 227px">
+
+                <tr style="height: 37px">
+                </tr>
+
+                <!-- If ALL_CLEAR is ON -->
+                <tr style="height: 62px" *ngIf="outputs.all_clear; else allClearOff">
+                  <td>
+                    <div class="all_clear_on_left"></div>
+                  </td>
+                  <td></td>
+                  <td>
+                    <div class="all_clear_on_right"></div>
+                  </td>
+                </tr>
+
+                <!-- If ALL_CLEAR is OFF -->
+                <ng-template #allClearOff>
+                  <tr style="height: 62px">
+                    <td>
+                      <div class="all_clear_off_left"></div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="all_clear_off_right"></div>
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <tr style="height: 12px">
+                </tr>
+
+                <!-- If EMERGENCY is ON -->
+                <tr style="height: 67px" *ngIf="outputs.emergency; else emergencyOff">
+                  <td>
+                    <div class="emergency_on_left"></div>
+                  </td>
+                  <td></td>
+                  <td>
+                    <div class="emergency_on_right"></div>
+                  </td>
+                </tr>
+
+                <!-- If EMERGENCY is OFF -->
+                <ng-template #emergencyOff>
+                  <tr style="height: 67px">
+                    <td>
+                      <div class="emergency_off_left"></div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="emergency_off_right"></div>
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <!-- If LIGHTNING is ON -->
+                <tr style="height: 67px;" *ngIf="outputs.lightning; else lightningOff">
+                  <td>
+                    <div class="lightning_on_left"></div>
+                  </td>
+                  <td></td>
+                  <td>
+                    <div class="lightning_on_right"></div>
+                  </td>
+                </tr>
+
+                <!-- If LIGHTNING is OFF -->
+                <ng-template #lightningOff>
+                  <tr style="height: 67px">
+                    <td>
+                      <div class="lightning_off_left"></div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="lightning_off_right"></div>
+                    </td>
+                  </tr>
+                </ng-template>
+
+                <tr style="height: 80px;">
+                  <!-- If A is ON -->
+                  <td style="height: 100px" *ngIf="outputs.a; else AOff">
+                    <div class="A_on"></div>
+                  </td>
+
+                  <!-- If A is OFF -->
+                  <ng-template #AOff>
+                    <td style="height: 100px">
+                      <div class="A_off"></div>
+                    </td>
+                  </ng-template>
+
+                  <!-- If B is ON -->
+                  <td style="height: 100px" *ngIf="outputs.b; else BOff">
+                    <div class="B_on"></div>
+                  </td>
+
+                  <!-- If B is OFF -->
+                  <ng-template #BOff>
+                    <td style="height: 100px">
+                      <div class="B_off"></div>
+                    </td>
+                  </ng-template>
+
+                  <!-- If C is ON -->
+                  <td style="height: 100px" *ngIf="outputs.c; else COff">
+                    <div class="C_on"></div>
+                  </td>
+
+                  <!-- If C is OFF -->
+                  <ng-template #COff>
+                    <td style="height: 100px">
+                      <div class="C_off"></div>
+                    </td>
+                  </ng-template>
+
+                </tr>
+
+              </table>
+            </div>
+            <!-- If a C Alert Beacon-->
+            <table class="calert" *ngIf="sign.CALERT">
+              <tr>
+                <div class="calert_on" *ngIf="outputs.c; else calertOff"></div>
+                <ng-template #calertOff>
+                  <div class="calert_off"></div>
+                </ng-template>
+              </tr>
+            </table>
+
+            <!-- If a Trailer-->
+            <table class="trailer" *ngIf="sign.TRAILER">
+              <tr style="height: 80px;">
+
+                <!-- If B is ON -->
+                <td *ngIf="outputs.b; else TrailerBOff">
+                  <div class="trailer_B_on"></div>
+                </td>
+
+                <!-- If B is OFF -->
+                <ng-template #TrailerBOff>
+                  <td>
+                    <div class="trailer_B_off"></div>
+                  </td>
+                </ng-template>
+
+                <!-- If C is ON -->
+                <td *ngIf="outputs.c; else TrailerCOff">
+                  <div class="trailer_C_on"></div>
+                </td>
+
+                <!-- If C is OFF -->
+                <ng-template #TrailerCOff>
+                  <td>
+                    <div class="trailer_C_off"></div>
+                  </td>
+                </ng-template>
+
+              </tr>
+            </table>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
   </div>
-  <button (click)="setOutputs()">Send</button>
-</div>

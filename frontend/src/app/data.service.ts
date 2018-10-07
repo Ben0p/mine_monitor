@@ -45,15 +45,15 @@ export class DataService {
     }
 
     getSignDetail(ip): Observable<any> {
-        return this.http.get('http://10.20.12.94:5000/sign/' + ip).pipe(
+        return this.http.get('http://10.20.64.253:5000/sign/' + ip).pipe(
             map(this.extractData)
         )
     }
 
     setOutputs (ip, outputs): Observable<any> {
         console.log(outputs);
-        return this.http.post<any>('http://10.20.12.94:5000/sign/' + ip, JSON.stringify(outputs), httpOptions).pipe(
-          tap((outputs) => console.log('Changed outputs on'+ip)),
+        return this.http.post<any>('http://10.20.64.253:5000/sign/' + ip, JSON.stringify(outputs), httpOptions).pipe(
+          tap((outputs) => console.log('Changed outputs on '+ip)),
           catchError(this.handleError<any>('setOutputs'))
         );
       }
