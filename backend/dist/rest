@@ -13,19 +13,23 @@ CORS(app)
 class Signs(Resource):
     def get(self, ip):
         # Get outputs via modbus on GET request
-        c = ModbusClient(host=ip, port=502, auto_open=True)
-        bits = c.read_coils(16, 6)
-        outputs = { 
-            "all_clear" : bits[0],
-            "emergency" : bits[1],
-            "lightning" : bits[2],
-            "a" : bits[3],
-            "b" : bits[4],
-            "c" : bits[5]
+        c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+        try:
+            bits = c.read_coils(16, 6)
+            outputs = { 
+                "all_clear" : bits[0],
+                "emergency" : bits[1],
+                "lightning" : bits[2],
+                "a" : bits[3],
+                "b" : bits[4],
+                "c" : bits[5]
             }
 
-        # Return a json response
-        return(jsonify(outputs))
+            # Return a json response
+            return(jsonify(outputs))
+        except:
+            return(False,404)
+
 
     def post(self, ip):
         # Parse the form data
