@@ -1,0 +1,58 @@
+.trucks:before {
+    content: "";
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    background: url("../../assets/img/trucks.jpg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+.trucks {
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+  
+.container {
+    margin: -6px;
+ }
+
+ .container > * {
+   margin: 6px;
+ }
+
+ .truck {
+   overflow-x: hidden;
+   width: 150px;
+   height: 70px;
+   padding: 0px;
+   cursor: pointer;
+ }
+
+ .truck-on {
+    background-color: mediumseagreen;
+ }
+
+ .truck-off {
+    background-color: slategray;
+ }
+
+ .truck-fail {
+    background-color: salmon;
+ }
+
+ mat-card-content {
+     text-align: center;
+ }
+
+ .header-image {
+  background-size: cover;
+}
