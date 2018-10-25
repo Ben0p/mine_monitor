@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SignsComponent } from './signs/signs.component';
 import { SignDetailComponent } from './sign-detail/sign-detail.component';
+import { TrucksComponent } from './trucks/trucks.component';
 
 const routes: Routes = [
   {
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'signs/:ip',
     component: SignDetailComponent
+  },
+  {
+    path: 'trucks',
+    component: TrucksComponent
   },
   { 
     path: '**', 
