@@ -8,13 +8,15 @@ import requests
 import utm
 from multiprocessing import Pool
 
+'''
+Loads IP addresses from trucks.json, gets latencies and scrapes the xim for data.
+Currently unable to get TropOS data
+Returns a json
+'''
 
 
-truckArray = json.load(open('trucks.json'))
-
-
-def getData(name):
-    for truck in truckArray:
+def getData(name, trucksArray):
+    for truck in trucksArray:
         if truck['name'] == name:
             truckInfo = truck
 
@@ -24,20 +26,31 @@ def getData(name):
     fiveOnline, fiveLatency = ping(truckInfo['5.0'])
     twoOnline, twoLatency = ping(truckInfo['2.4'])
 
-    if all([twoOnline, ximOnline, screenOnline]):
+    hardware = [twoOnline, ximOnline, screenOnline]
+    if all(hardware):
         allOnline = True
-    else:
+        allOffline = False
+        somethingOffline = False
+    elif any(hardware) and not all(hardware):
         allOnline = False
+        allOffline = False
+        somethingOffline = True
+    elif not all(hardware):
+        allOnline = False
+        allOffline = True
+        somethingOffline = False
 
     truckData = {
         'name' : name,
         'allOnline' : allOnline,
+        'allOffline' : allOffline,
+        'somethingOffline' : somethingOffline,
         'ximOnline' : ximOnline,
         'ximLatency' : ximLatency,
         'screenOnline' : screenOnline,
         'screenLatency' : screenLatency,
-        'ms952Online' : ms952Online,
-        'ms952Latency' : ms952Latency,
+        'ms352Online' : ms952Online,
+        'ms352Latency' : ms952Latency,
         'fiveOnline' : fiveOnline,
         'fiveLatency' : fiveLatency,
         'twoOnline' : twoOnline,
@@ -59,35 +72,38 @@ def scrapeXim(ip):
     utmnum = 50
     utmlet = 'K'
 
-    resp = requests.get(url, timeout=1)
-    soup = bs.BeautifulSoup(resp.text, 'lxml')
+    try:
+        resp = requests.get(url, timeout=1)
+        soup = bs.BeautifulSoup(resp.text, 'lxml')
 
-    easting = soup.find("td", text='Easting (m):').find_next_sibling('td').text
-    northing = soup.find("td", text='Northing (m):').find_next_sibling('td').text
-    latlon = utm.to_latlon(float(easting),float(northing),utmnum,utmlet)
+        easting = soup.find("td", text='Easting (m):').find_next_sibling('td').text
+        northing = soup.find("td", text='Northing (m):').find_next_sibling('td').text
+        latlon = utm.to_latlon(float(easting),float(northing),utmnum,utmlet)
 
-    ximinfo = {
-        'device' : soup.find("td", text='Device ID:').find_next_sibling('td').text,
-        'elevation' : soup.find("td", text='Elevation (m):').find_next_sibling('td').text,
-        'uptime' : soup.find("td", text='Uptime Hours:').find_next_sibling('td').text,
-        'one' : soup.find("td", text='Availability (1 Min.):').find_next_sibling('td').text,
-        'ten' : soup.find("td", text='Availability (10 Min.):').find_next_sibling('td').text,
-        'sixty' : soup.find("td", text='Availability (60 Min.):').find_next_sibling('td').text,
-        'satellites' : soup.find("td", text='Satellite Count:').find_next_sibling('td').text,
-        'vims' : soup.find("td", text='VIMS Communication Established:').find_next_sibling('td').text,
-        'version' : soup.find("td", text='VIMS Source Version: ').find_next_sibling('td').text,
-        'lat' : latlon[0],
-        'lon' : latlon[1],
-    }
-
-
-    return(ximinfo)
+        ximinfo = {
+            'device' : soup.find("td", text='Device ID:').find_next_sibling('td').text,
+            'elevation' : soup.find("td", text='Elevation (m):').find_next_sibling('td').text,
+            'uptime' : soup.find("td", text='Uptime Hours:').find_next_sibling('td').text,
+            'one' : soup.find("td", text='Availability (1 Min.):').find_next_sibling('td').text,
+            'ten' : soup.find("td", text='Availability (10 Min.):').find_next_sibling('td').text,
+            'sixty' : soup.find("td", text='Availability (60 Min.):').find_next_sibling('td').text,
+            'satellites' : soup.find("td", text='Satellite Count:').find_next_sibling('td').text,
+            'vims' : soup.find("td", text='VIMS Communication Established:').find_next_sibling('td').text,
+            'version' : soup.find("td", text='VIMS Source Version: ').find_next_sibling('td').text,
+            'lat' : latlon[0],
+            'lon' : latlon[1],
+        }
+        return(ximinfo)
+    except requests.exceptions.Timeout:
+        print("Timeout occurred")
+    
 
 
 def ping(host):
     """
     Returns True and latency if host responds to a ping request
     """
+    print('Pinging {}'.format(host))
     if platform.system().lower()=="windows":
 
         try:
@@ -119,22 +135,32 @@ def ping(host):
 
 
 
-def main():
+def main(trucks_file, json_file):
     '''
     Main
     '''
-
+    truckArray = json.load(open(trucks_file))
     truckData = []
     how_many = len(truckArray)
     p = Pool(processes=how_many)
-    results = [p.apply_async(getData, args=(truck['name'],)) for truck in truckArray]
+    results = [p.apply_async(getData, args=(truck['name'], truckArray,)) for truck in truckArray]
     output = [p.get() for p in results]
-    for result in output:
-        truckData.append(json.loads(json.dumps(result)))
-    print(truckData)
-
-  
-
+    for truck in output:
+        truckData.append(json.loads(truck))
+    truckData = json.dumps(truckData, indent=4)
+    with open(json_file, 'w') as f:
+        f.write(truckData)
+        f.close
 
 if __name__ == '__main__':
-    main()
+
+    if platform.system().lower()=="windows":
+        # Testing file location
+        trucks_file = './trucks.json'
+        json_file = '../frontend/src/assets/json/trucks.json'
+    else:
+        # Linux productin file locations
+        trucks_file = '/home/minesys/Desktop/trucks.json'
+        json_file = '/usr/share/nginx/html/assets/json/trucks.json'
+
+    main(trucks_file, json_file)
