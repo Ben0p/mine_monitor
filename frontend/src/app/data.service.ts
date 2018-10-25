@@ -50,6 +50,10 @@ export class DataService {
         )
     }
 
+    getTrucks() {
+      return this.http.get('/assets/json/trucks.json');
+  }
+
     setOutputs (ip, outputs): Observable<any> {
         console.log(outputs);
         return this.http.post<any>('http://10.20.64.253:5000/sign/' + ip, JSON.stringify(outputs), httpOptions).pipe(

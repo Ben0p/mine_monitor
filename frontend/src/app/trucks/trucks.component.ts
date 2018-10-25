@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-trucks',
@@ -7,9 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrucksComponent implements OnInit {
 
-  constructor() { }
+  trucks$: Object;
+  interval: any;
+
+  constructor(private data: DataService) { }
 
   ngOnInit() {
+    this.refreshData();
+    this.interval = setInterval(() => { 
+      this.refreshData(); 
+    }, 5000);
+  }
+
+  refreshData() {
+    this.data.getTrucks().subscribe(
+      data => this.trucks$ = data
+    );
   }
 
 }
