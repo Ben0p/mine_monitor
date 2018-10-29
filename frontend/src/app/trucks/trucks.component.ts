@@ -21,6 +21,10 @@ export class TrucksComponent implements OnInit {
     }, 1000);
   }
 
+  ngOnDestroy() {
+    clearInterval(this.interval);
+  }
+
   refreshData() {
 
     this.data.getTrucks()

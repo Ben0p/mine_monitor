@@ -17,7 +17,20 @@ client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
 db = client['minemonitor']
 
 
-class Signs(Resource):
+
+class alert(Resource):
+    def get(self):
+        # Get all sign data from the signs collection in mongo
+        alerts = db['alert'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(alert))))
+        except:
+            return(False,404)
+
+
+class alert_detail(Resource):
     def get(self, ip):
         # Get outputs via modbus on GET request
         c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
@@ -63,7 +76,7 @@ class Signs(Resource):
 
         return(bits, 201)
 
-class Fleet(Resource):
+class fleet(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
         pings = db['pings'].find()
@@ -75,8 +88,10 @@ class Fleet(Resource):
             return(False,404)
 
 
-# Add signs url, map to Signs class
-api.add_resource(Signs, "/sign/<string:ip>")
-api.add_resource(Fleet, "/fleet")
+# Map URL's to resource classes
+api.add_resource(alert, "/alert")
+api.add_resource(alert_detail, "/alert/<string:ip>")
+api.add_resource(fleet, "/fleet")
+
 # Run flask
 app.run(debug=True, host='0.0.0.0')
