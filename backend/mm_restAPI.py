@@ -87,11 +87,23 @@ class fleet(Resource):
         except:
             return(False,404)
 
+class fleet_detail(Resource):
+    def get(self, name):
+        # Get document with name
+        fleet_data = db['fleet_data'].find({'name' : name})
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(fleet_data))))
+        except:
+            return(False,404)
+
 
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
 api.add_resource(alert_detail, "/alert/<string:ip>")
 api.add_resource(fleet, "/fleet")
+api.add_resource(fleet_detail, "/fleet/<string:name>")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

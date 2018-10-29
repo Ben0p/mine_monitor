@@ -17,6 +17,7 @@ import { HomeComponent } from './home/home.component';
 import { SignsComponent } from './signs/signs.component';
 import { SignDetailComponent } from './sign-detail/sign-detail.component';
 import { TrucksComponent } from './trucks/trucks.component';
+import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
 
 
 
@@ -26,7 +27,8 @@ import { TrucksComponent } from './trucks/trucks.component';
     HomeComponent,
     SignsComponent,
     SignDetailComponent,
-    TrucksComponent
+    TrucksComponent,
+    FleetDetailComponent
   ],
   imports: [
     BrowserModule,
