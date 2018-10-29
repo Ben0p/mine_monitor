@@ -6,6 +6,7 @@ import { HomeComponent } from './home/home.component';
 import { SignsComponent } from './signs/signs.component';
 import { SignDetailComponent } from './sign-detail/sign-detail.component';
 import { TrucksComponent } from './trucks/trucks.component';
+import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
 
 const routes: Routes = [
   {
@@ -21,8 +22,12 @@ const routes: Routes = [
     component: SignDetailComponent
   },
   {
-    path: 'trucks',
+    path: 'fleet',
     component: TrucksComponent
+  },
+  {
+    path: 'fleet/:name',
+    component: FleetDetailComponent
   },
   { 
     path: '**', 
