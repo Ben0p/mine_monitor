@@ -1,3 +1,20 @@
-<p>
-  fleet-detail works!
-</p>
+<div class="fleet">
+  <div class="container" fxLayout="column" fxLayoutAlign="center center">
+    <div flex-gt-lg="15" *ngFor="let sign of signs$">
+      <div *ngIf="sign.IP == ip">
+        <mat-card class="card">
+          <mat-card-header>
+            <div mat-card-avatar class="header-image"></div>
+            <mat-card-title>
+              <h3>{{ sign.LOCATION }}</h3>
+            </mat-card-title>
+            <mat-card-subtitle *ngIf="sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms - WEB</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            Card Content
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>

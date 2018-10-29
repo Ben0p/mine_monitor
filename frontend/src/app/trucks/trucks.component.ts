@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from '../data.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { DataService } from '../data.service';
   templateUrl: './trucks.component.html',
   styleUrls: ['./trucks.component.scss']
 })
-export class TrucksComponent implements OnInit {
+export class TrucksComponent implements OnInit, OnDestroy {
 
   trucks$: any = [];
   interval: any;

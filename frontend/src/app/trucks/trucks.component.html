@@ -1,7 +1,7 @@
 <div class="trucks">
   <div class="container" fxLayout="row wrap" fxLayoutAlign="center" >
     <div flex-gt-lg="15" *ngFor="let truck of trucks$">
-      <mat-card class="truck" [ngClass]="{
+      <mat-card class="truck" routerLink="{{truck.name}}" [ngClass]="{
         'truck-on': truck.ximOnline && truck.twoOnline && truck.screenOnline, 
         'truck-off': !truck.ximOnline && !truck.twoOnline && !truck.screenOnline, 
         'truck-fail': somethingOffline(truck.ximOnline, truck.twoOnline, truck.screenOnline)
