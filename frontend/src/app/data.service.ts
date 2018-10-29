@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
-import { Sign } from './sign.model';
 
 const httpOptions = {
     headers: new HttpHeaders({
@@ -50,8 +49,10 @@ export class DataService {
         )
     }
 
-    getTrucks() {
-      return this.http.get('/assets/json/trucks.json');
+    getTrucks(): Observable<any> {
+      return this.http.get('http://localhost:5000/fleet').pipe(
+          map(this.extractData)
+      )
   }
 
     setOutputs (ip, outputs): Observable<any> {

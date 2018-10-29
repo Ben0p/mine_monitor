@@ -1,16 +1,32 @@
 <div class="trucks">
-  <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
+  <div class="container" fxLayout="row wrap" fxLayoutAlign="center" >
     <div flex-gt-lg="15" *ngFor="let truck of trucks$">
-      <mat-card class="truck" [ngClass]="{'truck-on': truck.allOnline, 'truck-off': truck.allOffline, 'truck-fail': truck.somethingOffline}">
+      <mat-card class="truck" [ngClass]="{
+        'truck-on': truck.ximOnline && truck.twoOnline && truck.screenOnline, 
+        'truck-off': !truck.ximOnline && !truck.twoOnline && !truck.screenOnline, 
+        'truck-fail': somethingOffline(truck.ximOnline, truck.twoOnline, truck.screenOnline)
+      }">
         <mat-card-header>
-          <div mat-card-avatar class="header-image"></div>
           <mat-card-title>
             <h3>{{ truck.name }}</h3>
           </mat-card-title>
           <mat-card-subtitle></mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          {{ truck.twoLatency }}ms
+          <table style="margin: auto; text-align: left;">
+            <tr>
+              <td>TropOS</td>
+              <td>{{ truck.twoLatency }}ms</td>
+            </tr>
+            <tr>
+              <td>xIM</td>
+              <td>{{ truck.ximLatency }}ms</td>
+            </tr>
+            <tr>
+              <td>Sreen</td>
+              <td>{{ truck.screenLatency }}ms</td>
+            </tr>
+          </table>
         </mat-card-content>
       </mat-card>
     </div>

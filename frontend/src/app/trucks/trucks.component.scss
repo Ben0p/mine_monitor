@@ -30,11 +30,12 @@
  }
 
  .truck {
-   overflow-x: hidden;
-   width: 150px;
-   height: 70px;
-   padding: 0px;
-   cursor: pointer;
+    overflow-x: hidden;
+    width: 130px;
+    height: 130px;
+    padding: 0px;
+    border-radius: 25px;
+    cursor: pointer;
  }
 
  .truck-on {
@@ -50,6 +51,11 @@
  }
 
  mat-card-content {
+     text-align: center;
+ }
+
+ mat-card-title {
+     width: 110px;
      text-align: center;
  }
 

@@ -57,46 +57,10 @@ def getData(name, trucksArray):
         'twoLatency' : twoLatency
     }
 
-    if ximOnline:
-        ximInfo = scrapeXim(truckInfo['xim'])
-        truckData.update(ximInfo)
     
 
     truckJson = json.dumps(truckData)
     return(truckJson)
-
-
-def scrapeXim(ip):
-    url = ''.join(['http://', ip, ':3785/getinfocore'])
-
-    utmnum = 50
-    utmlet = 'K'
-
-    try:
-        resp = requests.get(url, timeout=1)
-        soup = bs.BeautifulSoup(resp.text, 'lxml')
-
-        easting = soup.find("td", text='Easting (m):').find_next_sibling('td').text
-        northing = soup.find("td", text='Northing (m):').find_next_sibling('td').text
-        latlon = utm.to_latlon(float(easting),float(northing),utmnum,utmlet)
-
-        ximinfo = {
-            'device' : soup.find("td", text='Device ID:').find_next_sibling('td').text,
-            'elevation' : soup.find("td", text='Elevation (m):').find_next_sibling('td').text,
-            'uptime' : soup.find("td", text='Uptime Hours:').find_next_sibling('td').text,
-            'one' : soup.find("td", text='Availability (1 Min.):').find_next_sibling('td').text,
-            'ten' : soup.find("td", text='Availability (10 Min.):').find_next_sibling('td').text,
-            'sixty' : soup.find("td", text='Availability (60 Min.):').find_next_sibling('td').text,
-            'satellites' : soup.find("td", text='Satellite Count:').find_next_sibling('td').text,
-            'vims' : soup.find("td", text='VIMS Communication Established:').find_next_sibling('td').text,
-            'version' : soup.find("td", text='VIMS Source Version: ').find_next_sibling('td').text,
-            'lat' : latlon[0],
-            'lon' : latlon[1],
-        }
-        return(ximinfo)
-    except requests.exceptions.Timeout:
-        print("Timeout occurred")
-    
 
 
 def ping(host):
@@ -119,6 +83,10 @@ def ping(host):
         except subprocess.CalledProcessError:
             latency = 999
             result = False
+        except IndexError:
+            latency = 999
+            result = False    
+
     else:
         try:
             response = subprocess.check_output(
@@ -139,18 +107,24 @@ def main(trucks_file, json_file):
     '''
     Main
     '''
-    truckArray = json.load(open(trucks_file))
-    truckData = []
-    how_many = len(truckArray)
-    p = Pool(processes=how_many)
-    results = [p.apply_async(getData, args=(truck['name'], truckArray,)) for truck in truckArray]
-    output = [p.get() for p in results]
-    for truck in output:
-        truckData.append(json.loads(truck))
-    truckData = json.dumps(truckData, indent=4)
-    with open(json_file, 'w') as f:
-        f.write(truckData)
-        f.close
+    while True:
+        truckArray = json.load(open(trucks_file))
+        truckData = []
+        how_many = len(truckArray)
+        p = Pool(processes=how_many)
+        results = [p.apply_async(getData, args=(truck['name'], truckArray,)) for truck in truckArray]
+        output = [p.get() for p in results]
+        p.close()
+        p.join()
+
+        for truck in output:
+            truckData.append(json.loads(truck))
+        truckData = json.dumps(truckData, indent=4)
+        with open(json_file, 'w') as f:
+            f.write(truckData)
+            f.close
+        print('Sleeping for 30 sec')
+        time.sleep(30)
 
 if __name__ == '__main__':
 
