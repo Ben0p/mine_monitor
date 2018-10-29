@@ -3,11 +3,18 @@ from flask import Flask, jsonify
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
 from flask_cors import CORS
+import pymongo
+from bson.json_util import dumps
+import json
 
 # Initialize flask
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
+
+# Initialize mongo
+client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
+db = client['minemonitor']
 
 
 class Signs(Resource):
@@ -56,39 +63,20 @@ class Signs(Resource):
 
         return(bits, 201)
 
-    def put(self, name):
-        '''
-        Not in use, placeholder
-        '''
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
+class Fleet(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        pings = db['pings'].find()
 
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(pings))))
+        except:
+            return(False,404)
 
-        for user in users:
-            if(name == user["name"]):
-                user["age"] = args["age"]
-                user["occupation"] = args["occupation"]
-                return(user, 200)
-        
-        user = {
-            "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
-        }
-        users.append(user)
-        return(user, 201)
-    
-    def delete(self, name):
-        '''
-        Not in use, placeholder
-        '''
-        global users
-        users = [user for user in users if user["name"] != name]
-        return("{} is deleted.".format(name), 200)
 
 # Add signs url, map to Signs class
 api.add_resource(Signs, "/sign/<string:ip>")
+api.add_resource(Fleet, "/fleet")
 # Run flask
 app.run(debug=True, host='0.0.0.0')
