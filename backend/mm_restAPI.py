@@ -25,7 +25,7 @@ class alert(Resource):
 
         # Return collection as a massive json
         try:
-            return(jsonify(json.loads(dumps(alert))))
+            return(jsonify(json.loads(dumps(alerts))))
         except:
             return(False,404)
 
@@ -79,11 +79,11 @@ class alert_detail(Resource):
 class fleet(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
-        pings = db['pings'].find()
+        fleet_data = db['fleet_data'].find()
 
         # Return collection as a massive json
         try:
-            return(jsonify(json.loads(dumps(pings))))
+            return(jsonify(json.loads(dumps(fleet_data))))
         except:
             return(False,404)
 
