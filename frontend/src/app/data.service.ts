@@ -56,7 +56,7 @@ export class DataService {
   }
 
   fleetDetail(name): Observable<any> {
-    return this.http.get('http://localhost:5000/fleet' + name).pipe(
+    return this.http.get('http://localhost:5000/fleet/' + name).pipe(
       map(this.extractData)
     )
   }

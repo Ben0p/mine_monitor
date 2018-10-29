@@ -1,18 +1,83 @@
 <div class="fleet">
-  <div class="container" fxLayout="column" fxLayoutAlign="center center">
-    <div flex-gt-lg="15" *ngFor="let sign of signs$">
-      <div *ngIf="sign.IP == ip">
-        <mat-card class="card">
+  <div class="container" fxLayout="row wrap" fxLayoutAlign="center">
+    <div flex-gt-lg="15">
+      <div *ngFor="let fleet of fleet$">
+        <mat-card class="fleet-card" [ngClass]="{
+          'truck-on': fleet.ximOnline && fleet.twoOnline && fleet.screenOnline, 
+          'truck-off': !fleet.ximOnline && !fleet.twoOnline && !fleet.screenOnline, 
+          'truck-fail': somethingOffline(fleet.ximOnline, fleet.twoOnline, fleet.screenOnline)
+        }">
           <mat-card-header>
-            <div mat-card-avatar class="header-image"></div>
             <mat-card-title>
-              <h3>{{ sign.LOCATION }}</h3>
+              <h3>{{ fleet.name }}</h3>
             </mat-card-title>
-            <mat-card-subtitle *ngIf="sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms - WEB</mat-card-subtitle>
-            <mat-card-subtitle *ngIf="!sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms</mat-card-subtitle>
           </mat-card-header>
-          <mat-card-content>
-            Card Content
+          <mat-card-content class="devices">
+            <mat-card class="device" [ngClass]="{
+              'device-on': fleet.twoOnline, 
+              'device-off': !fleet.twoOnline
+            }">
+              <mat-card-header>
+                <mat-card-title>
+                  <h4>TropOS 2.4ghz</h4>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{fleet.twoLatency}} ms
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="device" [ngClass]="{
+              'device-on': fleet.fiveOnline, 
+              'device-off': !fleet.fiveOnline
+            }">
+              <mat-card-header>
+                <mat-card-title>
+                  <h4>TropOS 5ghz</h4>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{fleet.fiveLatency}} ms
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="device" [ngClass]="{
+              'device-on': fleet.ximOnline, 
+              'device-off': !fleet.ximOnline
+            }">
+              <mat-card-header>
+                <mat-card-title>
+                  <h4>xIM</h4>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{fleet.ximLatency}} ms
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="device" [ngClass]="{
+              'device-on': fleet.screenOnline, 
+              'device-off': !fleet.screenOnline
+            }">
+              <mat-card-header>
+                <mat-card-title>
+                  <h4>Screen</h4>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{fleet.screenLatency}} ms
+              </mat-card-content>
+            </mat-card>
+            <mat-card class="device" [ngClass]="{
+              'device-on': fleet.ms352Online, 
+              'device-off': !fleet.ms352Online
+            }">
+              <mat-card-header>
+                <mat-card-title>
+                  <h4>MS352</h4>
+                </mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                {{fleet.ms352Latency}} ms
+              </mat-card-content>
+            </mat-card>
           </mat-card-content>
         </mat-card>
       </div>

@@ -14,6 +14,7 @@ export class FleetDetailComponent implements OnInit, OnDestroy {
 
   fleet$: Object;
   interval: any;
+  count: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -40,6 +41,15 @@ export class FleetDetailComponent implements OnInit, OnDestroy {
       .subscribe((data: {}) => {
         this.fleet$ = data;
       })
+  }
+
+  somethingOffline(xim, two, screen) {
+    this.count = [xim, two, screen].filter(Boolean).length
+    if (this.count > 0 && this.count < 3) {
+      return (true);
+    } else {
+      return (false)
+    }
   }
 
 
