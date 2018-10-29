@@ -3,14 +3,34 @@ from flask import Flask, jsonify
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
 from flask_cors import CORS
+import pymongo
+from bson.json_util import dumps
+import json
 
 # Initialize flask
 app = Flask(__name__)
 api = Api(app)
 CORS(app)
 
+# Initialize mongo
+client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
+db = client['minemonitor']
 
-class Signs(Resource):
+
+
+class alert(Resource):
+    def get(self):
+        # Get all sign data from the signs collection in mongo
+        alerts = db['alert'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(alerts))))
+        except:
+            return(False,404)
+
+
+class alert_detail(Resource):
     def get(self, ip):
         # Get outputs via modbus on GET request
         c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
@@ -56,39 +76,34 @@ class Signs(Resource):
 
         return(bits, 201)
 
-    def put(self, name):
-        '''
-        Not in use, placeholder
-        '''
-        parser = reqparse.RequestParser()
-        parser.add_argument("age")
-        parser.add_argument("occupation")
-        args = parser.parse_args()
+class fleet(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        fleet_data = db['fleet_data'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(fleet_data))))
+        except:
+            return(False,404)
+
+class fleet_detail(Resource):
+    def get(self, name):
+        # Get document with name
+        fleet_data = db['fleet_data'].find({'name' : name})
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(fleet_data))))
+        except:
+            return(False,404)
 
 
-        for user in users:
-            if(name == user["name"]):
-                user["age"] = args["age"]
-                user["occupation"] = args["occupation"]
-                return(user, 200)
-        
-        user = {
-            "name": name,
-            "age": args["age"],
-            "occupation": args["occupation"]
-        }
-        users.append(user)
-        return(user, 201)
-    
-    def delete(self, name):
-        '''
-        Not in use, placeholder
-        '''
-        global users
-        users = [user for user in users if user["name"] != name]
-        return("{} is deleted.".format(name), 200)
+# Map URL's to resource classes
+api.add_resource(alert, "/sign")
+api.add_resource(alert_detail, "/sign/<string:ip>")
+api.add_resource(fleet, "/fleet")
+api.add_resource(fleet_detail, "/fleet/<string:name>")
 
-# Add signs url, map to Signs class
-api.add_resource(Signs, "/sign/<string:ip>")
 # Run flask
 app.run(debug=True, host='0.0.0.0')

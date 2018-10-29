@@ -100,8 +100,8 @@ class fleet_detail(Resource):
 
 
 # Map URL's to resource classes
-api.add_resource(alert, "/alert")
-api.add_resource(alert_detail, "/alert/<string:ip>")
+api.add_resource(alert, "/sign")
+api.add_resource(alert_detail, "/sign/<string:ip>")
 api.add_resource(fleet, "/fleet")
 api.add_resource(fleet_detail, "/fleet/<string:name>")
 
