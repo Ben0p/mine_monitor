@@ -7,6 +7,10 @@ import { SignsComponent } from './signs/signs.component';
 import { SignDetailComponent } from './sign-detail/sign-detail.component';
 import { TrucksComponent } from './trucks/trucks.component';
 import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
+import { LoginComponent } from './login/login.component';
+
+// Auth
+import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,7 +23,8 @@ const routes: Routes = [
   },
   {
     path: 'signs/:ip',
-    component: SignDetailComponent
+    component: SignDetailComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'fleet',
@@ -28,6 +33,10 @@ const routes: Routes = [
   {
     path: 'fleet/:name',
     component: FleetDetailComponent
+  },
+  { 
+    path: 'login',
+    component: LoginComponent 
   },
   { 
     path: '**', 
