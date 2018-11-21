@@ -8,6 +8,6 @@ export class UserService {
     constructor(private http: HttpClient) { }
 
     getAll() {
-        return this.http.get<User[]>(`${config.apiUrl}/users`);
+        return this.http.get<User[]>(`localhost:4000/users/authenticate/users`);
     }
 }
