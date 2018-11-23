@@ -11,6 +11,7 @@ import { MatNativeDateModule } from '@angular/material';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Forms
 import { MatRadioModule } from '@angular/material/radio';
@@ -43,7 +44,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSelectModule,
         MatSliderModule,
         MatTabsModule,
-        MatInputModule
+        MatInputModule,
+        MatProgressSpinnerModule
     ],
     exports: [
         MatButtonModule,
@@ -65,7 +67,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatSelectModule,
         MatSliderModule,
         MatTabsModule,
-        MatInputModule
+        MatInputModule,
+        MatProgressSpinnerModule
     ]
 })
 
