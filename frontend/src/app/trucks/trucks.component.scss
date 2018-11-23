@@ -39,15 +39,15 @@
  }
 
  .truck-on {
-    background-color: mediumseagreen;
+    background-color: rgb(150, 255, 150);
  }
 
  .truck-off {
-    background-color: slategray;
+    background-color: rgb(150, 150, 150);
  }
 
  .truck-fail {
-    background-color: salmon;
+    background-color: rgb(255, 150, 150);
  }
 
  mat-card-content {
@@ -55,7 +55,7 @@
  }
 
  mat-card-title {
-     width: 110px;
+     width: 100px;
      text-align: center;
  }
 
