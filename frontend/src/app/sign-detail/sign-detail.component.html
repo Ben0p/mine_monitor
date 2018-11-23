@@ -1,5 +1,13 @@
 <div class="signs">
   <div class="container" fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
+    <div flex-gt-lg="15">
+      <button mat-raised-button class="link_back" routerLink="/signs">
+        <h3>Back</h3>
+      </button>
+      <button mat-raised-button class="link_home" routerLink="/home">
+        <h3> Home</h3>
+      </button>
+    </div>
     <div flex-gt-lg="15" *ngFor="let sign of signs$">
       <div *ngIf="sign.IP == ip">
         <mat-card class="card">
@@ -20,7 +28,7 @@
                 <br>
                 <mat-slide-toggle [checked]="outputs.all_clear" (change)="onChange($event, 'all_clear')">
                 </mat-slide-toggle>
-              
+
                 <br>
                 Emergency
                 <br>

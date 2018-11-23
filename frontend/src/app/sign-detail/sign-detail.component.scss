@@ -34,9 +34,9 @@
    width: 260px;
    padding: 0px;
    position: absolute;
-   top: 10px;
+   top: 90px;
    left: 50%;
-   margin-left: -130px;
+   margin-left: -135px;
  }
 
  .header-image {
@@ -55,6 +55,15 @@
     height: 390px;
     margin: auto;
 }
+
+.link_back {
+    margin-right: 30px;
+    width: 100px;
+ }
+ 
+ .link_home {
+    width: 100px;
+ }
 
 td {
     text-align: center;
