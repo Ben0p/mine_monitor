@@ -1,25 +1,8 @@
 <div class="signs">
   <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
-    <div flex-gt-lg="15">
-      <mat-card class="button_card" >
-        <button mat-raised-button class="link_home" color="primary" routerLink="/home">
-          <h3> Home</h3>
-        </button>
-        <button *ngIf="!signedIn" mat-raised-button class="link_login" color="primary" [routerLink]="['/login']" [queryParams]="{returnUrl: '/signs'}">
-          <h3> Login </h3>
-        </button>
-        <button *ngIf="signedIn" mat-raised-button class="link_login" color="primary" (click)="logout()">
-          <h3> Logout </h3>
-        </button>
-        <button mat-raised-button class="add_sign" color="primary" [disabled]="true">
-            <h3> Add / Remove </h3>
-          </button>
-      </mat-card>
-    </div>
     <div flex-gt-lg="15" *ngFor="let sign of signs$">
       <mat-card class="card" routerLink="{{sign.IP}}">
         <mat-card-header>
-          <div mat-card-avatar class="header-image"></div>
           <mat-card-title>
             <h3>{{ sign.LOCATION }}</h3>
           </mat-card-title>

@@ -1,1 +1,12 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>
+            <button mat-raised-button routerLink="/home">home</button>
+            <span *ngIf="firstPath">&nbsp;/&nbsp;</span>
+            <button mat-raised-button *ngIf="firstPath" routerLink="/{{firstPath}}">{{firstPath}}</button>
+            <span *ngIf="secondPath">&nbsp;/&nbsp;</span>
+            <button mat-raised-button *ngIf="secondPath" routerLink="/{{firstPath}}/{{secondPath}}">{{secondPath}}</button>
+        </span>
+    </mat-toolbar-row>
+</mat-toolbar>
 <router-outlet></router-outlet>

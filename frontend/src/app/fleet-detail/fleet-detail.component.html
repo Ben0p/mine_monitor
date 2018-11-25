@@ -1,14 +1,6 @@
 <div class="fleet">
   <div class="container" fxLayout="column" fxLayoutAlign="space-around center">
     <div flex-gt-lg="15">
-      <button mat-raised-button class="link_back" routerLink="/fleet">
-        <h3>Back</h3>
-      </button>
-      <button mat-raised-button class="link_home" routerLink="/home">
-        <h3> Home</h3>
-      </button>
-    </div>
-    <div flex-gt-lg="15">
       <div *ngFor="let fleet of fleet$">
         <mat-card class="fleet-card" [ngClass]="{
           'truck-on': fleet.ximOnline && fleet.twoOnline && fleet.screenOnline, 

@@ -18,11 +18,11 @@ const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'signs',
+    path: 'alerts',
     component: SignsComponent
   },
   {
-    path: 'signs/:ip',
+    path: 'alerts/:ip',
     component: SignDetailComponent,
     canActivate: [AuthGuard]
   },

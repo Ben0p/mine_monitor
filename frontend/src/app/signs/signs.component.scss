@@ -42,7 +42,14 @@
 }
 
 mat-card-title h3 {
+    width: 225px;
     font-size: 20px;
+    text-align: center;
+}
+
+mat-card-subtitle {
+    width: 225px;
+    text-align: center;
 }
 
 .button_card {
