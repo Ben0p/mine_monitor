@@ -1,5 +1,21 @@
 <div class="signs">
   <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
+    <div flex-gt-lg="15">
+      <mat-card class="button_card" >
+        <button mat-raised-button class="link_home" color="primary" routerLink="/home">
+          <h3> Home</h3>
+        </button>
+        <button *ngIf="!signedIn" mat-raised-button class="link_login" color="primary" [routerLink]="['/login']" [queryParams]="{returnUrl: '/signs'}">
+          <h3> Login </h3>
+        </button>
+        <button *ngIf="signedIn" mat-raised-button class="link_login" color="primary" (click)="logout()">
+          <h3> Logout </h3>
+        </button>
+        <button mat-raised-button class="add_sign" color="primary" [disabled]="true">
+            <h3> Add / Remove </h3>
+          </button>
+      </mat-card>
+    </div>
     <div flex-gt-lg="15" *ngFor="let sign of signs$">
       <mat-card class="card" routerLink="{{sign.IP}}">
         <mat-card-header>
@@ -150,34 +166,34 @@
 
           <!-- If a Trailer-->
           <table class="trailer" *ngIf="sign.TRAILER">
-              <tr style="height: 80px;">
+            <tr style="height: 80px;">
 
-                <!-- If B is ON -->
-                <td *ngIf="sign.B; else TrailerBOff">
-                  <div class="trailer_B_on"></div>
+              <!-- If B is ON -->
+              <td *ngIf="sign.B; else TrailerBOff">
+                <div class="trailer_B_on"></div>
+              </td>
+
+              <!-- If B is OFF -->
+              <ng-template #TrailerBOff>
+                <td>
+                  <div class="trailer_B_off"></div>
                 </td>
+              </ng-template>
 
-                <!-- If B is OFF -->
-                <ng-template #TrailerBOff>
-                  <td>
-                    <div class="trailer_B_off"></div>
-                  </td>
-                </ng-template>
+              <!-- If C is ON -->
+              <td *ngIf="sign.C; else TrailerCOff">
+                <div class="trailer_C_on"></div>
+              </td>
 
-                <!-- If C is ON -->
-                <td *ngIf="sign.C; else TrailerCOff">
-                  <div class="trailer_C_on"></div>
+              <!-- If C is OFF -->
+              <ng-template #TrailerCOff>
+                <td>
+                  <div class="trailer_C_off"></div>
                 </td>
+              </ng-template>
 
-                <!-- If C is OFF -->
-                <ng-template #TrailerCOff>
-                  <td>
-                    <div class="trailer_C_off"></div>
-                  </td>
-                </ng-template>
-
-              </tr>
-            </table>
+            </tr>
+          </table>
         </mat-card-content>
       </mat-card>
     </div>

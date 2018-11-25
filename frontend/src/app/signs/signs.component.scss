@@ -32,12 +32,43 @@
  .card {
    overflow-x: hidden;
    width: 260px;
+   height: 477px;
    padding: 0px;
    cursor: pointer;
  }
 
  .header-image {
   background-size: cover;
+}
+
+mat-card-title h3 {
+    font-size: 20px;
+}
+
+.button_card {
+    overflow-x: hidden;
+    width: 260px;
+    height: 477px;
+    padding: 0px;
+  }
+
+.link_home {
+    top: 120px;
+    left: 30px;
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.link_login {
+    left: 30px;
+    width: 200px;
+    top: 120px;
+}
+
+.add_sign {
+    left: 30px;
+    width: 200px;
+    top: 142px;
 }
 
 .sign {
