@@ -47,7 +47,7 @@ export class SignsComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.data.getSigns().subscribe(
+    this.data.getAlerts().subscribe(
       data => this.signs$ = data
     );
   }

@@ -27,7 +27,7 @@ export class TrucksComponent implements OnInit, OnDestroy {
 
   refreshData() {
 
-    this.data.getTrucks()
+    this.data.getFleet()
       .subscribe((data: {}) => {
         this.trucks$ = data;
       })

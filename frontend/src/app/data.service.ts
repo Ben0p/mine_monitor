@@ -39,17 +39,25 @@ export class DataService {
     };
   }
 
+  /*
   getSigns() {
     return this.http.get('/assets/json/signs.json');
   }
+  */
 
-  getSignDetail(ip): Observable<any> {
-    return this.http.get('http://10.20.64.253:5000/sign/' + ip).pipe(
+ getAlerts(): Observable<any> {
+  return this.http.get('http://10.20.64.253:5000/alerts').pipe(
+    map(this.extractData)
+  )
+}
+
+  getAlertDetail(ip): Observable<any> {
+    return this.http.get('http://10.20.64.253:5000/alert/' + ip).pipe(
       map(this.extractData)
     )
   }
 
-  getTrucks(): Observable<any> {
+  getFleet(): Observable<any> {
     return this.http.get('http://10.20.64.253:5000/fleet').pipe(
       map(this.extractData)
     )
@@ -62,8 +70,14 @@ export class DataService {
   }
 
   setOutputs(ip, outputs): Observable<any> {
-    console.log(outputs);
-    return this.http.post<any>('http://10.20.64.253:5000/sign/' + ip, JSON.stringify(outputs), httpOptions).pipe(
+    return this.http.post<any>('http://10.20.64.253:5000/alert/' + ip, JSON.stringify(outputs), httpOptions).pipe(
+      tap((outputs) => console.log('Changed outputs on ' + ip)),
+      catchError(this.handleError<any>('setOutputs'))
+    );
+  }
+
+  addAlert(ip, alert): Observable<any> {
+    return this.http.post<any>('http://10.20.64.253:5000/alert/add/' + ip, JSON.stringify(alert), httpOptions).pipe(
       tap((outputs) => console.log('Changed outputs on ' + ip)),
       catchError(this.handleError<any>('setOutputs'))
     );

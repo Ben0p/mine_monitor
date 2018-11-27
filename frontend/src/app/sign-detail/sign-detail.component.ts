@@ -48,7 +48,7 @@ export class SignDetailComponent implements OnInit, OnDestroy {
   refreshData() {
     this.outputs = [];
 
-    this.data.getSignDetail(this.ip)
+    this.data.getAlertDetail(this.ip)
       .subscribe((data: {}) => {
         this.outputs = data;
 
@@ -90,7 +90,7 @@ export class SignDetailComponent implements OnInit, OnDestroy {
 
       })
 
-    this.data.getSigns().subscribe(
+    this.data.getAlerts().subscribe(
       data => this.signs$ = data
     );
 
