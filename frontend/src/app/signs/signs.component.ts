@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy  } from '@angular/core';
 import { DataService } from '../data.service';
 import { Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { AuthenticationService } from '../_services/authentication.service';
   styleUrls: ['./signs.component.scss']
 })
 
-export class SignsComponent implements OnInit {
+export class SignsComponent implements OnInit, OnDestroy {
 
   signs$: Object;
   interval: any;
@@ -40,6 +40,10 @@ export class SignsComponent implements OnInit {
       this.signedIn = false
     }
 
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
   }
 
   refreshData() {
