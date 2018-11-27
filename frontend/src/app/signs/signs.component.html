@@ -1,20 +1,20 @@
 <div class="signs">
   <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
-    <div flex-gt-lg="15" *ngFor="let sign of signs$">
-      <mat-card class="card" routerLink="{{sign.IP}}">
+    <div flex-gt-lg="15" *ngFor="let alert of alerts$">
+      <mat-card class="card" routerLink="{{alert.ip}}">
         <mat-card-header>
           <mat-card-title>
-            <h3>{{ sign.LOCATION }}</h3>
+            <h3>{{ alert.location }}</h3>
           </mat-card-title>
-          <mat-card-subtitle *ngIf="sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms - WEB</mat-card-subtitle>
-          <mat-card-subtitle *ngIf="!sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="alert.REST">{{ alert.ip }} - {{alert.latency}}ms - WEB</mat-card-subtitle>
+          <mat-card-subtitle *ngIf="!alert.REST">{{ alert.ip }} - {{alert.latency}}ms</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <!-- Offline image if offline -->
-          <img class="offline" src="../../assets/img/offline.png" *ngIf="!sign.ONLINE" />
+          <img class="offline" src="../../assets/img/offline.png" *ngIf="!alert.online" />
 
           <!-- If a Sign -->
-          <div class="sign" *ngIf="sign.SIGN">
+          <div class="sign" *ngIf="alert.sign">
 
             <table style="width: 227px">
 
@@ -22,7 +22,7 @@
               </tr>
 
               <!-- If ALL_CLEAR is ON -->
-              <tr style="height: 62px" *ngIf="sign.ALL_CLEAR; else allClearOff">
+              <tr style="height: 62px" *ngIf="alert.all_clear; else allClearOff">
                 <td>
                   <div class="all_clear_on_left"></div>
                 </td>
@@ -49,7 +49,7 @@
               </tr>
 
               <!-- If EMERGENCY is ON -->
-              <tr style="height: 67px" *ngIf="sign.EMERGENCY; else emergencyOff">
+              <tr style="height: 67px" *ngIf="alert.emergency; else emergencyOff">
                 <td>
                   <div class="emergency_on_left"></div>
                 </td>
@@ -73,7 +73,7 @@
               </ng-template>
 
               <!-- If LIGHTNING is ON -->
-              <tr style="height: 67px;" *ngIf="sign.LIGHTNING; else lightningOff">
+              <tr style="height: 67px;" *ngIf="alert.lightning; else lightningOff">
                 <td>
                   <div class="lightning_on_left"></div>
                 </td>
@@ -98,7 +98,7 @@
 
               <tr style="height: 80px;">
                 <!-- If A is ON -->
-                <td style="height: 100px" *ngIf="sign.A; else AOff">
+                <td style="height: 100px" *ngIf="alert.a; else AOff">
                   <div class="A_on"></div>
                 </td>
 
@@ -110,7 +110,7 @@
                 </ng-template>
 
                 <!-- If B is ON -->
-                <td style="height: 100px" *ngIf="sign.B; else BOff">
+                <td style="height: 100px" *ngIf="alert.b; else BOff">
                   <div class="B_on"></div>
                 </td>
 
@@ -122,7 +122,7 @@
                 </ng-template>
 
                 <!-- If C is ON -->
-                <td style="height: 100px" *ngIf="sign.C; else COff">
+                <td style="height: 100px" *ngIf="alert.c; else COff">
                   <div class="C_on"></div>
                 </td>
 
@@ -138,7 +138,7 @@
             </table>
           </div>
           <!-- If a C Alert Beacon-->
-          <table class="calert" *ngIf="sign.CALERT">
+          <table class="calert" *ngIf="alert.calert">
             <tr>
               <div class="calert_on" *ngIf="sign.C; else calertOff"></div>
               <ng-template #calertOff>
@@ -148,11 +148,11 @@
           </table>
 
           <!-- If a Trailer-->
-          <table class="trailer" *ngIf="sign.TRAILER">
+          <table class="trailer" *ngIf="alert.trailer">
             <tr style="height: 80px;">
 
               <!-- If B is ON -->
-              <td *ngIf="sign.B; else TrailerBOff">
+              <td *ngIf="alert.b; else TrailerBOff">
                 <div class="trailer_B_on"></div>
               </td>
 
@@ -164,7 +164,7 @@
               </ng-template>
 
               <!-- If C is ON -->
-              <td *ngIf="sign.C; else TrailerCOff">
+              <td *ngIf="alert.c; else TrailerCOff">
                 <div class="trailer_C_on"></div>
               </td>
 

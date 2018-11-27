@@ -46,7 +46,7 @@ export class DataService {
   */
 
  getAlerts(): Observable<any> {
-  return this.http.get('http://10.20.64.253:5000/alerts').pipe(
+  return this.http.get('http://localhost:5000/alert').pipe(
     map(this.extractData)
   )
 }
@@ -77,7 +77,7 @@ export class DataService {
   }
 
   addAlert(ip, alert): Observable<any> {
-    return this.http.post<any>('http://10.20.64.253:5000/alert/add/' + ip, JSON.stringify(alert), httpOptions).pipe(
+    return this.http.post<any>('http://localhost.253:5000/alert/add/' + ip, JSON.stringify(alert), httpOptions).pipe(
       tap((outputs) => console.log('Changed outputs on ' + ip)),
       catchError(this.handleError<any>('setOutputs'))
     );

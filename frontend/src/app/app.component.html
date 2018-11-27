@@ -7,6 +7,13 @@
             <span *ngIf="secondPath">&nbsp;/&nbsp;</span>
             <button mat-raised-button *ngIf="secondPath" routerLink="/{{firstPath}}/{{secondPath}}">{{secondPath}}</button>
         </span>
+        <span class="spacer"></span>
+        <button mat-raised-button routerLink="/edit">
+            <i class="material-icons">
+                edit
+            </i>
+        </button>
+
     </mat-toolbar-row>
 </mat-toolbar>
 <router-outlet></router-outlet>

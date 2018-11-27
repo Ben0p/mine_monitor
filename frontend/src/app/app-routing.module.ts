@@ -8,6 +8,7 @@ import { SignDetailComponent } from './sign-detail/sign-detail.component';
 import { TrucksComponent } from './trucks/trucks.component';
 import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
 import { LoginComponent } from './login/login.component';
+import { EditComponent } from './edit/edit.component';
 
 // Auth
 import { AuthGuard } from './_guards/auth.guard';
@@ -37,6 +38,10 @@ const routes: Routes = [
   { 
     path: 'login',
     component: LoginComponent 
+  },
+  { 
+    path: 'edit',
+    component: EditComponent 
   },
   { 
     path: '**', 

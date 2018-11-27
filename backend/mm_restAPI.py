@@ -21,7 +21,7 @@ db = client['minemonitor']
 class alert(Resource):
     def get(self):
         # Get all sign data from the signs collection in mongo
-        alerts = db['alert'].find()
+        alerts = db['alert_data'].find()
 
         # Return collection as a massive json
         try:
@@ -76,6 +76,27 @@ class alert_detail(Resource):
 
         return(bits, 201)
 
+class alert_add(Resource):
+
+    def post(self, ip):
+        # Parse the form data
+        parser = reqparse.RequestParser()
+        parser.add_argument("location")
+        parser.add_argument("type")
+
+        args = parser.parse_args()
+
+        # Insert into database
+        db['alert'].insert_one(
+            {
+                "location" : args['location'],
+                "ip" : ip,
+                "type" : args['type']
+            }
+        )
+
+        return(201)
+
 class fleet(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
@@ -102,7 +123,7 @@ class fleet_detail(Resource):
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
 api.add_resource(alert_detail, "/alert/<string:ip>")
-api.add_resource(alert_add), "/alert/add")
+api.add_resource(alert_add, "/alert/add/<string:ip>")
 api.add_resource(fleet, "/fleet")
 api.add_resource(fleet_detail, "/fleet/<string:name>")
 

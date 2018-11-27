@@ -12,7 +12,7 @@ import { AuthenticationService } from '../_services/authentication.service';
 
 export class SignsComponent implements OnInit, OnDestroy {
 
-  signs$: Object;
+  alerts$: Object;
   interval: any;
   signedIn: boolean;
 
@@ -48,7 +48,7 @@ export class SignsComponent implements OnInit, OnDestroy {
 
   refreshData() {
     this.data.getAlerts().subscribe(
-      data => this.signs$ = data
+      data => this.alerts$ = data
     );
   }
 

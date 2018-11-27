@@ -27,6 +27,7 @@ import { ErrorInterceptor } from './_helpers/error.Interceptor';
 
 // Fake backend for the login component
 import { fakeBackendProvider } from './_helpers/fake-backend';
+import { EditComponent } from './edit/edit.component';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { fakeBackendProvider } from './_helpers/fake-backend';
     SignDetailComponent,
     TrucksComponent,
     FleetDetailComponent,
-    LoginComponent
+    LoginComponent,
+    EditComponent
   ],
   imports: [
     BrowserModule,
