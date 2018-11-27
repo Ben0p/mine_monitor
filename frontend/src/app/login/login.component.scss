@@ -2,6 +2,7 @@
     content: "";
     display: block;
     position: fixed;
+    overflow: hidden;
     left: 0;
     top: 0;
     width: 100%;
@@ -28,7 +29,7 @@
     width: 210px;
     left: 50%;
     top: 50%;
-    margin: -100px 0 0 -105px;
+    margin: -100px 0 0 -121px;
 }
 
 .login_button { 

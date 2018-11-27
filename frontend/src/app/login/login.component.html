@@ -1,12 +1,4 @@
 <div class="login_component">
-    <div class="alert alert-info">
-        Username: test<br />
-        Password: test
-    </div>
-    <h2>Login</h2>
-
-
-
     <mat-card class="login_card">
         <mat-card-header>
             <mat-card-title>Login</mat-card-title>
@@ -36,7 +28,6 @@
                         <button class="login_button" mat-raised-button [disabled]="loading" color="primary">
                             <mat-spinner class="login_spinner" [diameter]="30" [color]="accent" *ngIf="loading"></mat-spinner>
                         </button>
-
                     </div>
                 </mat-card-actions>
             </form>
