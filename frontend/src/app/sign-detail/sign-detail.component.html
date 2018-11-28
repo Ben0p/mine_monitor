@@ -1,51 +1,51 @@
 <div class="signs">
   <div class="container" fxLayout="column" fxLayout.xs="column" fxLayoutAlign="center center" fxLayoutAlign.xs="center center">
-    <div flex-gt-lg="15" *ngFor="let sign of signs$">
-      <div *ngIf="sign.IP == ip">
-        <mat-card class="card">
+    <div flex-gt-lg="15">
+      <div>
+        <mat-card class="card" *ngIf="dataLoaded">
           <mat-card-header>
             <mat-card-title>
-              <h3>{{ sign.LOCATION }}</h3>
+              <h3>{{ alert$.location }}</h3>
             </mat-card-title>
-            <mat-card-subtitle *ngIf="sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms - WEB</mat-card-subtitle>
-            <mat-card-subtitle *ngIf="!sign.REST">{{ sign.IP }} - {{sign.LATENCY}}ms</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="alert$.rest">{{ alert$.ip }} - {{ alert$.latency }}ms - WEB</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!alert$.rest">{{ alert$.ip }} - {{ alert$.latency }}ms</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <!-- Offline image if offline -->
-            <img class="offline" src="../../assets/img/offline.png" *ngIf="!sign.ONLINE" />
-            <div class="controls" *ngIf="sign.ONLINE">
+            <img class="offline" src="../../assets/img/offline.png" *ngIf="!alert$.online" />
+            <div class="controls" *ngIf="alert$.online">
               <div>
                 All Clear
                 <br>
-                <mat-slide-toggle [checked]="outputs.all_clear" (change)="onChange($event, 'all_clear')">
+                <mat-slide-toggle [checked]="outputStates.all_clear" (change)="onChange($event, 'all_clear')">
                 </mat-slide-toggle>
 
                 <br>
                 Emergency
                 <br>
-                <mat-slide-toggle [checked]="outputs.emergency" (change)="onChange($event, 'emergency')">
+                <mat-slide-toggle [checked]="outputStates.emergency" (change)="onChange($event, 'emergency')">
                 </mat-slide-toggle>
 
                 <br>
                 Lightning
                 <br>
-                <mat-slide-toggle [checked]="outputs.lightning" (change)="onChange($event, 'lightning')">
+                <mat-slide-toggle [checked]="outputStates.lightning" (change)="onChange($event, 'lightning')">
                 </mat-slide-toggle>
                 <br>
 
                 <br>
                 A
-                <mat-slide-toggle [checked]="outputs.a" (change)="onChange($event, 'a')">
+                <mat-slide-toggle [checked]="outputStates.a" (change)="onChange($event, 'a')">
                 </mat-slide-toggle>
                 &nbsp;&nbsp;
 
                 B
-                <mat-slide-toggle [checked]="outputs.b" (change)="onChange($event, 'b')">
+                <mat-slide-toggle [checked]="outputStates.b" (change)="onChange($event, 'b')">
                 </mat-slide-toggle>
                 &nbsp;&nbsp;
 
                 C
-                <mat-slide-toggle [checked]="outputs.c" (change)="onChange($event, 'c')">
+                <mat-slide-toggle [checked]="outputStates.c" (change)="onChange($event, 'c')">
                 </mat-slide-toggle>
                 <br>
                 <br>
@@ -53,7 +53,7 @@
             </div>
 
             <!-- If a Sign -->
-            <div class="sign" *ngIf="sign.SIGN">
+            <div class="sign" *ngIf="alert$.sign">
 
               <table style="width: 227px">
 
@@ -61,7 +61,7 @@
                 </tr>
 
                 <!-- If ALL_CLEAR is ON -->
-                <tr style="height: 62px" *ngIf="outputs.all_clear; else allClearOff">
+                <tr style="height: 62px" *ngIf="alert$.all_clear; else allClearOff">
                   <td>
                     <div class="all_clear_on_left"></div>
                   </td>
@@ -88,7 +88,7 @@
                 </tr>
 
                 <!-- If EMERGENCY is ON -->
-                <tr style="height: 67px" *ngIf="outputs.emergency; else emergencyOff">
+                <tr style="height: 67px" *ngIf="alert$.emergency; else emergencyOff">
                   <td>
                     <div class="emergency_on_left"></div>
                   </td>
@@ -112,7 +112,7 @@
                 </ng-template>
 
                 <!-- If LIGHTNING is ON -->
-                <tr style="height: 67px;" *ngIf="outputs.lightning; else lightningOff">
+                <tr style="height: 67px;" *ngIf="alert$.lightning; else lightningOff">
                   <td>
                     <div class="lightning_on_left"></div>
                   </td>
@@ -137,7 +137,7 @@
 
                 <tr style="height: 80px;">
                   <!-- If A is ON -->
-                  <td style="height: 100px" *ngIf="outputs.a; else AOff">
+                  <td style="height: 100px" *ngIf="alert$.a; else AOff">
                     <div class="A_on"></div>
                   </td>
 
@@ -149,7 +149,7 @@
                   </ng-template>
 
                   <!-- If B is ON -->
-                  <td style="height: 100px" *ngIf="outputs.b; else BOff">
+                  <td style="height: 100px" *ngIf="alert$.b; else BOff">
                     <div class="B_on"></div>
                   </td>
 
@@ -161,7 +161,7 @@
                   </ng-template>
 
                   <!-- If C is ON -->
-                  <td style="height: 100px" *ngIf="outputs.c; else COff">
+                  <td style="height: 100px" *ngIf="alert$.c; else COff">
                     <div class="C_on"></div>
                   </td>
 
@@ -177,9 +177,9 @@
               </table>
             </div>
             <!-- If a C Alert Beacon-->
-            <table class="calert" *ngIf="sign.CALERT">
+            <table class="calert" *ngIf="alert$.calert">
               <tr>
-                <div class="calert_on" *ngIf="outputs.c; else calertOff"></div>
+                <div class="calert_on" *ngIf="alert$.c; else calertOff"></div>
                 <ng-template #calertOff>
                   <div class="calert_off"></div>
                 </ng-template>
@@ -187,11 +187,11 @@
             </table>
 
             <!-- If a Trailer-->
-            <table class="trailer" *ngIf="sign.TRAILER">
+            <table class="trailer" *ngIf="alert$.trailer">
               <tr style="height: 80px;">
 
                 <!-- If B is ON -->
-                <td *ngIf="outputs.b; else TrailerBOff">
+                <td *ngIf="alert$.b; else TrailerBOff">
                   <div class="trailer_B_on"></div>
                 </td>
 
@@ -203,7 +203,7 @@
                 </ng-template>
 
                 <!-- If C is ON -->
-                <td *ngIf="outputs.c; else TrailerCOff">
+                <td *ngIf="alert$.c; else TrailerCOff">
                   <div class="trailer_C_on"></div>
                 </td>
 

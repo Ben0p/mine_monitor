@@ -145,7 +145,6 @@ def modbus(ip):
 
 def writeDB(alert):
 
-
     # Check if collection exists
     collections = db.collection_names()
     if 'alert_data' in collections:
@@ -186,9 +185,9 @@ def writeDB(alert):
 
         elif existing_document.count() == 0:
                 # Create document
-                db['fleet_data'].insert_one(dumps(alert))
+                db['alert_data'].insert_one(alert)
     else:
-        db['alert_data'].insert_one(alert)
+        db['alert_data'].insert_one(dumps(alert))
 
 
 def getAll():

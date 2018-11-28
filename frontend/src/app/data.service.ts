@@ -47,12 +47,13 @@ export class DataService {
 
  getAlerts(): Observable<any> {
   return this.http.get('http://localhost:5000/alert').pipe(
-    map(this.extractData)
+    map(this.extractData),
+    catchError(this.handleError<any>('failed'))
   )
 }
 
-  getAlertDetail(ip): Observable<any> {
-    return this.http.get('http://10.20.64.253:5000/alert/' + ip).pipe(
+  alertDetail(ip): Observable<any> {
+    return this.http.get('http://10.20.12.94:5000/alert/' + ip).pipe(
       map(this.extractData)
     )
   }
@@ -70,16 +71,16 @@ export class DataService {
   }
 
   setOutputs(ip, outputs): Observable<any> {
-    return this.http.post<any>('http://10.20.64.253:5000/alert/' + ip, JSON.stringify(outputs), httpOptions).pipe(
+    return this.http.post<any>('http://10.20.12.94:5000/alert/' + ip, JSON.stringify(outputs), httpOptions).pipe(
       tap((outputs) => console.log('Changed outputs on ' + ip)),
       catchError(this.handleError<any>('setOutputs'))
     );
   }
 
-  addAlert(ip, alert): Observable<any> {
-    return this.http.post<any>('http://localhost.253:5000/alert/add/' + ip, JSON.stringify(alert), httpOptions).pipe(
-      tap((outputs) => console.log('Changed outputs on ' + ip)),
-      catchError(this.handleError<any>('setOutputs'))
+  edit(device): Observable<any> {
+    return this.http.post<any>('http://10.20.12.94:5000/edit', JSON.stringify(device), httpOptions).pipe(
+      tap((outputs) => console.log('Edited device')),
+      catchError(this.handleError<any>('error'))
     );
   }
 }

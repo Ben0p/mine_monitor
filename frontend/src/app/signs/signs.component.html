@@ -140,7 +140,7 @@
           <!-- If a C Alert Beacon-->
           <table class="calert" *ngIf="alert.calert">
             <tr>
-              <div class="calert_on" *ngIf="sign.C; else calertOff"></div>
+              <div class="calert_on" *ngIf="alert.c; else calertOff"></div>
               <ng-template #calertOff>
                 <div class="calert_off"></div>
               </ng-template>

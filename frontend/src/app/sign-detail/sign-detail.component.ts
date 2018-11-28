@@ -23,8 +23,9 @@ export class SignDetailComponent implements OnInit, OnDestroy {
   };
 
   outputs: any = [];
-  signs$: Object;
+  alert$: Object;
   interval: any;
+  dataLoaded: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -46,68 +47,38 @@ export class SignDetailComponent implements OnInit, OnDestroy {
   ip = this.route.snapshot.paramMap.get('ip');
 
   refreshData() {
-    this.outputs = [];
 
-    this.data.getAlertDetail(this.ip)
+    this.data.alertDetail(this.ip)
       .subscribe((data: {}) => {
-        this.outputs = data;
-
-        if (this.outputs.all_clear == true) {
-          this.outputStates.all_clear = '1'
-        } else {
-          this.outputStates.all_clear = ''
-        }
-
-        if (this.outputs.emergency == true) {
-          this.outputStates.emergency = '1'
-        } else {
-          this.outputStates.emergency = ''
-        }
-
-        if (this.outputs.lightning == true) {
-          this.outputStates.lightning = '1'
-        } else {
-          this.outputStates.lightning = ''
-        }
-
-        if (this.outputs.a == true) {
-          this.outputStates.a = '1'
-        } else {
-          this.outputStates.a = ''
-        }
-
-        if (this.outputs.b == true) {
-          this.outputStates.b = '1'
-        } else {
-          this.outputStates.b = ''
-        }
-
-        if (this.outputs.c == true) {
-          this.outputStates.c = '1'
-        } else {
-          this.outputStates.c = ''
-        }
-
+        this.alert$ = data;
+        this.dataLoaded = true
+        this.outputStates['all_clear'] = this.alert$['all_clear']
+        this.outputStates['emergency'] = this.alert$['emergency']
+        this.outputStates['lightning'] = this.alert$['lightning']
+        this.outputStates['a'] = this.alert$['a']
+        this.outputStates['b'] = this.alert$['b']
+        this.outputStates['c'] = this.alert$['c']
       })
-
-    this.data.getAlerts().subscribe(
-      data => this.signs$ = data
-    );
 
   }
 
   setOutputs() {
     this.data.setOutputs(this.ip, this.outputStates).subscribe((results) => {
-      this.refreshData()
+      this.outputStates['all_clear'] = this.alert$['all_clear'] = results[0]
+      this.outputStates['emergency'] = this.alert$['emergency'] = results[1]
+      this.outputStates['lightning'] = this.alert$['lightning'] = results[2]
+      this.outputStates['a'] = this.alert$['a'] = results[3]
+      this.outputStates['b'] = this.alert$['b'] = results[4]
+      this.outputStates['c'] = this.alert$['c'] = results[5]
     })
   }
 
   onChange(event, output) {
     if (event.checked == true) {
-      this.outputStates[output] = '1'
+      this.outputStates[output] = true
       this.setOutputs()
     } else {
-      this.outputStates[output] = ''
+      this.outputStates[output] = false
       this.setOutputs()
     }
   }

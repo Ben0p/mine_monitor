@@ -41,7 +41,8 @@ const routes: Routes = [
   },
   { 
     path: 'edit',
-    component: EditComponent 
+    component: EditComponent,
+    canActivate: [AuthGuard]
   },
   { 
     path: '**', 
