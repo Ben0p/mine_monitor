@@ -22,14 +22,14 @@ export class AppComponent implements OnInit {
         if (event instanceof NavigationStart) {
           // Could add more chars url:path?=;other possible
           const urlDelimitators = new RegExp(/[?//,;&:#$+=]/);
-          this.firstPath = event.url.slice(1).split(urlDelimitators)[0];
-          this.secondPath = event.url.slice(1).split(urlDelimitators)[1];
+          this.firstPath = unescape(event.url.slice(1).split(urlDelimitators)[0]);
+          this.secondPath = unescape(event.url.slice(1).split(urlDelimitators)[1]);
 
-          if (this.firstPath == 'home') {
+          if (this.firstPath == 'home' || this.firstPath == 'undefined') {
             this.firstPath = null
           }
 
-          if (this.secondPath == 'returnUrl') {
+          if (this.secondPath == 'returnUrl' || this.secondPath == 'undefined') {
             this.secondPath = null
           }
         }
