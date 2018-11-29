@@ -83,4 +83,11 @@ export class DataService {
       catchError(this.handleError<any>('error'))
     );
   }
+
+  delete(type, device): Observable<any> {
+    return this.http.delete<any>('http://10.20.12.94:5000/edit/'+ type + '-' + device).pipe(
+      tap((outputs) => console.log('Deleted device')),
+      catchError(this.handleError<any>('error'))
+    );
+  }
 }

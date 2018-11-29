@@ -91,10 +91,11 @@ td {
     text-align: center;
 }
 
+
 .offline {
     position: absolute;
-    width: 250px;
     height: 370px;
+    margin-left: -270px;
 }
 
 .all_clear_on_left {
@@ -295,7 +296,7 @@ td {
     background-size: 220px auto;
     background-position: center;
     width: 230px;
-    height: 390px;
+    height: 100px;
     margin: auto;
 }
 

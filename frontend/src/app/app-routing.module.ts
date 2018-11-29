@@ -23,7 +23,7 @@ const routes: Routes = [
     component: SignsComponent
   },
   {
-    path: 'alerts/:ip',
+    path: 'alerts/:name',
     component: SignDetailComponent,
     canActivate: [AuthGuard]
   },

@@ -14,6 +14,7 @@ import { Sign } from '../sign.model';
 export class SignDetailComponent implements OnInit, OnDestroy {
 
   @Input() outputStates = {
+    ip: '',
     all_clear: '',
     emergency: '',
     lightning: '',
@@ -44,11 +45,11 @@ export class SignDetailComponent implements OnInit, OnDestroy {
     clearInterval(this.interval);
   }
 
-  ip = this.route.snapshot.paramMap.get('ip');
+  name = this.route.snapshot.paramMap.get('name');
 
   refreshData() {
 
-    this.data.alertDetail(this.ip)
+    this.data.alertDetail(this.name)
       .subscribe((data: {}) => {
         this.alert$ = data;
         this.dataLoaded = true
@@ -58,12 +59,13 @@ export class SignDetailComponent implements OnInit, OnDestroy {
         this.outputStates['a'] = this.alert$['a']
         this.outputStates['b'] = this.alert$['b']
         this.outputStates['c'] = this.alert$['c']
+        this.outputStates['ip'] = this.alert$['ip']
       })
 
   }
 
   setOutputs() {
-    this.data.setOutputs(this.ip, this.outputStates).subscribe((results) => {
+    this.data.setOutputs(this.name, this.outputStates).subscribe((results) => {
       this.outputStates['all_clear'] = this.alert$['all_clear'] = results[0]
       this.outputStates['emergency'] = this.alert$['emergency'] = results[1]
       this.outputStates['lightning'] = this.alert$['lightning'] = results[2]

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DataService } from '../data.service';
+import {Router} from '@angular/router';
 
 
 export interface Type {
@@ -19,6 +20,7 @@ export interface alertType {
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit {
+  
 
   selectedType: string;
   alertType: string;
@@ -34,6 +36,10 @@ export class EditComponent implements OnInit {
     alert_location: new FormControl(''),
     alert_ip: new FormControl(''),
     alert_type: new FormControl(''),
+    trailer_number: new FormControl(''),
+    west_ip: new FormControl(''),
+    central_ip: new FormControl(''),
+    east_ip: new FormControl('')
   });
 
   types: Type[] = [
@@ -48,18 +54,34 @@ export class EditComponent implements OnInit {
   ];
 
   constructor(
-    private data: DataService
+    private data: DataService,
+    public router: Router
   ) { }
 
   ngOnInit() {
   }
 
-  onSubmit() {
+  onSubmit(operation) {
     // TODO: Use EventEmitter with form value
     console.warn(this.editForm.value);
-    this.data.edit(this.editForm.value).subscribe((results) => {
-      console.log(results)
-    })
+    if (operation == 'submit') {
+      this.data.edit(this.editForm.value).subscribe((results) => {
+        console.log(results)
+      })
+    } else if (operation == 'delete') {
+      if (this.editForm.value.type == 'alert') {
+        this.data.delete(this.editForm.value.type, this.editForm.value.alert_ip).subscribe((results) => {
+          console.log(results)
+        })
+      } else if (this.editForm.value.type == 'fleet') {
+        this.data.delete(this.editForm.value.type, this.editForm.value.fleet_name).subscribe((results) => {
+          console.log(results)
+        })
+      }
+
+    }
+
+    this.router.navigateByUrl('/alerts');
   
   }
 

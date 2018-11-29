@@ -43,23 +43,45 @@
             </div>
             <div *ngIf="selectedType == 'alert'">
               <mat-form-field>
-                <input matInput placeholder="Location" formControlName="alert_location">
-              </mat-form-field>
-              <br>
-              <mat-form-field>
-                <input matInput placeholder="IP" formControlName="alert_ip">
-              </mat-form-field>
-              <br>
-              <mat-form-field>
-                <mat-select placeholder="Type" name="alerttype" formControlName="alert_type">
+                <mat-select placeholder="Alert Type" [(ngModel)]="alertType" name="alerttype" formControlName="alert_type">
                   <mat-option *ngFor="let alert of alertTypes" [value]="alert.value">
                     {{alert.viewValue}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
+              <br>
+              <div *ngIf="alertType == 'sign' || alertType == 'calert'">
+                <mat-form-field>
+                  <input matInput placeholder="Location" formControlName="alert_location">
+                </mat-form-field>
+                <br>
+                <mat-form-field>
+                  <input matInput placeholder="IP" formControlName="alert_ip">
+                </mat-form-field>
+                <br>
+              </div>
             </div>
             <br>
-            <button mat-raised-button type="submit" [disabled]="!editForm.valid">Submit</button>
+            <div *ngIf="alertType == 'trailer'">
+              <mat-form-field>
+                <input matInput placeholder= "Trailer Number" formControlName="trailer_number">
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input matInput placeholder="West - IP" formControlName="west_ip">
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input matInput placeholder="Central - IP" formControlName="central_ip">
+              </mat-form-field>
+              <br>
+              <mat-form-field>
+                <input matInput placeholder="East - IP" formControlName="east_ip">
+              </mat-form-field>
+              <br>
+            </div>
+            <button mat-raised-button type="submit" (click)="onSubmit('submit')" [disabled]="!editForm.valid">Submit</button>
+            <button mat-raised-button type="submit" (click)="onSubmit('delete')" [disabled]="!editForm.valid">Delete</button>
           </form>
         </mat-card-content>
       </mat-card>

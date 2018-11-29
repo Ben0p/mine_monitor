@@ -32,8 +32,6 @@ export class AppComponent implements OnInit {
           if (this.secondPath == 'returnUrl') {
             this.secondPath = null
           }
-          console.log('First path: ', this.firstPath);
-          console.log('Second path: ', this.secondPath);
         }
       });
     }

@@ -1,13 +1,13 @@
 <div class="signs">
   <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
     <div flex-gt-lg="15" *ngFor="let alert of alerts$">
-      <mat-card class="card" routerLink="{{alert.ip}}">
+      <mat-card class="card" routerLink="{{alert.location}}">
         <mat-card-header>
           <mat-card-title>
             <h3>{{ alert.location }}</h3>
           </mat-card-title>
-          <mat-card-subtitle *ngIf="alert.REST">{{ alert.ip }} - {{alert.latency}}ms - WEB</mat-card-subtitle>
-          <mat-card-subtitle *ngIf="!alert.REST">{{ alert.ip }} - {{alert.latency}}ms</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="alert.rest && !alert.trailer">{{ alert.ip }} - {{alert.latency}}ms - WEB</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!alert.rest && !alert.trailer">{{ alert.ip }} - {{alert.latency}}ms</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <!-- Offline image if offline -->
@@ -148,35 +148,41 @@
           </table>
 
           <!-- If a Trailer-->
-          <table class="trailer" *ngIf="alert.trailer">
-            <tr style="height: 80px;">
+          <div *ngIf="alert.trailer">
+            <div *ngFor="let trailer of alert.areas">
+              <b style="margin-left: 30px;"> {{trailer.area}} - {{trailer.ip}} - {{trailer.latency}}ms </b>
+              <table class="trailer">
+                <tr style="height: 80px;">
 
-              <!-- If B is ON -->
-              <td *ngIf="alert.b; else TrailerBOff">
-                <div class="trailer_B_on"></div>
-              </td>
+                  <!-- If B is ON -->
+                  <td *ngIf="trailer.b; else TrailerBOff">
+                    <div class="trailer_B_on"></div>
+                  </td>
 
-              <!-- If B is OFF -->
-              <ng-template #TrailerBOff>
-                <td>
-                  <div class="trailer_B_off"></div>
-                </td>
-              </ng-template>
+                  <!-- If B is OFF -->
+                  <ng-template #TrailerBOff>
+                    <td>
+                      <div class="trailer_B_off"></div>
+                    </td>
+                  </ng-template>
 
-              <!-- If C is ON -->
-              <td *ngIf="alert.c; else TrailerCOff">
-                <div class="trailer_C_on"></div>
-              </td>
+                  <!-- If C is ON -->
+                  <td *ngIf="trailer.c ; else TrailerCOff">
+                    <div class="trailer_C_on"></div>
+                  </td>
 
-              <!-- If C is OFF -->
-              <ng-template #TrailerCOff>
-                <td>
-                  <div class="trailer_C_off"></div>
-                </td>
-              </ng-template>
+                  <!-- If C is OFF -->
+                  <ng-template #TrailerCOff>
+                    <td>
+                      <div class="trailer_C_off"></div>
+                    </td>
+                  </ng-template>
 
-            </tr>
-          </table>
+                </tr>
+              </table>
+              <br>
+            </div>
+          </div>
         </mat-card-content>
       </mat-card>
     </div>

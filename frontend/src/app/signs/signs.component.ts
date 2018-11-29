@@ -50,6 +50,7 @@ export class SignsComponent implements OnInit, OnDestroy {
     this.data.getAlerts().subscribe(
       data => this.alerts$ = data
     );
+    console.log(this.alerts$)
   }
 
   logout() {
