@@ -71,7 +71,7 @@ class alert_detail(Resource):
             return(jsonify(json.loads(dumps(alert_document))))
 
         else:
-            ip = [alert_document['ip']]
+            ip = alert_document['ip']
             c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
 
             try:

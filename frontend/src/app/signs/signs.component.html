@@ -6,8 +6,9 @@
           <mat-card-title>
             <h3>{{ alert.location }}</h3>
           </mat-card-title>
-            <mat-card-subtitle *ngIf="alert.rest && !alert.trailer">{{ alert.ip }} - {{alert.latency}}ms - WEB</mat-card-subtitle>
-            <mat-card-subtitle *ngIf="!alert.rest && !alert.trailer">{{ alert.ip }} - {{alert.latency}}ms</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="alert.rest && !alert.trailer && alert.online">{{ alert.ip }} - {{alert.latency}}ms - WEB</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!alert.rest && !alert.trailer && alert.online">{{ alert.ip }} - {{alert.latency}}ms</mat-card-subtitle>
+            <mat-card-subtitle *ngIf="!alert.trailer && !alert.online">{{ alert.ip }} - Offline</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <!-- Offline image if offline -->
