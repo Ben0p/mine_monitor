@@ -20,7 +20,13 @@ export class SignDetailComponent implements OnInit, OnDestroy {
     lightning: '',
     a: '',
     b: '',
-    c: ''
+    c: '',
+    west_b: '',
+    west_c: '',
+    central_b: '',
+    central_c: '',
+    east_b: '',
+    east_c: ''
   };
 
   outputs: any = [];
@@ -53,13 +59,22 @@ export class SignDetailComponent implements OnInit, OnDestroy {
       .subscribe((data: {}) => {
         this.alert$ = data;
         this.dataLoaded = true
-        this.outputStates['all_clear'] = this.alert$['all_clear']
-        this.outputStates['emergency'] = this.alert$['emergency']
-        this.outputStates['lightning'] = this.alert$['lightning']
-        this.outputStates['a'] = this.alert$['a']
-        this.outputStates['b'] = this.alert$['b']
-        this.outputStates['c'] = this.alert$['c']
-        this.outputStates['ip'] = this.alert$['ip']
+        if (this.alert$['type'] == 'trailer') {
+          this.outputStates['west_b'] = this.alert$['areas'][0]['b']
+          this.outputStates['west_c'] = this.alert$['areas'][0]['c']
+          this.outputStates['central_b'] = this.alert$['areas'][1]['b']
+          this.outputStates['central_c'] = this.alert$['areas'][1]['c']
+          this.outputStates['east_b'] = this.alert$['areas'][2]['b']
+          this.outputStates['east_c'] = this.alert$['areas'][2]['c']
+        } else {
+          this.outputStates['all_clear'] = this.alert$['all_clear']
+          this.outputStates['emergency'] = this.alert$['emergency']
+          this.outputStates['lightning'] = this.alert$['lightning']
+          this.outputStates['a'] = this.alert$['a']
+          this.outputStates['b'] = this.alert$['b']
+          this.outputStates['c'] = this.alert$['c']
+          this.outputStates['ip'] = this.alert$['ip']
+        }
       })
 
   }
@@ -83,6 +98,11 @@ export class SignDetailComponent implements OnInit, OnDestroy {
       this.outputStates[output] = false
       this.setOutputs()
     }
+  }
+
+  state(area, beacon) {
+      const State: string = area+'_'+beacon
+      return(this.outputStates[State])
   }
 
 }
