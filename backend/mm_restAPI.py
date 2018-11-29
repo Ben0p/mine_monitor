@@ -35,25 +35,64 @@ class alert_detail(Resource):
         alert_document = db['alert_data'].find_one({'location': name})
         if alert_document == None:
             return(404)
-        ip = alert_document['ip']
 
-        # Get outputs via modbus on GET request
-        c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+        # Check if the name is a trailer
+        if name[:2] == 'TR':
+            west_ip = alert_document['areas'][0]['ip']
+            central_ip = alert_document['areas'][1]['ip']
+            east_ip = alert_document['areas'][2]['ip']
 
-        try:
-            bits = c.read_coils(16, 6)
-            alert_document["all_clear"] = bits[0]
-            alert_document["emergency"] = bits[1]
-            alert_document["lightning"] = bits[2]
-            alert_document["a"] = bits[3]
-            alert_document["b"] = bits[4]
-            alert_document["c"] = bits[5]
+            # Create list of ips
+            ips = [west_ip, central_ip, east_ip]
+
+            
+            for index, ip in enumerate(ips):
+                # Get outputs via modbus on GET request
+                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+
+                try:
+                    bits = c.read_coils(16, 6)
+                    alert_document['areas'][index]["all_clear"] = bits[0]
+                    alert_document['areas'][index]["emergency"] = bits[1]
+                    alert_document['areas'][index]["lightning"] = bits[2]
+                    alert_document['areas'][index]["a"] = bits[3]
+                    alert_document['areas'][index]["b"] = bits[4]
+                    alert_document['areas'][index]["c"] = bits[5]
+                
+                except: 
+                    alert_document['areas'][index]["all_clear"] = False
+                    alert_document['areas'][index]["emergency"] = False
+                    alert_document['areas'][index]["lightning"] = False
+                    alert_document['areas'][index]["a"] = False
+                    alert_document['areas'][index]["b"] = False
+                    alert_document['areas'][index]["c"] = False
 
             # Return a json response
             return(jsonify(json.loads(dumps(alert_document))))
 
-        except:
-            return(False, 404)
+        else:
+            ip = [alert_document['ip']]
+            c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+
+            try:
+                bits = c.read_coils(16, 6)
+                alert_document["all_clear"] = bits[0]
+                alert_document["emergency"] = bits[1]
+                alert_document["lightning"] = bits[2]
+                alert_document["a"] = bits[3]
+                alert_document["b"] = bits[4]
+                alert_document["c"] = bits[5]
+            
+            except: 
+                alert_document["all_clear"] = False
+                alert_document["emergency"] = False
+                alert_document["lightning"] = False
+                alert_document["a"] = False
+                alert_document["b"] = False
+                alert_document["c"] = False
+            
+            return(jsonify(json.loads(dumps(alert_document))))
+
 
     def post(self, name):
 
