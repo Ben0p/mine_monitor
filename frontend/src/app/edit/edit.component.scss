@@ -12,12 +12,24 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-  }
-  
-  .edit {
-      height: calc(100vh - 64px);
-      width: 100vw;
-      margin: 0;
-      padding: 10px;
-      box-sizing: border-box;
-  }
+}
+
+.container {
+    margin: -6px;
+}
+
+.container > * {
+    margin: 6px;
+}
+
+.edit {
+    height: calc(100vh - 64px);
+    width: 100vw;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.card {
+    width: 200px;
+}

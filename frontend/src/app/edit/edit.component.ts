@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { DataService } from '../data.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 
 export interface Type {
@@ -20,7 +20,7 @@ export interface alertType {
   styleUrls: ['./edit.component.scss']
 })
 export class EditComponent implements OnInit {
-  
+
 
   selectedType: string;
   alertType: string;
@@ -43,14 +43,14 @@ export class EditComponent implements OnInit {
   });
 
   types: Type[] = [
-    {value: 'fleet', viewValue: 'Fleet'},
-    {value: 'alert', viewValue: 'Alert'}
+    // {value: 'fleet', viewValue: 'Fleet'},
+    { value: 'alert', viewValue: 'Alert' }
   ];
 
   alertTypes: alertType[] = [
-    {value: 'sign', viewValue: 'Sign'},
-    {value: 'calert', viewValue: 'C-Alert'},
-    {value: 'trailer', viewValue: 'Trailer'}
+    { value: 'sign', viewValue: 'Sign' },
+    { value: 'calert', viewValue: 'C-Alert' },
+    { value: 'trailer', viewValue: 'Trailer' }
   ];
 
   constructor(
@@ -70,9 +70,15 @@ export class EditComponent implements OnInit {
       })
     } else if (operation == 'delete') {
       if (this.editForm.value.type == 'alert') {
-        this.data.delete(this.editForm.value.type, this.editForm.value.alert_ip).subscribe((results) => {
-          console.log(results)
-        })
+        if (this.editForm.value.alertType == 'trailer') {
+          this.data.delete(this.editForm.value.type, this.editForm.value.trailer_number).subscribe((results) => {
+            console.log(results)
+          })
+        } else {
+          this.data.delete(this.editForm.value.type, this.editForm.value.alert_location).subscribe((results) => {
+            console.log(results)
+          })
+        }
       } else if (this.editForm.value.type == 'fleet') {
         this.data.delete(this.editForm.value.type, this.editForm.value.fleet_name).subscribe((results) => {
           console.log(results)
@@ -82,7 +88,7 @@ export class EditComponent implements OnInit {
     }
 
     this.router.navigateByUrl('/alerts');
-  
+
   }
 
 }

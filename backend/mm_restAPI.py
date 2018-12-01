@@ -220,21 +220,30 @@ class edit(Resource):
 
         # Check object type
         if args['type'] == 'alert':
-             # Check if document exists
-            existing_document = db['alert_data'].find({'location' : args['trailer_number']})
-            print('Updating {}'.format(args['trailer_number']))
+
+            # Check if trailer or not
+            if args['alert_type'] == 'trailer':
+                # Set name as trailer number
+                name = args['trailer_number']
+            else:
+                # Set name as location
+                name = args['alert_location']
+
+            # Check if document exists
+            existing_document = db['alert_data'].find({'location' : name})
+            print('Updating {}'.format(name))
 
             # Delete any existing documents
             if existing_document.count() >= 1:
-                db['alert'].delete_many({'location' : args['trailer_number']})
-                db['alert_data'].delete_many({'location' : args['trailer_number']})
+                db['alert'].delete_many({'location' : name})
+                db['alert_data'].delete_many({'location' : name})
 
             # Check if object is a trailer 
             if args['alert_type'] == 'trailer':
                 # Insert into database
                 db['alert'].insert_one(
                     {
-                        "location": args['trailer_number'],
+                        "location": name,
                         "west_ip": args['west_ip'],
                         "central_ip": args['central_ip'],
                         "east_ip": args['east_ip'],
@@ -246,7 +255,7 @@ class edit(Resource):
                 # Insert into database
                 db['alert'].insert_one(
                     {
-                        "location": args['alert_location'],
+                        "location": name,
                         "ip": args['alert_ip'],
                         "type": args['alert_type']
                     }
@@ -260,16 +269,17 @@ class edit(Resource):
 class delete(Resource):
 
     def delete(self, device):
-
+        print(device)
         _type, _device = device.split('-')
+        print(_type)
+        print(_device)
 
         try:
             if _type == 'alert':
-                db['alert_data'].delete_one({"ip": _device})
-                db['alert'].delete_one({"ip":  _device})
+                db['alert_data'].delete_one({"location": _device})
+                db['alert'].delete_one({"location":  _device})
 
                 return(202)
-            return(418)
 
         except:
             return(418)

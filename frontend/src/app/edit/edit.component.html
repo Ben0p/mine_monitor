@@ -1,5 +1,5 @@
 <div class="edit">
-  <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
+  <div class="container" fxLayout="column" fxLayoutAlign="space-around center">
     <div flex-gt-lg="15">
       <mat-card class="card">
         <mat-card-header>
@@ -64,7 +64,7 @@
             <br>
             <div *ngIf="alertType == 'trailer'">
               <mat-form-field>
-                <input matInput placeholder= "Trailer Number" formControlName="trailer_number">
+                <input matInput placeholder="Trailer Number" formControlName="trailer_number">
               </mat-form-field>
               <br>
               <mat-form-field>
@@ -81,9 +81,33 @@
               <br>
             </div>
             <button mat-raised-button type="submit" (click)="onSubmit('submit')" [disabled]="!editForm.valid">Submit</button>
+            &nbsp;&nbsp;
             <button mat-raised-button type="submit" (click)="onSubmit('delete')" [disabled]="!editForm.valid">Delete</button>
           </form>
         </mat-card-content>
+      </mat-card>
+    </div>
+    <div flex-gt-lg="15">
+      <mat-card class="card" style="font-size: 12px;">
+        Devices are matched by name.
+        <br>
+        <br>
+        <b>Add new:</b>
+        <br>
+        Enter details, click submit.
+        <br>
+        <br>
+        <b>To update:</b>
+        <br>
+        Enter the exact existing name and details, click submit.
+        <br>
+        <br>
+        <b>To delete:</b>
+        <br>
+        Enter exact existing name and click delete.
+        <br>
+        <br>
+        (Takes up to 30sec to update.)
       </mat-card>
     </div>
   </div>
