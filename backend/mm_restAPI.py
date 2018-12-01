@@ -22,7 +22,7 @@ db = client['minemonitor']
 class alert(Resource):
     def get(self):
         # Get all sign data from the signs collection in mongo
-        alerts = db['alert_data'].find()
+        alerts = db['alert_data'].find().sort("location",pymongo.ASCENDING)
 
         # Return collection as a massive json
         return(jsonify(json.loads(dumps(alerts))))
