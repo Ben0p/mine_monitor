@@ -8,7 +8,7 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+          <form [formGroup]="editForm">
             <mat-form-field>
               <mat-select placeholder="Type" [(ngModel)]="selectedType" name="type" formControlName="type">
                 <mat-option *ngFor="let type of types" [value]="type.value">

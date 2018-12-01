@@ -10,6 +10,8 @@ const httpOptions = {
   })
 };
 
+const APIurl: String = 'http://10.20.64.253:5000/'
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,7 @@ const httpOptions = {
 
 
 export class DataService {
+
 
   constructor(private http: HttpClient) { }
 
@@ -46,46 +49,46 @@ export class DataService {
   */
 
  getAlerts(): Observable<any> {
-  return this.http.get('http://localhost:5000/alert').pipe(
+  return this.http.get(APIurl + 'alert').pipe(
     map(this.extractData),
     catchError(this.handleError<any>('failed'))
   )
 }
 
   alertDetail(ip): Observable<any> {
-    return this.http.get('http://10.20.12.94:5000/alert/' + ip).pipe(
+    return this.http.get(APIurl + 'alert/' + ip).pipe(
       map(this.extractData)
     )
   }
 
   getFleet(): Observable<any> {
-    return this.http.get('http://10.20.64.253:5000/fleet').pipe(
+    return this.http.get(APIurl + 'fleet').pipe(
       map(this.extractData)
     )
   }
 
   fleetDetail(name): Observable<any> {
-    return this.http.get('http://10.20.64.253:5000/fleet/' + name).pipe(
+    return this.http.get(APIurl + 'fleet/' + name).pipe(
       map(this.extractData)
     )
   }
 
   setOutputs(name, outputs): Observable<any> {
-    return this.http.post<any>('http://10.20.12.94:5000/alert/' + name, JSON.stringify(outputs), httpOptions).pipe(
+    return this.http.post<any>(APIurl + 'alert/' + name, JSON.stringify(outputs), httpOptions).pipe(
       tap((outputs) => console.log(console.log(outputs))),
       catchError(this.handleError<any>('setOutputs'))
     );
   }
 
   edit(device): Observable<any> {
-    return this.http.post<any>('http://10.20.12.94:5000/edit', JSON.stringify(device), httpOptions).pipe(
+    return this.http.post<any>(APIurl + 'edit', JSON.stringify(device), httpOptions).pipe(
       tap((outputs) => console.log('Edited device')),
       catchError(this.handleError<any>('error'))
     );
   }
 
   delete(type, device): Observable<any> {
-    return this.http.delete<any>('http://10.20.12.94:5000/edit/'+ type + '-' + device).pipe(
+    return this.http.delete<any>(APIurl + 'edit/'+ type + '-' + device).pipe(
       tap((outputs) => console.log('Deleted device')),
       catchError(this.handleError<any>('error'))
     );
