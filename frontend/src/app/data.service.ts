@@ -70,9 +70,9 @@ export class DataService {
     )
   }
 
-  setOutputs(ip, outputs): Observable<any> {
-    return this.http.post<any>('http://10.20.12.94:5000/alert/' + ip, JSON.stringify(outputs), httpOptions).pipe(
-      tap((outputs) => console.log('Changed outputs on ' + ip)),
+  setOutputs(name, outputs): Observable<any> {
+    return this.http.post<any>('http://10.20.12.94:5000/alert/' + name, JSON.stringify(outputs), httpOptions).pipe(
+      tap((outputs) => console.log(console.log(outputs))),
       catchError(this.handleError<any>('setOutputs'))
     );
   }

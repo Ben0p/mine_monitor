@@ -192,17 +192,19 @@
             <!-- If a Trailer-->
             <div *ngIf="alert$.trailer">
               <div *ngFor="let trailer of alert$.areas">
+                <mat-divider></mat-divider>
+                <br>
                 <b style="margin-left: 30px;"> {{trailer.area}} - {{trailer.ip}} - {{trailer.latency}}ms </b>
 
                 <div class="controls">
                   <br>
                   B
-                  <mat-slide-toggle [checked]="state(trailer.area, 'b')">
+                  <mat-slide-toggle [checked]="state(trailer.area, 'b')" (change)="onChangeTrailer($event, trailer.area, 'b')">
                   </mat-slide-toggle>
                   &nbsp;&nbsp;
 
                   C
-                  <mat-slide-toggle [checked]="state(trailer.area, 'c')">
+                  <mat-slide-toggle [checked]="state(trailer.area, 'c')" (change)="onChangeTrailer($event, trailer.area, 'c')">
                   </mat-slide-toggle>
                 </div>
                 <br>
@@ -232,7 +234,6 @@
                         <div class="trailer_C_off"></div>
                       </td>
                     </ng-template>
-
                   </tr>
                 </table>
                 <br>

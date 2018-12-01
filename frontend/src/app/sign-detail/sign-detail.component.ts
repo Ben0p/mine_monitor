@@ -81,28 +81,41 @@ export class SignDetailComponent implements OnInit, OnDestroy {
 
   setOutputs() {
     this.data.setOutputs(this.name, this.outputStates).subscribe((results) => {
-      this.outputStates['all_clear'] = this.alert$['all_clear'] = results[0]
-      this.outputStates['emergency'] = this.alert$['emergency'] = results[1]
-      this.outputStates['lightning'] = this.alert$['lightning'] = results[2]
-      this.outputStates['a'] = this.alert$['a'] = results[3]
-      this.outputStates['b'] = this.alert$['b'] = results[4]
-      this.outputStates['c'] = this.alert$['c'] = results[5]
+      if (this.alert$['type'] == 'trailer') {
+        this.outputStates['west_b'] = this.alert$['areas'][0]['b'] = results[0][0]
+        this.outputStates['west_c'] = this.alert$['areas'][0]['c'] = results[0][1]
+        this.outputStates['central_b'] = this.alert$['areas'][1]['b'] = results[1][0]
+        this.outputStates['central_c'] = this.alert$['areas'][1]['c'] = results[1][1]
+        this.outputStates['east_b'] = this.alert$['areas'][2]['b'] = results[2][0]
+        this.outputStates['east_c'] = this.alert$['areas'][2]['c'] = results[2][1]
+      } else {
+        console.log(results)
+        this.outputStates['all_clear'] = this.alert$['all_clear'] = results[0]
+        this.outputStates['emergency'] = this.alert$['emergency'] = results[1]
+        this.outputStates['lightning'] = this.alert$['lightning'] = results[2]
+        this.outputStates['a'] = this.alert$['a'] = results[3]
+        this.outputStates['b'] = this.alert$['b'] = results[4]
+        this.outputStates['c'] = this.alert$['c'] = results[5]
+      }
     })
   }
 
   onChange(event, output) {
-    if (event.checked == true) {
-      this.outputStates[output] = true
-      this.setOutputs()
-    } else {
-      this.outputStates[output] = false
-      this.setOutputs()
-    }
+    this.outputStates[output] = event.checked
+    console.log(this.outputStates)
+    this.setOutputs()
+
   }
 
   state(area, beacon) {
-      const State: string = area+'_'+beacon
-      return(this.outputStates[State])
+    const trailerState: string = area.toLowerCase()+'_'+beacon
+    return(this.outputStates[trailerState])
+  }
+
+  onChangeTrailer(event, area, beacon) {
+    const trailerState: string = area.toLowerCase()+'_'+beacon
+    this.outputStates[trailerState] = event.checked
+    this.setOutputs()
   }
 
 }

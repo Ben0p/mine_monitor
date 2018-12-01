@@ -98,6 +98,8 @@ class alert_detail(Resource):
 
         # Blank output array
         outputs = []
+        trailer_outputs = []
+
         # Parse the form data
         parser = reqparse.RequestParser()
         parser.add_argument("all_clear")
@@ -107,35 +109,95 @@ class alert_detail(Resource):
         parser.add_argument("b")
         parser.add_argument("c")
         parser.add_argument("ip")
+        parser.add_argument("west_b")
+        parser.add_argument("west_c")
+        parser.add_argument("central_b")
+        parser.add_argument("central_c")
+        parser.add_argument("east_b")
+        parser.add_argument("east_c")
+
         args = parser.parse_args()
 
-        ip = args['ip']
+        # False lookup
+        false_array = ['False', 'false', '0', False]
 
-        inputs = [args['all_clear'], args['emergency'], args['lightning'], args['a'], args['b'], args['c']]
+        # Get alert details from database by ip
+        alert_document = db['alert_data'].find_one({'location': name})
+        if alert_document == None:
+            return(404)
 
-        for key in inputs:
-            if key == 'False':
-                outputs.append('')
-            else:
-                outputs.append(1)
-        print(ip)
-        print(outputs)
+        # Check if the name is a trailer
+        if name[:2] == 'TR':
+            west_ip = alert_document['areas'][0]['ip']
+            central_ip = alert_document['areas'][1]['ip']
+            east_ip = alert_document['areas'][2]['ip']
 
-        # Set output states via modbus
-        c = ModbusClient(host=ip, port=502, auto_open=True)
-        c.write_single_coil(16, outputs[0])
-        c.write_single_coil(17, outputs[1])
-        c.write_single_coil(18, outputs[2])
-        c.write_single_coil(19, outputs[3])
-        c.write_single_coil(20, outputs[4])
-        c.write_single_coil(21, outputs[5])
+            # Create list of ips
+            ips = [west_ip, central_ip, east_ip]
+            trailer_bits = [
+                [args['west_b'], args['west_c']],
+                [args['central_b'], args['central_c']],
+                [args['east_b'], args['east_c']]
+            ]
 
-        # Read the outputs again
-        bits = c.read_coils(16, 6)
+            for index, ip in enumerate(ips):
+                # Get outputs via modbus on GET request
+                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+                
+                try:
 
-        print(bits)
+                    # B
+                    output_b = trailer_bits[index][0]
+                    if output_b in false_array:
+                        output_b = ''
+                    
+                    # C
+                    output_c = trailer_bits[index][1]
+                    if output_c in false_array:
+                        output_c = ''                  
 
-        return(bits, 201)
+                    # Set B Alert
+                    c.write_single_coil(20, output_b)
+                    # Set C Alert
+                    c.write_single_coil(21, output_c)
+                    # Read outputs
+                    bits = c.read_coils(16, 6)
+                    
+                    trailer_outputs.append([bits[4], bits[5]])
+                
+                except: 
+                    trailer_outputs.append([0,0])
+
+            # Return a json response
+            return(trailer_outputs)
+
+        else:
+            ip = args['ip']
+            c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+            
+            outputs = [args['all_clear'], args['emergency'], args['lightning'], args['a'], args['b'], args['c']]
+
+            for index, output in enumerate(outputs):
+                if output in false_array:
+                    outputs[index] = ''
+
+            try:
+                # Set output states via modbus
+                c.write_single_coil(16, outputs[0])
+                c.write_single_coil(17, outputs[1])
+                c.write_single_coil(18, outputs[2])
+                c.write_single_coil(19, outputs[3])
+                c.write_single_coil(20, outputs[4])
+                c.write_single_coil(21, outputs[5])
+
+                # Read the outputs again
+                bits = c.read_coils(16, 6)
+            
+            except: 
+                return(404)
+            
+            return(bits)
+
 
 
 class edit(Resource):
@@ -164,7 +226,6 @@ class edit(Resource):
 
             # Delete any existing documents
             if existing_document.count() >= 1:
-                print('existing document')
                 db['alert'].delete_many({'location' : args['trailer_number']})
                 db['alert_data'].delete_many({'location' : args['trailer_number']})
 
