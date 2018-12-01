@@ -16,7 +16,7 @@
           <mat-card-content>
             <!-- Offline image if offline -->
             <img class="offline" src="../../assets/img/thor.gif" *ngIf="!alert$.online" />
-            <div class="controls" *ngIf="alert$.online && !alert$.trailer">
+            <div class="controls" *ngIf="alert$.online && alert$.sign">
               <div>
                 All Clear
                 <br>
@@ -180,14 +180,23 @@
               </table>
             </div>
             <!-- If a C Alert Beacon-->
-            <table class="calert" *ngIf="alert$.calert">
-              <tr>
-                <div class="calert_on" *ngIf="alert$.c; else calertOff"></div>
-                <ng-template #calertOff>
-                  <div class="calert_off"></div>
-                </ng-template>
-              </tr>
-            </table>
+            <div *ngIf="alert$.calert">
+              <div class="controls">
+                <br>
+                C
+                <br>
+                <mat-slide-toggle [checked]="outputStates.c" (change)="onChange($event, 'c')">
+                </mat-slide-toggle>
+              </div>
+              <table class="calert">
+                <tr>
+                  <div class="calert_on" *ngIf="alert$.c; else calertOff"></div>
+                  <ng-template #calertOff>
+                    <div class="calert_off"></div>
+                  </ng-template>
+                </tr>
+              </table>
+            </div>
 
             <!-- If a Trailer-->
             <div *ngIf="alert$.trailer">

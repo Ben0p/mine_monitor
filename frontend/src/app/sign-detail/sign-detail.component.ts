@@ -89,7 +89,6 @@ export class SignDetailComponent implements OnInit, OnDestroy {
         this.outputStates['east_b'] = this.alert$['areas'][2]['b'] = results[2][0]
         this.outputStates['east_c'] = this.alert$['areas'][2]['c'] = results[2][1]
       } else {
-        console.log(results)
         this.outputStates['all_clear'] = this.alert$['all_clear'] = results[0]
         this.outputStates['emergency'] = this.alert$['emergency'] = results[1]
         this.outputStates['lightning'] = this.alert$['lightning'] = results[2]
@@ -102,7 +101,6 @@ export class SignDetailComponent implements OnInit, OnDestroy {
 
   onChange(event, output) {
     this.outputStates[output] = event.checked
-    console.log(this.outputStates)
     this.setOutputs()
 
   }
