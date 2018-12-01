@@ -45,11 +45,13 @@ mat-card-title h3 {
     width: 225px;
     font-size: 20px;
     text-align: center;
+    margin-bottom: 15px;
 }
 
 mat-card-subtitle {
     width: 225px;
     text-align: center;
+    margin-bottom: 10px;
 }
 
 .button_card {
@@ -94,7 +96,8 @@ td {
 
 .offline {
     position: absolute;
-    height: 370px;
+    top: 75px;
+    height: 390px;
     margin-left: -270px;
 }
 
