@@ -9,6 +9,7 @@ import multiprocessing
 
 
 def get(device):
+    # Have to create a new mongo connection for each thread or it wigs out
     client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
     db = client['minemonitor']
 
@@ -74,11 +75,12 @@ def main():
     client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
     db = client['minemonitor']
 
-
     documents = db['fleet'].find()
 
-    # A little lesson in trickery
     devices = []
+    
+    # A little lesson in trickery
+    
     for document in documents:
         devices.extend(
             [
@@ -116,6 +118,8 @@ def main():
     for device in devices:
         p = multiprocessing.Process(target=get, args=(device,))
         p.start()
+        print('Pinging {} - {}'.format(device['name'], device['device']))
+    print('After start')
 
 
 

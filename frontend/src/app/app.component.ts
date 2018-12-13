@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   path: any;
   firstPath: string;
   secondPath: string;
+  navbarHidden: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +35,10 @@ export class AppComponent implements OnInit {
           }
         }
       });
+    }
+
+    hideNav (value) {
+      this.navbarHidden = value;
     }
 
 

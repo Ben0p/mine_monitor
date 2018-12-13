@@ -203,7 +203,8 @@ class alert_detail(Resource):
 class edit(Resource):
 
     def post(self):
-        # Parse the form data
+
+        # Parse the form data (alert)
         parser = reqparse.RequestParser()
         parser.add_argument("alert_location")
         parser.add_argument("alert_ip")
@@ -213,6 +214,14 @@ class edit(Resource):
         parser.add_argument("central_ip")
         parser.add_argument("east_ip")
         parser.add_argument("trailer_number")
+
+        # Parse the form data (fleet)
+        parser.add_argument("fleet_name")
+        parser.add_argument("fleet_xim")
+        parser.add_argument("fleet_screen")
+        parser.add_argument("fleet_other")
+        parser.add_argument("fleet_2")
+        parser.add_argument("fleet_5")
 
         args = parser.parse_args()
 
@@ -230,6 +239,9 @@ class edit(Resource):
                 name = args['alert_location']
 
             # Check if document exists
+            '''
+            ' Is this supposed to be db['alert'] ???
+            '''
             existing_document = db['alert_data'].find({'location' : name})
             print('Updating {}'.format(name))
 
@@ -262,6 +274,57 @@ class edit(Resource):
                 )
 
             return(201)
+        elif (args['type'] == 'fleet'):
+
+            # Check for existing document
+            existing_document = db['fleet'].find({'name' : args['fleet_name']})
+            document_count = existing_document.count()
+
+
+            if document_count == None:
+                db['fleet'].insert_one(
+                    {
+                        'name' : args['fleet_name'],
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+
+            elif document_count == 1:
+                db['fleet'].find_one_and_update(
+                    {
+                        'name' : args['fleet_name']
+                    },
+                    {
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+            
+            elif document_count > 1:
+                db['fleet'].delete_many({'name' : args['fleet_name']})
+                db['fleet_data'].delete_many({'name' : args['fleet_name']})
+
+                db['fleet'].insert_one(
+                    {
+                        'name' : args['fleet_name'],
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+
+            print('Updated {}'.format(args['fleet_name']))
+
+            
         else:
             return(404)
 

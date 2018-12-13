@@ -1,4 +1,9 @@
-<mat-toolbar color="primary">
+<div class="show_nav" *ngIf="navbarHidden" (click)="hideNav(false)">
+    <i class="material-icons">
+            keyboard_arrow_down
+    </i>
+</div>
+<mat-toolbar color="primary" *ngIf="!navbarHidden">
     <mat-toolbar-row>
         <span>
             <button mat-raised-button routerLink="/home">home</button>
@@ -11,6 +16,12 @@
         <button mat-raised-button routerLink="/edit">
             <i class="material-icons">
                 edit
+            </i>
+        </button>
+        &nbsp;&nbsp;
+        <button mat-raised-button (click)="hideNav(true)">
+            <i class="material-icons">
+                visibility_off
             </i>
         </button>
 

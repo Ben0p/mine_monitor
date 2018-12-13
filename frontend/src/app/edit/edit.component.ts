@@ -43,7 +43,7 @@ export class EditComponent implements OnInit {
   });
 
   types: Type[] = [
-    // {value: 'fleet', viewValue: 'Fleet'},
+    {value: 'fleet', viewValue: 'Fleet'},
     { value: 'alert', viewValue: 'Alert' }
   ];
 
