@@ -32,7 +32,7 @@
 .fleet-card {
     overflow-x: hidden;
     width: 300px;
-    height: 620px;
+    height: 710px;
     padding: 0px;
     border-radius: 25px;
  }
@@ -40,7 +40,7 @@
  .device {
     overflow-x: hidden;
     width: 250px;
-    height: 100px;
+    height: 115px;
     padding: 0px;
     border-radius: 25px;
     margin-left: auto;
@@ -82,9 +82,15 @@
  }
 
  mat-card-title {
-     width: 200px;
-     text-align: left;
+   width: 200px;
+   text-align: left;
  }
+ 
+mat-card-subtitle {
+   width: 200px;
+   text-align: left;
+   margin-left: 15px;
+}
 
  .header-image {
   background-size: cover;

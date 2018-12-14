@@ -12,6 +12,8 @@
               <h3>{{ fleet.name }}</h3>
             </mat-card-title>
           </mat-card-header>
+
+          <!-- TropOS 2.4 ghz -->
           <mat-card-content class="devices">
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.twoOnline, 
@@ -21,11 +23,16 @@
                 <mat-card-title>
                   <h4>TropOS 2.4ghz</h4>
                 </mat-card-title>
+                <mat-card-subtitle>
+                  <h3>{{ fleet.twoIP }}</h3>
+                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
-                {{fleet.twoLatency}} ms
+                {{ fleet.twoLatency }} ms
               </mat-card-content>
             </mat-card>
+
+            <!-- TropOS 5ghz -->
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.fiveOnline, 
               'device-off': !fleet.fiveOnline
@@ -34,11 +41,16 @@
                 <mat-card-title>
                   <h4>TropOS 5ghz</h4>
                 </mat-card-title>
+                <mat-card-subtitle>
+                  <h3>{{ fleet.fiveIP }}</h3>
+                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 {{fleet.fiveLatency}} ms
               </mat-card-content>
             </mat-card>
+
+            <!-- xIM -->
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.ximOnline, 
               'device-off': !fleet.ximOnline
@@ -47,11 +59,16 @@
                 <mat-card-title>
                   <h4>xIM</h4>
                 </mat-card-title>
+                <mat-card-subtitle>
+                  <h3>{{ fleet.ximIP }}</h3>
+                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 {{fleet.ximLatency}} ms
               </mat-card-content>
             </mat-card>
+
+            <!-- screen -->
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.screenOnline, 
               'device-off': !fleet.screenOnline
@@ -60,10 +77,15 @@
                 <mat-card-title>
                   <h4>Screen</h4>
                 </mat-card-title>
+                <mat-card-subtitle>
+                  <h3>{{ fleet.screenIP }}</h3>
+                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 {{fleet.screenLatency}} ms
               </mat-card-content>
+
+              <!-- Other / MS952-->
             </mat-card>
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.ms352Online, 
@@ -73,6 +95,9 @@
                 <mat-card-title>
                   <h4>MS352</h4>
                 </mat-card-title>
+                <mat-card-subtitle>
+                  <h3>{{ fleet.ms952IP }}</h3>
+                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 {{fleet.ms352Latency}} ms

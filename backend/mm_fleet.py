@@ -22,7 +22,8 @@ def get(device):
                 "$set": 
                     {
                         device['device']+'Latency' : pong,
-                        device['device']+'Online' : online
+                        device['device']+'Online' : online,
+                        device['device']+'IP' : device['ip']
                     }
             }
         )
@@ -80,7 +81,6 @@ def main():
     devices = []
     
     # A little lesson in trickery
-    
     for document in documents:
         devices.extend(
             [
