@@ -16,5 +16,7 @@
 - [ ] Pull tetra data somehow
 - [ ] Production / development environment setup
 - [ ] Convert to progressive web app
-- [ ] Links to devices from fleet detail
-- [ ] Add ip addresses to fleet_data collection
+- [x] Links to devices from fleet detail
+- [x] Add ip addresses to fleet_data collection
+- [x] Add ip addresses in fleet detail page
+- [ ] SVG angular material icons for no internet

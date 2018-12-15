@@ -52,5 +52,15 @@ export class FleetDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  externalLink(device, ip, online) {
+    if (device === "tropos" && online) {
+      window.open("https://"+ip, "_blank");
+    } else if (device === "xim" && online) {
+      window.open("http://"+ip+':3785/getinfocore', "_blank");
+    } else if (device === "ms352" && online) {
+      window.open("http://"+ip, "_blank");
+    }
+    
+  }
 
 }

@@ -12,13 +12,14 @@
               <h3>{{ fleet.name }}</h3>
             </mat-card-title>
           </mat-card-header>
-
-          <!-- TropOS 2.4 ghz -->
           <mat-card-content class="devices">
+
+            <!-- TropOS 2.4 ghz -->
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.twoOnline, 
               'device-off': !fleet.twoOnline
-            }">
+            }"
+              (click)="externalLink('tropos', fleet.twoIP, fleet.twoOnline)">
               <mat-card-header>
                 <mat-card-title>
                   <h4>TropOS 2.4ghz</h4>
@@ -36,7 +37,8 @@
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.fiveOnline, 
               'device-off': !fleet.fiveOnline
-            }">
+            }"
+              (click)="externalLink('tropos', fleet.fiveIP, fleet.fiveOnline)">
               <mat-card-header>
                 <mat-card-title>
                   <h4>TropOS 5ghz</h4>
@@ -54,7 +56,8 @@
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.ximOnline, 
               'device-off': !fleet.ximOnline
-            }">
+            }"
+              (click)="externalLink('xim', fleet.ximIP, fleet.ximOnline)">
               <mat-card-header>
                 <mat-card-title>
                   <h4>xIM</h4>
@@ -90,7 +93,8 @@
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.ms352Online, 
               'device-off': !fleet.ms352Online
-            }">
+            }"
+            (click)="externalLink('ms352', fleet.ms352IP, fleet.ms352Online)">
               <mat-card-header>
                 <mat-card-title>
                   <h4>MS352</h4>
