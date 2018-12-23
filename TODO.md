@@ -20,3 +20,7 @@
 - [x] Add ip addresses to fleet_data collection
 - [x] Add ip addresses in fleet detail page
 - [ ] SVG angular material icons for no internet
+- [ ] Power devices (DC distrubution / Cordex / APC UPS)
+- [ ] Trailers (Solar / TropOS / Backhual )
+- [ ] Add TriStar solar regulators from webui
+- [ ] Solar regulator modbus data aquisition

@@ -10,7 +10,7 @@ const httpOptions = {
   })
 };
 
-const APIurl: String = 'http://10.20.12.94:5000/'
+const APIurl: String = 'http://10.20.64.253:5000/'
 
 
 @Injectable({

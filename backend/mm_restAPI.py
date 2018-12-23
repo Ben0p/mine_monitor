@@ -204,12 +204,16 @@ class edit(Resource):
 
     def post(self):
 
-        # Parse the form data (alert)
+        # Initilize request parser
         parser = reqparse.RequestParser()
+        # Get type
+        parser.add_argument("type")
+
+        # Parse the form data (alert)
+
         parser.add_argument("alert_location")
         parser.add_argument("alert_ip")
         parser.add_argument("alert_type")
-        parser.add_argument("type")
         parser.add_argument("west_ip")
         parser.add_argument("central_ip")
         parser.add_argument("east_ip")
@@ -222,6 +226,10 @@ class edit(Resource):
         parser.add_argument("fleet_other")
         parser.add_argument("fleet_2")
         parser.add_argument("fleet_5")
+
+        # Parse the form data (tristar)
+        parser.add_argument("tristar_ip")
+        parser.add_argument("parent")
 
         args = parser.parse_args()
 
@@ -324,7 +332,25 @@ class edit(Resource):
 
             print('Updated {}'.format(args['fleet_name']))
 
-            
+        elif (args['type'] == 'tristar'):
+
+            # Find existing document and update, create new if it doesn't exist
+            db['tristar'].find_one_and_update(
+                    {
+                        'ip' : args['tristar_ip']
+                    },
+                    {
+                        '$set': 
+                        {
+                        'ip' : args['tristar_ip'],
+                        'parent' : args['parent']
+                        }
+                    },
+                    upsert = True
+                )
+            return(201)
+
+
         else:
             return(404)
 
