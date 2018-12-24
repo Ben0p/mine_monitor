@@ -398,6 +398,18 @@ class fleet_detail(Resource):
             return(False, 404)
 
 
+class trailers(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        trailer_data = db['tristar_data'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(trailer_data))))
+        except:
+            return(False, 404)
+
+
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
 api.add_resource(alert_detail, "/alert/<string:name>")
@@ -405,6 +417,7 @@ api.add_resource(fleet, "/fleet")
 api.add_resource(fleet_detail, "/fleet/<string:name>")
 api.add_resource(edit, "/edit")
 api.add_resource(delete, "/edit/<string:device>")
+api.add_resource(trailers, "/trailers")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')
