@@ -39,12 +39,15 @@ export class EditComponent implements OnInit {
     trailer_number: new FormControl(''),
     west_ip: new FormControl(''),
     central_ip: new FormControl(''),
-    east_ip: new FormControl('')
+    east_ip: new FormControl(''),
+    parent: new FormControl(''),
+    tristar_ip: new FormControl('')
   });
 
   types: Type[] = [
     {value: 'fleet', viewValue: 'Fleet'},
-    { value: 'alert', viewValue: 'Alert' }
+    { value: 'alert', viewValue: 'Alert' },
+    { value: 'tristar', viewValue: 'Trailer' },
   ];
 
   alertTypes: alertType[] = [
@@ -87,7 +90,7 @@ export class EditComponent implements OnInit {
 
     }
 
-    this.router.navigateByUrl('/alerts');
+    // this.router.navigateByUrl('/alerts');
 
   }
 

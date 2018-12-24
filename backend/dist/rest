@@ -203,16 +203,33 @@ class alert_detail(Resource):
 class edit(Resource):
 
     def post(self):
-        # Parse the form data
+
+        # Initilize request parser
         parser = reqparse.RequestParser()
+        # Get type
+        parser.add_argument("type")
+
+        # Parse the form data (alert)
+
         parser.add_argument("alert_location")
         parser.add_argument("alert_ip")
         parser.add_argument("alert_type")
-        parser.add_argument("type")
         parser.add_argument("west_ip")
         parser.add_argument("central_ip")
         parser.add_argument("east_ip")
         parser.add_argument("trailer_number")
+
+        # Parse the form data (fleet)
+        parser.add_argument("fleet_name")
+        parser.add_argument("fleet_xim")
+        parser.add_argument("fleet_screen")
+        parser.add_argument("fleet_other")
+        parser.add_argument("fleet_2")
+        parser.add_argument("fleet_5")
+
+        # Parse the form data (tristar)
+        parser.add_argument("tristar_ip")
+        parser.add_argument("parent")
 
         args = parser.parse_args()
 
@@ -230,6 +247,9 @@ class edit(Resource):
                 name = args['alert_location']
 
             # Check if document exists
+            '''
+            ' Is this supposed to be db['alert'] ???
+            '''
             existing_document = db['alert_data'].find({'location' : name})
             print('Updating {}'.format(name))
 
@@ -262,6 +282,75 @@ class edit(Resource):
                 )
 
             return(201)
+        elif (args['type'] == 'fleet'):
+
+            # Check for existing document
+            existing_document = db['fleet'].find({'name' : args['fleet_name']})
+            document_count = existing_document.count()
+
+
+            if document_count == None:
+                db['fleet'].insert_one(
+                    {
+                        'name' : args['fleet_name'],
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+
+            elif document_count == 1:
+                db['fleet'].find_one_and_update(
+                    {
+                        'name' : args['fleet_name']
+                    },
+                    {
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+            
+            elif document_count > 1:
+                db['fleet'].delete_many({'name' : args['fleet_name']})
+                db['fleet_data'].delete_many({'name' : args['fleet_name']})
+
+                db['fleet'].insert_one(
+                    {
+                        'name' : args['fleet_name'],
+                        'xim' : args['fleet_xim'],
+                        'screen' : args['fleet_screen'],
+                        'ms352' : args['fleet_other'],
+                        'five' : args['fleet_five'],
+                        'two' : args['fleet_two']
+                    }
+                )
+
+            print('Updated {}'.format(args['fleet_name']))
+
+        elif (args['type'] == 'tristar'):
+
+            # Find existing document and update, create new if it doesn't exist
+            db['tristar'].find_one_and_update(
+                    {
+                        'ip' : args['tristar_ip']
+                    },
+                    {
+                        '$set': 
+                        {
+                        'ip' : args['tristar_ip'],
+                        'parent' : args['parent']
+                        }
+                    },
+                    upsert = True
+                )
+            return(201)
+
+
         else:
             return(404)
 
@@ -309,6 +398,18 @@ class fleet_detail(Resource):
             return(False, 404)
 
 
+class trailers(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        trailer_data = db['tristar_data'].find().sort("parent",pymongo.ASCENDING)
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(trailer_data))))
+        except:
+            return(False, 404)
+
+
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
 api.add_resource(alert_detail, "/alert/<string:name>")
@@ -316,6 +417,7 @@ api.add_resource(fleet, "/fleet")
 api.add_resource(fleet_detail, "/fleet/<string:name>")
 api.add_resource(edit, "/edit")
 api.add_resource(delete, "/edit/<string:device>")
+api.add_resource(trailers, "/trailers")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

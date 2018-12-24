@@ -1,3 +1,31 @@
 <div class="trailers">
-
+    <div class="container" fxLayout="row wrap" fxLayoutAlign="center" >
+        <div flex-gt-lg="15" *ngFor="let trailer of trailers">
+          <mat-card class="trailer" (click)="onNavigate(trailer.ip)">
+            <mat-card-header>
+              <mat-card-title>
+                <br>
+                {{ trailer.parent }}
+              </mat-card-title>
+              <mat-card-subtitle>
+                {{ trailer.ip }}
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                Battery Volts: {{ trailer.live.batt_volts }}
+                <br>
+                Battery Current: {{ trailer.live.batt_current }}
+                <br>
+                Solar Volts: {{ trailer.live.solar_volts }}
+                <br>
+                Solar Current: {{ trailer.live.solar_current}}
+                <br>
+                Charge Mode: {{ trailer.live.charge_state }}
+                <br>
+                Output Power: {{ trailer.live.output_power }}
+                <br>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
 </div>

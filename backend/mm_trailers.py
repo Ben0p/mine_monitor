@@ -1,3 +1,4 @@
+#! /usr/bin/python3.6
 from pyModbusTCP.client import ModbusClient
 import pymongo
 import multiprocessing
@@ -13,8 +14,8 @@ def calcVolts(hi, lo, v):
     '''
     Converts raw modbus voltage value to actual volts
     '''
-    v_scaling = hi + lo/(2**16)
-    volts = v*v_scaling*2**-15
+    v_scaling = hi + (lo/(2**16))
+    volts = v*v_scaling*(2**-15)
     return(format(volts, '.2f'))
 
 
@@ -22,8 +23,9 @@ def calcCurrent(hi, lo, i):
     '''
     Converts raw modbus current value to actual current
     '''
-    c_scaling = hi + lo/(2**16)
-    current = i*c_scaling*2**-15
+    c_scaling = hi * lo
+    current = i*c_scaling*(2**-15)
+
     return(format(current, '.2f'))
 
 
@@ -70,84 +72,88 @@ def parseTristar(tristar):
     # Initialize modbus connection
     c = ModbusClient(host=tristar['ip'], port=502, auto_open=True, timeout=1)
 
-    # Read up to modbus register 60
-    values = c.read_holding_registers(0, 60)
 
-    if values:
-        # Save modbus values to dictionary
-        raw_values = {
-            'V_PU_hi': values[0],
-            'V_PU_lo': values[1],
-            'I_PU_hi': values[2],
-            'I_PU_lo': values[3],
-            'adc_vb_f_med': values[24],
-            'adc_vbterm_f': values[25],
-            'adc_vbs_f': values[26],
-            'adc_va_f': values[27],
-            'adc_ib_f_shadow': values[28],
-            'adc_ia_f_shadow': values[29],
-            'T_hs': values[35],
-            'charge_state': values[50],
-            'power_out_shadow': values[58]
-        }
+    while True:
+        # Read up to modbus register 60
+        values = c.read_holding_registers(0, 60)
 
-        # Save converted values to dictionary
-        live_values = {
-            'online' : True,
-            'batt_volts': calcVolts(
-                raw_values['V_PU_hi'],
-                raw_values['V_PU_lo'],
-                raw_values['adc_vb_f_med']),
-            'batt_current': calcCurrent(
-                raw_values['I_PU_hi'],
-                raw_values['I_PU_lo'],
-                raw_values['adc_ib_f_shadow']),
-            'solar_volts': calcVolts(
-                raw_values['V_PU_hi'],
-                raw_values['V_PU_lo'],
-                raw_values['adc_va_f']),
-            'solar_current': calcCurrent(
-                raw_values['I_PU_hi'],
-                raw_values['I_PU_lo'],
-                raw_values['adc_ia_f_shadow']),
-            'charge_state': chargeState(
-                raw_values['charge_state']),
-            'output_power': calcPower(
-                raw_values['V_PU_hi'],
-                raw_values['V_PU_lo'],
-                raw_values['I_PU_hi'],
-                raw_values['I_PU_lo'],
-                raw_values['power_out_shadow']
-            )
-        }
-
-    # Blank values if there is no connection
-    else: 
-        live_values = {
-            'online' : False,
-            'batt_volts': '',
-            'batt_current': '',
-            'solar_volts': '',
-            'solar_current': '',
-            'charge_state': '',
-            'output_power': ''
-        }
-
-    # Dump into tristar_data collection
-    db['tristar_data'].find_one_and_update(
-        {
-            'parent': tristar['parent']
-        },
-        {
-            '$set': {
-                'ip': tristar['ip'],
-                'parent': tristar['parent'],
-                'live' : live_values
+        if values:
+            # Save modbus values to dictionary
+            raw_values = {
+                'V_PU_hi': values[0],
+                'V_PU_lo': values[1],
+                'I_PU_hi': values[2],
+                'I_PU_lo': values[3],
+                'adc_vb_f_med': values[24],
+                'adc_vbterm_f': values[25],
+                'adc_vbs_f': values[26],
+                'adc_va_f': values[27],
+                'adc_ib_f_shadow': values[28],
+                'adc_ia_f_shadow': values[29],
+                'T_hs': values[35],
+                'charge_state': values[50],
+                'power_out_shadow': values[58]
             }
-        },
-        upsert=True
-    )
 
+            # Save converted values to dictionary
+            live_values = {
+                'online' : True,
+                'batt_volts': calcVolts(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['adc_vb_f_med']),
+                'batt_current': calcCurrent(
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['adc_ib_f_shadow']),
+                'solar_volts': calcVolts(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['adc_va_f']),
+                'solar_current': calcCurrent(
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['adc_ia_f_shadow']),
+                'charge_state': chargeState(
+                    raw_values['charge_state']),
+                'output_power': calcPower(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['power_out_shadow']
+                )
+            }
+
+        # Blank values if there is no connection
+        else: 
+            live_values = {
+                'online' : False,
+                'batt_volts': '',
+                'batt_current': '',
+                'solar_volts': '',
+                'solar_current': '',
+                'charge_state': '',
+                'output_power': ''
+            }
+
+        # Dump into tristar_data collection
+        db['tristar_data'].find_one_and_update(
+            {
+                'parent': tristar['parent']
+            },
+            {
+                '$set': {
+                    'ip': tristar['ip'],
+                    'parent': tristar['parent'],
+                    'live' : live_values
+                }
+            },
+            upsert=True
+        )
+
+        # Every 1 second so it doesn't go out of control
+        time.sleep(1)
 
 def main():
     '''
@@ -208,8 +214,8 @@ def main():
                 print("Stopped {}".format(name))
 
         time.sleep(10)
-        print('Sleep 10 sec')
 
 
 if __name__ == '__main__':
+    print("Polling trailers...")
     main()

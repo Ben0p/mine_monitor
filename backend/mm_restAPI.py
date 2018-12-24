@@ -401,7 +401,7 @@ class fleet_detail(Resource):
 class trailers(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
-        trailer_data = db['tristar_data'].find()
+        trailer_data = db['tristar_data'].find().sort("parent",pymongo.ASCENDING)
 
         # Return collection as a massive json
         try:

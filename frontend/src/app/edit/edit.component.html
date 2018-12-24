@@ -41,6 +41,15 @@
                 <input matInput placeholder="TropOS 2.4ghz" formControlName="fleet_2">
               </mat-form-field>
             </div>
+            <div *ngIf="selectedType == 'tristar'">
+                <mat-form-field>
+                  <input matInput placeholder="CT0xx" formControlName="parent">
+                </mat-form-field>
+                <h4>IP Addresses</h4>
+                <mat-form-field>
+                  <input matInput placeholder="Tristar IP" formControlName="tristar_ip">
+                </mat-form-field>
+              </div>
             <div *ngIf="selectedType == 'alert'">
               <mat-form-field>
                 <mat-select placeholder="Alert Type" [(ngModel)]="alertType" name="alerttype" formControlName="alert_type">
