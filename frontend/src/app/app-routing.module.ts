@@ -44,6 +44,10 @@ const routes: Routes = [
     component: EditComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'trailers',
+    loadChildren: '../app/trailers/trailers.module#TrailersModule'
+  },
   { 
     path: '**', 
     component: HomeComponent 

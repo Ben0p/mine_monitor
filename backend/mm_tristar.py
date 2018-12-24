@@ -121,6 +121,7 @@ def parseTristar(tristar):
             )
         }
 
+    # Blank values if there is no connection
     else: 
         live_values = {
             'online' : False,
@@ -132,6 +133,7 @@ def parseTristar(tristar):
             'output_power': ''
         }
 
+    # Dump into tristar_data collection
     db['tristar_data'].find_one_and_update(
         {
             'parent': tristar['parent']
