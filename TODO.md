@@ -6,7 +6,8 @@
 - [x] Hide navbar button or something
 - [ ] Mobile size menu
 - [ ] Reduce amount of devices pinged
-- [ ] Start pinging new device when added
+- [ ] Start pinging new fleet when added
+- [ ] Poll the signs without a delay
 - [ ] Put angular components into modules
 - [ ] Terrain page
 - [ ] Corrections stats page
@@ -22,5 +23,12 @@
 - [ ] SVG angular material icons for no internet
 - [ ] Power devices (DC distrubution / Cordex / APC UPS)
 - [ ] Trailers (Solar / TropOS / Backhual )
-- [ ] Add TriStar solar regulators from webui
-- [ ] Solar regulator modbus data aquisition
+- [x] Add TriStar solar regulators from webui
+- [x] Solar regulator modbus data aquisition
+- [ ] Fix solar current calculations always 0
+- [ ] Trailers green / orange / red indicating status
+- [ ] Trailer temps
+- [ ] Convert scripts into linux services
+- [ ] Make scripts headless
+- [ ] Master script to run as a service to start other scipts and monitor status
+- [ ] Indication on web page if script (service) not running (pop down)

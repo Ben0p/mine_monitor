@@ -6,7 +6,8 @@ import time
 
 
 '''
-In development
+Scrapes data for the comms trailers
+Gets details from mongo which has been added through the web UI
 '''
 
 
@@ -63,6 +64,7 @@ def chargeState(state):
 def parseTristar(tristar):
     '''
     Gets tristar data via modbus and writes to tristar_data db
+    This function is threaded for each trailer
     '''
 
     # Have to create a new mongo connection for each thread or it wigs out
@@ -122,7 +124,8 @@ def parseTristar(tristar):
                     raw_values['I_PU_hi'],
                     raw_values['I_PU_lo'],
                     raw_values['power_out_shadow']
-                )
+                ),
+                'heatsink_temp': raw_values['T_hs']
             }
 
         # Blank values if there is no connection
@@ -134,7 +137,8 @@ def parseTristar(tristar):
                 'solar_volts': '',
                 'solar_current': '',
                 'charge_state': '',
-                'output_power': ''
+                'output_power': '',
+                'heatsink_temp': ''
             }
 
         # Dump into tristar_data collection
@@ -152,12 +156,12 @@ def parseTristar(tristar):
             upsert=True
         )
 
-        # Every 1 second so it doesn't go out of control
-        time.sleep(1)
+        # Every 2 seconds so it doesn't go out of control
+        time.sleep(2)
 
 def main():
     '''
-    Continually checks for new tristars in db and creates a process
+    Continually checks for new trailers in db and creates a new process
     '''
 
     # Initialize mongo
@@ -169,12 +173,12 @@ def main():
 
     while True:
         # Get tristar documents
-        ts_docs = db['tristar'].find()
+        docs = db['tristar'].find()
 
         # Reset list of tristars in db
         tristar_list = []
 
-        for tristar in ts_docs:
+        for tristar in docs:
 
             # Get name
             name = tristar['parent']
