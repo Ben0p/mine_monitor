@@ -13,6 +13,18 @@
       </mat-card>
     </div>
     <div flex-gt-lg="15">
+      <mat-card class="card" (click)="toggle('gps')">
+        <mat-card-header>
+          <mat-card-title>
+            <h3>GPS</h3>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="gps_card">
+          <img class="gpsIMG" src="/assets/img/gps.png">
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div flex-gt-lg="15">
       <mat-card class="card" (click)="toggle('fleet')">
         <mat-card-header>
           <mat-card-title>

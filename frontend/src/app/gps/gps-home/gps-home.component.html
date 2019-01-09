@@ -1,3 +1,37 @@
-<p>
-  gps-home works!
-</p>
+<div class="gps">
+  <div class="container" fxLayout="row wrap" fxLayoutAlign="center">
+    <div flex-gt-lg="15">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title> Corrections </mat-card-title>
+          <mat-card-subtitle> Mine Systems </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngFor="let i of gps.data">
+            Uptime: &nbsp; {{ i.uptime }} <br>
+            Delay: &nbsp; {{ i.delay }} &nbsp; ms <br>
+            IPs: &nbsp; {{ i.ips }} <br>
+            <h4>Binding</h4>
+            Source: &nbsp; {{ i.binding.source_ip }}:{{ i.binding.source_port }} <br>
+            Binding: &nbsp; {{ i.binding.binding_ip }}:{{ i.binding.binding_port }} <br>
+            <h4>Buffer</h4>
+            Rx Buffer: &nbsp; {{ i.buffer.rx }} <br>
+            Tx Buffer: &nbsp; {{ i.buffer.tx }} <br>
+            <h4>Corrections In</h4>
+            Ok: &nbsp; {{ i.in.ok }} <br>
+            Fail: &nbsp; {{ i.in.fail }} <br>
+            Percentage: &nbsp; {{ i.in.percent }} <br>
+            <h4>Corrections Out</h4>
+            Ok: &nbsp; {{ i.out.ok }} <br>
+            Fail: &nbsp; {{ i.out.fail }} <br>
+            Percentage: &nbsp; {{ i.out.percent }} <br>
+            <h4>Total Sent</h4>
+            Ok: &nbsp; {{ i.send.ok }} <br>
+            Fail: &nbsp; {{ i.send.fail }} <br>
+            Percentage: &nbsp; {{ i.send.percent }} <br>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

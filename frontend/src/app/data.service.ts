@@ -73,6 +73,13 @@ export class DataService {
     )
   }
 
+  getCorrections(): Observable<any> {
+    return this.http.get(APIurl + 'corrections').pipe(
+      map(this.extractData)
+    )
+  }
+
+
   fleetDetail(name): Observable<any> {
     return this.http.get(APIurl + 'fleet/' + name).pipe(
       map(this.extractData)
