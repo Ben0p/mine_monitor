@@ -44,14 +44,14 @@
         - [ ] backend script
         - [ ] mongo collection
         - [ ] restAPI adjustment
-- [ ] Convert gps corrections to headless
+- [x] Convert gps corrections to headless
     - [x] Add devices via webGUI
     - [x] RestAPI class
     - [x] RestAPI edit corrections
     - [x] Migrate to mongo
     - [x] Store stats in mongo
     - [x] Create angular module
-    - [ ] WebUI component
+    - [x] WebUI component
 - [ ] Convert scripts into linux services
     - [x] alert
     - [x] rest
