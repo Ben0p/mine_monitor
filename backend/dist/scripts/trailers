@@ -24,9 +24,8 @@ def calcCurrent(hi, lo, i):
     '''
     Converts raw modbus current value to actual current
     '''
-    c_scaling = hi * lo
+    c_scaling = hi + (lo/(2**16))
     current = i*c_scaling*(2**-15)
-
     return(format(current, '.2f'))
 
 

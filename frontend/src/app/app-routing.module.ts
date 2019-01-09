@@ -48,6 +48,10 @@ const routes: Routes = [
     path: 'trailers',
     loadChildren: '../app/trailers/trailers.module#TrailersModule'
   },
+  {
+    path: 'gps',
+    loadChildren: '../app/gps/gps.module#GpsModule'
+  },
   { 
     path: '**', 
     component: HomeComponent 

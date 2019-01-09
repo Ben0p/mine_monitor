@@ -342,18 +342,9 @@ def getAll():
                 alert['c'] = outputs[5]
 
         writeDB(alert)
-        # Print results
-        print('{}'.format(alert['location']))
-        print('--IP: {}'.format(alert['ip']))
-        print('--Type: {}'.format(alert['type']))
-        print('--Online: {}'.format(alert['online']))
-        print('--Latency: {}ms'.format(alert['latency']))
-        print('---------------')
-    
 
-
-    print('Sleeping for 30 sec...')
-    time.sleep(30)
+    # Sleep for 1 sec to avoid chaos
+    time.sleep(1)
 
 
 if __name__ == '__main__':

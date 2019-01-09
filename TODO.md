@@ -5,9 +5,9 @@
 - [ ] Finish fleet update from browser
 - [x] Hide navbar button or something
 - [ ] Mobile size menu
-- [ ] Reduce amount of devices pinged
+- [ ] Reduce amount of devices pinged on fleet
 - [ ] Start pinging new fleet when added
-- [ ] Poll the signs without a delay
+- [x] Poll the signs without a delay
 - [ ] Put angular components into modules
 - [ ] Terrain page
 - [ ] Corrections stats page
@@ -17,18 +17,49 @@
 - [ ] Pull tetra data somehow
 - [ ] Production / development environment setup
 - [ ] Convert to progressive web app
+- [ ] Add to home screen thing
+- [ ] Change shortcut icon on phone
 - [x] Links to devices from fleet detail
 - [x] Add ip addresses to fleet_data collection
 - [x] Add ip addresses in fleet detail page
 - [ ] SVG angular material icons for no internet
 - [ ] Power devices (DC distrubution / Cordex / APC UPS)
-- [ ] Trailers (Solar / TropOS / Backhual )
+- [ ] Trailers
+    - [ ] Morningstar
+    - [ ] TropOS
+    - [ ] Cisco (+gps)
 - [x] Add TriStar solar regulators from webui
 - [x] Solar regulator modbus data aquisition
-- [ ] Fix solar current calculations always 0
+- [x] Fix solar current calculations always 0
 - [ ] Trailers green / orange / red indicating status
-- [ ] Trailer temps
+- [x] Trailer temps
+- [ ] change scripts to device type
+    - [ ] tropos
+        - [ ] frontend add form
+        - [ ] backend script
+        - [ ] mongo collection
+        - [ ] restAPI adjustment
+    - [ ] alerts
+        - [ ] frontend add form
+        - [ ] backend script
+        - [ ] mongo collection
+        - [ ] restAPI adjustment
+- [ ] Convert gps corrections to headless
+    - [ ] Add devices via webGUI
+    - [ ] RestAPI class
+    - [x] RestAPI edit corrections
+    - [ ] Migrate to mongo
+    - [ ] Store stats in mongo
+    - [ ] Create angular module
 - [ ] Convert scripts into linux services
-- [ ] Make scripts headless
+    - [x] alert
+    - [x] rest
+    - [x] fleet
+    - [x] trailers
+    - [ ] gps
+- [ ] Make scripts headless (output text is hidden anyway)
 - [ ] Master script to run as a service to start other scipts and monitor status
 - [ ] Indication on web page if script (service) not running (pop down)
+- [ ] J.A.R.V.I.S boiii
+- [ ] Indication if backend connection has dropped out
+- [ ] Create cisco 1572 script

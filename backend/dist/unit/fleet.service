@@ -1,0 +1,10 @@
+[Unit]
+Description=MineMonitor Fleet
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3.6 /usr/local/bin/fleet
+
+[Install]
+WantedBy=multi-user.target

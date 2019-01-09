@@ -27,8 +27,15 @@
     color: rgb(0, 255, 213);
     border-width: 2px;
     border-style: solid;
-    border-color: deepskyblue;
     cursor: pointer;
+}
+
+.trailer-online {
+  border-color: rgb(0, 255, 213);
+}
+
+.trailer-offline {
+  border-color: #c7254e
 }
 
 .container {

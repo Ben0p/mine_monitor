@@ -1,0 +1,10 @@
+[Unit]
+Description=MineMonitor Alerts
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3.6 /usr/local/bin/alert
+
+[Install]
+WantedBy=multi-user.target

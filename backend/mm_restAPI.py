@@ -209,6 +209,9 @@ class edit(Resource):
         # Get type
         parser.add_argument("type")
 
+        # Device parent
+        parser.add_argument("parent")
+
         # Parse the form data (alert)
 
         parser.add_argument("alert_location")
@@ -229,7 +232,9 @@ class edit(Resource):
 
         # Parse the form data (tristar)
         parser.add_argument("tristar_ip")
-        parser.add_argument("parent")
+
+        # Parse the form data (corrections)
+        parser.add_argument("correction_ip")
 
         args = parser.parse_args()
 
@@ -350,6 +355,23 @@ class edit(Resource):
                 )
             return(201)
 
+        elif (args['type'] == 'corrections'):
+
+            # Find existing document and update, create new if it doesn't exist
+            db['corrections'].find_one_and_update(
+                    {
+                        'ip' : args['correction_ip']
+                    },
+                    {
+                        '$set': 
+                        {
+                        'ip' : args['correction_ip'],
+                        'parent' : args['parent']
+                        }
+                    },
+                    upsert = True
+                )
+            return(201)
 
         else:
             return(404)
@@ -418,6 +440,7 @@ api.add_resource(fleet_detail, "/fleet/<string:name>")
 api.add_resource(edit, "/edit")
 api.add_resource(delete, "/edit/<string:device>")
 api.add_resource(trailers, "/trailers")
+api.add_resource(trailers, "/corrections")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')
