@@ -42,7 +42,7 @@ export class EditComponent implements OnInit {
     east_ip: new FormControl(''),
     parent: new FormControl(''),
     tristar_ip: new FormControl(''),
-    correction_ip: new FormControl(''),
+    correction_ip: new FormControl('')
   });
 
   types: Type[] = [

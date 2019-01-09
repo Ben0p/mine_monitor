@@ -431,6 +431,24 @@ class trailers(Resource):
         except:
             return(False, 404)
 
+class corrections(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        correction_data = db['correction_data'].find()
+        correction_list = db['corrections'].find().sort("parent",pymongo.ASCENDING)
+
+        # Combine into one json
+        correction_json = {
+            'data' : correction_data,
+            'list' : correction_list
+        }
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(correction_json))))
+        except:
+            return(False, 404)
+
 
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
@@ -440,7 +458,7 @@ api.add_resource(fleet_detail, "/fleet/<string:name>")
 api.add_resource(edit, "/edit")
 api.add_resource(delete, "/edit/<string:device>")
 api.add_resource(trailers, "/trailers")
-api.add_resource(trailers, "/corrections")
+api.add_resource(corrections, "/corrections")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

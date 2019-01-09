@@ -3,120 +3,193 @@
     <div flex-gt-lg="15">
       <mat-card class="card">
         <mat-card-header>
-          <mat-card-title>
-            <h3>Add / Update</h3>
-          </mat-card-title>
+          <mat-card-title> <h3>Add / Update</h3> </mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <form [formGroup]="editForm">
             <mat-form-field>
-              <mat-select placeholder="Type" [(ngModel)]="selectedType" name="type" formControlName="type">
+              <mat-select
+                placeholder="Type"
+                [(ngModel)]="selectedType"
+                name="type"
+                formControlName="type"
+              >
                 <mat-option *ngFor="let type of types" [value]="type.value">
-                  {{type.viewValue}}
+                  {{ type.viewValue }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
             <div *ngIf="selectedType == 'fleet'">
               <mat-form-field>
-                <input matInput placeholder="Name" formControlName="fleet_name">
+                <input
+                  matInput
+                  placeholder="Name"
+                  formControlName="fleet_name"
+                />
               </mat-form-field>
               <h4>IP Addresses</h4>
               <mat-form-field>
-                <input matInput placeholder="xIM" formControlName="fleet_xim">
+                <input matInput placeholder="xIM" formControlName="fleet_xim" />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="Screen" formControlName="fleet_screen">
+                <input
+                  matInput
+                  placeholder="Screen"
+                  formControlName="fleet_screen"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="MS352 or Other" formControlName="fleet_other">
+                <input
+                  matInput
+                  placeholder="MS352 or Other"
+                  formControlName="fleet_other"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="TropOS 5ghz" formControlName="fleet_5">
+                <input
+                  matInput
+                  placeholder="TropOS 5ghz"
+                  formControlName="fleet_5"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="TropOS 2.4ghz" formControlName="fleet_2">
+                <input
+                  matInput
+                  placeholder="TropOS 2.4ghz"
+                  formControlName="fleet_2"
+                />
               </mat-form-field>
             </div>
             <div *ngIf="selectedType == 'tristar'">
-                <mat-form-field>
-                  <input matInput placeholder="CT0xx" formControlName="parent">
-                </mat-form-field>
-                <h4>IP Addresses</h4>
-                <mat-form-field>
-                  <input matInput placeholder="Tristar IP" formControlName="tristar_ip">
-                </mat-form-field>
-              </div>
+              <mat-form-field>
+                <input matInput placeholder="CT0xx" formControlName="parent" />
+              </mat-form-field>
+              <h4>IP Addresses</h4>
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Tristar IP"
+                  formControlName="tristar_ip"
+                />
+              </mat-form-field>
+            </div>
+            <div *ngIf="selectedType == 'corrections'">
+              <mat-form-field>
+                <input matInput placeholder="Machine Name" formControlName="parent" />
+              </mat-form-field>
+              <h4>IP Addresses</h4>
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Correction Rx IP"
+                  formControlName="correction_ip"
+                />
+              </mat-form-field>
+            </div>
             <div *ngIf="selectedType == 'alert'">
               <mat-form-field>
-                <mat-select placeholder="Alert Type" [(ngModel)]="alertType" name="alerttype" formControlName="alert_type">
-                  <mat-option *ngFor="let alert of alertTypes" [value]="alert.value">
-                    {{alert.viewValue}}
+                <mat-select
+                  placeholder="Alert Type"
+                  [(ngModel)]="alertType"
+                  name="alerttype"
+                  formControlName="alert_type"
+                >
+                  <mat-option
+                    *ngFor="let alert of alertTypes"
+                    [value]="alert.value"
+                  >
+                    {{ alert.viewValue }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <br>
+              <br />
               <div *ngIf="alertType == 'sign' || alertType == 'calert'">
                 <mat-form-field>
-                  <input matInput placeholder="Location" formControlName="alert_location">
+                  <input
+                    matInput
+                    placeholder="Location"
+                    formControlName="alert_location"
+                  />
                 </mat-form-field>
-                <br>
+                <br />
                 <mat-form-field>
-                  <input matInput placeholder="IP" formControlName="alert_ip">
+                  <input matInput placeholder="IP" formControlName="alert_ip" />
                 </mat-form-field>
-                <br>
+                <br />
               </div>
             </div>
-            <br>
+            <br />
             <div *ngIf="alertType == 'trailer'">
               <mat-form-field>
-                <input matInput placeholder="Trailer Number" formControlName="trailer_number">
+                <input
+                  matInput
+                  placeholder="Trailer Number"
+                  formControlName="trailer_number"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="West - IP" formControlName="west_ip">
+                <input
+                  matInput
+                  placeholder="West - IP"
+                  formControlName="west_ip"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="Central - IP" formControlName="central_ip">
+                <input
+                  matInput
+                  placeholder="Central - IP"
+                  formControlName="central_ip"
+                />
               </mat-form-field>
-              <br>
+              <br />
               <mat-form-field>
-                <input matInput placeholder="East - IP" formControlName="east_ip">
+                <input
+                  matInput
+                  placeholder="East - IP"
+                  formControlName="east_ip"
+                />
               </mat-form-field>
-              <br>
+              <br />
             </div>
-            <button mat-raised-button type="submit" (click)="onSubmit('submit')" [disabled]="!editForm.valid">Submit</button>
+            <button
+              mat-raised-button
+              type="submit"
+              (click)="onSubmit('submit')"
+              [disabled]="!editForm.valid"
+            >
+              Submit
+            </button>
             &nbsp;&nbsp;
-            <button mat-raised-button type="submit" (click)="onSubmit('delete')" [disabled]="!editForm.valid">Delete</button>
+            <button
+              mat-raised-button
+              type="submit"
+              (click)="onSubmit('delete')"
+              [disabled]="!editForm.valid"
+            >
+              Delete
+            </button>
           </form>
         </mat-card-content>
       </mat-card>
     </div>
     <div flex-gt-lg="15">
       <mat-card class="card" style="font-size: 12px;">
-        Devices are matched by name.
-        <br>
-        <br>
-        <b>Add new:</b>
-        <br>
-        Enter details, click submit.
-        <br>
-        <br>
-        <b>To update:</b>
-        <br>
-        Enter the exact existing name and details, click submit.
-        <br>
-        <br>
-        <b>To delete:</b>
-        <br>
-        Enter exact existing name and click delete.
-        <br>
-        <br>
-        (Takes up to 30sec to update.)
+        Devices are matched by name. <br />
+        <br />
+        <b>Add new:</b> <br />
+        Enter details, click submit. <br />
+        <br />
+        <b>To update:</b> <br />
+        Enter the exact existing name and details, click submit. <br />
+        <br />
+        <b>To delete:</b> <br />
+        Enter exact existing name and click delete. <br />
       </mat-card>
     </div>
   </div>

@@ -45,12 +45,13 @@
         - [ ] mongo collection
         - [ ] restAPI adjustment
 - [ ] Convert gps corrections to headless
-    - [ ] Add devices via webGUI
-    - [ ] RestAPI class
+    - [x] Add devices via webGUI
+    - [x] RestAPI class
     - [x] RestAPI edit corrections
-    - [ ] Migrate to mongo
-    - [ ] Store stats in mongo
-    - [ ] Create angular module
+    - [x] Migrate to mongo
+    - [x] Store stats in mongo
+    - [x] Create angular module
+    - [ ] WebUI component
 - [ ] Convert scripts into linux services
     - [x] alert
     - [x] rest
