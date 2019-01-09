@@ -44,7 +44,7 @@
         - [ ] backend script
         - [ ] mongo collection
         - [ ] restAPI adjustment
-- [x] Convert gps corrections to headless
+- [ ] Convert gps corrections to headless
     - [x] Add devices via webGUI
     - [x] RestAPI class
     - [x] RestAPI edit corrections
@@ -52,15 +52,26 @@
     - [x] Store stats in mongo
     - [x] Create angular module
     - [x] WebUI component
-- [ ] Convert scripts into linux services
+    - [ ] Delete from GUI
+    - [ ] List page component
+    - [ ] Add all machines to db through webui (Up to DT210)
+- [x] Convert scripts into linux services
     - [x] alert
     - [x] rest
     - [x] fleet
     - [x] trailers
-    - [ ] gps
-- [ ] Make scripts headless (output text is hidden anyway)
+    - [x] corrections
+    - [x] services
+- [x] Make scripts headless (output text is hidden anyway)
 - [ ] Master script to run as a service to start other scipts and monitor status
+    - [x] services service for service status
+    - [ ] RestAPI services class (GET)
+    - [ ] RestAPI services class (POST) - start / stop service
+    - [ ] angular module
+    - [ ] angular services component
+    - [ ] angular services data.service
 - [ ] Indication on web page if script (service) not running (pop down)
 - [ ] J.A.R.V.I.S boiii
 - [ ] Indication if backend connection has dropped out
 - [ ] Create cisco 1572 script
+- [ ] Blank edit form after submit and return 'OK'
