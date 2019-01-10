@@ -52,6 +52,10 @@ const routes: Routes = [
     path: 'gps',
     loadChildren: '../app/gps/gps.module#GpsModule'
   },
+  {
+    path: 'services',
+    loadChildren: '../app/services/services.module#ServicesModule'
+  },
   { 
     path: '**', 
     component: HomeComponent 

@@ -59,10 +59,24 @@ img {
   height: auto;
 }
 
+.servicesIMG {
+  width: 180px;
+  height: auto;
+}
+
 .truck_card {
   margin-top: 25px;
 }
 
 .gps_card {
   margin-top: 25px;
+}
+
+.services_card {
+  margin-top: 10px;
+}
+
+mat-card-header h3 {
+  text-align: center;
+  width: 142px;
 }
