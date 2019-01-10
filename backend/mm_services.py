@@ -23,20 +23,24 @@ def status(service):
                 service_status['active'] = word_list[1]
                 if service_status['active'] == "active":
                     service_status['running'] = True
+                    service_status['status'] = word_list[2]
+                    service_status['run_time'] = word_list[8]
                 else:
                     service_status['running'] = False
-                service_status['status'] = word_list[2]
+                    service_status['status'] = word_list[1]
+                    service_status['run_time'] = word_list[9]
+
                 service_status['date'] = "{} {}".format(word_list[4], word_list[5])
                 service_status['time'] = word_list[6]
-                service_status['run_time'] = word_list[8]
+                
             elif first_word == 'Main':
                 service_status['pid'] = word_list[2]
 
-
         popen.stdout.close()
         return_code = popen.wait()
+
         if return_code:
-            raise subprocess.CalledProcessError(return_code, cmd)
+            service_status['return_code'] = return_code
         
 
         return(service_status)

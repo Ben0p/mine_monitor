@@ -82,35 +82,38 @@ def main():
     
     # A little lesson in trickery
     for document in documents:
-        devices.extend(
-            [
-                {
-                    "name": document['name'],
-                    "device": "xim",
-                    "ip": document['xim']
-                },
-                {
-                    "name": document['name'],
-                    "device": "two",
-                    "ip": document['two']
-                },
-                {
-                    "name": document['name'],
-                    "device": "five",
-                    "ip": document['five']
-                },
-                {
-                    "name": document['name'],
-                    "device": "screen",
-                    "ip": document['screen']
-                },
-                {
-                    "name": document['name'],
-                    "device": 'ms352',
-                    "ip": document['ms352']
-                }
-            ]
-        )
+        try:
+            devices.extend(
+                [
+                    {
+                        "name": document['name'],
+                        "device": "xim",
+                        "ip": document['xim']
+                    },
+                    {
+                        "name": document['name'],
+                        "device": "two",
+                        "ip": document['two']
+                    },
+                    {
+                        "name": document['name'],
+                        "device": "five",
+                        "ip": document['five']
+                    },
+                    {
+                        "name": document['name'],
+                        "device": "screen",
+                        "ip": document['screen']
+                    },
+                    {
+                        "name": document['name'],
+                        "device": 'ms352',
+                        "ip": document['ms352']
+                    }
+                ]
+            )
+        except:
+            pass
 
 
     # Set multiprocessing
