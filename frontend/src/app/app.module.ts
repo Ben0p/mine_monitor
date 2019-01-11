@@ -28,6 +28,8 @@ import { ErrorInterceptor } from './_helpers/error.Interceptor';
 // Fake backend for the login component
 import { fakeBackendProvider } from './_helpers/fake-backend';
 import { EditComponent } from './edit/edit.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -50,7 +52,8 @@ import { EditComponent } from './edit/edit.component';
     HttpModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },

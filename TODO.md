@@ -18,9 +18,9 @@
 - [ ] Indication on web page if script (service) not running (pop down)
 - [ ] J.A.R.V.I.S boiii
 - [ ] Indication if backend connection has dropped out
-- [ ] SVG angular material icons for no internet
+- [x] SVG angular material icons for no internet
 - [ ] Production / development environment setup
-- [ ] Convert to progressive web app
+- [x] Convert to progressive web app
 - [ ] Add to home screen thing
 - [ ] Change shortcut icon on phone
 - [ ] Graphs, because awesome
