@@ -59,6 +59,8 @@
         - [x] Filter
         - [x] Pagination
         - [x] Default sort
+        - [ ] Delete 
+        - [ ] Add
     - [x] Title
 - [ ] Add all machines to db through webui (done but not adding up)
 - [ ] Pretty up page UI
