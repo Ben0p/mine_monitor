@@ -1,0 +1,68 @@
+.gps_list:before {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background: url("../../../assets/img/gps.jpg") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.gps_list {
+  margin: 0;
+  padding: 10px;
+  min-height: calc(100vh-64px);
+  box-sizing: border-box;
+}
+
+table {
+  max-width: 410px;
+  margin: 0 auto 0 auto;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-paginator {
+    max-width: 410px;
+    margin: 0 auto 20px auto;
+}
+
+td,
+th {
+  width: 25%;
+}
+
+.filter {
+    max-width: 410px;
+    margin: 0px auto 10px auto;
+    padding: 10px 0 0 0;
+}
+
+.mat-elevation-z8 {
+    max-width: 410px;
+    margin: 0 auto 0 auto;
+}
+
+.list {
+    max-width: 460px;
+    margin: 0 auto 10px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0 0 10px 0;
+}
+
+.title {
+  max-width: 450px;
+  margin: 0 auto 10px auto;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 5px;
+}

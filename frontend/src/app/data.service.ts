@@ -68,6 +68,10 @@ export class DataService {
     return this.http.get(APIurl + "services").pipe(map(this.extractData));
   }
 
+  getGpsList(): Observable<any> {
+    return this.http.get(APIurl + "corrections/list").pipe(map(this.extractData));
+  }
+
   fleetDetail(name): Observable<any> {
     return this.http.get(APIurl + "fleet/" + name).pipe(map(this.extractData));
   }

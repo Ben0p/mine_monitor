@@ -11,9 +11,10 @@ import { MaterialModule } from '../material';
 
 // Componenets
 import { GpsHomeComponent } from './gps-home/gps-home.component';
+import { GpsListComponent } from './gps-list/gps-list.component';
 
 @NgModule({
-  declarations: [GpsHomeComponent],
+  declarations: [GpsHomeComponent, GpsListComponent],
   imports: [
     CommonModule,
     GpsRoutingModule,

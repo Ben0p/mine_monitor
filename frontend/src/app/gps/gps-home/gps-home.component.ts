@@ -7,8 +7,10 @@ import { DataService } from "../../data.service";
   styleUrls: ["./gps-home.component.scss"]
 })
 export class GpsHomeComponent implements OnInit, OnDestroy {
+
   gps: any = [];
   interval: any;
+  resultsLength = 0;
 
   constructor(private data: DataService) {}
 

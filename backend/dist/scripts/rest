@@ -460,6 +460,16 @@ class services(Resource):
         except:
             return(False, 404)
 
+class corrections_list(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        corrections = db['corrections'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(corrections))))
+        except:
+            return(False, 404)
 
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
@@ -471,6 +481,7 @@ api.add_resource(delete, "/edit/<string:device>")
 api.add_resource(trailers, "/trailers")
 api.add_resource(corrections, "/corrections")
 api.add_resource(services, "/services")
+api.add_resource(corrections_list, "/corrections/list")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

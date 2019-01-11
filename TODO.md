@@ -9,6 +9,9 @@
 - [ ] Always general code cleaning, optimising, comments
 - [ ] Organise TODO
 - [ ] Create README and docs
+- [ ] In-browser VNC
+- [ ] Automate backups
+- [ ] Main page indicates status (% offline)
 
 ### Frontend
 #### General
@@ -33,14 +36,42 @@
 - [x] angular services component
 - [x] angular services data.service
 - [ ] Start / Stop scipts from browser
+- [ ] Service detail page
+
+#### Trailers
+- [ ] Trailer detail page
+- [ ] Reduce details on main page
 
 #### Fleet
 - [x] Links to devices from fleet detail
 - [x] Add ip addresses to fleet_data collection
 - [x] Add ip addresses in fleet detail page
 
-### Edit
+### GPS
+- [x] Create angular module
+- [x] WebUI component
+- [ ] Delete from GUI
+- [x] Correction device list
+    - [x] List page component
+    - [x] Data service
+    - [x] Mat data table
+        - [x] Sort
+        - [x] Filter
+        - [x] Pagination
+        - [x] Default sort
+    - [x] Title
+- [ ] Add all machines to db through webui (done but not adding up)
+- [ ] Pretty up page UI
+- [ ] Base station stats
+- [ ] TropOS server stats 
+- [x] List button
+
+#### Edit
 - [ ] Blank edit form after submit and return 'OK'
+- [ ] Form input verification
+- [ ] Delete fleet
+- [ ] Delete trailers
+- [ ] Delete gps devices
 
 ### Backend
 #### General
@@ -67,20 +98,20 @@
 
 #### Services
 - [ ] Master script to run as a service to start other scipts and monitor status
+- [ ] RestAPI to start / stop services
 
-#### Corrections
-- [ ] Convert gps corrections to headless
+#### GPS
+- [x] Convert gps corrections to headless
 - [x] Corrections stats page
 - [x] Add devices via webGUI
 - [x] RestAPI class
 - [x] RestAPI edit corrections
 - [x] Migrate to mongo
 - [x] Store stats in mongo
-- [x] Create angular module
-- [x] WebUI component
-- [ ] Delete from GUI
-- [ ] List page component
-- [ ] Add all machines to db through webui (done but not adding up)
+- [x] restAPI to get list of devices
+- [ ] Base station data
+- [ ] TropOS corrections data
+
 
 #### Trailers
 - [ ] Devices
@@ -91,6 +122,9 @@
 - [x] Solar regulator modbus data aquisition
 - [x] Fix solar current calculations always 0
 - [ ] Trailers green / orange / red indicating status
+    - [ ] On / offlne
+    - [ ] Battery volts
+    - [ ] Temp
 - [x] Trailer temps
 
 #### Alerts

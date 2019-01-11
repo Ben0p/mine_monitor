@@ -4,9 +4,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 // Componenets
 import { GpsHomeComponent } from './gps-home/gps-home.component';
+import { GpsListComponent } from './gps-list/gps-list.component';
 
 const routes: Routes = [
-    { path: '', component: GpsHomeComponent }
+    { path: '', component: GpsHomeComponent },
+    { path: 'list', component: GpsListComponent }
   ];
 
 @NgModule({
