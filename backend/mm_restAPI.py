@@ -288,53 +288,26 @@ class edit(Resource):
             return(201)
         elif (args['type'] == 'fleet'):
 
-            # Check for existing document
-            existing_document = db['fleet'].find({'name' : args['fleet_name']})
-            document_count = existing_document.count()
-
-
-            if document_count == None:
-                db['fleet'].insert_one(
-                    {
-                        'name' : args['fleet_name'],
-                        'xim' : args['fleet_xim'],
-                        'screen' : args['fleet_screen'],
-                        'ms352' : args['fleet_other'],
-                        'five' : args['fleet_five'],
-                        'two' : args['fleet_two']
-                    }
-                )
-
-            elif document_count == 1:
-                db['fleet'].find_one_and_update(
+            # Find existing document and update, create new if it doesn't exist
+            db['fleet'].find_one_and_update(
                     {
                         'name' : args['fleet_name']
                     },
                     {
-                        'xim' : args['fleet_xim'],
-                        'screen' : args['fleet_screen'],
-                        'ms352' : args['fleet_other'],
-                        'five' : args['fleet_five'],
-                        'two' : args['fleet_two']
-                    }
+                        '$set': 
+                        {
+                            'name' : args['fleet_name'],
+                            'xim' : args['fleet_xim'],
+                            'screen' : args['fleet_screen'],
+                            'ms352' : args['fleet_other'],
+                            'five' : args['fleet_5'],
+                            'two' : args['fleet_2']
+                        }
+                    },
+                    upsert = True
                 )
-            
-            elif document_count > 1:
-                db['fleet'].delete_many({'name' : args['fleet_name']})
-                db['fleet_data'].delete_many({'name' : args['fleet_name']})
+            return(201)
 
-                db['fleet'].insert_one(
-                    {
-                        'name' : args['fleet_name'],
-                        'xim' : args['fleet_xim'],
-                        'screen' : args['fleet_screen'],
-                        'ms352' : args['fleet_other'],
-                        'five' : args['fleet_five'],
-                        'two' : args['fleet_two']
-                    }
-                )
-
-            print('Updated {}'.format(args['fleet_name']))
 
         elif (args['type'] == 'tristar'):
 

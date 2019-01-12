@@ -51,7 +51,7 @@
 ### GPS
 - [x] Create angular module
 - [x] WebUI component
-- [ ] Delete from GUI
+- [x] Delete from GUI
 - [x] Correction device list
     - [x] List page component
     - [x] Data service
@@ -100,11 +100,11 @@
         - [ ] restAPI adjustment
 
 #### RestAPI
-- [ ] Delete
-    - [ ] Trailers
-    - [ ] Fleet
-    - [ ] GPS
-    - [ ] Alerts
+- [x] Delete
+    - [x] Trailers
+    - [x] Fleet
+    - [x] GPS
+    - [x] Alerts
 
 
 #### Services
@@ -142,6 +142,11 @@
 - [x] Poll alerts without a delay
 
 #### Fleet
-- [ ] Start pinging new fleet when added
-- [ ] Reduce amount of devices pinged on fleet
+- [x] Start pinging new fleet when added
+- [x] Stop process when deleted
+    - [x] Delete from both databases when deleted
+    - [x] Fix bug where it re-adds fleet to fleet_data
+- [ ] Pretty up UI
+    - [ ] Perhaps have no data on main page or one latency only
+    - [ ] Jarvisify cards
 
