@@ -23,18 +23,20 @@
 }
 
 .trailer {
-    background-color: black;
-    color: rgb(0, 255, 213);
     border-width: 2px;
     border-style: solid;
     cursor: pointer;
 }
 
 .trailer-online {
+  color: rgb(204, 255, 204);
+  background-color: rgba(0, 94, 78, 0.8);
   border-color: rgb(0, 255, 213);
 }
 
 .trailer-offline {
+  color: rgb(255, 204, 204);
+  background-color: rgba(255, 0, 0, 0.3);
   border-color: #c7254e
 }
 

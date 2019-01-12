@@ -213,7 +213,6 @@ class edit(Resource):
         parser.add_argument("parent")
 
         # Parse the form data (alert)
-
         parser.add_argument("alert_location")
         parser.add_argument("alert_ip")
         parser.add_argument("alert_type")
@@ -380,20 +379,31 @@ class edit(Resource):
 class delete(Resource):
 
     def delete(self, device):
-        print(device)
+
+        # Split string into type and device
         _type, _device = device.split('-')
-        print(_type)
-        print(_device)
 
         try:
             if _type == 'alert':
                 db['alert_data'].delete_one({"location": _device})
                 db['alert'].delete_one({"location":  _device})
 
-                return(202)
+            elif _type == 'corrections':
+                db['corrections'].delete_one({"ip": _device})
+            
+            elif _type == 'fleet':
+                db['fleet_data'].delete_one({"name": _device})
+                db['fleet'].delete_one({"name":  _device})
+            
+            elif _type == 'trailer':
+                db['tristar_data'].delete_one({"parent": _device})
+                db['tristar'].delete_one({"parent":  _device})
+
+            return(202)
 
         except:
             return(418)
+        
 
 
 class fleet(Resource):
@@ -435,17 +445,10 @@ class corrections(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
         correction_data = db['correction_data'].find()
-        correction_list = db['corrections'].find().sort("parent",pymongo.ASCENDING)
-
-        # Combine into one json
-        correction_json = {
-            'data' : correction_data,
-            'list' : correction_list
-        }
 
         # Return collection as a massive json
         try:
-            return(jsonify(json.loads(dumps(correction_json))))
+            return(jsonify(json.loads(dumps(correction_data))))
         except:
             return(False, 404)
 

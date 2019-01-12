@@ -5,13 +5,14 @@
 - [ ] Pull tetra data somehow
 - [ ] Master list
 - [ ] Terrain
-- [ ] Fleet delete
+- [x] Fleet delete
 - [ ] Always general code cleaning, optimising, comments
 - [ ] Organise TODO
 - [ ] Create README and docs
 - [ ] In-browser VNC
 - [ ] Automate backups
 - [ ] Main page indicates status (% offline)
+- [ ] nginx serve https
 
 ### Frontend
 #### General
@@ -21,8 +22,8 @@
 - [x] SVG angular material icons for no internet
 - [ ] Production / development environment setup
 - [x] Convert to progressive web app
-- [ ] Add to home screen thing
-- [ ] Change shortcut icon on phone
+- [x] Add to home screen thing (manually through chrome)
+- [x] Change shortcut icon on phone
 - [ ] Graphs, because awesome
 - [ ] Put angular components into modules (re-structure)
 - [ ] Mobile size menu
@@ -71,9 +72,9 @@
 #### Edit
 - [ ] Blank edit form after submit and return 'OK'
 - [ ] Form input verification
-- [ ] Delete fleet
-- [ ] Delete trailers
-- [ ] Delete gps devices
+- [x] Delete fleet
+- [x] Delete trailers
+- [x] Delete gps devices
 
 ### Backend
 #### General
@@ -97,6 +98,14 @@
         - [ ] backend script
         - [ ] mongo collection
         - [ ] restAPI adjustment
+
+#### RestAPI
+- [ ] Delete
+    - [ ] Trailers
+    - [ ] Fleet
+    - [ ] GPS
+    - [ ] Alerts
+
 
 #### Services
 - [ ] Master script to run as a service to start other scipts and monitor status
