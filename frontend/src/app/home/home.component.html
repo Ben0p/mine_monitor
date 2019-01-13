@@ -1,63 +1,77 @@
 <div class="home">
-  <div class="container" fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="center" fxLayoutAlign.xs="space-around center">
+  <div
+    class="container"
+    fxLayout="row wrap"
+    fxLayoutAlign="center"
+    *ngIf="loaded"
+  >
     <div flex-gt-lg="15">
-      <mat-card class="card" (click)="toggle('alerts')">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>Alerts</h3>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <img src="/assets/img/sign.PNG">
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div flex-gt-lg="15">
-      <mat-card class="card" (click)="toggle('gps')">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>GPS</h3>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="gps_card">
-          <img class="gpsIMG" src="/assets/img/gps.png">
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div flex-gt-lg="15">
-      <mat-card class="card" (click)="toggle('fleet')">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>Fleet</h3>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content class="truck_card">
-          <img class="truckIMG" src="/assets/img/truck.jpg">
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div flex-gt-lg="15">
-        <mat-card class="card" (click)="toggle('services')">
-          <mat-card-header>
-            <mat-card-title>
-              <h3>Services</h3>
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content class="services_card">
-            <img class="servicesIMG" src="/assets/img/jarvis.png">
-          </mat-card-content>
-        </mat-card>
+      <div
+        class="cards"
+        (click)="toggle('alerts', overview.alerts.running)"
+        [ngClass]="{
+          online: overview.alerts.running,
+          offline: !overview.alerts.running
+        }"
+      >
+        <h1>Alerts</h1>
+        <h1>{{ overview.alerts.percentage }}%</h1>
       </div>
+    </div>
     <div flex-gt-lg="15">
-      <mat-card class="card" (click)="toggle('trailers')">
-        <mat-card-header>
-          <mat-card-title>
-            <h3>Trailers</h3>
-          </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <img src="/assets/img/trailer.jpg">
-        </mat-card-content>
-      </mat-card>
+      <div
+        class="cards"
+        (click)="toggle('gps', overview.corrections.running)"
+        [ngClass]="{
+          online: overview.corrections.running,
+          offline: !overview.corrections.running
+        }"
+      >
+        <h1>GPS</h1>
+        <h1>{{ overview.corrections.percentage }}%</h1>
+      </div>
+    </div>
+    <div flex-gt-lg="15">
+      <div
+        class="cards"
+        (click)="toggle('fleet', overview.fleet.running)"
+        [ngClass]="{
+          online: overview.fleet.running,
+          offline: !overview.fleet.running
+        }"
+      >
+        <h1>Fleet</h1>
+        <h1>{{ overview.fleet.percentage }}%</h1>
+      </div>
+    </div>
+    <div flex-gt-lg="15">
+      <div
+        class="cards"
+        (click)="toggle('services', overview.services.running)"
+        [ngClass]="{
+          online: overview.services.running,
+          offline: !overview.services.running
+        }"
+      >
+        <h1>Services</h1>
+        <h1>{{ overview.services.percentage }}%</h1>
+      </div>
+    </div>
+    <div flex-gt-lg="15">
+      <div
+        class="cards"
+        (click)="toggle('trailers', overview.trailers.running)"
+        [ngClass]="{
+          online: overview.trailers.running,
+          offline: !overview.trailers.running
+        }"
+      >
+        <h1>Trailers</h1>
+        <h1 *ngIf="overview.trailers.running; else offline">{{ overview.trailers.percentage }}%</h1>
+        <ng-template #offline>
+          <h1>Offline</h1>
+        </ng-template>
+      </div>
     </div>
   </div>
+</div>

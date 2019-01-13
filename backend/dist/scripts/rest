@@ -455,6 +455,17 @@ class check(Resource):
         # Return response
         return(jsonify(json.loads(dumps(response))))
 
+class overview(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        overview = db['overview'].find()
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(overview))))
+        except:
+            return(False, 404)
+
 
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
@@ -468,6 +479,7 @@ api.add_resource(corrections, "/corrections")
 api.add_resource(services, "/services")
 api.add_resource(corrections_list, "/corrections/list")
 api.add_resource(check, "/check")
+api.add_resource(overview, "/overview")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

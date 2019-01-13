@@ -82,6 +82,10 @@ export class DataService {
     return this.http.get(APIurl + "fleet/" + name).pipe(map(this.extractData));
   }
 
+  getOverview(): Observable<any> {
+    return this.http.get(APIurl + "overview").pipe(map(this.extractData));
+  }
+
   checkConnection(): Observable<any> {
     return this.http.get(APIurl + "check")
     .pipe(

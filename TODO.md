@@ -11,11 +11,13 @@
 - [ ] Create README and docs
 - [ ] In-browser VNC
 - [ ] Automate backups
-- [ ] Main page indicates status (% offline)
+- [x] Main page indicates status (% offline)
 - [ ] nginx serve https
 - [ ] East Camera
 - [ ] RestAPI authentication token
 - [ ] Database backup
+- [ ] Multiple user accounts and authentication
+    - [ ] Tie into fmg.local or fmg.ops (long-term)
 
 ### Frontend
 #### General
@@ -41,18 +43,18 @@
 - [ ] Put angular components into modules (re-structure)
 - [ ] Mobile size menu
 - [x] Hide navbar button or something
-- [ ] Overview home page
+- [x] Overview home page percentages
 
 #### Overview (home)
-- [ ] jarvisify box's (not cards)
+- [x] jarvisify box's (not cards)
 - [ ] Color gradient based on percentage
-- [ ] Jarvis background
-- [ ] Create a service
+- [x] Jarvis background
+- [x] Create a overview data service
+- [x] Grey and "Offline" if service offline
+- [ ] Quick links (somewhere)
 
 #### Services
 - [x] services service for service status
-- [x] RestAPI services class (GET)
-- [ ] RestAPI services class (POST) - start / stop service
 - [x] angular module
 - [x] angular services component
 - [x] angular services data.service
@@ -128,13 +130,17 @@
     - [x] Fleet
     - [x] GPS
     - [x] Alerts
-- [ ] Overview get request
+- [x] Overview get request
+- [ ] Services
+    - [x] Services class (GET)
+    - [ ] Services class (POST) - start / stop service
 
 
 #### Services
 - [ ] Master script to run as a service to start other scipts and monitor status
-- [ ] RestAPI to start / stop services
 - [x] Add overview service
+- [ ] Fix uptime
+- [ ] Service stopped info busted
 
 #### GPS
 - [x] Convert gps corrections to headless
@@ -176,10 +182,10 @@
     - [ ] Jarvisify cards
 
 #### Overview
-- [ ] Service running
-- [ ] Percent online
-    - [ ] Alerts
-    - [ ] GPS (Rx fail)?
-    - [ ] Fleet (per truck or device or somethingOffline)?
-    - [ ] Services
-    - [ ] Trailers
+- [x] Service running
+- [x] Percent online
+    - [x] Alerts
+    - [x] GPS (Rx fail)?
+    - [x] Fleet (per truck or device or somethingOffline)?
+    - [x] Services
+    - [x] Trailers
