@@ -62,7 +62,8 @@ def main():
         'trailers',
         'mongod',
         'nginx',
-        'services'
+        'services',
+        'overview'
     ]
 
     while True:

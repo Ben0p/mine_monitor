@@ -101,14 +101,14 @@
 #### General
 - [ ] Create cisco 1572 script
 - [ ] Make scripts headless (output text is hidden anyway)
-- [ ] Convert scripts into linux services
+- [x] Convert scripts into linux services
     - [x] alert
     - [x] rest
     - [x] fleet
     - [x] trailers
     - [x] corrections
     - [x] services
-    - [ ] overview
+    - [x] overview
 - [ ] change scripts to device type or modules
     - [ ] tropos
         - [ ] frontend add form
@@ -128,13 +128,13 @@
     - [x] Fleet
     - [x] GPS
     - [x] Alerts
-- [ ] Status Overview
+- [ ] Overview get request
 
 
 #### Services
 - [ ] Master script to run as a service to start other scipts and monitor status
 - [ ] RestAPI to start / stop services
-- [ ] Add overview service
+- [x] Add overview service
 
 #### GPS
 - [x] Convert gps corrections to headless
