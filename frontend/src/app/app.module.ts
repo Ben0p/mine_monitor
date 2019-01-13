@@ -20,6 +20,7 @@ import { SignDetailComponent } from './sign-detail/sign-detail.component';
 import { TrucksComponent } from './trucks/trucks.component';
 import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
 import { LoginComponent } from './login/login.component';
+import { PizzaPartyComponent } from './app.component';
 
 // Helpers
 import { BasicAuthInterceptor } from './_helpers/basic-auth.Interceptor';
@@ -41,7 +42,8 @@ import { environment } from '../environments/environment';
     TrucksComponent,
     FleetDetailComponent,
     LoginComponent,
-    EditComponent
+    EditComponent,
+    PizzaPartyComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,9 @@ import { environment } from '../environments/environment';
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     fakeBackendProvider
+  ],
+  entryComponents: [ 
+    PizzaPartyComponent
   ],
   bootstrap: [AppComponent]
 })

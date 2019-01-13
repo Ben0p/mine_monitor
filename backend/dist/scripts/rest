@@ -447,6 +447,15 @@ class corrections_list(Resource):
         except:
             return(False, 404)
 
+class check(Resource):
+    def get(self):
+
+        response = {'online' : True}
+
+        # Return response
+        return(jsonify(json.loads(dumps(response))))
+
+
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
 api.add_resource(alert_detail, "/alert/<string:name>")
@@ -458,6 +467,7 @@ api.add_resource(trailers, "/trailers")
 api.add_resource(corrections, "/corrections")
 api.add_resource(services, "/services")
 api.add_resource(corrections_list, "/corrections/list")
+api.add_resource(check, "/check")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')

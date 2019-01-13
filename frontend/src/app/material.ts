@@ -15,6 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 // Forms
@@ -52,7 +53,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatProgressSpinnerModule,
         MatPaginatorModule,
         MatSortModule,
-        MatTableModule
+        MatTableModule,
+        MatSnackBarModule
     ],
     exports: [
         MatButtonModule,
@@ -78,7 +80,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatProgressSpinnerModule,
         MatPaginatorModule,
         MatSortModule,
-        MatTableModule
+        MatTableModule,
+        MatSnackBarModule
     ]
 })
 

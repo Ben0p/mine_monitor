@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable, of } from "rxjs";
 import { map, catchError, tap } from "rxjs/operators";
+import { getMatIconFailedToSanitizeUrlError } from "@angular/material";
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -33,6 +34,11 @@ export class DataService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  private returnFalse<T>(operation = "operation", result?: T) {
+    var status = {'online' : result}
+    return of(result as T)
   }
 
   /*
@@ -74,6 +80,16 @@ export class DataService {
 
   fleetDetail(name): Observable<any> {
     return this.http.get(APIurl + "fleet/" + name).pipe(map(this.extractData));
+  }
+
+  checkConnection(): Observable<any> {
+    return this.http.get(APIurl + "check")
+    .pipe(
+      map(this.extractData),
+      catchError( error => { 
+        return of({online: false});
+      })
+    )
   }
 
   setOutputs(name, outputs): Observable<any> {

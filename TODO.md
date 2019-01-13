@@ -7,18 +7,30 @@
 - [ ] Terrain
 - [x] Fleet delete
 - [ ] Always general code cleaning, optimising, comments
-- [ ] Organise TODO
+- [x] Organise TODO
 - [ ] Create README and docs
 - [ ] In-browser VNC
 - [ ] Automate backups
 - [ ] Main page indicates status (% offline)
 - [ ] nginx serve https
+- [ ] East Camera
+- [ ] RestAPI authentication token
 
 ### Frontend
 #### General
 - [ ] Indication on web page if script (service) not running (pop down)
 - [ ] J.A.R.V.I.S boiii
-- [ ] Indication if backend connection has dropped out
+- [x] Indication if backend connection has dropped out
+    - [x] http get from app.component every second
+    - [x] Snackbar popup if fail
+    - [x] import snackbar 
+    - [x] data service function
+    - [ ] Indication for each service
+        - [ ] Alerts
+        - [ ] GPS
+        - [ ] Fleet
+        - [ ] Services
+        - [ ] Trailers
 - [x] SVG angular material icons for no internet
 - [ ] Production / development environment setup
 - [x] Convert to progressive web app
@@ -63,7 +75,7 @@
         - [ ] Delete 
         - [ ] Add
     - [x] Title
-- [ ] Add all machines to db through webui (done but not adding up)
+- [x] Add all machines to db through webui
 - [ ] Pretty up page UI
 - [ ] Base station stats
 - [ ] TropOS server stats 
