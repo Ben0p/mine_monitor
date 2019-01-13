@@ -15,6 +15,7 @@
 - [ ] nginx serve https
 - [ ] East Camera
 - [ ] RestAPI authentication token
+- [ ] Database backup
 
 ### Frontend
 #### General
@@ -40,6 +41,13 @@
 - [ ] Put angular components into modules (re-structure)
 - [ ] Mobile size menu
 - [x] Hide navbar button or something
+- [ ] Overview home page
+
+#### Overview (home)
+- [ ] jarvisify box's (not cards)
+- [ ] Color gradient based on percentage
+- [ ] Jarvis background
+- [ ] Create a service
 
 #### Services
 - [x] services service for service status
@@ -88,17 +96,19 @@
 - [x] Delete trailers
 - [x] Delete gps devices
 
+
 ### Backend
 #### General
 - [ ] Create cisco 1572 script
 - [ ] Make scripts headless (output text is hidden anyway)
-- [x] Convert scripts into linux services
+- [ ] Convert scripts into linux services
     - [x] alert
     - [x] rest
     - [x] fleet
     - [x] trailers
     - [x] corrections
     - [x] services
+    - [ ] overview
 - [ ] change scripts to device type or modules
     - [ ] tropos
         - [ ] frontend add form
@@ -110,6 +120,7 @@
         - [ ] backend script
         - [ ] mongo collection
         - [ ] restAPI adjustment
+- [x] Create overview script
 
 #### RestAPI
 - [x] Delete
@@ -117,11 +128,13 @@
     - [x] Fleet
     - [x] GPS
     - [x] Alerts
+- [ ] Status Overview
 
 
 #### Services
 - [ ] Master script to run as a service to start other scipts and monitor status
 - [ ] RestAPI to start / stop services
+- [ ] Add overview service
 
 #### GPS
 - [x] Convert gps corrections to headless
@@ -162,3 +175,11 @@
     - [ ] Perhaps have no data on main page or one latency only
     - [ ] Jarvisify cards
 
+#### Overview
+- [ ] Service running
+- [ ] Percent online
+    - [ ] Alerts
+    - [ ] GPS (Rx fail)?
+    - [ ] Fleet (per truck or device or somethingOffline)?
+    - [ ] Services
+    - [ ] Trailers
