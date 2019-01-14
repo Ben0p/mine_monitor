@@ -11,9 +11,20 @@
       >
         <mat-card-header>
           <mat-card-title> {{ trailer.parent }} </mat-card-title>
-          <mat-card-subtitle> {{ trailer.tristar.ip }} </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
+          ──────────────<br/>
+          <b>TropOS:</b> <br />
+          {{ trailer.tropos.ip }} <br />
+          {{ trailer.tropos.latency }}ms<br />
+          ──────────────<br />
+          <b>Cisco:</b> <br />
+          {{ trailer.cisco.ip }} <br />
+          {{ trailer.cisco.latency }}ms <br />
+          ──────────────<br />
+          <b>Tristar:</b> <br />
+          {{ trailer.tristar.ip }} <br />
+          {{ trailer.tristar.latency }}ms <br />
           Battery Volts: {{ trailer.tristar_live.batt_volts }} <br />
           Battery Current: {{ trailer.tristar_live.batt_current }} <br />
           Solar Volts: {{ trailer.tristar_live.solar_volts }} <br />

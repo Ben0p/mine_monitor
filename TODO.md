@@ -19,7 +19,7 @@
 - [ ] Multiple user accounts and authentication
     - [ ] Tie into fmg.local or fmg.ops (long-term)
 - [ ] Pre-load pwa for offline mode
-- [ ] Tristar history
+- [ ] Tristar history + graphs
 
 ### Frontend
 #### General
@@ -68,7 +68,7 @@
 #### Trailers
 - [ ] Trailer detail page
 - [ ] Reduce details on main page
-- [ ] Add Tropos / Cisco / Ubi
+- [x] Add Tropos / Cisco / Ubi
 
 #### Fleet
 - [x] Links to devices from fleet detail
@@ -103,12 +103,13 @@
 - [x] List button
 
 #### Edit
-- [ ] Blank edit form after submit and return 'OK'
+- [x] Blank edit form after submit
+- [ ] Return 'OK' after submit
 - [ ] Form input verification
 - [x] Delete fleet
 - [x] Delete trailers
 - [x] Delete gps devices
-- [ ] Trailer tropos / cisco / ubi
+- [x] Trailer tropos / cisco / ubi
 
 
 ### Backend
@@ -147,10 +148,10 @@
 - [ ] Services
     - [x] Services class (GET)
     - [ ] Services class (POST) - start / stop service
-- [ ] Trailers
-    - [ ] Add Tropos
-    - [ ] Add Ubi
-    - [ ] Add Cisco
+- [x] Trailers
+    - [x] Add Tropos
+    - [x] Add Ubi
+    - [x] Add Cisco
 
 
 #### Services
@@ -185,12 +186,15 @@
     - [ ] Battery volts
     - [ ] Temp
 - [x] Trailer temps
-- [ ] Ping
-    - [ ] Cisco
-    - [ ] Topos
-    - [ ] Ubi
-    - [ ] Tristar
+- [x] Ping
+    - [x] Cisco
+    - [x] Topos
+    - [x] Ubi
+    - [x] Tristar
 - [ ] Pull cisco data
+- [ ] Fix data reseting bug
+    - [ ] write to pymongo in one hit
+    - [ ] combine tristar and ping process
 
 #### Alerts
 - [x] Poll alerts without a delay

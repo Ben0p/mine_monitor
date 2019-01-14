@@ -105,6 +105,33 @@ export class EditComponent implements OnInit {
       }
     }
 
+    // Rest all exept type
+    this.editForm.setValue(
+      {
+        'type' : this.editForm.value.type,
+        'fleet_name' : "",
+        'fleet_xim' : "",
+        'fleet_screen' : "",
+        'fleet_other' : "",
+        'fleet_2' : "",
+        'fleet_5' : '',
+        'alert_location' : '',
+        'alert_ip' : "",
+        'alert_type' : "",
+        'trailer_number' : "",
+        'west_ip' : "",
+        'central_ip' : "",
+        'east_ip' : "",
+        'parent' :"",
+        'tristar_ip' : "",
+        'tropos2_ip' : "",
+        'cisco1572_ip' : "",
+        'ubi_ip' : "",
+        'correction_ip' : ""
+      }
+    )
+
     // this.router.navigateByUrl('/alerts');
+    
   }
 }

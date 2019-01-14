@@ -361,6 +361,9 @@ class delete(Resource):
 
         # Split string into type and device
         _type, _device = device.split('-')
+        if not _device:
+            _device = ""
+            print("Blank device name")
 
         try:
             if _type == 'alert':
@@ -375,9 +378,10 @@ class delete(Resource):
                 db['fleet'].delete_one({"name":  _device})
             
             elif _type == 'trailer':
-                db['tristar_data'].delete_one({"parent": _device})
-                db['tristar'].delete_one({"parent":  _device})
+                db['trailer_data'].delete_one({"parent": _device})
+                db['trailers'].delete_one({"parent":  _device})
 
+            print("Deleted {} - {}".format(_type, _device))
             return(202)
 
         except:

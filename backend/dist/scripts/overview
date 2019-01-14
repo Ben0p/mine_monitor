@@ -105,7 +105,7 @@ def trailers():
     '''
 
     # Get Trailers
-    trailers = db['tristar_data'].find()
+    trailers = db['trailer_data'].find()
     trailer_count = trailers.count()
 
     # Reset online count
@@ -113,7 +113,7 @@ def trailers():
 
     # Count how many trailers online
     for trailer in trailers:
-        if trailer['live']['online']:
+        if trailer['tropos']['online']:
             online += 1
     
     # Calculate percentage online

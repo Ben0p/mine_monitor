@@ -124,6 +124,7 @@ def parsePing(device):
                 'online': online,
                 'ip': device['ip']
             }
+            
 
             db['trailer_data'].find_one_and_update(
                 {
@@ -161,91 +162,91 @@ def parseTristar(name, ip):
     # Initialize modbus connection
     c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
 
-    while True:
+    #while True:
 
-        # Read up to modbus register 60
-        values = c.read_holding_registers(0, 60)
+    # Read up to modbus register 60
+    values = c.read_holding_registers(0, 60)
 
-        if values:
-            # Save modbus values to dictionary
-            raw_values = {
-                'V_PU_hi': values[0],
-                'V_PU_lo': values[1],
-                'I_PU_hi': values[2],
-                'I_PU_lo': values[3],
-                'adc_vb_f_med': values[24],
-                'adc_vbterm_f': values[25],
-                'adc_vbs_f': values[26],
-                'adc_va_f': values[27],
-                'adc_ib_f_shadow': values[28],
-                'adc_ia_f_shadow': values[29],
-                'T_hs': values[35],
-                'charge_state': values[50],
-                'power_out_shadow': values[58]
+    if values:
+        # Save modbus values to dictionary
+        raw_values = {
+            'V_PU_hi': values[0],
+            'V_PU_lo': values[1],
+            'I_PU_hi': values[2],
+            'I_PU_lo': values[3],
+            'adc_vb_f_med': values[24],
+            'adc_vbterm_f': values[25],
+            'adc_vbs_f': values[26],
+            'adc_va_f': values[27],
+            'adc_ib_f_shadow': values[28],
+            'adc_ia_f_shadow': values[29],
+            'T_hs': values[35],
+            'charge_state': values[50],
+            'power_out_shadow': values[58]
+        }
+
+        # Save converted values to dictionary
+        live_values = {
+            'ip': ip,
+            'online': True,
+            'batt_volts': calcVolts(
+                raw_values['V_PU_hi'],
+                raw_values['V_PU_lo'],
+                raw_values['adc_vb_f_med']),
+            'batt_current': calcCurrent(
+                raw_values['I_PU_hi'],
+                raw_values['I_PU_lo'],
+                raw_values['adc_ib_f_shadow']),
+            'solar_volts': calcVolts(
+                raw_values['V_PU_hi'],
+                raw_values['V_PU_lo'],
+                raw_values['adc_va_f']),
+            'solar_current': calcCurrent(
+                raw_values['I_PU_hi'],
+                raw_values['I_PU_lo'],
+                raw_values['adc_ia_f_shadow']),
+            'charge_state': chargeState(
+                raw_values['charge_state']),
+            'output_power': calcPower(
+                raw_values['V_PU_hi'],
+                raw_values['V_PU_lo'],
+                raw_values['I_PU_hi'],
+                raw_values['I_PU_lo'],
+                raw_values['power_out_shadow']
+            ),
+            'heatsink_temp': raw_values['T_hs']
+        }
+
+    # Blank values if there is no connection
+    else:
+        live_values = {
+            'ip': ip,
+            'online': False,
+            'batt_volts': '',
+            'batt_current': '',
+            'solar_volts': '',
+            'solar_current': '',
+            'charge_state': '',
+            'output_power': '',
+            'heatsink_temp': ''
+        }
+
+    # Dump into tristar_data collection
+    db['trailer_data'].find_one_and_update(
+        {
+            'parent': name
+        },
+        {
+            '$set': {
+                'parent': name,
+                'tristar_live': live_values
             }
+        },
+        upsert=True
+    )
 
-            # Save converted values to dictionary
-            live_values = {
-                'ip': ip,
-                'online': True,
-                'batt_volts': calcVolts(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['adc_vb_f_med']),
-                'batt_current': calcCurrent(
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['adc_ib_f_shadow']),
-                'solar_volts': calcVolts(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['adc_va_f']),
-                'solar_current': calcCurrent(
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['adc_ia_f_shadow']),
-                'charge_state': chargeState(
-                    raw_values['charge_state']),
-                'output_power': calcPower(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['power_out_shadow']
-                ),
-                'heatsink_temp': raw_values['T_hs']
-            }
-
-        # Blank values if there is no connection
-        else:
-            live_values = {
-                'ip': ip,
-                'online': False,
-                'batt_volts': '',
-                'batt_current': '',
-                'solar_volts': '',
-                'solar_current': '',
-                'charge_state': '',
-                'output_power': '',
-                'heatsink_temp': ''
-            }
-
-        # Dump into tristar_data collection
-        db['trailer_data'].find_one_and_update(
-            {
-                'parent': name
-            },
-            {
-                '$set': {
-                    'parent': name,
-                    'tristar_live': live_values
-                }
-            },
-            upsert=True
-        )
-
-        # Sleep every 5 seconds, tristar crashes with too many requests
-        time.sleep(2)
+    # Sleep every 5 seconds, tristar crashes with too many requests
+    # time.sleep(2)
 
 
 def main():
@@ -314,6 +315,8 @@ def main():
             except:
                 pass
 
+            parseTristar(name, trailer['tristar_ip'])
+
         for device in devices:
 
             # Check if device ip isn't blank
@@ -357,6 +360,8 @@ def main():
 
                 print("Stopped {}".format(process))
 
+        # mongo can't handle concurrent updates on the same document
+        '''
         for name in tristar_list:
             # Check if tristar in active processes
             if name not in active_processes:
@@ -388,6 +393,7 @@ def main():
                 del process_match[process]
 
                 print("Stopped {}".format(name))
+        '''
 
         time.sleep(10)
 
