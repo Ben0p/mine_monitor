@@ -18,6 +18,7 @@
 - [ ] Database backup
 - [ ] Multiple user accounts and authentication
     - [ ] Tie into fmg.local or fmg.ops (long-term)
+- [ ] Pre-load pwa for offline mode
 
 ### Frontend
 #### General
@@ -44,6 +45,7 @@
 - [ ] Mobile size menu
 - [x] Hide navbar button or something
 - [x] Overview home page percentages
+- [ ] Fix arrow down partly off screen on phones
 
 #### Overview (home)
 - [x] jarvisify box's (not cards)
@@ -52,6 +54,7 @@
 - [x] Create a overview data service
 - [x] Grey and "Offline" if service offline
 - [ ] Quick links (somewhere)
+- [ ] Align box's middle
 
 #### Services
 - [x] services service for service status
@@ -64,11 +67,18 @@
 #### Trailers
 - [ ] Trailer detail page
 - [ ] Reduce details on main page
+- [ ] Add Tropos / Cisco / Ubi
 
 #### Fleet
 - [x] Links to devices from fleet detail
 - [x] Add ip addresses to fleet_data collection
 - [x] Add ip addresses in fleet detail page
+- [ ] Jarvisify
+    - [ ] latency if online, "Offline" if offline
+    - [ ] Perhaps have no data on main page or one latency only
+- [ ] Fleet Detail
+    - [ ] Shorten to fit on phone better
+    - [ ] Jarvisify
 
 ### GPS
 - [x] Create angular module
@@ -97,6 +107,7 @@
 - [x] Delete fleet
 - [x] Delete trailers
 - [x] Delete gps devices
+- [ ] Trailer tropos / cisco / ubi
 
 
 ### Backend
@@ -131,9 +142,14 @@
     - [x] GPS
     - [x] Alerts
 - [x] Overview get request
+- [x] Check get request for monitoring connection
 - [ ] Services
     - [x] Services class (GET)
     - [ ] Services class (POST) - start / stop service
+- [ ] Trailers
+    - [ ] Add Tropos
+    - [ ] Add Ubi
+    - [ ] Add Cisco
 
 
 #### Services
@@ -168,6 +184,12 @@
     - [ ] Battery volts
     - [ ] Temp
 - [x] Trailer temps
+- [ ] Ping
+    - [ ] Cisco
+    - [ ] Topos
+    - [ ] Ubi
+    - [ ] Tristar
+- [ ] Pull cisco data
 
 #### Alerts
 - [x] Poll alerts without a delay
@@ -177,9 +199,10 @@
 - [x] Stop process when deleted
     - [x] Delete from both databases when deleted
     - [x] Fix bug where it re-adds fleet to fleet_data
-- [ ] Pretty up UI
-    - [ ] Perhaps have no data on main page or one latency only
-    - [ ] Jarvisify cards
+- [ ] Reduce pings
+    - [ ] Don't bother about tropos 5ghz
+    - [ ] Don't ping spare IP if not used
+
 
 #### Overview
 - [x] Service running

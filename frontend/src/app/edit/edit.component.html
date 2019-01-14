@@ -64,7 +64,7 @@
                 />
               </mat-form-field>
             </div>
-            <div *ngIf="selectedType == 'tristar'">
+            <div *ngIf="selectedType == 'trailer'">
               <mat-form-field>
                 <input matInput placeholder="CT0xx" formControlName="parent" />
               </mat-form-field>
@@ -72,8 +72,32 @@
               <mat-form-field>
                 <input
                   matInput
-                  placeholder="Tristar IP"
+                  placeholder="Tristar"
                   formControlName="tristar_ip"
+                />
+              </mat-form-field>
+              <br />
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="TropOS 2.4ghz"
+                  formControlName="tropos2_ip"
+                />
+              </mat-form-field>
+              <br />
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Cisco 1572"
+                  formControlName="cisco1572_ip"
+                />
+              </mat-form-field>
+              <br />
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Ubiquiti"
+                  formControlName="ubi_ip"
                 />
               </mat-form-field>
             </div>
@@ -184,10 +208,10 @@
     </div>
     <div flex-gt-lg="15">
       <mat-card class="card" style="font-size: 12px;">
-        Devices are matched by name. <br />
+        Devices are matched by name. Corrections matched by IP. <br />
         <br />
         <b>Add new:</b> <br />
-        Enter details, click submit. <br />
+        Enter details, click submit. If a device doesn't exist, leave it blank. <br />
         <br />
         <b>To update:</b> <br />
         Enter the exact existing name and details, click submit. <br />

@@ -39,13 +39,16 @@ export class EditComponent implements OnInit {
     east_ip: new FormControl(""),
     parent: new FormControl(""),
     tristar_ip: new FormControl(""),
+    tropos2_ip: new FormControl(""),
+    cisco1572_ip: new FormControl(""),
+    ubi_ip: new FormControl(""),
     correction_ip: new FormControl("")
   });
 
   types: Type[] = [
     { value: "fleet", viewValue: "Fleet" },
     { value: "alert", viewValue: "Alert" },
-    { value: "tristar", viewValue: "Trailer" },
+    { value: "trailer", viewValue: "Trailer" },
     { value: "corrections", viewValue: "Correction" }
   ];
 
