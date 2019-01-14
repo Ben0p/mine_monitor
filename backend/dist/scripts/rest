@@ -231,6 +231,9 @@ class edit(Resource):
 
         # Parse the form data (tristar)
         parser.add_argument("tristar_ip")
+        parser.add_argument("tropos2_ip")
+        parser.add_argument("cisco1572_ip")
+        parser.add_argument("ubi_ip")
 
         # Parse the form data (corrections)
         parser.add_argument("correction_ip")
@@ -309,18 +312,21 @@ class edit(Resource):
             return(201)
 
 
-        elif (args['type'] == 'tristar'):
+        elif (args['type'] == 'trailer'):
 
             # Find existing document and update, create new if it doesn't exist
-            db['tristar'].find_one_and_update(
+            db['trailers'].find_one_and_update(
                     {
-                        'ip' : args['tristar_ip']
+                        'parent' : args['parent']
                     },
                     {
                         '$set': 
                         {
-                        'ip' : args['tristar_ip'],
-                        'parent' : args['parent']
+                        'parent' : args['parent'],
+                        'tristar_ip' : args['tristar_ip'],
+                        'tropos2_ip' : args['tropos2_ip'],
+                        'cisco1572_ip' : args['cisco1572_ip'],
+                        'ubi_ip' : args['ubi_ip']
                         }
                     },
                     upsert = True
@@ -406,7 +412,7 @@ class fleet_detail(Resource):
 class trailers(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
-        trailer_data = db['tristar_data'].find().sort("parent",pymongo.ASCENDING)
+        trailer_data = db['trailer_data'].find().sort("parent",pymongo.ASCENDING)
 
         # Return collection as a massive json
         try:

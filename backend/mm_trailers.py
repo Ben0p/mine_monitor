@@ -1,11 +1,14 @@
 #! /usr/bin/python3.6
 from pyModbusTCP.client import ModbusClient
 import pymongo
+import subprocess
+import platform
 import multiprocessing
 import time
 
 
 '''
+This script is actual chaos
 Scrapes data for the comms trailers
 Gets details from mongo which has been added through the web UI
 '''
@@ -60,7 +63,92 @@ def chargeState(state):
     return(states[str(state)])
 
 
-def parseTristar(tristar):
+def ping(host):
+    """
+    Returns True and latency if host responds to a ping request
+    """
+    if platform.system().lower() == "windows":
+        cmd = ["ping", host, "-t"]
+        popen = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        for stdout_line in iter(popen.stdout.readline, ""):
+            if stdout_line[:5] == "Reply":
+                try:
+                    yield(stdout_line.split()[4].split('=')[1][:-2], True)
+                except IndexError:
+                    yield(999, False)
+            elif stdout_line[:7] == "Request":
+                yield(999, False)
+
+        popen.stdout.close()
+        return_code = popen.wait()
+        if return_code:
+            raise subprocess.CalledProcessError(return_code, cmd)
+
+    else:
+
+        cmd = ['ping', host]
+        popen = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, universal_newlines=True)
+        for stdout_line in iter(popen.stdout.readline, ""):
+            if stdout_line[:2] == "64":
+                try:
+                    yield(stdout_line.split()[6].split('=')[1][:-3], True)
+                except IndexError:
+                    yield(999, False)
+            elif stdout_line[:4] == "From":
+                yield(999, False)
+            else:
+                yield(999, False)
+
+        popen.stdout.close()
+        return_code = popen.wait()
+        if return_code:
+            raise subprocess.CalledProcessError(return_code, cmd)
+
+
+def parsePing(device):
+    # Have to create a new mongo connection for each thread or it wigs out
+    client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
+    db = client['minemonitor']
+
+    for pong, online in ping(device['ip']):
+
+        # Check if device hasn't been deleted
+        trailer_exists = db['trailers'].find_one({"parent": device['name']})
+        trailer_data = db['trailer_data'].find_one({"parent": device['name']})
+
+        if trailer_exists:
+            data = {
+                'latency': pong,
+                'online': online,
+                'ip': device['ip']
+            }
+
+            db['trailer_data'].find_one_and_update(
+                {
+                    "parent": device['name']
+                },
+                {
+                    "$set": {
+                        'parent': device['name'],
+                        device['device']: data
+                    }
+                },
+                upsert=True
+            )
+
+        # If it doesn't exist...
+        else:
+            # AND if it exists in fleet_data
+            if trailer_data:
+                # Delete from fleet_data
+                db['trailer_data'].find_one_and_delete(
+                    {"parent": device['name']})
+                print('Deleted {}'.format(device['name']))
+
+
+def parseTristar(name, ip):
     '''
     Gets tristar data via modbus and writes to tristar_data db
     This function is threaded for each trailer
@@ -71,10 +159,10 @@ def parseTristar(tristar):
     db = client['minemonitor']
 
     # Initialize modbus connection
-    c = ModbusClient(host=tristar['ip'], port=502, auto_open=True, timeout=1)
-
+    c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
 
     while True:
+
         # Read up to modbus register 60
         values = c.read_holding_registers(0, 60)
 
@@ -98,7 +186,8 @@ def parseTristar(tristar):
 
             # Save converted values to dictionary
             live_values = {
-                'online' : True,
+                'ip': ip,
+                'online': True,
                 'batt_volts': calcVolts(
                     raw_values['V_PU_hi'],
                     raw_values['V_PU_lo'],
@@ -128,9 +217,10 @@ def parseTristar(tristar):
             }
 
         # Blank values if there is no connection
-        else: 
+        else:
             live_values = {
-                'online' : False,
+                'ip': ip,
+                'online': False,
                 'batt_volts': '',
                 'batt_current': '',
                 'solar_volts': '',
@@ -141,22 +231,22 @@ def parseTristar(tristar):
             }
 
         # Dump into tristar_data collection
-        db['tristar_data'].find_one_and_update(
+        db['trailer_data'].find_one_and_update(
             {
-                'parent': tristar['parent']
+                'parent': name
             },
             {
                 '$set': {
-                    'ip': tristar['ip'],
-                    'parent': tristar['parent'],
-                    'live' : live_values
+                    'parent': name,
+                    'tristar_live': live_values
                 }
             },
             upsert=True
         )
 
-        # Every 2 seconds so it doesn't go out of control
+        # Sleep every 5 seconds, tristar crashes with too many requests
         time.sleep(2)
+
 
 def main():
     '''
@@ -167,30 +257,113 @@ def main():
     client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
     db = client['minemonitor']
 
+    # Reset arrays and dictionaries
     active_processes = []
     process_match = {}
+    active_pings = []
+    ping_match = {}
 
     while True:
-        # Get tristar documents
-        docs = db['tristar'].find()
+        # Get trailer documents
+        docs = db['trailers'].find()
 
-        # Reset list of tristars in db
+        # Reset tristar list
         tristar_list = []
 
-        for tristar in docs:
+        # Reset ping list
+        ping_list = []
+
+        # Reset trailer devices array for extending
+        devices = []
+
+        for trailer in docs:
 
             # Get name
-            name = tristar['parent']
+            name = trailer['parent']
 
-            # Append name to list
+            # Append name to tristar list
             tristar_list.append(name)
 
-            # Check if parent name is in active processes
+            # Create list of all the devices every trailer
+            try:
+                devices.extend(
+                    [
+                        {
+                            "name": name,
+                            "device": "tropos",
+                            "ip": trailer['tropos2_ip']
+                        },
+                        {
+                            "name": name,
+                            "device": "tristar",
+                            "ip": trailer['tristar_ip']
+                        },
+                        {
+                            "name": name,
+                            "device": "cisco",
+                            "ip": trailer['cisco1572_ip']
+                        },
+                        {
+                            "name": name,
+                            "device": "ubi",
+                            "ip": trailer['ubi_ip']
+                        }
+                    ]
+                )
+
+            except:
+                pass
+
+        for device in devices:
+
+            # Check if device ip isn't blank
+            if device['ip']:
+                # Generate a unique device name (DT050-xim)
+                device_name = "{}-{}".format(device['name'], device['device'])
+
+                # Append device name to list
+                ping_list.append(device_name)
+
+                # Check if there is a process already running with the device name
+                if device_name not in active_pings:
+
+                    # Create process
+                    p = multiprocessing.Process(
+                        target=parsePing,
+                        args=(device,)
+                    )
+
+                    # Append device name to active process list
+                    active_pings.append(device_name)
+
+                    # Add process ID to dictionary
+                    ping_match[device_name] = p
+
+                    # Start process
+                    p.start()
+
+                    print('Started pinging {}'.format(device_name))
+
+        # Stop process if the fleet device has been removed from db
+        for process in active_pings:
+            # If there is a process running that isn't in the db
+            if process not in ping_list:
+                # Terminate that process
+                ping_match[process].terminate()
+                # Remove from active processes
+                active_processes.remove(process)
+                # Remove from process match dictionary
+                del process_match[process]
+
+                print("Stopped {}".format(process))
+
+        for name in tristar_list:
+            # Check if tristar in active processes
             if name not in active_processes:
 
                 # Create process
                 p = multiprocessing.Process(
-                    target=parseTristar, args=(tristar,))
+                    target=parseTristar, args=(name, trailer['tristar_ip'],))
 
                 # Append name to active process list
                 active_processes.append(name)
@@ -201,7 +374,7 @@ def main():
                 # Start process
                 p.start()
 
-                print("Started {}".format(name))
+                print("Pythoning {} tristar data".format(name))
 
         # Stop process if the tristar has been removed from db
         for process in active_processes:

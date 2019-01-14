@@ -5,22 +5,22 @@
         class="trailer"
         (click)="onNavigate(trailer.ip)"
         [ngClass]="{
-          'trailer-online': trailer.live.online,
-          'trailer-offline': !trailer.live.online
+          'trailer-online': trailer.tropos.online,
+          'trailer-offline': !trailer.tropos.online
         }"
       >
         <mat-card-header>
           <mat-card-title> {{ trailer.parent }} </mat-card-title>
-          <mat-card-subtitle> {{ trailer.ip }} </mat-card-subtitle>
+          <mat-card-subtitle> {{ trailer.tristar.ip }} </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          Battery Volts: {{ trailer.live.batt_volts }} <br />
-          Battery Current: {{ trailer.live.batt_current }} <br />
-          Solar Volts: {{ trailer.live.solar_volts }} <br />
-          Solar Current: {{ trailer.live.solar_current }} <br />
-          Charge Mode: {{ trailer.live.charge_state }} <br />
-          Output Power: {{ trailer.live.output_power }} <br />
-          Heatsink Temp: {{ trailer.live.heatsink_temp }} <br />
+          Battery Volts: {{ trailer.tristar_live.batt_volts }} <br />
+          Battery Current: {{ trailer.tristar_live.batt_current }} <br />
+          Solar Volts: {{ trailer.tristar_live.solar_volts }} <br />
+          Solar Current: {{ trailer.tristar_live.solar_current }} <br />
+          Charge Mode: {{ trailer.tristar_live.charge_state }} <br />
+          Output Power: {{ trailer.tristar_live.output_power }} <br />
+          Heatsink Temp: {{ trailer.tristar_live.heatsink_temp }} <br />
         </mat-card-content>
       </mat-card>
     </div>

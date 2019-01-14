@@ -19,6 +19,7 @@
 - [ ] Multiple user accounts and authentication
     - [ ] Tie into fmg.local or fmg.ops (long-term)
 - [ ] Pre-load pwa for offline mode
+- [ ] Tristar history
 
 ### Frontend
 #### General
