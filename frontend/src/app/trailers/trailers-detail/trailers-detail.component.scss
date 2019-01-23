@@ -1,0 +1,52 @@
+.trailers:before {
+    content: "";
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10;
+    background: url("../../../assets/img/trailers.jpg") no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+  
+  .trailers {
+    height: calc(100vh - 64px);
+    width: 100vw;
+    margin: 0;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  .trailer {
+      border-width: 2px;
+      border-style: solid;
+  }
+  
+  .trailer-online {
+    color: rgb(204, 255, 204);
+    background-color: rgba(0, 94, 78, 0.8);
+    border-color: rgb(0, 255, 213);
+  }
+  
+  .trailer-offline {
+    color: rgb(255, 204, 204);
+    background-color: rgba(255, 0, 0, 0.3);
+    border-color: #c7254e
+  }
+  
+  .container {
+    margin: -6px;
+  }
+  
+  .container > * {
+   margin: 6px;
+  }
+  
+  mat-card-subtitle {
+      color: deepskyblue;
+  }

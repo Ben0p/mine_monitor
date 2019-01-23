@@ -3,7 +3,7 @@
     <div flex-gt-lg="15" *ngFor="let trailer of trailers">
       <mat-card
         class="trailer"
-        (click)="onNavigate(trailer.ip)"
+        routerLink="{{trailer.parent}}"
         [ngClass]="{
           'trailer-online': trailer.tropos.online,
           'trailer-offline': !trailer.tropos.online

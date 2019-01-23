@@ -1,3 +1,52 @@
-<p>
-  {{name}}
-</p>
+<div class="trailers">
+    <div class="container" fxLayout="row wrap" fxLayoutAlign="center">
+      <div flex-gt-lg="15" *ngFor="let trailer of trailer$">
+        <mat-card
+          class="trailer"
+          [ngClass]="{
+            'trailer-online': trailer.tropos.online,
+            'trailer-offline': !trailer.tropos.online
+          }"
+        >
+          <mat-card-header>
+            <mat-card-title> {{ trailer.parent }} </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div *ngIf="trailer.tropos">
+              ──────────────<br />
+              <b>TropOS:</b> <br />
+              {{ trailer.tropos.ip }} <br />
+              {{ trailer.tropos.latency }}ms<br />
+            </div>
+            <div *ngIf="trailer.cisco">
+              ──────────────<br />
+              <b>Cisco:</b> <br />
+              {{ trailer.cisco.ip }} <br />
+              {{ trailer.cisco.latency }}ms <br />
+            </div>
+            <div *ngIf="trailer.ubi">
+              ──────────────<br />
+              <b>Ubi:</b> <br />
+              {{ trailer.ubi.ip }} <br />
+              {{ trailer.ubi.latency }}ms <br />
+            </div>
+            <div *ngIf="trailer.tristar">
+              ──────────────<br />
+              <b>Tristar:</b> <br />
+              {{ trailer.tristar.ip }} <br />
+              {{ trailer.tristar.latency }}ms <br />
+              Battery Volts: {{ trailer.tristar_live.batt_volts }} <br />
+              Battery Current: {{ trailer.tristar_live.batt_current }} <br />
+              Solar Volts: {{ trailer.tristar_live.solar_volts }} <br />
+              Solar Current: {{ trailer.tristar_live.solar_current }} <br />
+              Charge Mode: {{ trailer.tristar_live.charge_state }} <br />
+              Output Power: {{ trailer.tristar_live.output_power }} <br />
+              Heatsink Temp: {{ trailer.tristar_live.heatsink_temp }} <br />
+            </div>
+            ──────────────<br />
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  

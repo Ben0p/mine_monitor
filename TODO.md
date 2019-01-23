@@ -56,7 +56,7 @@
 - [x] Grey and "Offline" if service offline
 - [ ] Quick links (somewhere)
 - [ ] Align box's middle
-- [ ] Get rid of scroll bars
+- [x] Get rid of scroll bars
 
 #### Services
 - [x] services service for service status
@@ -69,8 +69,8 @@
 #### Trailers
 - [ ] Trailer detail page
     - [x] Data service
-    - [ ] Get data in component
-
+    - [x] Get data in component
+    - [x] Card and background
 - [ ] Reduce details on main page
 - [x] Add Tropos / Cisco / Ubi
 - [x] *ngIf devices
