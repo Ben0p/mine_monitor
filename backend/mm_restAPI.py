@@ -424,6 +424,17 @@ class trailers(Resource):
         except:
             return(False, 404)
 
+class trailers_detail(Resource):
+    def get(self, name):
+        # Get document with name
+        trailer_data = db['trailer_data'].find({'parent': name})
+
+        # Return collection as a massive json
+        try:
+            return(jsonify(json.loads(dumps(trailer_data))))
+        except:
+            return(False, 404)
+
 class corrections(Resource):
     def get(self):
         # Get all ping data from the pings collection in mongo
@@ -485,6 +496,7 @@ api.add_resource(fleet_detail, "/fleet/<string:name>")
 api.add_resource(edit, "/edit")
 api.add_resource(delete, "/edit/<string:device>")
 api.add_resource(trailers, "/trailers")
+api.add_resource(trailers_detail, "/trailers/<string:name>")
 api.add_resource(corrections, "/corrections")
 api.add_resource(services, "/services")
 api.add_resource(corrections_list, "/corrections/list")

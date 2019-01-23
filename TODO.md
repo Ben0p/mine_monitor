@@ -56,6 +56,7 @@
 - [x] Grey and "Offline" if service offline
 - [ ] Quick links (somewhere)
 - [ ] Align box's middle
+- [ ] Get rid of scroll bars
 
 #### Services
 - [x] services service for service status
@@ -67,8 +68,12 @@
 
 #### Trailers
 - [ ] Trailer detail page
+    - [x] Data service
+    - [ ] Get data in component
+
 - [ ] Reduce details on main page
 - [x] Add Tropos / Cisco / Ubi
+- [x] *ngIf devices
 
 #### Fleet
 - [x] Links to devices from fleet detail
@@ -80,6 +85,7 @@
 - [ ] Fleet Detail
     - [ ] Shorten to fit on phone better
     - [ ] Jarvisify
+- [ ] Remove 5ghz and Spare (unless used)
 
 ### GPS
 - [x] Create angular module
@@ -152,6 +158,11 @@
     - [x] Add Tropos
     - [x] Add Ubi
     - [x] Add Cisco
+    - [ ] Add tetra ISSI for reference only
+    - [ ] Add other Tropos IP's for reference
+    - [ ] Don't add tristar_live if no tristar
+    - [ ] Change from tristar_live to just tristar
+- [x] Create trailer_detail
 
 
 #### Services
@@ -182,7 +193,7 @@
 - [x] Solar regulator modbus data aquisition
 - [x] Fix solar current calculations always 0
 - [ ] Trailers green / orange / red indicating status
-    - [ ] On / offlne
+    - [ ] On / offline
     - [ ] Battery volts
     - [ ] Temp
 - [x] Trailer temps
@@ -195,6 +206,7 @@
 - [ ] Fix data reseting bug
     - [ ] write to pymongo in one hit
     - [ ] combine tristar and ping process
+- [x] Crashes when adding additional trailer (frontend fix)
 
 #### Alerts
 - [x] Poll alerts without a delay

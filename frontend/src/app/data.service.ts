@@ -66,6 +66,10 @@ export class DataService {
     return this.http.get(APIurl + "trailers").pipe(map(this.extractData));
   }
 
+  trailerDetail(name): Observable<any> {
+    return this.http.get(APIurl + "trailers/" + name).pipe(map(this.extractData));
+  }
+
   getCorrections(): Observable<any> {
     return this.http.get(APIurl + "corrections").pipe(map(this.extractData));
   }
