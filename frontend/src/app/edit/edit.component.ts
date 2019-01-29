@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, FormBuilder } from "@angular/forms";
+import { FormControl, FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { DataService } from "../data.service";
 import { Router } from "@angular/router";
 
@@ -13,6 +13,8 @@ export interface alertType {
   viewValue: string;
 }
 
+const ipPattern = 
+    "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)";
 @Component({
   selector: "app-edit",
   templateUrl: "./edit.component.html",
@@ -23,26 +25,29 @@ export class EditComponent implements OnInit {
   alertType: string;
 
   editForm = new FormGroup({
-    type: new FormControl(""),
-    fleet_name: new FormControl(""),
-    fleet_xim: new FormControl(""),
-    fleet_screen: new FormControl(""),
-    fleet_other: new FormControl(""),
-    fleet_2: new FormControl(""),
-    fleet_5: new FormControl(""),
-    alert_location: new FormControl(""),
-    alert_ip: new FormControl(""),
-    alert_type: new FormControl(""),
-    trailer_number: new FormControl(""),
-    west_ip: new FormControl(""),
-    central_ip: new FormControl(""),
-    east_ip: new FormControl(""),
-    parent: new FormControl(""),
-    tristar_ip: new FormControl(""),
-    tropos2_ip: new FormControl(""),
-    cisco1572_ip: new FormControl(""),
-    ubi_ip: new FormControl(""),
-    correction_ip: new FormControl("")
+    type: new FormControl("", Validators.required),
+    fleet_name: new FormControl("", Validators.required),
+    fleet_xim: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    fleet_screen: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    fleet_other: new FormControl("", Validators.pattern(ipPattern)),
+    fleet_2: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    fleet_5: new FormControl("", Validators.pattern(ipPattern)),
+    alert_location: new FormControl("", Validators.required),
+    alert_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    alert_type: new FormControl("", Validators.required),
+    trailer_number: new FormControl("", Validators.required),
+    west_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    central_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    east_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    parent: new FormControl("", Validators.required),
+    tristar_ip: new FormControl("", Validators.pattern(ipPattern)),
+    tropos2_ip: new FormControl("", Validators.pattern(ipPattern)),
+    tropos5_ip: new FormControl("", Validators.pattern(ipPattern)),
+    tropos_lan_ip: new FormControl("", Validators.pattern(ipPattern)),
+    cisco1572_ip: new FormControl("", Validators.pattern(ipPattern)),
+    ubi_ip: new FormControl("", Validators.pattern(ipPattern)),
+    issi: new FormControl(""),
+    correction_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)])
   });
 
   types: Type[] = [
@@ -57,6 +62,7 @@ export class EditComponent implements OnInit {
     { value: "calert", viewValue: "C-Alert" },
     { value: "trailer", viewValue: "Trailer" }
   ];
+
 
   constructor(private data: DataService, public router: Router) {}
 

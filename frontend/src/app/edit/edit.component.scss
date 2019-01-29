@@ -23,10 +23,9 @@
 }
 
 .edit {
-    height: calc(100vh - 64px);
-    width: 100vw;
     margin: 0;
     padding: 10px;
+    min-height: calc(100vh-64px);
     box-sizing: border-box;
 }
 

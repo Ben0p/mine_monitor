@@ -46,14 +46,7 @@
                   placeholder="MS352 or Other"
                   formControlName="fleet_other"
                 />
-              </mat-form-field>
-              <br />
-              <mat-form-field>
-                <input
-                  matInput
-                  placeholder="TropOS 5ghz"
-                  formControlName="fleet_5"
-                />
+                <mat-hint>Not required.</mat-hint>
               </mat-form-field>
               <br />
               <mat-form-field>
@@ -88,9 +81,19 @@
               <mat-form-field>
                 <input
                   matInput
+                  placeholder="TropOS LAN"
+                  formControlName="tropos_lan_ip"
+                />
+                <mat-hint>Required if a gateway.</mat-hint>
+              </mat-form-field>
+              <br />
+              <mat-form-field>
+                <input
+                  matInput
                   placeholder="Cisco 1572"
                   formControlName="cisco1572_ip"
                 />
+                <mat-hint>Can't be monitored from VLAN 20</mat-hint>
               </mat-form-field>
               <br />
               <mat-form-field>
@@ -98,6 +101,14 @@
                   matInput
                   placeholder="Ubiquiti"
                   formControlName="ubi_ip"
+                />
+              </mat-form-field>
+              <h4>Tetra</h4>
+              <mat-form-field>
+                <input
+                  matInput
+                  placeholder="Tetra ISSI"
+                  formControlName="issi"
                 />
               </mat-form-field>
             </div>
@@ -204,20 +215,6 @@
             </button>
           </form>
         </mat-card-content>
-      </mat-card>
-    </div>
-    <div flex-gt-lg="15">
-      <mat-card class="card" style="font-size: 12px;">
-        Devices are matched by name. Corrections matched by IP. <br />
-        <br />
-        <b>Add new:</b> <br />
-        Enter details, click submit. If a device doesn't exist, leave it blank. <br />
-        <br />
-        <b>To update:</b> <br />
-        Enter the exact existing name and details, click submit. <br />
-        <br />
-        <b>To delete:</b> <br />
-        Enter exact existing name and click delete. <br />
       </mat-card>
     </div>
   </div>

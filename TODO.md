@@ -72,8 +72,11 @@
     - [x] Get data in component
     - [x] Card and background
 - [ ] Reduce details on main page
+- [ ] "Jigsaw" main page cards different sizes
 - [x] Add Tropos / Cisco / Ubi
 - [x] *ngIf devices
+- [ ] Main page indicate if gateway / node
+    - [ ] Indicate if gateway acting as node
 
 #### Fleet
 - [x] Links to devices from fleet detail
@@ -111,11 +114,24 @@
 #### Edit
 - [x] Blank edit form after submit
 - [ ] Return 'OK' after submit
-- [ ] Form input verification
+- [x] Form input verification
+    - [x] IP validation
+    - [x] Required inputs
+    - [ ] Trailer name starts with CT
+- [ ] Tooltips
+- [ ] Inputs required
 - [x] Delete fleet
 - [x] Delete trailers
 - [x] Delete gps devices
-- [x] Trailer tropos / cisco / ubi
+- [x] Trailer 
+    - [x] name
+    - [x] tropos
+        - [x] 2.4
+        - [x] 5
+        - [ ] LAN
+    - [x] cisco ip
+    - [x] ub ip
+    - [ ]  ISSI
 
 
 ### Backend
@@ -162,6 +178,7 @@
     - [ ] Add other Tropos IP's for reference
     - [ ] Don't add tristar_live if no tristar
     - [ ] Change from tristar_live to just tristar
+    - [ ] TropOS LAN to ping to determine if gateway
 - [x] Create trailer_detail
 
 
@@ -193,7 +210,7 @@
 - [x] Solar regulator modbus data aquisition
 - [x] Fix solar current calculations always 0
 - [ ] Trailers green / orange / red indicating status
-    - [ ] On / offline
+    - [x] On / offline
     - [ ] Battery volts
     - [ ] Temp
 - [x] Trailer temps
@@ -202,11 +219,16 @@
     - [x] Topos
     - [x] Ubi
     - [x] Tristar
+    - [ ] TropOS LAN (if gateway)
 - [ ] Pull cisco data
 - [ ] Fix data reseting bug
     - [ ] write to pymongo in one hit
     - [ ] combine tristar and ping process
 - [x] Crashes when adding additional trailer (frontend fix)
+- [ ] Stats function
+    - [x] Online / offline
+    - [x] Device total / online count
+    - [ ] Gateway / Node
 
 #### Alerts
 - [x] Poll alerts without a delay

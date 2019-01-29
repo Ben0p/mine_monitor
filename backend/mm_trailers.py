@@ -249,6 +249,50 @@ def parseTristar(name, ip):
     # Sleep every 5 seconds, tristar crashes with too many requests
     # time.sleep(2)
 
+def calcStats():
+    client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
+    db = client['minemonitor']
+    collection = db['trailer_data'].find()
+
+    device_list = ['cisco', 'tristar', 'tropos', 'ubi']
+
+    for doc in collection:
+
+        devices_count = 0
+        devices_online = 0
+
+        for device in device_list:
+            try:
+                if doc[device]:
+                    devices_count += 1
+                    if doc[device]['online']:
+                        devices_online += 1
+            except:
+                pass
+
+        devices_percentage = int((devices_online / devices_count) * 100)
+        devices_offline = devices_count - devices_online
+        if devices_online > 0:
+            online = True
+        else:
+            online = False
+
+
+        db['trailer_data'].find_one_and_update(
+            {
+                'parent': doc['parent']
+            },
+            {
+                '$set': {
+                    'devices_online': devices_online,
+                    'devices_count' : devices_count,
+                    'devices_percentage' : devices_percentage,
+                    'devices_offline' : devices_offline,
+                    'online' : online
+                }
+            }
+        )
+
 
 def main():
     '''
@@ -316,7 +360,10 @@ def main():
             except:
                 pass
 
-            parseTristar(name, trailer['tristar_ip'])
+            # Parse tristar if there is one
+            if trailer['tristar_ip']:
+                parseTristar(name, trailer['tristar_ip'])
+
 
         for device in devices:
 
@@ -395,6 +442,9 @@ def main():
 
                 print("Stopped {}".format(name))
         '''
+
+        # Calc how many devices online
+        calcStats()
 
         time.sleep(10)
 
