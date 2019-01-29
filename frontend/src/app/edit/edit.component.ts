@@ -26,20 +26,20 @@ export class EditComponent implements OnInit {
 
   editForm = new FormGroup({
     type: new FormControl("", Validators.required),
-    fleet_name: new FormControl("", Validators.required),
-    fleet_xim: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
-    fleet_screen: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    fleet_name: new FormControl(""),
+    fleet_xim: new FormControl("", Validators.pattern(ipPattern)),
+    fleet_screen: new FormControl("", Validators.pattern(ipPattern)),
     fleet_other: new FormControl("", Validators.pattern(ipPattern)),
-    fleet_2: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
+    fleet_2: new FormControl("", Validators.pattern(ipPattern)),
     fleet_5: new FormControl("", Validators.pattern(ipPattern)),
-    alert_location: new FormControl("", Validators.required),
-    alert_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
-    alert_type: new FormControl("", Validators.required),
-    trailer_number: new FormControl("", Validators.required),
-    west_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
-    central_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
-    east_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)]),
-    parent: new FormControl("", Validators.required),
+    alert_location: new FormControl(""),
+    alert_ip: new FormControl("", Validators.pattern(ipPattern)),
+    alert_type: new FormControl(""),
+    trailer_number: new FormControl(""),
+    west_ip: new FormControl("", Validators.pattern(ipPattern)),
+    central_ip: new FormControl("", Validators.pattern(ipPattern)),
+    east_ip: new FormControl("", Validators.pattern(ipPattern)),
+    parent: new FormControl(""),
     tristar_ip: new FormControl("", Validators.pattern(ipPattern)),
     tropos2_ip: new FormControl("", Validators.pattern(ipPattern)),
     tropos5_ip: new FormControl("", Validators.pattern(ipPattern)),
@@ -47,7 +47,7 @@ export class EditComponent implements OnInit {
     cisco1572_ip: new FormControl("", Validators.pattern(ipPattern)),
     ubi_ip: new FormControl("", Validators.pattern(ipPattern)),
     issi: new FormControl(""),
-    correction_ip: new FormControl("", [Validators.required, Validators.pattern(ipPattern)])
+    correction_ip: new FormControl("", Validators.pattern(ipPattern))
   });
 
   types: Type[] = [
@@ -66,7 +66,54 @@ export class EditComponent implements OnInit {
 
   constructor(private data: DataService, public router: Router) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.onChanges()
+  }
+
+  // Set validators dynamically depending on slected type
+  onChanges(): void {
+    this.editForm.get('type').valueChanges.subscribe(val => {
+      console.log(`Type is ${val}.`);
+      if (val == 'fleet'){
+        this.editForm.controls["fleet_name"].setValidators(Validators.required);
+        this.editForm.controls["fleet_name"].updateValueAndValidity();
+        this.editForm.controls["fleet_xim"].setValidators(Validators.required);
+        this.editForm.controls["fleet_xim"].updateValueAndValidity();
+        this.editForm.controls["fleet_screen"].setValidators(Validators.required);
+        this.editForm.controls["fleet_screen"].updateValueAndValidity();
+        this.editForm.controls["fleet_2"].setValidators(Validators.required);
+        this.editForm.controls["fleet_2"].updateValueAndValidity();
+      } else if (val == 'alert') {
+        this.editForm.controls["alert_location"].setValidators(Validators.required);
+        this.editForm.controls["alert_location"].updateValueAndValidity();
+        this.editForm.controls["alert_type"].setValidators(Validators.required);
+        this.editForm.controls["alert_type"].updateValueAndValidity();
+        this.editForm.get('alert_type').valueChanges.subscribe(alertType => {
+          if (alertType == 'sign' || alertType == 'calert') {
+            this.editForm.controls["alert_ip"].setValidators(Validators.required);
+            this.editForm.controls["alert_ip"].updateValueAndValidity();
+          } else if (alertType == 'trailer') {
+            this.editForm.controls["trailer_number"].setValidators(Validators.required);
+            this.editForm.controls["trailer_number"].updateValueAndValidity();
+            this.editForm.controls["west_ip"].setValidators(Validators.required);
+            this.editForm.controls["west_ip"].updateValueAndValidity();
+            this.editForm.controls["central_ip"].setValidators(Validators.required);
+            this.editForm.controls["central_ip"].updateValueAndValidity();
+            this.editForm.controls["east_ip"].setValidators(Validators.required);
+            this.editForm.controls["east_ip"].updateValueAndValidity();
+          }
+        })
+      } else if (val == 'trailer') {
+        this.editForm.controls["parent"].setValidators(Validators.required);
+        this.editForm.controls["parent"].updateValueAndValidity();
+      } else if (val == 'corrections') {
+        this.editForm.controls["parent"].setValidators(Validators.required);
+        this.editForm.controls["parent"].updateValueAndValidity();
+        this.editForm.controls["correction_ip"].setValidators(Validators.required);
+        this.editForm.controls["correction_ip"].updateValueAndValidity();
+      }
+    });
+  }
 
   onSubmit(operation) {
     // TODO: Use EventEmitter with form value
@@ -131,8 +178,11 @@ export class EditComponent implements OnInit {
         'parent' :"",
         'tristar_ip' : "",
         'tropos2_ip' : "",
+        'tropos5_ip' : "",
+        'tropos_lan_ip' : "",
         'cisco1572_ip' : "",
         'ubi_ip' : "",
+        'issi' : "",
         'correction_ip' : ""
       }
     )

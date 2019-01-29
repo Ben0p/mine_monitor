@@ -212,6 +212,9 @@ class edit(Resource):
         # Device parent
         parser.add_argument("parent")
 
+        # Tetra
+        parser.add_argument("issi")
+
         # Parse the form data (alert)
         parser.add_argument("alert_location")
         parser.add_argument("alert_ip")
@@ -229,9 +232,10 @@ class edit(Resource):
         parser.add_argument("fleet_2")
         parser.add_argument("fleet_5")
 
-        # Parse the form data (tristar)
+        # Parse the form data (trailer)
         parser.add_argument("tristar_ip")
         parser.add_argument("tropos2_ip")
+        parser.add_argument("tropos_lan_ip")
         parser.add_argument("cisco1572_ip")
         parser.add_argument("ubi_ip")
 
@@ -325,8 +329,10 @@ class edit(Resource):
                         'parent' : args['parent'],
                         'tristar_ip' : args['tristar_ip'],
                         'tropos2_ip' : args['tropos2_ip'],
+                        'tropos_lan_ip' : args['tropos_lan_ip'],
                         'cisco1572_ip' : args['cisco1572_ip'],
-                        'ubi_ip' : args['ubi_ip']
+                        'ubi_ip' : args['ubi_ip'],
+                        'issi' : args['issi']
                         }
                     },
                     upsert = True

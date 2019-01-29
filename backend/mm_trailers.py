@@ -276,7 +276,20 @@ def calcStats():
             online = True
         else:
             online = False
-
+        
+        # Check if gateway
+        try:
+            if doc['tropos_lan']:
+                is_gateway = True
+                if doc['tropos_lan']['online']:
+                    gateway = True
+                else:
+                    gateway = False
+            else:
+                is_gateway = False
+        except:
+            is_gateway = False
+            gateway = False
 
         db['trailer_data'].find_one_and_update(
             {
@@ -288,7 +301,9 @@ def calcStats():
                     'devices_count' : devices_count,
                     'devices_percentage' : devices_percentage,
                     'devices_offline' : devices_offline,
-                    'online' : online
+                    'online' : online,
+                    'is_gateway' : is_gateway,
+                    'gateway' : gateway
                 }
             }
         )
@@ -338,6 +353,11 @@ def main():
                             "name": name,
                             "device": "tropos",
                             "ip": trailer['tropos2_ip']
+                        },
+                        {
+                            "name": name,
+                            "device": "tropos_lan",
+                            "ip": trailer['tropos_lan_ip']
                         },
                         {
                             "name": name,
