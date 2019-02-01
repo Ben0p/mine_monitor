@@ -124,10 +124,13 @@ def trailers():
 
     # Count how many trailers online
     for trailer in trailers:
-        if trailer['tropos2']['online']:
-            online += 1
-        elif trailer['cisco1572']['online']:
-            online += 1
+        # Add extra if statement to account for key error
+        if trailer['tropos2']:
+            if trailer['tropos2']['online']:
+                online += 1
+        elif trailer['cisco1572']:
+            if trailer['cisco1572']['online']:
+                online += 1
     
     # Calculate percentage online
     percent = (online / trailer_count)*100
