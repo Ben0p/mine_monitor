@@ -8,11 +8,17 @@ import time
 
 
 '''
-This script is actual chaos
+This script is actual chaos, desperately needs to be re-written
 Currently under temporary fix's
 Scrapes data for the comms trailers
 Gets details from mongo which has been added through the web UI
 '''
+
+# Reset arrays and dictionaries
+tristar_active = []
+tristar_match = {}
+ping_active = []
+ping_match = {}
 
 
 def calcVolts(hi, lo, v):
@@ -152,7 +158,7 @@ def parsePing(device):
 
 def parseTristar(name, ip):
     '''
-    Gets tristar data via modbus and writes to tristar_data db
+    Gets tristar data via modbus and writes to trailer_data db
     This function is threaded for each trailer
     '''
 
@@ -254,7 +260,7 @@ def calcStats():
     db = client['minemonitor']
     collection = db['trailer_data'].find()
 
-    device_list = ['cisco', 'tristar', 'tropos', 'ubi']
+    device_list = ['tristar', 'tropos2', 'ubi', 'troposLAN']
 
     for doc in collection:
 
@@ -270,7 +276,9 @@ def calcStats():
             except:
                 pass
 
+
         devices_percentage = int((devices_online / devices_count) * 100)
+
         devices_offline = devices_count - devices_online
         if devices_online > 0:
             online = True
@@ -280,15 +288,15 @@ def calcStats():
         # Check if gateway
         try:
             if doc['tropos_lan']:
-                is_gateway = True
+                tropos_type = 'Gateway'
                 if doc['tropos_lan']['online']:
                     gateway = True
                 else:
                     gateway = False
             else:
-                is_gateway = False
+                tropos_type = 'Node'
         except:
-            is_gateway = False
+            tropos_type = 'Node'
             gateway = False
 
         db['trailer_data'].find_one_and_update(
@@ -302,11 +310,138 @@ def calcStats():
                     'devices_percentage' : devices_percentage,
                     'devices_offline' : devices_offline,
                     'online' : online,
-                    'is_gateway' : is_gateway,
+                    'tropos_type' : tropos_type,
                     'gateway' : gateway
                 }
             }
         )
+
+
+def generateDevices(docs):
+    '''
+    Generates a list of all IP devices to ping
+    '''
+
+    # Reset trailer devices array for extending
+    devices = []
+
+        
+    # Iterate over docs and generate list of individual devices
+    for trailer in docs:
+
+        # Get name
+        name = trailer['parent']
+
+        # Devices to check 
+        device_list = ['tropos2', 'troposLAN', 'tristar', 'ubi']
+
+        for device in device_list:
+            if trailer[device]:
+                devices.append(
+                    {
+                        "name": name,
+                        "uid": "{}-{}".format(name, device),
+                        "device": device,
+                        "ip": trailer[device]
+                    }
+                )
+    
+    return(devices)
+
+
+def processControl(devices):
+    '''
+    Starts and stops processes
+    '''
+
+    # Reset tristar list
+    tristar_list = []
+
+    # For keeping track of what needs to be running
+    ping_list = []
+
+
+    for device in devices:
+
+        # Check if device ip isn't blank
+        if device['ip']:
+
+            # Append device name to list
+            ping_list.append(device['uid'])
+
+            # Check if there is a process already running with the device name
+            if device['uid'] not in ping_active:
+
+                # Create process
+                p = multiprocessing.Process(
+                    target=parsePing,
+                    args=(device,)
+                )
+
+                # Append device name to active process list
+                ping_active.append(device['uid'])
+
+                # Add process ID to dictionary
+                ping_match[device['uid']] = p
+
+                # Start process
+                p.start()
+
+                print('Started pinging {}'.format(device['uid']))
+        
+            if device['device'] == 'tristar_ip':
+                
+                # Append device name to list
+                tristar_list.append(device['uid'])
+
+                # Check if there is a process already running with the device name
+                if device['uid'] not in tristar_active:
+
+                    # Create process
+                    p = multiprocessing.Process(
+                        target=parseTristar,
+                        args=(device,)
+                    )
+
+                    # Append device name to active process list
+                    tristar_active.append(device['uid'])
+
+                    # Add process ID to dictionary
+                    tristar_match[device['uid']] = p
+
+                    # Start process
+                    p.start()
+
+                    print('Pythoning {}'.format(device['uid']))
+
+
+
+    # Stop process if the device has been removed from db
+    for process in ping_active:
+        # If there is a process running that isn't in the db
+        if process not in ping_list:
+            # Terminate that process
+            ping_match[process].terminate()
+            # Remove from active processes
+            ping_active.remove(process)
+            # Remove from process match dictionary
+            del ping_match[process]
+
+            print("Stopped {}".format(process))
+
+    # Stop process if the device has been removed from db
+    for process in tristar_active:
+        # If there is a process running that isn't in the db
+        if process not in tristar_list:
+            # Terminate that process
+            tristar_match[process].terminate()
+            # Remove from active processes
+            tristar_active.remove(process)
+            # Remove from process match dictionary
+            del tristar_match[process]
+
+            print("Stopped {}".format(process))
+
 
 
 def main():
@@ -318,150 +453,16 @@ def main():
     client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
     db = client['minemonitor']
 
-    # Reset arrays and dictionaries
-    active_processes = []
-    process_match = {}
-    active_pings = []
-    ping_match = {}
 
     while True:
-        # Get trailer documents
+        # Get all trailer documents
         docs = db['trailers'].find()
 
-        # Reset tristar list
-        tristar_list = []
+        # Generate list of devices
+        devices = generateDevices(docs)
 
-        # Reset ping list
-        ping_list = []
-
-        # Reset trailer devices array for extending
-        devices = []
-
-        for trailer in docs:
-
-            # Get name
-            name = trailer['parent']
-
-            # Append name to tristar list
-            tristar_list.append(name)
-
-            # Create list of all the devices every trailer
-            try:
-                devices.extend(
-                    [
-                        {
-                            "name": name,
-                            "device": "tropos",
-                            "ip": trailer['tropos2_ip']
-                        },
-                        {
-                            "name": name,
-                            "device": "tropos_lan",
-                            "ip": trailer['tropos_lan_ip']
-                        },
-                        {
-                            "name": name,
-                            "device": "tristar",
-                            "ip": trailer['tristar_ip']
-                        },
-                        {
-                            "name": name,
-                            "device": "cisco",
-                            "ip": trailer['cisco1572_ip']
-                        },
-                        {
-                            "name": name,
-                            "device": "ubi",
-                            "ip": trailer['ubi_ip']
-                        }
-                    ]
-                )
-
-            except:
-                pass
-
-            # Parse tristar if there is one
-            if trailer['tristar_ip']:
-                parseTristar(name, trailer['tristar_ip'])
-
-
-        for device in devices:
-
-            # Check if device ip isn't blank
-            if device['ip']:
-                # Generate a unique device name (DT050-xim)
-                device_name = "{}-{}".format(device['name'], device['device'])
-
-                # Append device name to list
-                ping_list.append(device_name)
-
-                # Check if there is a process already running with the device name
-                if device_name not in active_pings:
-
-                    # Create process
-                    p = multiprocessing.Process(
-                        target=parsePing,
-                        args=(device,)
-                    )
-
-                    # Append device name to active process list
-                    active_pings.append(device_name)
-
-                    # Add process ID to dictionary
-                    ping_match[device_name] = p
-
-                    # Start process
-                    p.start()
-
-                    print('Started pinging {}'.format(device_name))
-
-        # Stop process if the fleet device has been removed from db
-        for process in active_pings:
-            # If there is a process running that isn't in the db
-            if process not in ping_list:
-                # Terminate that process
-                ping_match[process].terminate()
-                # Remove from active processes
-                active_processes.remove(process)
-                # Remove from process match dictionary
-                del process_match[process]
-
-                print("Stopped {}".format(process))
-
-        # mongo can't handle concurrent updates on the same document
-        '''
-        for name in tristar_list:
-            # Check if tristar in active processes
-            if name not in active_processes:
-
-                # Create process
-                p = multiprocessing.Process(
-                    target=parseTristar, args=(name, trailer['tristar_ip'],))
-
-                # Append name to active process list
-                active_processes.append(name)
-
-                # Add process ID to dictionary
-                process_match[name] = p
-
-                # Start process
-                p.start()
-
-                print("Pythoning {} tristar data".format(name))
-
-        # Stop process if the tristar has been removed from db
-        for process in active_processes:
-            # If there is a process running that isn't in the db
-            if process not in tristar_list:
-                # Terminate that process
-                process_match[process].terminate()
-                # Remove from active processes
-                active_processes.remove(process)
-                # Remove from process match dictionary
-                del process_match[process]
-
-                print("Stopped {}".format(name))
-        '''
+        # Start / stop process
+        processControl(devices)
 
         # Calc how many devices online
         calcStats()

@@ -118,8 +118,8 @@
     - [x] IP validation
     - [x] Required inputs
     - [ ] Trailer name starts with CT
+    - [ ] Move IP pattern to dynamic section
 - [ ] Tooltips
-- [ ] Inputs required
 - [x] Delete fleet
 - [x] Delete trailers
 - [x] Delete gps devices
@@ -128,10 +128,10 @@
     - [x] tropos
         - [x] 2.4
         - [x] 5
-        - [ ] LAN
+        - [x] LAN
     - [x] cisco ip
     - [x] ub ip
-    - [ ]  ISSI
+    - [x] ISSI
 
 
 ### Backend
@@ -174,16 +174,15 @@
     - [x] Add Tropos
     - [x] Add Ubi
     - [x] Add Cisco
-    - [ ] Add tetra ISSI for reference only
-    - [ ] Add other Tropos IP's for reference
-    - [ ] Don't add tristar_live if no tristar
-    - [ ] Change from tristar_live to just tristar
-    - [ ] TropOS LAN to ping to determine if gateway
+    - [x] Add tetra ISSI for reference only
+    - [x] Add other Tropos IP's for reference
+    - [x] Don't add tristar_live if no tristar
+    - [x] TropOS LAN to ping to determine if gateway
 - [x] Create trailer_detail
 
 
 #### Services
-- [ ] Master script to run as a service to start other scipts and monitor status
+- [x] Master script to run as a service to start other scipts and monitor status
 - [x] Add overview service
 - [ ] Fix uptime
 - [ ] Service stopped info busted
@@ -204,7 +203,7 @@
 #### Trailers
 - [ ] Devices
     - [x] Morningstar
-    - [ ] TropOS
+    - [x] TropOS
     - [ ] Cisco (+gps)
 - [x] Add TriStar solar regulators from webui
 - [x] Solar regulator modbus data aquisition
@@ -219,16 +218,16 @@
     - [x] Topos
     - [x] Ubi
     - [x] Tristar
-    - [ ] TropOS LAN (if gateway)
+    - [x] TropOS LAN (if gateway)
 - [ ] Pull cisco data
-- [ ] Fix data reseting bug
-    - [ ] write to pymongo in one hit
-    - [ ] combine tristar and ping process
+- [x] Fix data reseting bug
+    - [x] write to pymongo in one hit
+    - [x] combine tristar and ping process
 - [x] Crashes when adding additional trailer (frontend fix)
-- [ ] Stats function
+- [x] Stats function
     - [x] Online / offline
     - [x] Device total / online count
-    - [ ] Gateway / Node
+    - [x] Gateway / Node
 
 #### Alerts
 - [x] Poll alerts without a delay
@@ -251,3 +250,4 @@
     - [x] Fleet (per truck or device or somethingOffline)?
     - [x] Services
     - [x] Trailers
+- [x] Fix key error if device doesn't exist

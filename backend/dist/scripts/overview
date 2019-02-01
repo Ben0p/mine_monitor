@@ -57,7 +57,18 @@ def fleet():
 
     # Count how many fleet not in failure
     for fleet in fleets:
-        devices_online = sum([fleet['twoOnline'], fleet['ximOnline'], fleet['screenOnline']])
+
+        # Reset devices online count
+        devices_online = 0
+        
+        # Count individualy to return false if key error
+        if fleet['twoOnline']:
+            devices_online += 1
+        if fleet['ximOnline']:
+            devices_online += 1
+        if fleet['screenOnline']:
+            devices_online += 1
+
         if devices_online == 3 or devices_online == 0:
             online += 1
     
@@ -113,7 +124,9 @@ def trailers():
 
     # Count how many trailers online
     for trailer in trailers:
-        if trailer['tropos']['online']:
+        if trailer['tropos2']['online']:
+            online += 1
+        elif trailer['cisco1572']['online']:
             online += 1
     
     # Calculate percentage online

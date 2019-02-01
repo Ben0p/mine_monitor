@@ -233,11 +233,12 @@ class edit(Resource):
         parser.add_argument("fleet_5")
 
         # Parse the form data (trailer)
-        parser.add_argument("tristar_ip")
-        parser.add_argument("tropos2_ip")
-        parser.add_argument("tropos_lan_ip")
-        parser.add_argument("cisco1572_ip")
-        parser.add_argument("ubi_ip")
+        parser.add_argument("tristar")
+        parser.add_argument("tropos2")
+        parser.add_argument("tropos5")
+        parser.add_argument("troposLAN")
+        parser.add_argument("cisco1572")
+        parser.add_argument("ubi")
 
         # Parse the form data (corrections)
         parser.add_argument("correction_ip")
@@ -326,17 +327,38 @@ class edit(Resource):
                     {
                         '$set': 
                         {
-                        'parent' : args['parent'],
-                        'tristar_ip' : args['tristar_ip'],
-                        'tropos2_ip' : args['tropos2_ip'],
-                        'tropos_lan_ip' : args['tropos_lan_ip'],
-                        'cisco1572_ip' : args['cisco1572_ip'],
-                        'ubi_ip' : args['ubi_ip'],
-                        'issi' : args['issi']
+                            'parent' : args['parent'],
+                            'tristar' : args['tristar'],
+                            'tropos2' : args['tropos2'],
+                            'tropos5' : args['tropos5'],
+                            'troposLAN' : args['troposLAN'],
+                            'cisco1572' : args['cisco1572'],
+                            'ubi' : args['ubi'],
+                            'issi' : args['issi']
                         }
                     },
                     upsert = True
                 )
+
+            db['trailer_data'].find_one_and_update(
+                {
+                    'parent' : args['parent']
+                },
+                {
+                    '$set': 
+                    {
+                        'parent' : args['parent'],
+                        'tristar' : { 'ip' : args['tristar'] },
+                        'tropos2' : { 'ip' : args['tropos2'] },
+                        'tropos5' : { 'ip' : args['tropos5'] },
+                        'troposLAN' : { 'ip' : args['troposLAN'] },
+                        'cisco1572' : { 'ip' : args['cisco1572'] },
+                        'ubi' : { 'ip' : args['ubi'] },
+                        'issi' : args['issi']
+                    }
+                },
+                upsert = True
+            )
             return(201)
 
         elif (args['type'] == 'corrections'):

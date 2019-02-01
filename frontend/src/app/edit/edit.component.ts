@@ -27,10 +27,10 @@ export class EditComponent implements OnInit {
   editForm = new FormGroup({
     type: new FormControl("", Validators.required),
     fleet_name: new FormControl(""),
-    fleet_xim: new FormControl("", Validators.pattern(ipPattern)),
-    fleet_screen: new FormControl("", Validators.pattern(ipPattern)),
+    fleet_xim: new FormControl(""),
+    fleet_screen: new FormControl(""),
     fleet_other: new FormControl("", Validators.pattern(ipPattern)),
-    fleet_2: new FormControl("", Validators.pattern(ipPattern)),
+    fleet_2: new FormControl(""),
     fleet_5: new FormControl("", Validators.pattern(ipPattern)),
     alert_location: new FormControl(""),
     alert_ip: new FormControl("", Validators.pattern(ipPattern)),
@@ -40,12 +40,12 @@ export class EditComponent implements OnInit {
     central_ip: new FormControl("", Validators.pattern(ipPattern)),
     east_ip: new FormControl("", Validators.pattern(ipPattern)),
     parent: new FormControl(""),
-    tristar_ip: new FormControl("", Validators.pattern(ipPattern)),
-    tropos2_ip: new FormControl("", Validators.pattern(ipPattern)),
-    tropos5_ip: new FormControl("", Validators.pattern(ipPattern)),
-    tropos_lan_ip: new FormControl("", Validators.pattern(ipPattern)),
-    cisco1572_ip: new FormControl("", Validators.pattern(ipPattern)),
-    ubi_ip: new FormControl("", Validators.pattern(ipPattern)),
+    tristar: new FormControl("", Validators.pattern(ipPattern)),
+    tropos2: new FormControl("", Validators.pattern(ipPattern)),
+    tropos5: new FormControl("", Validators.pattern(ipPattern)),
+    troposLAN: new FormControl("", Validators.pattern(ipPattern)),
+    cisco1572: new FormControl("", Validators.pattern(ipPattern)),
+    ubi: new FormControl("", Validators.pattern(ipPattern)),
     issi: new FormControl(""),
     correction_ip: new FormControl("", Validators.pattern(ipPattern))
   });
@@ -77,11 +77,11 @@ export class EditComponent implements OnInit {
       if (val == 'fleet'){
         this.editForm.controls["fleet_name"].setValidators(Validators.required);
         this.editForm.controls["fleet_name"].updateValueAndValidity();
-        this.editForm.controls["fleet_xim"].setValidators(Validators.required);
+        this.editForm.controls["fleet_xim"].setValidators([Validators.required, Validators.pattern(ipPattern)]);
         this.editForm.controls["fleet_xim"].updateValueAndValidity();
-        this.editForm.controls["fleet_screen"].setValidators(Validators.required);
+        this.editForm.controls["fleet_screen"].setValidators([Validators.required, Validators.pattern(ipPattern)]);
         this.editForm.controls["fleet_screen"].updateValueAndValidity();
-        this.editForm.controls["fleet_2"].setValidators(Validators.required);
+        this.editForm.controls["fleet_2"].setValidators([Validators.required, Validators.pattern(ipPattern)]);
         this.editForm.controls["fleet_2"].updateValueAndValidity();
       } else if (val == 'alert') {
         this.editForm.controls["alert_location"].setValidators(Validators.required);
@@ -176,12 +176,12 @@ export class EditComponent implements OnInit {
         'central_ip' : "",
         'east_ip' : "",
         'parent' :"",
-        'tristar_ip' : "",
-        'tropos2_ip' : "",
-        'tropos5_ip' : "",
-        'tropos_lan_ip' : "",
-        'cisco1572_ip' : "",
-        'ubi_ip' : "",
+        'tristar' : "",
+        'tropos2' : "",
+        'tropos5' : "",
+        'troposLAN' : "",
+        'cisco1572' : "",
+        'ubi' : "",
         'issi' : "",
         'correction_ip' : ""
       }

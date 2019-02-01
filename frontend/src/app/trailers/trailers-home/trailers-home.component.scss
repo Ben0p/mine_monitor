@@ -23,9 +23,11 @@
 }
 
 .trailer {
-    border-width: 2px;
-    border-style: solid;
-    cursor: pointer;
+  width: 80px;
+  height: 80px;
+  border-width: 2px;
+  border-style: solid;
+  cursor: pointer;
 }
 
 .trailer-online {
@@ -37,7 +39,7 @@
 .trailer-offline {
   color: rgb(255, 204, 204);
   background-color: rgba(255, 0, 0, 0.3);
-  border-color: #c7254e
+  border-color: #c7254e;
 }
 
 .container {
@@ -45,13 +47,34 @@
 }
 
 .container > * {
- margin: 6px;
+  margin: 6px;
+}
+
+mat-card-title {
+  margin-left: -8px;
 }
 
 mat-card-subtitle {
-    color: deepskyblue;
+  color: deepskyblue;
 }
 
-.online_count {
+.gateway {
+  text-align: center;
+}
+
+.image {
+  width: 50px;
+  height: 50px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  filter: hue-rotate(182deg);
+  -webkit-filter: hue-rotate(182deg);
+}
+
+.status {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
 }

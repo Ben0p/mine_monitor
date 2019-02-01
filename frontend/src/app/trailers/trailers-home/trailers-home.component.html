@@ -13,8 +13,13 @@
           <mat-card-title> {{ trailer.parent }} </mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="online_count">
-            <h3>{{ trailer.devices_online }} / {{ trailer.devices_count }}</h3>
+          <div class="status">
+              <span *ngIf="trailer.online">
+                <b style="font-size: 30px;">{{ trailer.tropos2.latency }} </b>ms
+              </span>
+              <span *ngIf="!trailer.online">
+                <b style="font-size: 20px; line-height: 40px;"> Offline </b>
+              </span>
           </div>
         </mat-card-content>
       </mat-card>
