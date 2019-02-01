@@ -122,11 +122,6 @@ def main():
                         },
                         {
                             "name": document['name'],
-                            "device": "five",
-                            "ip": document['five']
-                        },
-                        {
-                            "name": document['name'],
                             "device": "screen",
                             "ip": document['screen']
                         },

@@ -33,25 +33,6 @@
               </mat-card-content>
             </mat-card>
 
-            <!-- TropOS 5ghz -->
-            <mat-card class="device" [ngClass]="{
-              'device-on': fleet.fiveOnline, 
-              'device-off': !fleet.fiveOnline
-            }"
-              (click)="externalLink('tropos', fleet.fiveIP, fleet.fiveOnline)">
-              <mat-card-header>
-                <mat-card-title>
-                  <h4>TropOS 5ghz</h4>
-                </mat-card-title>
-                <mat-card-subtitle>
-                  <h3>{{ fleet.fiveIP }}</h3>
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                {{fleet.fiveLatency}} ms
-              </mat-card-content>
-            </mat-card>
-
             <!-- xIM -->
             <mat-card class="device" [ngClass]="{
               'device-on': fleet.ximOnline, 
