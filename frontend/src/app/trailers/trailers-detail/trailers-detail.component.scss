@@ -1,52 +1,68 @@
 .trailers:before {
-    content: "";
-    display: block;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -10;
-    background: url("../../../assets/img/trailers.jpg") no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+  content: "";
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background: url("../../../assets/img/trailers.jpg") no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.trailers {
+  height: calc(100vh - 64px);
+  width: 100vw;
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.container {
+  margin: -6px;
+}
+
+.container > * {
+  margin: 6px;
+}
+
+.trailer {
+  color: rgba(52, 63, 86, 1);
+  width: 200px;
+  background-color: rgba(52, 63, 86, 0.8);
+  mat-card-header {
+    padding-top: 10px;
   }
-  
-  .trailers {
-    height: calc(100vh - 64px);
-    width: 100vw;
-    margin: 0;
-    padding: 10px;
-    box-sizing: border-box;
+}
+
+.trailer-online {
+  mat-card-header {
+    background: linear-gradient(to right, #29fc9b 0%, #09b0e8 100%);
   }
-  
-  .trailer {
-      border-width: 2px;
-      border-style: solid;
+}
+
+.trailer-offline {
+  mat-card-header {
+    background: linear-gradient(to right, #FF6D88 0%, #FF8E8A 100%);
   }
-  
-  .trailer-online {
-    color: rgb(204, 255, 204);
-    background-color: rgba(0, 94, 78, 0.8);
-    border-color: rgb(204, 255, 204);
-  }
-  
-  .trailer-offline {
-    color: rgb(255, 204, 204);
-    background-color: rgba(255, 0, 0, 0.3);
-    border-color: #c7254e
-  }
-  
-  .container {
-    margin: -6px;
-  }
-  
-  .container > * {
-   margin: 6px;
-  }
-  
-  mat-card-subtitle {
-      color: rgb(204, 255, 204);
-  }
+}
+
+.device {
+  padding: 10px;
+}
+
+.device-online {
+  background: linear-gradient(to right, #29fc9b 0%, #09b0e8 100%);
+}
+
+.device-offline {
+  background: linear-gradient(to right, #FF6D88 0%, #FF8E8A 100%);
+}
+
+.device-info {
+  background: linear-gradient(to right, #FB83ED 0%, #6775EB 100%);
+}

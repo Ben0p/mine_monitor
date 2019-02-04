@@ -155,6 +155,12 @@ export class EditComponent implements OnInit {
           .subscribe(results => {
             console.log(results);
           });
+      } else if (this.editForm.value.type == "trailer") {
+        this.data
+          .delete(this.editForm.value.type, this.editForm.value.parent)
+          .subscribe(results => {
+            console.log(results);
+          });
       }
     }
 

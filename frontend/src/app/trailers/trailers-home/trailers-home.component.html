@@ -6,22 +6,20 @@
         routerLink="{{ trailer.parent }}"
         [ngClass]="{
           'trailer-online': trailer.online,
-          'trailer-offline': !trailer.online
+          'trailer-offline': !trailer.online,
+          'trailer-node': trailer.online && !trailer.gateway
         }"
       >
-        <mat-card-header>
-          <mat-card-title> {{ trailer.parent }} </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="status">
-              <span *ngIf="trailer.online">
-                <b style="font-size: 30px;">{{ trailer.tropos2.latency }} </b>ms
-              </span>
-              <span *ngIf="!trailer.online">
-                <b style="font-size: 20px; line-height: 40px;"> Offline </b>
-              </span>
-          </div>
-        </mat-card-content>
+        <div class="status">
+          <b style="font-size: 20px;">{{ trailer.parent }}</b><br />
+          <span style="font-size: 15px;">{{ trailer.tropos_type }} </span><br />
+          <span *ngIf="trailer.online">
+            <b style="font-size: 30px; line-height: 40px;">{{ trailer.tropos2.latency }} </b>ms
+          </span>
+          <span *ngIf="!trailer.online">
+            <b style="font-size: 20px; line-height: 40px;"> Offline </b>
+          </span>
+        </div>
       </mat-card>
     </div>
   </div>

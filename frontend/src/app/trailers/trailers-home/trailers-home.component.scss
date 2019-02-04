@@ -15,31 +15,30 @@
 }
 
 .trailers {
-  height: calc(100vh - 64px);
-  width: 100vw;
   margin: 0;
   padding: 10px;
+  min-height: calc(100vh-64px);
   box-sizing: border-box;
 }
 
 .trailer {
   width: 80px;
   height: 80px;
-  border-width: 2px;
-  border-style: solid;
   cursor: pointer;
 }
 
 .trailer-online {
-  color: rgb(204, 255, 204);
-  background-color: rgba(0, 94, 78, 0.8);
-  border-color: rgb(0, 255, 213);
+  color: rgb(235, 252, 235);
+  background: linear-gradient(to right, #29fc9b 0%, #09e8dd 100%);
 }
 
 .trailer-offline {
-  color: rgb(255, 204, 204);
-  background-color: rgba(255, 0, 0, 0.3);
-  border-color: #c7254e;
+  color: rgb(255, 231, 231);
+  background: linear-gradient(to right, #FF6D88 0%, #FF8E8A 100%);
+}
+
+.trailer-node {
+  background: linear-gradient(to right, #6787FE 0%, #25D0FD 100%);
 }
 
 .container {
@@ -55,25 +54,16 @@ mat-card-title {
 }
 
 mat-card-subtitle {
-  color: deepskyblue;
+  margin-left: -8px;
+  margin-bottom: 0px;
 }
+
 
 .gateway {
   text-align: center;
 }
 
-.image {
-  width: 50px;
-  height: 50px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  filter: hue-rotate(182deg);
-  -webkit-filter: hue-rotate(182deg);
-}
-
 .status {
-  display: block;
   margin-left: auto;
   margin-right: auto;
   text-align: center;

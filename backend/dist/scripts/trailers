@@ -90,7 +90,7 @@ def ping(host):
         popen.stdout.close()
         return_code = popen.wait()
         if return_code:
-            raise subprocess.CalledProcessError(return_code, cmd)
+            pass
 
     else:
 
@@ -156,11 +156,14 @@ def parsePing(device):
                 print('Deleted {}'.format(device['name']))
 
 
-def parseTristar(name, ip):
+def parseTristar(device):
     '''
     Gets tristar data via modbus and writes to trailer_data db
     This function is threaded for each trailer
     '''
+
+    ip = device['ip']
+    name = device['name']
 
     # Have to create a new mongo connection for each thread or it wigs out
     client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
@@ -260,7 +263,7 @@ def calcStats():
     db = client['minemonitor']
     collection = db['trailer_data'].find()
 
-    device_list = ['cisco1572', 'tristar', 'tropos2', 'ubi', 'troposLAN']
+    device_list = ['tristar', 'tropos2', 'ubi', 'troposLAN']
 
     for doc in collection:
 
@@ -287,14 +290,15 @@ def calcStats():
         
         # Check if gateway
         try:
-            if doc['tropos_lan']:
-                tropos_type = 'Gateway'
-                if doc['tropos_lan']['online']:
+            if doc['troposLAN']:
+                if doc['troposLAN']['online']:
+                    tropos_type = 'Gateway'
                     gateway = True
                 else:
+                    tropos_type = 'Node'
                     gateway = False
             else:
-                tropos_type = 'Node'
+                troposLAN = 'Node'
         except:
             tropos_type = 'Node'
             gateway = False
@@ -333,7 +337,7 @@ def generateDevices(docs):
         name = trailer['parent']
 
         # Devices to check 
-        device_list = ['tropos2', 'troposLAN', 'tristar', 'cisco1572', 'ubi']
+        device_list = ['tropos2', 'troposLAN', 'tristar', 'ubi']
 
         for device in device_list:
             if trailer[device]:
@@ -389,7 +393,7 @@ def processControl(devices):
 
                 print('Started pinging {}'.format(device['uid']))
         
-            if device['device'] == 'tristar_ip':
+            if device['device'] == 'tristar':
                 
                 # Append device name to list
                 tristar_list.append(device['uid'])

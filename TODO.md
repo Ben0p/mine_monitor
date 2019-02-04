@@ -21,21 +21,29 @@
 - [ ] Pre-load pwa for offline mode
 - [ ] Tristar history + graphs
 
+### ngx-admin
+#### General
+- [ ] Git clone starter-kit
+- [ ] Install npm dependancies
+
+#### Themes
+- [ ] Install themes
+
 ### Frontend
 #### General
-- [ ] Indication on web page if script (service) not running (pop down)
+- [x] Indication on web page if script (service) not running (pop down)
 - [ ] J.A.R.V.I.S boiii
 - [x] Indication if backend connection has dropped out
     - [x] http get from app.component every second
     - [x] Snackbar popup if fail
     - [x] import snackbar 
     - [x] data service function
-    - [ ] Indication for each service
-        - [ ] Alerts
-        - [ ] GPS
-        - [ ] Fleet
-        - [ ] Services
-        - [ ] Trailers
+    - [x] Indication for each service
+        - [x] Alerts
+        - [x] GPS
+        - [x] Fleet
+        - [x] Services
+        - [x] Trailers
 - [x] SVG angular material icons for no internet
 - [ ] Production / development environment setup
 - [x] Convert to progressive web app
@@ -47,6 +55,8 @@
 - [x] Hide navbar button or something
 - [x] Overview home page percentages
 - [ ] Fix arrow down partly off screen on phones
+- [ ] Align cards middle of screen somehow to look better on big screen
+- [ ]
 
 #### Overview (home)
 - [x] jarvisify box's (not cards)
@@ -71,12 +81,21 @@
     - [x] Data service
     - [x] Get data in component
     - [x] Card and background
-- [ ] Reduce details on main page
-- [ ] "Jigsaw" main page cards different sizes
+    - [x] Color Sections
+        - [x] Purple for info
+        - [x] Green online
+        - [x] Red offline
+    - [x] Hide Ubi if doesn't exists
+    - [x] Hide tristar_data if offline
+- [x] Reduce details on main page
 - [x] Add Tropos / Cisco / Ubi
 - [x] *ngIf devices
-- [ ] Main page indicate if gateway / node
+- [x] Indicate if gateway / node
+    - [x] Main page and detail
     - [ ] Indicate if gateway acting as node
+- [x] Gradient colors
+    - [x] Home
+    - [x] Detail
 
 #### Fleet
 - [x] Links to devices from fleet detail
@@ -86,9 +105,12 @@
     - [ ] latency if online, "Offline" if offline
     - [ ] Perhaps have no data on main page or one latency only
 - [ ] Fleet Detail
-    - [ ] Shorten to fit on phone better
+    - [x] Shorten to fit on phone better
     - [ ] Jarvisify
-- [ ] Remove 5ghz and Spare (unless used)
+- [x] Remove 5ghz
+- [ ] color gradients
+    - [ ] Home page
+    - [ ] Detail page
 
 ### GPS
 - [x] Create angular module
@@ -121,7 +143,8 @@
     - [ ] Move IP pattern to dynamic section
 - [ ] Tooltips
 - [x] Delete fleet
-- [x] Delete trailers
+- [ ] Delete trailers
+    - [ ] Not deleting
 - [x] Delete gps devices
 - [x] Trailer 
     - [x] name
@@ -132,6 +155,11 @@
     - [x] cisco ip
     - [x] ub ip
     - [x] ISSI
+
+#### Alerts
+- [ ] Detail and controls page
+    - [ ] Disable toggle for 2 sec after click
+    - [ ] Make toggles less glitchy
 
 
 ### Backend
@@ -204,6 +232,7 @@
 - [ ] Devices
     - [x] Morningstar
     - [x] TropOS
+    - [x] Ubi
     - [ ] Cisco (+gps)
 - [x] Add TriStar solar regulators from webui
 - [x] Solar regulator modbus data aquisition
@@ -238,7 +267,7 @@
     - [x] Delete from both databases when deleted
     - [x] Fix bug where it re-adds fleet to fleet_data
 - [ ] Reduce pings
-    - [ ] Don't bother about tropos 5ghz
+    - [x] Don't bother about tropos 5ghz
     - [ ] Don't ping spare IP if not used
 
 

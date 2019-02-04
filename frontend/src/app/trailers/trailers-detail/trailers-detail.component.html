@@ -10,58 +10,117 @@
       >
         <mat-card-header>
           <mat-card-title> {{ trailer.parent }} </mat-card-title>
-          <mat-card-subtitle> {{ trailer.tropos_type }} </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <div *ngIf="trailer.issi">
-            ──────────────<br />
-            <b>Tetra ISSI</b> <br />
-            {{ trailer.issi }} <br />
+          <div
+            class="device"
+            [ngClass]="{
+              'device-online': trailer.tropos2.online,
+              'device-offline': !trailer.tropos2.online
+            }"
+          >
+            <b>{{ trailer.tropos_type }}</b>
           </div>
-          <div *ngIf="trailer.tropos2">
-            ──────────────<br />
+
+          <div
+            class="device"
+            *ngIf="trailer.tropos2"
+            [ngClass]="{
+              'device-online': trailer.tropos2.online,
+              'device-offline': !trailer.tropos2.online
+            }"
+          >
             <b>TropOS 2.4Ghz:</b> <br />
             {{ trailer.tropos2.ip }} <br />
-            {{ trailer.tropos2.latency }}ms<br />
+            <div *ngIf="trailer.tropos2.online">
+              <b style="font-size: 30px;">{{ trailer.tropos2.latency }}</b
+              >ms
+            </div>
+            <div *ngIf="!trailer.tropos2.online">
+              <b style="font-size: 20px; line-height: 40px;">Offline</b>
+            </div>
           </div>
-          <div *ngIf="trailer.tropos5">
-            ──────────────<br />
+
+          <div class="device device-info" *ngIf="trailer.issi">
+            <b>Tetra ISSI</b> <br />
+            {{ trailer.issi }}
+          </div>
+
+          <div class="device device-info" *ngIf="trailer.tropos5">
             <b>TropOS 5Ghz:</b> <br />
-            {{ trailer.tropos5.ip }} <br />
+            {{ trailer.tropos5.ip }}
           </div>
-          <div *ngIf="trailer.troposLAN && trailer.tropos_type == 'Gateway'">
-            ──────────────<br />
+          <div
+            class="device"
+            *ngIf="trailer.troposLAN && trailer.tropos_type == 'Gateway'"
+            [ngClass]="{
+              'device-online':
+                trailer.troposLAN.online && trailer.tropos_type == 'Gateway',
+              'device-offline':
+                !trailer.troposLAN.online && trailer.tropos_type == 'Gateway',
+              'device-info': trailer.tropos_type == 'Node'
+            }"
+          >
             <b>TropOS LAN:</b> <br />
             {{ trailer.troposLAN.ip }} <br />
-            {{ trailer.troposLAN.latency }}ms<br />
+            <div *ngIf="trailer.troposLAN.online">
+              <b style="font-size: 30px;">{{ trailer.troposLAN.latency }}</b
+              >ms
+            </div>
+            <div *ngIf="!trailer.troposLAN.online">
+              <b style="font-size: 20px; line-height: 40px;">Offline</b>
+            </div>
           </div>
-          <div *ngIf="trailer.cisco1572.ip">
-            ──────────────<br />
+          <div class="device device-info" *ngIf="trailer.cisco1572.ip">
             <b>Cisco:</b> <br />
             {{ trailer.cisco1572.ip }} <br />
           </div>
-          <div *ngIf="trailer.ubi.ip">
-            ──────────────<br />
+          <div
+            class="device"
+            *ngIf="trailer.ubi.ip"
+            [ngClass]="{
+              'device-online': trailer.ubi.online,
+              'device-offline': !trailer.ubi.online
+            }"
+          >
             <b>Ubi:</b> <br />
             {{ trailer.ubi.ip }} <br />
-            {{ trailer.ubi.latency }}ms <br />
+            <div *ngIf="trailer.ubi.online">
+              <b style="font-size: 30px;">{{ trailer.ubi.latency }}</b
+              >ms
+            </div>
+            <div *ngIf="!trailer.ubi.online">
+              <b style="font-size: 20px; line-height: 40px;">Offline</b>
+            </div>
           </div>
-          <div *ngIf="trailer.tristar">
-            ──────────────<br />
+          <div
+            class="device"
+            *ngIf="trailer.tristar"
+            [ngClass]="{
+              'device-online': trailer.tristar.online,
+              'device-offline': !trailer.tristar.online
+            }"
+          >
             <b>Tristar:</b> <br />
             {{ trailer.tristar.ip }} <br />
-            {{ trailer.tristar.latency }}ms <br />
+            <div *ngIf="trailer.tristar.online">
+              <b style="font-size: 30px;">{{ trailer.tristar.latency }}</b
+              >ms<br />
+              <div *ngIf="trailer.tristar_live">
+                Battery Volts: {{ trailer.tristar_live.batt_volts }} <br />
+                Battery Current: {{ trailer.tristar_live.batt_current }} <br />
+                Solar Volts: {{ trailer.tristar_live.solar_volts }} <br />
+                Solar Current: {{ trailer.tristar_live.solar_current }} <br />
+                Charge Mode: {{ trailer.tristar_live.charge_state }} <br />
+                Output Power: {{ trailer.tristar_live.output_power }} <br />
+                Heatsink Temp: {{ trailer.tristar_live.heatsink_temp }} <br />
+              </div>
+
+            </div>
+            <div *ngIf="!trailer.tristar.online">
+              <b style="font-size: 20px; line-height: 40px;">Offline</b>
+            </div>
           </div>
-          <div *ngIf="trailer.tristar_live">
-            Battery Volts: {{ trailer.tristar_live.batt_volts }} <br />
-            Battery Current: {{ trailer.tristar_live.batt_current }} <br />
-            Solar Volts: {{ trailer.tristar_live.solar_volts }} <br />
-            Solar Current: {{ trailer.tristar_live.solar_current }} <br />
-            Charge Mode: {{ trailer.tristar_live.charge_state }} <br />
-            Output Power: {{ trailer.tristar_live.output_power }} <br />
-            Heatsink Temp: {{ trailer.tristar_live.heatsink_temp }} <br />
-          </div>
-          ──────────────<br />
         </mat-card-content>
       </mat-card>
     </div>
