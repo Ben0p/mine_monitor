@@ -132,6 +132,7 @@
 - [ ] Base station stats
 - [ ] TropOS server stats 
 - [x] List button
+- [ ] Download list button
 
 #### Edit
 - [x] Blank edit form after submit
@@ -207,6 +208,9 @@
     - [x] Don't add tristar_live if no tristar
     - [x] TropOS LAN to ping to determine if gateway
 - [x] Create trailer_detail
+- [x] GPS
+    - [x] Generate list for other samplicate servers
+    - [x] Return list as download 'final.conf'
 
 
 #### Services

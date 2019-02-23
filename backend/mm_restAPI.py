@@ -1,5 +1,5 @@
 #! /usr/bin/python3.6
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_file
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
 from flask_cors import CORS
@@ -515,6 +515,19 @@ class overview(Resource):
         except:
             return(False, 404)
 
+class corrections_file(Resource):
+    def get(self):
+        # Get all ping data from the pings collection in mongo
+        corrections = db['corrections'].find()
+
+        with open('./final.conf', 'w') as f:
+            for correction in corrections:
+                f.write('#{}\n'.format(correction['parent']))
+                f.write('10.20.23.230:{}/5019\n'.format(correction['ip']))
+            f.close()
+
+        return(send_file('./final.conf', as_attachment = True))
+
 
 # Map URL's to resource classes
 api.add_resource(alert, "/alert")
@@ -530,6 +543,7 @@ api.add_resource(services, "/services")
 api.add_resource(corrections_list, "/corrections/list")
 api.add_resource(check, "/check")
 api.add_resource(overview, "/overview")
+api.add_resource(corrections_file, "/corrections/file")
 
 # Run flask
 app.run(debug=True, host='0.0.0.0')
