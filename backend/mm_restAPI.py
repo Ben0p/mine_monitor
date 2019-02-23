@@ -515,18 +515,19 @@ class overview(Resource):
         except:
             return(False, 404)
 
+def generateFinalConf():
+    # Get all ping data from the pings collection in mongo
+    corrections = db['corrections'].find()
+    with open('../../../home/minesys/Desktop/final.conf', 'w') as f:
+        for correction in corrections:
+            f.write('#{}\n'.format(correction['parent']))
+            f.write('10.20.23.230:{}/5019\n'.format(correction['ip']))
+        f.close()
+
 class corrections_file(Resource):
+    generateFinalConf()
     def get(self):
-        # Get all ping data from the pings collection in mongo
-        corrections = db['corrections'].find()
-
-        with open('./final.conf', 'w') as f:
-            for correction in corrections:
-                f.write('#{}\n'.format(correction['parent']))
-                f.write('10.20.23.230:{}/5019\n'.format(correction['ip']))
-            f.close()
-
-        return(send_file('./final.conf', as_attachment = True))
+        return(send_file('../../../home/minesys/Desktop/final.conf', as_attachment = True))
 
 
 # Map URL's to resource classes

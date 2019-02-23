@@ -124,4 +124,10 @@ export class DataService {
       catchError(this.handleError<any>("error"))
     );
   }
+
+  getCorrectionsFile(): Observable<Blob> {   
+    //const options = { responseType: 'blob' }; there is no use of this
+        // this.http refers to HttpClient. Note here that you cannot use the generic get<Blob> as it does not compile: instead you "choose" the appropriate API in this way.
+        return this.http.get(APIurl + "corrections/file", { responseType: 'blob' });
+    }
 }
