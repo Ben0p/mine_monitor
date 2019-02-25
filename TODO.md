@@ -132,7 +132,7 @@
 - [ ] Base station stats
 - [ ] TropOS server stats 
 - [x] List button
-- [ ] Download list button
+- [x] Download list button
 
 #### Edit
 - [x] Blank edit form after submit
