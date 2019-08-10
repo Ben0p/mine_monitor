@@ -27,8 +27,18 @@
 
 ### ngx-admin
 #### General
-- [ ] Git clone starter-kit
-- [ ] Install npm dependancies
+- [x] Git clone starter-kit
+- [x] Install npm dependancies
+- [ ] Settings page
+
+### Settings
+- [ ] Create settings module
+- [ ] Settings route
+- [ ] Settings menu
+
+#### Auth
+- [ ] Setup basic auth
+- [ ] OPS AD Auth
 
 #### Themes
 - [ ] Install themes
