@@ -20,6 +20,10 @@
     - [ ] Tie into fmg.local or fmg.ops (long-term)
 - [ ] Pre-load pwa for offline mode
 - [ ] Tristar history + graphs
+- [ ] Migrate to ngx-admin
+- [ ] Remove redundant monitoring
+
+
 
 ### ngx-admin
 #### General
@@ -76,63 +80,6 @@
 - [ ] Start / Stop scipts from browser
 - [ ] Service detail page
 
-#### Trailers
-- [ ] Trailer detail page
-    - [x] Data service
-    - [x] Get data in component
-    - [x] Card and background
-    - [x] Color Sections
-        - [x] Purple for info
-        - [x] Green online
-        - [x] Red offline
-    - [x] Hide Ubi if doesn't exists
-    - [x] Hide tristar_data if offline
-- [x] Reduce details on main page
-- [x] Add Tropos / Cisco / Ubi
-- [x] *ngIf devices
-- [x] Indicate if gateway / node
-    - [x] Main page and detail
-    - [ ] Indicate if gateway acting as node
-- [x] Gradient colors
-    - [x] Home
-    - [x] Detail
-
-#### Fleet
-- [x] Links to devices from fleet detail
-- [x] Add ip addresses to fleet_data collection
-- [x] Add ip addresses in fleet detail page
-- [ ] Jarvisify
-    - [ ] latency if online, "Offline" if offline
-    - [ ] Perhaps have no data on main page or one latency only
-- [ ] Fleet Detail
-    - [x] Shorten to fit on phone better
-    - [ ] Jarvisify
-- [x] Remove 5ghz
-- [ ] color gradients
-    - [ ] Home page
-    - [ ] Detail page
-
-### GPS
-- [x] Create angular module
-- [x] WebUI component
-- [x] Delete from GUI
-- [x] Correction device list
-    - [x] List page component
-    - [x] Data service
-    - [x] Mat data table
-        - [x] Sort
-        - [x] Filter
-        - [x] Pagination
-        - [x] Default sort
-        - [ ] Delete 
-        - [ ] Add
-    - [x] Title
-- [x] Add all machines to db through webui
-- [ ] Pretty up page UI
-- [ ] Base station stats
-- [ ] TropOS server stats 
-- [x] List button
-- [x] Download list button
 
 #### Edit
 - [x] Blank edit form after submit
@@ -219,61 +166,8 @@
 - [ ] Fix uptime
 - [ ] Service stopped info busted
 
-#### GPS
-- [x] Convert gps corrections to headless
-- [x] Corrections stats page
-- [x] Add devices via webGUI
-- [x] RestAPI class
-- [x] RestAPI edit corrections
-- [x] Migrate to mongo
-- [x] Store stats in mongo
-- [x] restAPI to get list of devices
-- [ ] Base station data
-- [ ] TropOS corrections data
-
-
-#### Trailers
-- [ ] Devices
-    - [x] Morningstar
-    - [x] TropOS
-    - [x] Ubi
-    - [ ] Cisco (+gps)
-- [x] Add TriStar solar regulators from webui
-- [x] Solar regulator modbus data aquisition
-- [x] Fix solar current calculations always 0
-- [ ] Trailers green / orange / red indicating status
-    - [x] On / offline
-    - [ ] Battery volts
-    - [ ] Temp
-- [x] Trailer temps
-- [x] Ping
-    - [x] Cisco
-    - [x] Topos
-    - [x] Ubi
-    - [x] Tristar
-    - [x] TropOS LAN (if gateway)
-- [ ] Pull cisco data
-- [x] Fix data reseting bug
-    - [x] write to pymongo in one hit
-    - [x] combine tristar and ping process
-- [x] Crashes when adding additional trailer (frontend fix)
-- [x] Stats function
-    - [x] Online / offline
-    - [x] Device total / online count
-    - [x] Gateway / Node
-
 #### Alerts
 - [x] Poll alerts without a delay
-
-#### Fleet
-- [x] Start pinging new fleet when added
-- [x] Stop process when deleted
-    - [x] Delete from both databases when deleted
-    - [x] Fix bug where it re-adds fleet to fleet_data
-- [ ] Reduce pings
-    - [x] Don't bother about tropos 5ghz
-    - [ ] Don't ping spare IP if not used
-
 
 #### Overview
 - [x] Service running
