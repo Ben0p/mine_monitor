@@ -8,8 +8,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     home: true,
   },
   {
-    title: 'FEATURES',
-    group: true,
+    title: 'Alerts',
+    icon: 'bulb-outline',
+    children: [
+      {
+        title: 'Overview',
+        link: '/pages/alerts/overview'
+      },
+      {
+        title: 'All',
+      },
+      {
+        title: 'List',
+        link: '/pages/alerts/list'
+      },
+    ]
   },
   {
     title: 'Auth',

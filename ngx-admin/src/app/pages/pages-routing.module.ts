@@ -18,6 +18,11 @@ const routes: Routes = [{
         .then(m => m.SettingsModule),
     },
     {
+      path: 'alerts',
+      loadChildren: () => import('./alerts/alerts.module')
+        .then(m => m.AlertsModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

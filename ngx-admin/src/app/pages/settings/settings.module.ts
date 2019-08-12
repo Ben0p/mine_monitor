@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import {
   NbCardModule,
   NbSelectModule,
+  NbButtonModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -22,7 +23,8 @@ import { SettingsRoutingModule, routedComponents } from './settings-routing.modu
     SettingsRoutingModule,
     ThemeModule,
     NbCardModule,
-    NbSelectModule
+    NbSelectModule,
+    NbButtonModule,
   ]
 })
 export class SettingsModule { }

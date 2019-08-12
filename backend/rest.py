@@ -1,7 +1,8 @@
 #! /usr/bin/python3.7
 
-from env.dev import env
+# from env.dev import env
 # from env.prod import env
+from env.devprod import env
 from flask import Flask, jsonify, send_file
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
@@ -23,7 +24,7 @@ CORS(APP)
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
-DB = CLIENT[env['collection']]
+DB = CLIENT[env['database']]
 
 
 class alert(Resource):
@@ -209,6 +210,32 @@ class alert_detail(Resource):
             
             return(bits)
 
+class alert_overview(Resource):
+    """GET for alert overview data"""
+    def get(self):
+
+        overview = {
+            'all_clear' : DB['alert_data'].find({'all_clear': True}).count(),
+            'emergency' : DB['alert_data'].find({'emergency': True}).count(),
+            'a' : DB['alert_data'].find({'a': True}).count(),
+            'b' : DB['alert_data'].find({'b': True}).count(),
+            'c' : DB['alert_data'].find({'c': True}).count(),
+            'offline' : DB['alert_data'].find({'online': False}).count(),
+        }
+
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(overview))))
+
+class alert_modules(Resource):
+    """GET for alert module info"""
+    def get(self):
+
+        alert_modules = DB['alert'].find().sort("location",pymongo.ASCENDING)
+
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(alert_modules))))
 
 
 class edit(Resource):
@@ -319,6 +346,8 @@ class check(Resource):
 
 # Map URL's to resource classes
 API.add_resource(alert, "/alert")
+API.add_resource(alert_modules, "/alert_modules")
+API.add_resource(alert_overview, "/alert_overview")
 API.add_resource(alert_detail, "/alert/<string:name>")
 API.add_resource(check, "/check")
 

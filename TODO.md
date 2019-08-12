@@ -26,15 +26,30 @@
 
 
 ### ngx-admin
+#### Components
+- [ ] Alerts overview status card
+- [ ] Sign / C-Alert / Trailer
+
 #### General
 - [x] Git clone starter-kit
 - [x] Install npm dependancies
 - [ ] Settings page
 
-### Settings
-- [ ] Create settings module
-- [ ] Settings route
-- [ ] Settings menu
+#### Dashboard
+- [ ] Alerts overview
+
+#### Settings
+- [x] Create settings module
+- [x] Settings route
+- [x] Settings menu
+
+#### Style
+- [x] Create style page
+- [x] Theme
+- [x] Layout Direction
+- [ ] Sidebar (not working)
+- [ ] Layouts (not working)
+
 
 #### Auth
 - [ ] Setup basic auth
