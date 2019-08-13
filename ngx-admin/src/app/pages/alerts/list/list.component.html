@@ -1,15 +1,29 @@
 <nb-card>
     <nb-card-header>
-        Smart Table
+        Alert Modules
     </nb-card-header>
 
+    <ng-template #dialog let-data let-ref="dialogRef">
+        <nb-card status="danger">
+            <nb-card-header>Warning</nb-card-header>
+            <nb-card-body>{{ data }}</nb-card-body>
+            <nb-card-footer>
+                <div class=wrapper>
+                    <button nbButton (click)="onModifyConfirm(true); ref.close()">Yes</button>
+                    &nbsp;&nbsp;
+                    <button nbButton (click)="onModifyConfirm(false); ref.close()">No</button>
+                </div>
+            </nb-card-footer>
+        </nb-card>
+    </ng-template>
+
     <nb-card-body>
-        <ng2-smart-table 
+        <ng2-smart-table
             [settings]="settings"
             [source]="source"
-            (deleteConfirm)="onDeleteConfirm($event)"
-            (editConfirm)="onEditConfirm($event)"
-            (createConfirm)="onCreateConfirm($event)">
+            (deleteConfirm)="onDialog(dialog, 'delete', $event)"
+            (editConfirm)="onDialog(dialog, 'edit', $event)"
+            (createConfirm)="onDialog(dialog, 'create', $event)">
         </ng2-smart-table>
     </nb-card-body>
 </nb-card>

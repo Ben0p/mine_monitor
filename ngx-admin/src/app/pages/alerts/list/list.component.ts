@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 
 import { AlertService } from './../../../@core/data/alerts'
-
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-list',
@@ -30,7 +30,7 @@ export class ListComponent implements OnDestroy, OnInit {
     },
     columns: {
       location: {
-        title: 'location',
+        title: 'Location',
         type: 'string',
       },
       ip: {
@@ -49,8 +49,14 @@ export class ListComponent implements OnDestroy, OnInit {
   };
 
   source: Object
+  tableEvent: any
+  modifyType: string
+  dialogMessage: string
 
-  constructor(private alerts: AlertService, ) {
+  constructor(
+    private alerts: AlertService,
+    private dialogService: NbDialogService,
+    ) {
 
     this.alerts.getAlertModules().subscribe(
       (
@@ -64,34 +70,35 @@ export class ListComponent implements OnDestroy, OnInit {
 
   ngOnDestroy(): void { }
 
-  ngOnInit() {
-    console.log(this.alerts.getAlertModules())
+  ngOnInit() { }
+
+  onDialog(dialog: TemplateRef<any>, crud, event){
+    this.tableEvent = event;
+    this.modifyType = crud;
+    if (crud == 'create') {
+      this.dialogMessage = 'Are you sure you want to '+crud+' '+this.tableEvent.newData.location + '?'
+    } else {
+      this.dialogMessage = 'Are you sure you want to '+crud+' '+this.tableEvent.data.location + '?'
+    }
+    this.dialogService.open(dialog, {
+      context: this.dialogMessage
+    });
   }
 
-  onDeleteConfirm(event): void {
-    if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
+  onModifyConfirm(confirmation): void {
+    if (confirmation) {
+      if (this.modifyType == 'delete'){
+        console.log("Deleted " + this.tableEvent.data.location)
+      } else if (this.modifyType == 'edit' ) {
+        console.log("Edited " + this.tableEvent.data.location)
+      } else if (this.modifyType == 'create') {
+        console.log("Created " + this.tableEvent.newData.location)
+      }
+
+      this.tableEvent.confirm.resolve();
     } else {
-      event.confirm.reject();
+      this.tableEvent.confirm.reject();
     }
   }
-
-  onCreateConfirm(event): void {
-    if (window.confirm('Are you sure you want to create?')) {
-      event.confirm.resolve();
-      console.log(event.newData)
-    } else {
-      event.confirm.reject();
-    }
-  }
-
-  onEditConfirm(event): void {
-    if (window.confirm('Are you sure you want to edit?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
-    }
-  }
-
 
 }
