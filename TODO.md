@@ -26,30 +26,55 @@
 
 
 ### ngx-admin
-#### Components
-- [ ] Alerts overview status card
-- [ ] Sign / C-Alert / Trailer
 
 #### General
 - [x] Git clone starter-kit
 - [x] Install npm dependancies
-- [ ] Settings page
+- [x] Settings module
+- [x] Alerts module
 
 #### Dashboard
 - [ ] Alerts overview
+
+#### Alerts
+
+##### Overview
+- [x] Advanced Pie chart working with data
+
+##### List
+- [x] List working
+- [x] List with data
+- [ ] Delete
+    - [x] Delete event
+    - [x] Delete confirmation
+    - [ ] Delete data.service function
+    - [ ] Send to REST API
+    - [ ] ngx style popup
+- [x] Edit
+    - [x] Edit event
+    - [x] Edit confirmation
+    - [ ] Edit data.service function
+    - [ ] Send to REST API
+    - [ ] ngx style popup
+- [x] Create
+    - [x] Create event
+    - [x] Create confirmation
+    - [ ] Create data.service function
+    - [ ] Send to REST API
+    - [ ] ngx style popup
 
 #### Settings
 - [x] Create settings module
 - [x] Settings route
 - [x] Settings menu
 
-#### Style
+##### Style
 - [x] Create style page
 - [x] Theme
 - [x] Layout Direction
 - [ ] Sidebar (not working)
 - [ ] Layouts (not working)
-
+- [ ] Save settings per user
 
 #### Auth
 - [ ] Setup basic auth
@@ -58,7 +83,10 @@
 #### Themes
 - [ ] Install themes
 
-### Frontend
+
+
+## This is being depreciated
+### Frontend (Old version)
 #### General
 - [x] Indication on web page if script (service) not running (pop down)
 - [ ] J.A.R.V.I.S boiii

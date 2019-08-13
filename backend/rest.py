@@ -215,12 +215,12 @@ class alert_overview(Resource):
     def get(self):
 
         overview = {
-            'all_clear' : DB['alert_data'].find({'all_clear': True}).count(),
-            'emergency' : DB['alert_data'].find({'emergency': True}).count(),
-            'a' : DB['alert_data'].find({'a': True}).count(),
-            'b' : DB['alert_data'].find({'b': True}).count(),
-            'c' : DB['alert_data'].find({'c': True}).count(),
-            'offline' : DB['alert_data'].find({'online': False}).count(),
+            'all_clear' : DB['alert_data'].count_documents({'all_clear':True}),
+            'emergency' : DB['alert_data'].count_documents({'emergency': True}),
+            'a' : DB['alert_data'].count_documents({'a': True}),
+            'b' : DB['alert_data'].count_documents({'b': True}),
+            'c' : DB['alert_data'].count_documents({'c': True}),
+            'offline' : DB['alert_data'].count_documents({'online': False}),
         }
 
 

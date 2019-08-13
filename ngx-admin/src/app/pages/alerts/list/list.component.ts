@@ -15,11 +15,14 @@ export class ListComponent implements OnDestroy, OnInit {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true,
     },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true,
+
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
@@ -32,6 +35,14 @@ export class ListComponent implements OnDestroy, OnInit {
       },
       ip: {
         title: 'IP',
+        type: 'string',
+      },
+      type: {
+        title: 'Type',
+        type: 'string',
+      },
+      zone: {
+        title: 'Zone',
         type: 'string',
       },
     },
@@ -64,4 +75,23 @@ export class ListComponent implements OnDestroy, OnInit {
       event.confirm.reject();
     }
   }
+
+  onCreateConfirm(event): void {
+    if (window.confirm('Are you sure you want to create?')) {
+      event.confirm.resolve();
+      console.log(event.newData)
+    } else {
+      event.confirm.reject();
+    }
+  }
+
+  onEditConfirm(event): void {
+    if (window.confirm('Are you sure you want to edit?')) {
+      event.confirm.resolve();
+    } else {
+      event.confirm.reject();
+    }
+  }
+
+
 }
