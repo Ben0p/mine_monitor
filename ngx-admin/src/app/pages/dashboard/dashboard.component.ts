@@ -21,10 +21,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.refreshData()
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 1000);
+    }, 2000);
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() { 
+    clearInterval(this.interval);
+  }
 
   refreshData() {
     this.alerts.getAlertStatus().subscribe(
