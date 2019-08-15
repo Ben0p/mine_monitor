@@ -33,6 +33,14 @@
 - [x] Settings module
 - [x] Alerts module
 
+
+#### Data Services
+- [ ] alerts.service
+    - [ ] Rename alerts.ts to alerts.service.ts
+    - [x] Danger toast on error
+    - [ ] Success toast on success
+
+
 #### Dashboard
 - [ ] Alerts overview
 
@@ -211,6 +219,8 @@
 - [x] GPS
     - [x] Generate list for other samplicate servers
     - [x] Return list as download 'final.conf'
+- [ ] Alerts
+    - [x] Change all to /alerts/{whatever}
 
 
 #### Services

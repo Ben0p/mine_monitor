@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AlertService } from './../../@core/data/alerts.service'
 
 @Component({
   selector: 'ngx-dashboard',
@@ -9,10 +10,29 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 export class DashboardComponent implements OnInit, OnDestroy {
 
-  constructor( ) { }
+  alerts$: Object
+  interval: any;
 
-  ngOnInit( ) { }
+  constructor(
+    private alerts: AlertService,
+  ) { }
 
-  ngOnDestroy( ) { }
+  ngOnInit() {
+    this.refreshData()
+    this.interval = setInterval(() => {
+      this.refreshData();
+    }, 1000);
+  }
+
+  ngOnDestroy() { }
+
+  refreshData() {
+    this.alerts.getAlertStatus().subscribe(
+      (
+        data: {}) => {
+        this.alerts$ = data;
+      }
+    )
+  }
 
 }

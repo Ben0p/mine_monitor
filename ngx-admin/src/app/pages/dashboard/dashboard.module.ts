@@ -9,6 +9,7 @@ import {
   NbSelectModule,
   NbListModule,
   NbIconModule,
+  NbAlertModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -21,6 +22,7 @@ import { DashboardComponent } from './dashboard.component';
     ThemeModule,
     NbListModule,
     NbTabsetModule,
+    NbAlertModule,
   ],
   declarations: [
     DashboardComponent,

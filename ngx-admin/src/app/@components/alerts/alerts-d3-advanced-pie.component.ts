@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 
-import { AlertService } from '../../@core/data/alerts'
+import { AlertService } from '../../@core/data/alerts.service'
 
 
 @Component({

@@ -1,9 +1,31 @@
-<div class="col-md-8">
-  <nb-card>
+<div>
+  <nb-card class="col-md-12 col-lg-4 col-xxxl-4">
     <nb-card-header>
       Alerts
     </nb-card-header>
     <nb-card-body>
+      <div *ngFor="let alert of alerts$">
+        <nb-alert *ngIf="alert.state == 'All Clear'" status="success">
+          <h6>{{alert.zone}}</h6>
+          {{alert.state}}
+        </nb-alert>
+        <nb-alert *ngIf="alert.state == 'Emergency'" status="danger">
+          <h6>{{alert.zone}}</h6>
+          {{alert.state}}
+        </nb-alert>
+        <nb-alert *ngIf="alert.state == 'A Alert'" status="info">
+          <h6>{{alert.zone}}</h6>
+          {{alert.state}}
+        </nb-alert>
+        <nb-alert *ngIf="alert.state == 'B Alert'" status="warning">
+          <h6>{{alert.zone}}</h6>
+          {{alert.state}}
+        </nb-alert>
+        <nb-alert *ngIf="alert.state == 'C Alert'" status="danger">
+          <h6>{{alert.zone}}</h6>
+          {{alert.state}}
+        </nb-alert>
+      </div>
     </nb-card-body>
   </nb-card>
 </div>

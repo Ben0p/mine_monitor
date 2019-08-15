@@ -3,12 +3,13 @@
 # from env.dev import env
 # from env.prod import env
 from env.devprod import env
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, Response
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
 from flask_cors import CORS
 import pymongo
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import json
 import copy
 
@@ -230,85 +231,145 @@ class alert_overview(Resource):
 class alert_modules(Resource):
     """GET for alert module info"""
     def get(self):
+        #try:
+        alert_modules_uid = []
+        alert_modules = DB['alert_modules'].find().sort("location",pymongo.ASCENDING)
 
-        alert_modules = DB['alert'].find().sort("location",pymongo.ASCENDING)
+        for alert in alert_modules:
+            try:
+                zone = alert['zone']
+            except KeyError:
+                zone = ''
+            try:
+                ip = alert['ip']
+            except KeyError:
+                ip = ''
 
+            alert_modules_uid.append(
+                {
+                    'uid': str(alert['_id']),
+                    'location': alert['location'],
+                    'ip': ip,
+                    'type' : alert['type'],
+                    'zone': zone
+                }
+            )
 
         # Return collection as a massive json 
-        return(jsonify(json.loads(dumps(alert_modules))))
+        return(jsonify(json.loads(dumps(alert_modules_uid))))
+        #except:
+        #    return(Response(status=418))
+
+class alert_zones(Resource):
+
+    def get(self):
+        alert_zones = DB['alert_zones'].find().sort("name",pymongo.ASCENDING)
+        alert_zones_list = []
+
+        for zone in alert_zones:
+            alert_zones_list.append(
+                {
+                    'value': zone['name'],
+                    'title': zone['name']
+                }
+            )
+
+        return(jsonify(json.loads(dumps(alert_zones_list))))
+
+class alert_types(Resource):
+
+    def get(self):
+        alert_types = DB['alert_types'].find().sort("name",pymongo.ASCENDING)
+        alert_types_list = []
+
+        for types in alert_types:
+            alert_types_list.append(
+                {
+                    'value': types['name'],
+                    'title': types['name']
+                }
+            )
+
+        return(jsonify(json.loads(dumps(alert_types_list))))
+
+class alert_status(Resource):
+
+    def get(self):
+        alert_zones = DB['alert_zones'].find()
+
+        zone_status = []
+        states = ['all_clear', 'emergency', 'a', 'b', 'c']
+
+        state_match = {
+            'all_clear': "All Clear",
+            'emergency': "Emergency",
+            'a': "A Alert",
+            'b': "B Alert",
+            'c': "C Alert"
+        }
+        
+        for zone in alert_zones:
+            module_zone = DB['alert_modules'].find_one(
+                {
+                    'zone': zone['name']
+                }
+            )
 
 
-class edit(Resource):
-    """POST to add new alerts"""
+            if module_zone:
+                alert_data = DB['alert_data'].find_one(
+                    {
+                        'location': module_zone['location']
+                    }
+                ) 
+
+                for state in states:
+                    if alert_data[state]:
+                        zone_status.append(
+                            {
+                                'zone': zone['name'],
+                                'state': state_match[state]
+                            }
+                        )
+                    
+
+        return(jsonify(json.loads(dumps(zone_status))))
+
+
+class alert_edit(Resource):
+    """POST to add edit alerts"""
 
     def post(self):
 
         # Initilize request parser
         parser = reqparse.RequestParser()
 
-        # Get type
+        # Parse arguments from form data
+        parser.add_argument("location")
+        parser.add_argument("ip")
         parser.add_argument("type")
-
-        # Device parent
-        parser.add_argument("parent")
-
-        # Parse the form data (alert)
-        parser.add_argument("alert_location")
-        parser.add_argument("alert_ip")
-        parser.add_argument("alert_type")
-        parser.add_argument("west_ip")
-        parser.add_argument("central_ip")
-        parser.add_argument("east_ip")
-        parser.add_argument("trailer_number")
+        parser.add_argument("zone")
 
         args = parser.parse_args()
 
-        # Check object type
-        if args['type'] == 'alert':
-
-            # Check if trailer or not
-            if args['alert_type'] == 'trailer':
-                # Set name as trailer number
-                name = args['trailer_number']
-            else:
-                # Set name as location
-                name = args['alert_location']
-
-            # Check if document exists
-            existing_document = DB['alert_data'].find({'location' : name})
-            print('Updating {}'.format(name))
-
-            # Delete any existing documents
-            if existing_document.count() >= 1:
-                DB['alert'].delete_many({'location' : name})
-                DB['alert_data'].delete_many({'location' : name})
-
-            # Check if object is a trailer 
-            if args['alert_type'] == 'trailer':
-                # Insert into database
-                DB['alert'].insert_one(
+        try:
+            DB['alert'].find_one_and_update(
+                {
+                    "ip": args['ip'],
+                },
+                { "$set":
                     {
-                        "location": name,
-                        "west_ip": args['west_ip'],
-                        "central_ip": args['central_ip'],
-                        "east_ip": args['east_ip'],
-                        "type": args['alert_type']
+                        "location": args['location'],
+                        "ip": args['ip'],
+                        "type": args['alert_type'],
+                        "zone": args['zone'],
                     }
-                )
-
-            else:
-                # Insert into database
-                DB['alert'].insert_one(
-                    {
-                        "location": name,
-                        "ip": args['alert_ip'],
-                        "type": args['alert_type']
-                    }
-                )
+                }
+            )
 
             return(201)
 
-        else:
+        except:
             return(404)
 
 
@@ -345,10 +406,14 @@ class check(Resource):
 
 
 # Map URL's to resource classes
-API.add_resource(alert, "/alert")
-API.add_resource(alert_modules, "/alert_modules")
-API.add_resource(alert_overview, "/alert_overview")
-API.add_resource(alert_detail, "/alert/<string:name>")
+API.add_resource(alert, "/alerts/all")
+API.add_resource(alert_modules, "/alerts/modules")
+API.add_resource(alert_overview, "/alerts/overview")
+API.add_resource(alert_zones, "/alerts/zones")
+API.add_resource(alert_types, "/alerts/types")
+API.add_resource(alert_status, "/alerts/status")
+API.add_resource(alert_edit, "/alerts/edit")
+API.add_resource(alert_detail, "/alerts/<string:name>")
 API.add_resource(check, "/check")
 
 # Run flask
