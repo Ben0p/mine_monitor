@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AlertsComponent } from './alerts.component';
 import { OverviewComponent } from './overview/overview.component';
 import { ListComponent } from './list/list.component';
+import { AllComponent } from './all/all.component';
 
 const routes: Routes = [{
   path: '',
@@ -12,6 +13,10 @@ const routes: Routes = [{
     {
       path: 'overview',
       component: OverviewComponent,
+    },
+    {
+      path: 'all',
+      component: AllComponent,
     },
     {
       path: 'list',

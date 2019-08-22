@@ -36,9 +36,13 @@
 
 #### Data Services
 - [ ] alerts.service
-    - [ ] Rename alerts.ts to alerts.service.ts
+    - [x] Rename alerts.ts to alerts.service.ts
     - [x] Danger toast on error
     - [ ] Success toast on success
+    - [x] Infinite danger toast on multiple API call fails
+        - [x] Disable duplicates
+    - [x] Close danger toast on restoration of API 
+
 
 
 #### Dashboard
@@ -221,6 +225,8 @@
     - [x] Return list as download 'final.conf'
 - [ ] Alerts
     - [x] Change all to /alerts/{whatever}
+    - [ ] Status
+        - [x] Only return one status per alert
 
 
 #### Services

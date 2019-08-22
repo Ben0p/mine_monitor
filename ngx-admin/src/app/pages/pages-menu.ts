@@ -17,6 +17,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'All',
+        link: '/pages/alerts/all'
       },
       {
         title: 'List',

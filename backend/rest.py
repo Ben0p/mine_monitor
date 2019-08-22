@@ -331,6 +331,7 @@ class alert_status(Resource):
                                 'state': state_match[state]
                             }
                         )
+                        break
                     
 
         return(jsonify(json.loads(dumps(zone_status))))

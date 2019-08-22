@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
-import { NbToastrService } from '@nebular/theme';
+import { NbToastrService, NbToastRef } from '@nebular/theme';
 
 
 const httpOptions = {
@@ -17,10 +17,14 @@ const APIurl: String = 'http://localhost:5000/alerts/';
   providedIn: 'root',
 })
 export class AlertService {
+
   constructor(
     private http: HttpClient,
     private toastrService: NbToastrService,
-    ) {}
+  ) { }
+
+  toastRef: NbToastRef
+  tempToast: NbToastRef
 
   private extractData(res: Response) {
     const body = res;
@@ -29,19 +33,13 @@ export class AlertService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error); // log to console
       this.dangerToast('top-right', 'danger', error.statusText, error.status)
-
-      // TODO: better job of transforming error for user consumption
-      // console.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
   private returnFalse<T>(operation = 'operation', result?: T) {
-    const status = {'online' : result};
+    const status = { 'online': result };
     return of(result as T);
   }
 
@@ -81,18 +79,29 @@ export class AlertService {
   }
 
   getAlertStatus(): Observable<any> {
-    return this.http.get(APIurl + "status").pipe(
-      map(this.extractData),
-      catchError(this.handleError<any>("failed"))
+    var data = this.http.get(APIurl + "status").pipe(
+      map(
+        this.extractData,
+      ),
+      catchError(
+        this.handleError<any>("failed")
+      )
     );
+    data.subscribe(
+      val => {
+        if (this.tempToast && val){
+          this.tempToast.close()
+        }
+      }
+    )
+    return(data)
   }
 
   deleteAlertModules(module): Observable<any> {
-    return this.http.get(APIurl + "delete/"+module).pipe(
+    return this.http.get(APIurl + "delete/" + module).pipe(
       map(
         this.extractData,
         (response: Response) => {
-          console.log(response);
           this.successToast('top-right', 'success', response.statusText, response.status)
         }
       ),
@@ -100,20 +109,29 @@ export class AlertService {
     );
   }
 
+  
+ dangerToast(position, status, message, code) {
+    var preventDuplicates = true
+    var duration = 0
 
-  dangerToast(position, status, message, code) {
-      this.toastrService.show(
-        'API call error - '+code+': '+message,
-        `Failed`,
-        { position, status });
+    this.toastRef = this.toastrService.show(
+      'API call error - ' + code + ': ' + message,
+      `Failed`,
+      { position, status, preventDuplicates, duration });
+    
+    if (this.toastRef){
+      this.tempToast = this.toastRef
+    }
   }
 
+
   successToast(position, status, message, code) {
+    var preventDuplicates = true
     this.toastrService.show(
-      'API call error - '+code+': '+message,
+      'API call error - ' + code + ': ' + message,
       `Failed`,
-      { position, status });
-}
+      { position, status, preventDuplicates });
+  }
 
 
 }

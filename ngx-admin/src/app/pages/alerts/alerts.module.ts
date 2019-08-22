@@ -14,7 +14,8 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { OverviewComponent } from './overview/overview.component';
 import { AlertsComponent } from './alerts.component';
 import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.component';
-import { ListComponent } from './list/list.component'
+import { ListComponent } from './list/list.component';
+import { AllComponent } from './all/all.component'
 
 
 
@@ -25,6 +26,7 @@ import { ListComponent } from './list/list.component'
     OverviewComponent,
     AlertsD3AdvancedPieComponent,
     ListComponent,
+    AllComponent,
   ],
   imports: [
     AlertsRoutingModule,
