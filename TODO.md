@@ -49,10 +49,11 @@
 - [ ] Alerts overview
 
 #### Alerts
-
 ##### Overview
 - [x] Advanced Pie chart working with data
-
+##### All
+- [ ] Data service
+- [ ] Basic Cards
 ##### List
 - [x] List working
 - [x] List with data
@@ -75,6 +76,9 @@
     - [ ] Send to REST API
     - [ ] ngx style popup
 
+
+
+
 #### Settings
 - [x] Create settings module
 - [x] Settings route
@@ -91,9 +95,6 @@
 #### Auth
 - [ ] Setup basic auth
 - [ ] OPS AD Auth
-
-#### Themes
-- [ ] Install themes
 
 
 

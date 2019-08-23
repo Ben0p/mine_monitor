@@ -1,6 +1,7 @@
 #! /usr/bin/python3.7
 
-from env.dev import env
+from env.devprod import env
+# from env.dev import env
 # from env.prod import env
 from xml.etree import ElementTree
 import requests
@@ -24,94 +25,28 @@ Writes results back in mongo
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
-DB = CLIENT[env['collection']]
+DB = CLIENT[env['database']]
 
 
-def getDetails():
-    """Get array of alert documents from mongodb"""
+def getModules():
+    module_locations = []
 
-    # Reset the array
-    alerts = []
+    modules = DB['alert_modules'].find()
+    locations = set([module['location'] for module in modules])
 
-    # Retrieve objects from alert collection
-    alert_documents = DB['alert'].find()
+    for location in locations:
+        grouped = DB['alert_modules'].find(
+            {
+                'location' : location
+            }
+        )
 
-    # Extract location, ip and type
-    for alert in alert_documents:
-        # Reset the SIGN dictioary
-        alert_dict = {
-            'location' : '',
-            'ip' : '',
-            'type' : '',
-            'online' : False,
-            'latency' : 999, 
-            'sign' : False,
-            'calert' : False,
-            'trailer' : False,
-            'rest' : False,
-            'all_clear' : False,
-            'emergency' : False,
-            'lightning' : False,
-            'a' : False,
-            'b' : False,
-            'c' : False
-        }
+        grouped = list(grouped)
 
-        # Reset trailer dictionary
-        trailer_dict = {
-            'area' : '',
-            'ip' : '',
-            'online' : False,
-            'latency' : 999, 
-            'rest' : False,
-            'all_clear' : False,
-            'emergency' : False,
-            'lightning' : False,
-            'a' : False,
-            'b' : False,
-            'c' : False
-        }
+        module_locations.append(grouped)
 
+    return(module_locations)
 
-        # Set location and type
-        alert_dict['location'] = alert['location']
-        alert_dict['type'] = alert['type']
-
-        # Determine if 'C' Alert, Trailer or Sign
-        if alert_dict['type'] == 'calert':
-            alert_dict['calert'] = True
-            alert_dict['ip'] = alert['ip']
-        elif alert_dict['type'] == 'trailer':
-            # Create a copy of the trailer dictionary for each area
-            trailer_west = copy.deepcopy(trailer_dict)
-            trailer_central = copy.deepcopy(trailer_dict)
-            trailer_east = copy.deepcopy(trailer_dict)
-
-            # Set ip's for each trailer area
-            trailer_west['ip'] = alert['west_ip']
-            trailer_central['ip'] = alert['central_ip']
-            trailer_east['ip'] = alert['east_ip']
-
-            # Set each area name
-            trailer_west['area'] = 'West'
-            trailer_central['area'] = 'Central'
-            trailer_east['area'] = 'East'
-
-            # Set trailer to true
-            alert_dict['trailer'] = True
-
-            # Append array to main dictionary
-            alert_dict['areas'] = [trailer_west, trailer_central, trailer_east]
-
-        else:
-            alert_dict['sign'] = True
-            alert_dict['ip'] = alert['ip']
-
-        # Duplicate the dictionary (doesn't work if you don't do this)
-        my_copy = copy.deepcopy(alert_dict)
-        # Append dictionary to list of dictionaries
-        alerts.append(my_copy)
-    return(alerts)
 
 def ping(host):
     """Returns True and latency if host responds to a ping request"""
@@ -177,169 +112,64 @@ def modbus(ip):
 
 
 def writeDB(alert):
+    print("Updating "+alert['location'])
 
-    # Check if collection exists
-    collections = DB.collection_names()
+    DB['alert_status'].find_one_and_update(
+        {
+            'location':alert['location']
+        },
+        {
+            '$set': {
+                'modules': alert['modules']
+            }
+        },
+        upsert=True
+    )
 
-    if 'alert_data' in collections:
-        existing_document = DB['alert_data'].find({'location' : alert['location']})
-        
-        # Check if a document was returned
-        if existing_document.count() == 1:
-            # Trailer
-            if alert['type'] == 'trailer':
-                # Update document
-                DB['alert_data'].find_one_and_update(
-                    {
-                        "location": alert['location']
-                    }, 
-                    {
-                        "$set": {
-                            "location": alert['location'],
-                            "type": alert['type'],
-                            "online": alert['online'],
-                            "sign": alert['sign'],
-                            "calert": alert['calert'],
-                            "trailer": alert['trailer'],
-                            "areas": [
-                                {
-                                    "area": alert['areas'][0]['area'],
-                                    "ip": alert['areas'][0]['ip'],
-                                    "online": alert['areas'][0]['online'],
-                                    "latency": alert['areas'][0]['latency'],
-                                    "rest": alert['areas'][0]['rest'],
-                                    "all_clear": alert['areas'][0]['all_clear'],
-                                    "emergency": alert['areas'][0]['emergency'],
-                                    "lightning": alert['areas'][0]['lightning'],
-                                    "a": alert['areas'][0]['a'],
-                                    "b": alert['areas'][0]['b'],
-                                    "c": alert['areas'][0]['c'],
-                                },
-                                {
-                                     "area": alert['areas'][1]['area'],
-                                    "ip": alert['areas'][1]['ip'],
-                                    "online": alert['areas'][1]['online'],
-                                    "latency": alert['areas'][1]['latency'],
-                                    "rest": alert['areas'][1]['rest'],
-                                    "all_clear": alert['areas'][1]['all_clear'],
-                                    "emergency": alert['areas'][1]['emergency'],
-                                    "lightning": alert['areas'][1]['lightning'],
-                                    "a": alert['areas'][1]['a'],
-                                    "b": alert['areas'][1]['b'],
-                                    "c": alert['areas'][1]['c'],
-                                },
-                                {
-                                    "area": alert['areas'][2]['area'],
-                                    "ip": alert['areas'][2]['ip'],
-                                    "online": alert['areas'][2]['online'],
-                                    "latency": alert['areas'][2]['latency'],
-                                    "rest": alert['areas'][2]['rest'],
-                                    "all_clear": alert['areas'][2]['all_clear'],
-                                    "emergency": alert['areas'][2]['emergency'],
-                                    "lightning": alert['areas'][2]['lightning'],
-                                    "a": alert['areas'][2]['a'],
-                                    "b": alert['areas'][2]['b'],
-                                    "c": alert['areas'][2]['c'],
-                                }
-                            ]
-                        }
-                    }
-                )
     
-            else:
-                # Update document (C-Alert and Sign)
-                DB['alert_data'].find_one_and_update(
-                    {
-                        "location": alert['location']
-                    }, 
-                    {
-                        "$set": {
-                        'ip' : alert['ip'],
-                        'type' : alert['type'],
-                        'online' : alert['online'],
-                        'latency' : alert['latency'], 
-                        'sign' : alert['sign'],
-                        'calert' : alert['calert'],
-                        'trailer' : alert['trailer'],
-                        'rest' : alert['rest'],
-                        'all_clear' : alert['all_clear'],
-                        'emergency' : alert['emergency'],
-                        'lightning' : alert['lightning'],
-                        'a' : alert['a'],
-                        'b' : alert['b'],
-                        'c' : alert['c']
-                        }
-                    }
-                )
-
-        # Check if there is more than one document returned
-        elif existing_document.count() > 1:
-                # delete duplicates and insert one
-                DB['alert_data'].delete_many({'location' : alert['location']})
-                DB['alert_data'].insert_one(dumps(alert))
-
-        elif existing_document.count() == 0:
-                # Create document
-                DB['alert_data'].insert_one(alert)
-
-    # If collection doens't exist, insert entire thing
-    else:
-        DB['alert_data'].insert_one(alert)
 
 
 def getAll():
     """Main function"""
 
     # Generate array of alerts with location and IP
-    alerts = getDetails()
+    locations = getModules()
 
-    # For each alert...
-    for alert in alerts:
+    location = {}
 
-        # If a trailer
-        if alert['type'] == 'trailer':
-            # For each area in trailer array
-            for area in alert['areas']:
-                online = ping(area['ip'])
-                area['online'] = online[0]
-                area['latency'] = online[1]
-                if area['online']:
-                    # Check if REST API available
-                    area['rest'] = restAPI(area['ip'])
-                    # Get modbus outputs
-                    outputs = modbus(area['ip'])
-                    # Set output states
-                    area['all_clear'] = outputs[0]
-                    area['emergency'] = outputs[1]
-                    area['lightning'] = outputs[2]
-                    area['a'] = outputs[3]
-                    area['b'] = outputs[4]
-                    area['c'] = outputs[5]
-                    alert['online'] = True
-        else:
-            online = ping(alert['ip'])
-            alert['online'] = online[0]
-            alert['latency'] = online[1]
-            if alert['online']:
-                # Check if REST API available
-                alert['rest'] = restAPI(alert['ip'])
-                # Get modbus outputs
-                outputs = modbus(alert['ip'])
-                # Set output states
-                alert['all_clear'] = outputs[0]
-                alert['emergency'] = outputs[1]
-                alert['lightning'] = outputs[2]
-                alert['a'] = outputs[3]
-                alert['b'] = outputs[4]
-                alert['c'] = outputs[5]
+    # For each module
+    for modules in locations:
+        modules_list = []
+        for module in modules:
+            online, latency = ping(module['ip'])
+            module['online'] = online
+            if not online:
+                module['status'] = 'offline'
+            else:
+                outputs = modbus(module['ip'])
+                if outputs[0]:
+                    module['status'] = 'success'
+                elif outputs[1]:
+                    module['status'] = 'danger'
+                elif outputs[3]:
+                    module['status'] = 'info'
+                elif outputs[4]:
+                    module['status'] = 'warning'
+                elif outputs[5]:
+                    module['status'] = 'danger'
 
-        writeDB(alert)
 
-    # Sleep for 1 sec to avoid chaos
-    time.sleep(1)
+                module['latency'] = latency
+                module['online'] = online
+
+            modules_list.append(module)
+        
+
+        location['location'] = modules[0]['location']
+        location['modules'] = modules_list
+        writeDB(location)
 
 
 if __name__ == '__main__':
 
-    while True:
-        getAll()
+    getAll()

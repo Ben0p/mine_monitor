@@ -28,11 +28,11 @@ CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['m
 DB = CLIENT[env['database']]
 
 
-class alert(Resource):
+class alert_all(Resource):
     """GET for alert data"""
     def get(self):
         # Get all sign data from the signs collection in mongo
-        alerts = DB['alert_data'].find().sort("location",pymongo.ASCENDING)
+        alerts = DB['alert_status'].find().sort("location",pymongo.ASCENDING)
 
         # Return collection as a massive json 
         return(jsonify(json.loads(dumps(alerts))))
@@ -407,7 +407,7 @@ class check(Resource):
 
 
 # Map URL's to resource classes
-API.add_resource(alert, "/alerts/all")
+API.add_resource(alert_all, "/alerts/all")
 API.add_resource(alert_modules, "/alerts/modules")
 API.add_resource(alert_overview, "/alerts/overview")
 API.add_resource(alert_zones, "/alerts/zones")

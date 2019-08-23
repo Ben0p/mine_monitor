@@ -17,6 +17,8 @@ import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 
+import { StatusCardComponent } from './all/status-card/status-card.component';
+
 
 
 @NgModule({
@@ -27,6 +29,7 @@ import { AllComponent } from './all/all.component'
     AlertsD3AdvancedPieComponent,
     ListComponent,
     AllComponent,
+    StatusCardComponent,
   ],
   imports: [
     AlertsRoutingModule,
