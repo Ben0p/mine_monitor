@@ -1,45 +1,44 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertService } from '../../../@core/data/alerts.service'
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'all',
   templateUrl: './all.component.html',
   styleUrls: ['./all.component.scss']
 })
+
 export class AllComponent implements OnInit, OnDestroy {
   alerts$: Object;
+  zones$: Object;
   interval: any;
 
   constructor(
     private alerts: AlertService,
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.refreshData();
     this.interval = setInterval(() => {
-        this.refreshData();
-    }, 2000);
+      this.refreshData();
+    }, 60000);
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     clearInterval(this.interval);
   }
 
   refreshData() {
     this.alerts.getAlerts().subscribe(
-        (data: {}) => {
-            this.alerts$ = data;
-        }
+      (data: {}) => {
+        this.alerts$ = data;
+      }
     );
-  }
-
-  getStatus(alert){
-    var status
-    if(alert.all_clear){
-      status = 'success'
-    }
-    console.log(status)
-    return status
+    this.alerts.getAlertZones().subscribe(
+      (data: {}) => {
+        this.zones$ = data;
+      }
+    );
   }
 
 }

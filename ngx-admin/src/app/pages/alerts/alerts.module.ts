@@ -3,6 +3,7 @@ import {
   NbCardModule,
   NbSelectModule,
   NbButtonModule,
+  NbIconModule
 } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { NgxEchartsModule } from 'ngx-echarts';
@@ -40,6 +41,7 @@ import { StatusCardComponent } from './all/status-card/status-card.component';
     NgxEchartsModule,
     NgxChartsModule,
     Ng2SmartTableModule,
+    NbIconModule
   ]
 })
 export class AlertsModule { }

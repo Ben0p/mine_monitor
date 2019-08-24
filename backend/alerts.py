@@ -136,6 +136,7 @@ def getAll():
     locations = getModules()
 
     location = {}
+    module_locations = []
 
     # For each module
     for modules in locations:
@@ -144,7 +145,7 @@ def getAll():
             online, latency = ping(module['ip'])
             module['online'] = online
             if not online:
-                module['status'] = 'offline'
+                module['status'] = 'primary'
             else:
                 outputs = modbus(module['ip'])
                 if outputs[0]:
@@ -167,7 +168,7 @@ def getAll():
 
         location['location'] = modules[0]['location']
         location['modules'] = modules_list
-        writeDB(location)
+        module_locations.append(location)
 
 
 if __name__ == '__main__':
