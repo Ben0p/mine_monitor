@@ -29,27 +29,34 @@ DB = CLIENT[env['database']]
 
 
 def getModules():
-    module_locations = []
+    '''Returns array of alert modules'''
 
     modules = DB['alert_modules'].find()
-    locations = set([module['location'] for module in modules])
 
-    for location in locations:
-        grouped = DB['alert_modules'].find(
-            {
-                'location' : location
-            }
-        )
+    return(list(modules))
 
-        grouped = list(grouped)
+def getLocations():
+    '''Returns array of alert locations'''
 
-        module_locations.append(grouped)
+    locations = DB['alert_locations'].find()
+    location_names = [location for location in locations]
 
-    return(module_locations)
+    return(location_names)
+
+def getTypes():
+    '''Returns array of alert types'''
+
+    types = DB['alert_types'].find()
+    types_names = [_type for _type in types]
+
+    return(types_names)
 
 
 def ping(host):
-    """Returns True and latency if host responds to a ping request"""
+    """Returns True and latency if host responds to a ping request
+    host = ipv4 address
+    """
+
     if platform.system().lower()=="windows":
 
         try:
@@ -110,6 +117,27 @@ def modbus(ip):
     else:
         return(['', '', '', '', '', ''])
 
+def getStatus(modules):
+    updated_list = []
+
+    for module in modules:
+        outputs = modbus(module['ip'])
+        online, latency = ping(module['ip'])
+
+        module['All Clear'] = outputs[0]
+        module['Emergency'] = outputs[1]
+        module['Lightning'] = outputs[2]
+        module['A'] = outputs[3]
+        module['B'] = outputs[4]
+        module['C'] = outputs[5]
+        module['online'] = online
+        module['latency'] = latency
+
+
+        updated_list.append(module)
+    
+    return(updated_list)
+
 
 def writeDB(alert):
     print("Updating "+alert['location'])
@@ -125,9 +153,6 @@ def writeDB(alert):
         },
         upsert=True
     )
-
-    
-
 
 def getAll():
     """Main function"""
