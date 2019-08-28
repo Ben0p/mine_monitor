@@ -319,20 +319,21 @@ class alert_status(Resource):
             if module_zone:
                 alert_data = DB['alert_data'].find_one(
                     {
-                        'location': module_zone['location']
+                        'location': module_zone['name']
                     }
                 ) 
 
                 for state in states:
-                    if alert_data[state]:
-                        zone_status.append(
-                            {
-                                'zone': zone['name'],
-                                'state': state_match[state]
-                            }
-                        )
-                        break
-                    
+                    if alert_data:
+                        if alert_data[state]:
+                            zone_status.append(
+                                {
+                                    'zone': zone['name'],
+                                    'state': state_match[state]
+                                }
+                            )
+                            break
+                        
 
         return(jsonify(json.loads(dumps(zone_status))))
 
