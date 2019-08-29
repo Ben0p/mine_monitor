@@ -2,7 +2,7 @@
   <div *ngFor="let alert of alerts$" class="col-xxxl-3 col-md-6">
     <div *ngFor="let module of alert.modules">
       <div class="col-12">
-        <ngx-status-card [title]="module.location" [type]="module.status" [on]="module.online" [icon]="'checkmark-circle-2-outline'">
+        <ngx-status-card [title]="module.location" [type]="module.status" [on]="module.online" [icon]="'checkmark-circle-2-outline'" [state]="'All Clear'">
         </ngx-status-card>
       </div>
     </div>
