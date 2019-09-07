@@ -56,6 +56,9 @@ def ping(host):
         except subprocess.CalledProcessError:
             latency = 999
             result = False
+        except IndexError:
+            latency = 999
+            result = False
     else:
         try:
             response = subprocess.check_output(
@@ -96,7 +99,7 @@ def modbus(ip):
     bits = c.read_coils(16, 6)
     # If there is a response
     if bits:
-        # Set output states
+        # Set output states   
         return([bits[0], bits[1], bits[2], bits[3], bits[4], bits[5]])
     else:
         return(['', '', '', '', '', ''])
@@ -104,36 +107,33 @@ def modbus(ip):
 
 def writeDB(alert):
 
-    try:
-        print("Updating "+alert['name'])
-        DB['alert_all'].find_one_and_update(
-            {
-                'name':alert['name']
-            },
-            {
-                '$set': {
-                    'name' : alert['name'],
-                    'location' : alert['location'],
-                    'zone' : alert['zone'],
-                    'ip' : alert['ip'],
-                    'online' : alert['online'],
-                    'type' : alert['type'],
-                    'status' : alert['status'],
-                    'icon' : alert['icon'],
-                    'state' : alert['state'],
-                    'latency' : alert['latency'],
-                    'all_clear' : alert['all_clear'],
-                    'emergency' : alert['emergency'],
-                    'lightning' : alert['lightning'],
-                    'a' :  alert['a'],
-                    'b' :  alert['b'],
-                    'c' : alert['c']
-                }
-            },
-            upsert=True
-        )
-    except KeyError:
-        pass
+    print("Updating "+alert['name'])
+    DB['alert_all'].find_one_and_update(
+        {
+            'name':alert['name']
+        },
+        {
+            '$set': {
+                'name' : alert['name'],
+                'location' : alert['location'],
+                'zone' : alert['zone'],
+                'ip' : alert['ip'],
+                'online' : alert['online'],
+                'type' : alert['type'],
+                'status' : alert['status'],
+                'icon' : alert['icon'],
+                'state' : alert['state'],
+                'latency' : alert['latency'],
+                'all_clear' : alert['all_clear'],
+                'emergency' : alert['emergency'],
+                'lightning' : alert['lightning'],
+                'a' :  alert['a'],
+                'b' :  alert['b'],
+                'c' : alert['c']
+            }
+        },
+        upsert=True
+    )
 
 def getAll():
     """Main function"""
@@ -159,6 +159,12 @@ def getAll():
             module['icon'] = 'close-circle-outline'
             module['state'] = 'Offline'
             module['rest'] = False
+            module['all_clear'] = False
+            module['emergency'] = False
+            module['lightning'] = False
+            module['a'] = False
+            module['b'] = False
+            module['c'] = False
         else:
             outputs = modbus(module['ip'])
             module['rest'] = restAPI(module['ip'])
@@ -182,13 +188,18 @@ def getAll():
                 module['state'] = 'C Alert'
                 module['status'] = 'danger'
                 module['icon'] = 'flash-outline'
+            else:
+                module['status'] = 'primary'
+                module['icon'] = 'close-circle-outline'
+                module['state'] = 'Offline'
+                module['rest'] = False
 
-        module['all_clear'] = outputs[0]
-        module['emergency'] = outputs[1]
-        module['lightning'] = outputs[2]
-        module['a'] = outputs[3]
-        module['b'] = outputs[4]
-        module['c'] = outputs[5]
+            module['all_clear'] = outputs[0]
+            module['emergency'] = outputs[1]
+            module['lightning'] = outputs[2]
+            module['a'] = outputs[3]
+            module['b'] = outputs[4]
+            module['c'] = outputs[5]
 
         writeDB(module)
 

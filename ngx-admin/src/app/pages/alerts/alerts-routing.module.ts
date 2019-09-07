@@ -5,6 +5,7 @@ import { AlertsComponent } from './alerts.component';
 import { OverviewComponent } from './overview/overview.component';
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component';
+import { DisplayComponent } from './display/display.component';
 
 const routes: Routes = [{
   path: '',
@@ -17,6 +18,10 @@ const routes: Routes = [{
     {
       path: 'all',
       component: AllComponent,
+    },
+    {
+      path: 'display',
+      component: DisplayComponent,
     },
     {
       path: 'list',

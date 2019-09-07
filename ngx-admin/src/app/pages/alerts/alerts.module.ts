@@ -18,7 +18,8 @@ import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 
-import { ComponentsModule } from '../../@components/components.module'
+import { ComponentsModule } from '../../@components/components.module';
+import { DisplayComponent } from './display/display.component'
 
 
 
@@ -30,6 +31,7 @@ import { ComponentsModule } from '../../@components/components.module'
     AlertsD3AdvancedPieComponent,
     ListComponent,
     AllComponent,
+    DisplayComponent,
   ],
   imports: [
     AlertsRoutingModule,

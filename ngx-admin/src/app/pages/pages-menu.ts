@@ -20,6 +20,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/alerts/all'
       },
       {
+        title: 'Display',
+        link: '/pages/alerts/display'
+      },
+      {
         title: 'List',
         link: '/pages/alerts/list'
       },

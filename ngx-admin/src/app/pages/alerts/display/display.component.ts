@@ -2,24 +2,23 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertService } from '../../../@core/data/alerts.service'
 
 @Component({
-  selector: 'all',
-  templateUrl: './all.component.html',
-  styleUrls: ['./all.component.scss']
+  selector: 'display',
+  templateUrl: './display.component.html',
+  styleUrls: ['./display.component.scss']
 })
-
-export class AllComponent implements OnInit, OnDestroy {
+export class DisplayComponent implements OnInit, OnDestroy {
   alerts$: Object;
   interval: any;
 
   constructor(
     private alerts: AlertService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 1000);
+    }, 5000);
   }
 
   ngOnDestroy() {
@@ -27,7 +26,7 @@ export class AllComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.alerts.getAlerts().subscribe(
+    this.alerts.getAlertAll().subscribe(
       (data: {}) => {
         this.alerts$ = data;
       }

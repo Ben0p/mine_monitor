@@ -1,18 +1,21 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StatusCardComponent } from './status-card/status-card.component'
 import {
     NbCardModule,
     NbSelectModule,
     NbButtonModule,
     NbIconModule
   } from '@nebular/theme';
+
+import { StatusCardComponent } from './status-card/status-card.component'
+import { AlertSignComponent } from './alert-sign/alert-sign.component'
  
 
 @NgModule({
     declarations: [
-        StatusCardComponent
+        StatusCardComponent,
+        AlertSignComponent,
     ],
     imports: [
         CommonModule,
@@ -22,7 +25,8 @@ import {
         NbIconModule,
     ],
     exports: [
-        StatusCardComponent
+        StatusCardComponent,
+        AlertSignComponent
     ]
 })
 
