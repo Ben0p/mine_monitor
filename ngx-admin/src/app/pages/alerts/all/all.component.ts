@@ -20,7 +20,7 @@ export class AllComponent implements OnInit, OnDestroy {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 60000);
+    }, 1000);
   }
 
   ngOnDestroy() {
@@ -31,11 +31,6 @@ export class AllComponent implements OnInit, OnDestroy {
     this.alerts.getAlerts().subscribe(
       (data: {}) => {
         this.alerts$ = data;
-      }
-    );
-    this.alerts.getAlertZones().subscribe(
-      (data: {}) => {
-        this.zones$ = data;
       }
     );
   }

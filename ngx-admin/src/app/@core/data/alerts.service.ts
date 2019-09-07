@@ -78,6 +78,13 @@ export class AlertService {
     );
   }
 
+  getAlertAll(): Observable<any> {
+    return this.http.get(APIurl + "all").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
   getAlertStatus(): Observable<any> {
     var data = this.http.get(APIurl + "status").pipe(
       map(

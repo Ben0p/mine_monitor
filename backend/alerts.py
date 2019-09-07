@@ -158,8 +158,10 @@ def getAll():
             module['status'] = 'primary'
             module['icon'] = 'close-circle-outline'
             module['state'] = 'Offline'
+            module['rest'] = False
         else:
             outputs = modbus(module['ip'])
+            module['rest'] = restAPI(module['ip'])
             if outputs[0]:
                 module['state'] = 'All Clear'
                 module['status'] = 'success'
@@ -194,4 +196,6 @@ def getAll():
 
 if __name__ == '__main__':
 
-    getAll()
+    while True:
+        getAll()
+        time.sleep(1)

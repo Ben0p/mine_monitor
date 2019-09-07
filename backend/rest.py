@@ -32,7 +32,7 @@ class alert_all(Resource):
     """GET for alert data"""
     def get(self):
         # Get all sign data from the signs collection in mongo
-        alerts = DB['alert_status'].find().sort("location",pymongo.ASCENDING)
+        alerts = DB['alert_all'].find().sort("name",pymongo.ASCENDING)
 
         # Return collection as a massive json 
         return(jsonify(json.loads(dumps(alerts))))
