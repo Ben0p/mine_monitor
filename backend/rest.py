@@ -295,21 +295,15 @@ class alert_types(Resource):
 class alert_status(Resource):
 
     def get(self):
+        # Get zone list
         alert_zones = DB['alert_zones'].find()
 
+        # Zone status list
         zone_status = []
-        states = ['all_clear', 'emergency', 'a', 'b', 'c']
-
-        state_match = {
-            'all_clear': "All Clear",
-            'emergency': "Emergency",
-            'a': "A Alert",
-            'b': "B Alert",
-            'c': "C Alert"
-        }
         
+        # Find first matching module for each zone
         for zone in alert_zones:
-            module_zone = DB['alert_modules'].find_one(
+            module_zone = DB['alert_all'].find_one(
                 {
                     'zone': zone['name']
                 }
@@ -317,22 +311,15 @@ class alert_status(Resource):
 
 
             if module_zone:
-                alert_data = DB['alert_data'].find_one(
+                zone_status.append(
                     {
-                        'location': module_zone['name']
+                        'zone' : module_zone['zone'],
+                        'status' : module_zone['status'],
+                        'icon' : module_zone['icon'],
+                        'state' : module_zone['state'],
+                        'online' : module_zone['online']
                     }
-                ) 
-
-                for state in states:
-                    if alert_data:
-                        if alert_data[state]:
-                            zone_status.append(
-                                {
-                                    'zone': zone['name'],
-                                    'state': state_match[state]
-                                }
-                            )
-                            break
+                )
                         
 
         return(jsonify(json.loads(dumps(zone_status))))

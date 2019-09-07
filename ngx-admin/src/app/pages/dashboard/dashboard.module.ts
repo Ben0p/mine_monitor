@@ -14,6 +14,7 @@ import {
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardComponent } from './dashboard.component';
+import { ComponentsModule } from '../../@components/components.module'
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { DashboardComponent } from './dashboard.component';
     NbListModule,
     NbTabsetModule,
     NbAlertModule,
+    ComponentsModule,
   ],
   declarations: [
     DashboardComponent,

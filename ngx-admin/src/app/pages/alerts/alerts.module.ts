@@ -18,7 +18,7 @@ import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 
-import { StatusCardComponent } from './all/status-card/status-card.component';
+import { ComponentsModule } from '../../@components/components.module'
 
 
 
@@ -30,7 +30,6 @@ import { StatusCardComponent } from './all/status-card/status-card.component';
     AlertsD3AdvancedPieComponent,
     ListComponent,
     AllComponent,
-    StatusCardComponent,
   ],
   imports: [
     AlertsRoutingModule,
@@ -41,7 +40,8 @@ import { StatusCardComponent } from './all/status-card/status-card.component';
     NgxEchartsModule,
     NgxChartsModule,
     Ng2SmartTableModule,
-    NbIconModule
+    NbIconModule,
+    ComponentsModule,
   ]
 })
 export class AlertsModule { }
