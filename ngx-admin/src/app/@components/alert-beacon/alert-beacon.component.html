@@ -1,0 +1,16 @@
+<nb-card>
+  <nb-card-header>
+    {{ name }}
+  </nb-card-header>
+  <nb-card-body>
+    <!-- If a C Alert Beacon-->
+    <table class="calert">
+      <tr>
+        <div class="calert_on" *ngIf="c; else calertOff"></div>
+        <ng-template #calertOff>
+          <div class="calert_off"></div>
+        </ng-template>
+      </tr>
+    </table>
+  </nb-card-body>
+</nb-card>

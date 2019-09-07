@@ -9,13 +9,15 @@ import {
   } from '@nebular/theme';
 
 import { StatusCardComponent } from './status-card/status-card.component'
-import { AlertSignComponent } from './alert-sign/alert-sign.component'
+import { AlertSignComponent } from './alert-sign/alert-sign.component';
+import { AlertBeaconComponent } from './alert-beacon/alert-beacon.component'
  
 
 @NgModule({
     declarations: [
         StatusCardComponent,
         AlertSignComponent,
+        AlertBeaconComponent,
     ],
     imports: [
         CommonModule,
@@ -26,7 +28,8 @@ import { AlertSignComponent } from './alert-sign/alert-sign.component'
     ],
     exports: [
         StatusCardComponent,
-        AlertSignComponent
+        AlertSignComponent,
+        AlertBeaconComponent,
     ]
 })
 

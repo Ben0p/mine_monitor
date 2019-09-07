@@ -1,6 +1,5 @@
 
 $column-right-margin-left: 22px;
-$blinker-shadow: 0px 0px 59px 20px rgba(0,255,9,0.8);
 
 .sign {
   background-image: url("../../../assets/images/sign.PNG");
@@ -40,7 +39,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 13px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 20px rgba(0,255,9,0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -50,7 +49,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: $column-right-margin-left;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 20px rgba(0,255,9,0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -76,7 +75,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 13px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(255, 106, 106, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -86,7 +85,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: $column-right-margin-left;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(255, 106, 106, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -112,7 +111,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 13px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(197, 197, 197, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -122,7 +121,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: $column-right-margin-left;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(197, 197, 197, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -148,7 +147,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 22px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(145, 224, 255, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -166,7 +165,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 10px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(255, 241, 117, 0.8);
   animation: blinker 1s linear infinite;
 }
 
@@ -184,7 +183,7 @@ td {
   width: 20px;
   height: 15px;
   margin-left: 13px;
-  box-shadow: $blinker-shadow;
+  box-shadow: 0px 0px 59px 34px rgba(255, 106, 106, 0.8);
   animation: blinker 1s linear infinite;
 }
 
