@@ -35,22 +35,6 @@ def getModules():
 
     return(list(modules))
 
-def getLocations():
-    '''Returns array of alert locations'''
-
-    locations = DB['alert_locations'].find()
-    location_names = [location for location in locations]
-
-    return(location_names)
-
-def getTypes():
-    '''Returns array of alert types'''
-
-    types = DB['alert_types'].find()
-    types_names = [_type for _type in types]
-
-    return(types_names)
-
 
 def ping(host):
     """Returns True and latency if host responds to a ping request
@@ -117,83 +101,95 @@ def modbus(ip):
     else:
         return(['', '', '', '', '', ''])
 
-def getStatus(modules):
-    updated_list = []
-
-    for module in modules:
-        outputs = modbus(module['ip'])
-        online, latency = ping(module['ip'])
-
-        module['All Clear'] = outputs[0]
-        module['Emergency'] = outputs[1]
-        module['Lightning'] = outputs[2]
-        module['A'] = outputs[3]
-        module['B'] = outputs[4]
-        module['C'] = outputs[5]
-        module['online'] = online
-        module['latency'] = latency
-
-
-        updated_list.append(module)
-    
-    return(updated_list)
-
 
 def writeDB(alert):
-    print("Updating "+alert['location'])
 
-    DB['alert_status'].find_one_and_update(
-        {
-            'location':alert['location']
-        },
-        {
-            '$set': {
-                'modules': alert['modules']
-            }
-        },
-        upsert=True
-    )
+    try:
+        print("Updating "+alert['name'])
+        DB['alert_all'].find_one_and_update(
+            {
+                'name':alert['name']
+            },
+            {
+                '$set': {
+                    'name' : alert['name'],
+                    'location' : alert['location'],
+                    'zone' : alert['zone'],
+                    'ip' : alert['ip'],
+                    'online' : alert['online'],
+                    'type' : alert['type'],
+                    'status' : alert['status'],
+                    'icon' : alert['icon'],
+                    'state' : alert['state'],
+                    'latency' : alert['latency'],
+                    'all_clear' : alert['all_clear'],
+                    'emergency' : alert['emergency'],
+                    'lightning' : alert['lightning'],
+                    'a' :  alert['a'],
+                    'b' :  alert['b'],
+                    'c' : alert['c']
+                }
+            },
+            upsert=True
+        )
+    except KeyError:
+        pass
 
 def getAll():
     """Main function"""
 
-    # Generate array of alerts with location and IP
-    locations = getModules()
-
-    location = {}
-    module_locations = []
+    modules = getModules()
 
     # For each module
-    for modules in locations:
-        modules_list = []
-        for module in modules:
-            online, latency = ping(module['ip'])
-            module['online'] = online
-            if not online:
-                module['status'] = 'primary'
-            else:
-                outputs = modbus(module['ip'])
-                if outputs[0]:
-                    module['status'] = 'success'
-                elif outputs[1]:
-                    module['status'] = 'danger'
-                elif outputs[3]:
-                    module['status'] = 'info'
-                elif outputs[4]:
-                    module['status'] = 'warning'
-                elif outputs[5]:
-                    module['status'] = 'danger'
+    for module in modules:
+        # module['name'] = module['name']
+        # module['type'] = module['type']
+        # module['zone'] = module['zone']
+        # module['location'] = module['location']
+        # module['ip] = module['ip']
 
+        # Remove the mongo id
+        module.pop('_id', None)
+        online, latency = ping(module['ip'])
+        module['online'] = online
+        module['latency'] = latency
 
-                module['latency'] = latency
-                module['online'] = online
+        if not online:
+            module['status'] = 'primary'
+            module['icon'] = 'close-circle-outline'
+            module['state'] = 'Offline'
+        else:
+            outputs = modbus(module['ip'])
+            if outputs[0]:
+                module['state'] = 'All Clear'
+                module['status'] = 'success'
+                module['icon'] = 'checkmark-circle-2-outline'
+            elif outputs[1]:
+                module['state'] = 'Emergency'
+                module['status'] = 'danger'
+                module['icon'] = 'alert-circle-outline'
+            elif outputs[3]:
+                module['state'] = 'A Alert'
+                module['status'] = 'info'
+                module['icon'] = 'flash-outline'
+            elif outputs[4]:
+                module['state'] = 'B Alert'
+                module['status'] = 'warning'
+                module['icon'] = 'flash-outline'
+            elif outputs[5]:
+                module['state'] = 'C Alert'
+                module['status'] = 'danger'
+                module['icon'] = 'flash-outline'
 
-            modules_list.append(module)
-        
+        module['all_clear'] = outputs[0]
+        module['emergency'] = outputs[1]
+        module['lightning'] = outputs[2]
+        module['a'] = outputs[3]
+        module['b'] = outputs[4]
+        module['c'] = outputs[5]
 
-        location['location'] = modules[0]['location']
-        location['modules'] = modules_list
-        module_locations.append(location)
+        writeDB(module)
+
 
 
 if __name__ == '__main__':
