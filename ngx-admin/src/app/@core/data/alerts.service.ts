@@ -101,14 +101,12 @@ export class AlertService {
     );
   }
 
-  deleteAlertModule(uid): Observable<any> {
-    return this.http.get(APIurl + "delete/" + uid).pipe(
+  deleteAlertModule(name): Observable<any> {
+    return this.http.delete(APIurl + "delete/" + name).pipe(
       map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );
   }
-
-
 
   dangerToast(position, status, message, code) {
     var preventDuplicates = true

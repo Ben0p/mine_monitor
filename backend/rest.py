@@ -40,9 +40,7 @@ class alert_all(Resource):
 class alert_display(Resource):
     """GET for alert data"""
     def get(self):
-        lastTrailer = ''
         display_array = []
-        modules = []
         trailers = []
 
         # Get all sign data from the signs collection in mongo
@@ -299,13 +297,22 @@ class alert_modules(Resource):
                 ip = alert['ip']
             except KeyError:
                 ip = ''
+            try:
+                location = alert['location']
+            except KeyError:
+                location = ''
+            try:
+                _type = alert['type']
+            except KeyError:
+                _type = ''
 
             alert_modules_uid.append(
                 {
                     'uid': str(alert['_id']),
-                    'location': alert['location'],
+                    'name': alert['name'],
+                    'location': location,
                     'ip': ip,
-                    'type' : alert['type'],
+                    'type' : _type,
                     'zone': zone
                 }
             )
@@ -417,27 +424,27 @@ class alert_edit(Resource):
             return(404)
 
 
-class delete(Resource):
+class alert_delete(Resource):
     """ DELETE alert document """
 
-    def delete(self, device):
+    def delete(self, name):
 
-        # Split string into type and device
-        _type, _device = device.split('-')
-        if not _device:
-            _device = ""
-            print("Blank device name")
+        if not name:
 
-        try:
-            if _type == 'alert':
-                db['alert_data'].delete_one({"location": _device})
-                db['alert'].delete_one({"location":  _device})
+            return({'success' : False})
 
-            print("Deleted {} - {}".format(_type, _device))
-            return(202)
+        else:
+            modules_del_count = DB['alert_modules'].delete_many({"name" : name})
+            all_del_count = DB['alert_all'].delete_many({"name" : name})
 
-        except:
-            return(418)
+            total_del = modules_del_count.deleted_count + all_del_count.deleted_count
+
+            if total_del > 0:
+                return({'success' : True, 'message' : 'Deleted {} objects.'.format(total_del)})
+            else:
+                return({'success' : False, 'message' : '{} not found.'.format(name)})
+
+
 
 
 class check(Resource):
@@ -459,6 +466,7 @@ API.add_resource(alert_types, "/alerts/types")
 API.add_resource(alert_status, "/alerts/status")
 API.add_resource(alert_edit, "/alerts/edit")
 API.add_resource(alert_detail, "/alerts/<string:name>")
+API.add_resource(alert_delete, "/alerts/delete/<string:name>")
 API.add_resource(check, "/check")
 
 # Run flask

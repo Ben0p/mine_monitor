@@ -45,6 +45,10 @@ export class ListComponent implements OnDestroy, OnInit {
         confirmDelete: true,
       },
       columns: {
+        name: {
+          title: 'Name',
+          type: 'string',
+        },
         location: {
           title: 'Location',
           type: 'string',
@@ -160,19 +164,26 @@ export class ListComponent implements OnDestroy, OnInit {
     var invalidData = false
     if (confirmation) {
       if (this.modifyType == 'delete') {
-        this.alerts.deleteAlertModule(this.tableEvent.data.uid).subscribe(
+        this.alerts.deleteAlertModule(this.tableEvent.data.name).subscribe(
           (data: {}) => {
             this.postResult = data;
+            if (this.postResult['success']) {
+              this.successToast('top-right', 'success', this.postResult['message'])
+              this.tableEvent.confirm.resolve();
+            } else {
+              this.dangerToast('top-right', 'danger', this.postResult['message'])
+              this.tableEvent.confirm.reject();
+            }
           }
         )
-        if (this.postResult) {
-          this.tableEvent.confirm.resolve();
-        } else {
-          this.tableEvent.confirm.reject();
-        }
       } else if (this.modifyType == 'edit') {
         if (this.ipPattern.test(this.tableEvent.newData.ip) == false) {
           this.dangerToast('top-right', 'danger', 'IP Address')
+          invalidData = true
+        }
+
+        if (this.tableEvent.newData.name === "") {
+          this.dangerToast('top-right', 'danger', 'Name')
           invalidData = true
         }
 
@@ -192,7 +203,7 @@ export class ListComponent implements OnDestroy, OnInit {
         }
         
         if (invalidData == false){
-          this.successToast('top-right', 'success')
+          this.successToast('top-right', 'success', 'Modify Success')
           this.tableEvent.confirm.resolve();
         }
 
@@ -202,6 +213,11 @@ export class ListComponent implements OnDestroy, OnInit {
           invalidData = true
         }
 
+        if (this.tableEvent.newData.name === "") {
+          this.dangerToast('top-right', 'danger', 'Name')
+          invalidData = true
+        }
+
         if (this.tableEvent.newData.location === "") {
           this.dangerToast('top-right', 'danger', 'Location')
           invalidData = true
@@ -218,7 +234,7 @@ export class ListComponent implements OnDestroy, OnInit {
         }
         
         if (invalidData == false){
-          this.successToast('top-right', 'success')
+          this.successToast('top-right', 'success', 'Modify Success')
           this.tableEvent.confirm.resolve();
         }
 
@@ -228,20 +244,20 @@ export class ListComponent implements OnDestroy, OnInit {
     }
   }
 
-  successToast(position, status) {
+  successToast(position, status, message) {
     if (this.modifyType == 'delete') {
       this.toastrService.show(
-        "Deleted " + this.tableEvent.data.location,
+        message,
         `Success`,
         { position, status });
     } else if (this.modifyType == 'edit') {
       this.toastrService.show(
-        "Updated " + this.tableEvent.data.location,
+        "Updated " + this.tableEvent.data.name,
         `Success`,
         { position, status });
     } else if (this.modifyType == 'create') {
       this.toastrService.show(
-        "Created  " + this.tableEvent.newData.location,
+        "Created  " + this.tableEvent.newData.name,
         `Success`,
         { position, status });
     }
@@ -249,7 +265,7 @@ export class ListComponent implements OnDestroy, OnInit {
 
   dangerToast(position, status, message) {
     this.toastrService.show(
-      message + ' not valid.',
+      message,
       `Error`,
       { position, status });
   }
