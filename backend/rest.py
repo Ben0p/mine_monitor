@@ -386,16 +386,15 @@ class alert_status(Resource):
 
         return(jsonify(json.loads(dumps(zone_status))))
 
-
-class alert_edit(Resource):
-    """POST to add edit alerts"""
+class alert_create(Resource):
 
     def post(self):
-
+    
         # Initilize request parser
         parser = reqparse.RequestParser()
 
         # Parse arguments from form data
+        parser.add_argument("name")
         parser.add_argument("location")
         parser.add_argument("ip")
         parser.add_argument("type")
@@ -403,25 +402,66 @@ class alert_edit(Resource):
 
         args = parser.parse_args()
 
+        data = {
+            "name" : args['name'],
+            "location": args['location'],
+            "ip": args['ip'],
+            "type": args['type'],
+            "zone": args['zone'],
+        }
+
         try:
-            DB['alert'].find_one_and_update(
+            DB['alert_modules'].insert_one(data)
+
+            return({'success' : True, 'message' : 'Created {}'.format(args['name'])})
+
+        except:
+            return({'success' : False, 'message' : 'Failed to create'})
+
+
+
+
+class alert_update(Resource):
+    """POST to update an alert module"""
+
+    def post(self):
+
+
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+        parser.add_argument("location")
+        parser.add_argument("ip")
+        parser.add_argument("type")
+        parser.add_argument("zone")
+        parser.add_argument("uid")
+
+        args = parser.parse_args()
+
+        try:
+            DB['alert_modules'].find_one_and_update(
                 {
-                    "ip": args['ip'],
+                    "_id": ObjectId(args['uid']),
                 },
                 { "$set":
                     {
+                        "name" : args['name'],
                         "location": args['location'],
                         "ip": args['ip'],
-                        "type": args['alert_type'],
+                        "type": args['type'],
                         "zone": args['zone'],
                     }
                 }
             )
 
-            return(201)
+            return({'success' : True, 'message' : 'Updated {}'.format(args['name'])})
 
         except:
-            return(404)
+            return({'success' : False, 'message' : 'Failed to update'})
+
+
 
 
 class alert_delete(Resource):
@@ -464,9 +504,10 @@ API.add_resource(alert_overview, "/alerts/overview")
 API.add_resource(alert_zones, "/alerts/zones")
 API.add_resource(alert_types, "/alerts/types")
 API.add_resource(alert_status, "/alerts/status")
-API.add_resource(alert_edit, "/alerts/edit")
-API.add_resource(alert_detail, "/alerts/<string:name>")
+API.add_resource(alert_create, "/alerts/create")
+API.add_resource(alert_update, "/alerts/update")
 API.add_resource(alert_delete, "/alerts/delete/<string:name>")
+API.add_resource(alert_detail, "/alerts/<string:name>")
 API.add_resource(check, "/check")
 
 # Run flask

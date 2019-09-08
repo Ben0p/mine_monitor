@@ -35,6 +35,13 @@ def getModules():
 
     return(list(modules))
 
+def getAlerts():
+    '''Returns array of alert modules'''
+
+    alerts = DB['alert_all'].find()
+
+    return(list(alerts))
+
 
 def ping(host):
     """Returns True and latency if host responds to a ping request
@@ -104,6 +111,22 @@ def modbus(ip):
     else:
         return(['', '', '', '', '', ''])
 
+def cleanUp(module):
+    alerts = getAlerts()
+
+    for alert in alerts:
+        count = DB['alert_modules'].count_documents(
+            {
+                'name' : alert['name']
+            }
+        )
+
+        if count < 1:
+            DB['alert_all'].delete_many(
+                {'name' : alert['name']}
+            )
+            print("Deleted {}".format(alert['name']))
+
 
 def writeDB(alert):
 
@@ -139,6 +162,8 @@ def getAll():
     """Main function"""
 
     modules = getModules()
+    cleanUp(modules)
+
 
     # For each module
     for module in modules:
@@ -150,7 +175,10 @@ def getAll():
 
         # Remove the mongo id
         module.pop('_id', None)
-        online, latency = ping(module['ip'])
+        if module['ip']:
+            online, latency = ping(module['ip'])
+        else:
+            online = False
         module['online'] = online
         module['latency'] = latency
 

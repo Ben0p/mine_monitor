@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from '../../../@core/data/alerts.service'
 import { NbDialogService, NbToastrService } from '@nebular/theme';
+import { getLocaleDateFormat } from '@angular/common';
 
 @Component({
   selector: 'ngx-list',
@@ -115,35 +116,37 @@ export class ListComponent implements OnDestroy, OnInit {
     private formBuilder: FormBuilder
   ) {
 
-    this.alerts.getAlertModules().subscribe(
-      (
-        data: {}) => {
-        this.source = data;
-      }
-    )
-
-    this.alerts.getAlertZones().subscribe(
-      (
-        data: {}) => {
-        this.alertZones = data;
-        this.settings = this.loadTableSettings();
-      }
-    )
-
-    this.alerts.getAlertTypes().subscribe(
-      (
-        data: {}) => {
-        this.alertTypes = data;
-        this.settings = this.loadTableSettings();
-      }
-    )
   }
 
+    refreshData(){
+      this.alerts.getAlertModules().subscribe(
+        (
+          data: {}) => {
+          this.source = data;
+        }
+      )
+  
+      this.alerts.getAlertZones().subscribe(
+        (
+          data: {}) => {
+          this.alertZones = data;
+          this.settings = this.loadTableSettings();
+        }
+      )
+  
+      this.alerts.getAlertTypes().subscribe(
+        (
+          data: {}) => {
+          this.alertTypes = data;
+          this.settings = this.loadTableSettings();
+        }
+      )
+    }
 
   ngOnDestroy(): void { }
 
   ngOnInit() {
-
+    this.refreshData()
   }
 
 
@@ -151,9 +154,9 @@ export class ListComponent implements OnDestroy, OnInit {
     this.tableEvent = event;
     this.modifyType = crud;
     if (crud == 'create') {
-      this.dialogMessage = 'Are you sure you want to ' + crud + ' ' + this.tableEvent.newData.location + '?'
+      this.dialogMessage = 'Are you sure you want to ' + crud + ' ' + this.tableEvent.newData.name + '?'
     } else {
-      this.dialogMessage = 'Are you sure you want to ' + crud + ' ' + this.tableEvent.data.location + '?'
+      this.dialogMessage = 'Are you sure you want to ' + crud + ' ' + this.tableEvent.data.name + '?'
     }
     this.dialogService.open(dialog, {
       context: this.dialogMessage
@@ -170,72 +173,96 @@ export class ListComponent implements OnDestroy, OnInit {
             if (this.postResult['success']) {
               this.successToast('top-right', 'success', this.postResult['message'])
               this.tableEvent.confirm.resolve();
+              this.refreshData()
             } else {
               this.dangerToast('top-right', 'danger', this.postResult['message'])
               this.tableEvent.confirm.reject();
+
             }
           }
         )
       } else if (this.modifyType == 'edit') {
         if (this.ipPattern.test(this.tableEvent.newData.ip) == false) {
-          this.dangerToast('top-right', 'danger', 'IP Address')
+          this.dangerToast('top-right', 'danger', 'IP Address invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.name === "") {
-          this.dangerToast('top-right', 'danger', 'Name')
+          this.dangerToast('top-right', 'danger', 'Name invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.location === "") {
-          this.dangerToast('top-right', 'danger', 'Location')
+          this.dangerToast('top-right', 'danger', 'Location invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.type === "") {
-          this.dangerToast('top-right', 'danger', 'Type')
+          this.dangerToast('top-right', 'danger', 'Type invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.zone === "") {
-          this.dangerToast('top-right', 'danger', 'Zone')
+          this.dangerToast('top-right', 'danger', 'Zone invalid.')
           invalidData = true
         }
         
         if (invalidData == false){
-          this.successToast('top-right', 'success', 'Modify Success')
-          this.tableEvent.confirm.resolve();
+          this.alerts.updateAlertModule(this.tableEvent.newData).subscribe(
+            (data: {}) => {
+              this.postResult = data;
+              if (this.postResult['success']) {
+                this.successToast('top-right', 'success', this.postResult['message'])
+                this.tableEvent.confirm.resolve();
+                this.refreshData()
+              } else {
+                this.dangerToast('top-right', 'danger', this.postResult['message'])
+                this.tableEvent.confirm.reject();
+              }
+            }
+          )
         }
 
       } else if (this.modifyType == 'create') {
         if (this.ipPattern.test(this.tableEvent.newData.ip) == false) {
-          this.dangerToast('top-right', 'danger', 'IP Address')
+          this.dangerToast('top-right', 'danger', 'IP Address invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.name === "") {
-          this.dangerToast('top-right', 'danger', 'Name')
+          this.dangerToast('top-right', 'danger', 'Name invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.location === "") {
-          this.dangerToast('top-right', 'danger', 'Location')
+          this.dangerToast('top-right', 'danger', 'Location invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.type === "") {
-          this.dangerToast('top-right', 'danger', 'Type')
+          this.dangerToast('top-right', 'danger', 'Type invalid.')
           invalidData = true
         }
 
         if (this.tableEvent.newData.zone === "") {
-          this.dangerToast('top-right', 'danger', 'Zone')
+          this.dangerToast('top-right', 'danger', 'Zone invalid.')
           invalidData = true
         }
         
         if (invalidData == false){
-          this.successToast('top-right', 'success', 'Modify Success')
-          this.tableEvent.confirm.resolve();
+          this.alerts.createAlertModule(this.tableEvent.newData).subscribe(
+            (data: {}) => {
+              this.postResult = data;
+              if (this.postResult['success']) {
+                this.successToast('top-right', 'success', this.postResult['message'])
+                this.tableEvent.confirm.resolve();
+                this.refreshData()
+              } else {
+                this.dangerToast('top-right', 'danger', this.postResult['message'])
+                this.tableEvent.confirm.reject();
+              }
+            }
+          )
         }
 
       }
@@ -252,7 +279,7 @@ export class ListComponent implements OnDestroy, OnInit {
         { position, status });
     } else if (this.modifyType == 'edit') {
       this.toastrService.show(
-        "Updated " + this.tableEvent.data.name,
+        message,
         `Success`,
         { position, status });
     } else if (this.modifyType == 'create') {

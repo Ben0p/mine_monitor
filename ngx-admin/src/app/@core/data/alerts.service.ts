@@ -108,6 +108,24 @@ export class AlertService {
     );
   }
 
+  updateAlertModule(module): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "update", JSON.stringify(module), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
+  createAlertModule(module): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "create", JSON.stringify(module), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
   dangerToast(position, status, message, code) {
     var preventDuplicates = true
     var duration = 0
