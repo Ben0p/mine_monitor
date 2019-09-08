@@ -18,6 +18,8 @@ const APIurl: String = 'http://localhost:5000/alerts/';
 })
 export class AlertService {
 
+  delay: any;
+
   constructor(
     private http: HttpClient,
     private toastrService: NbToastrService,
@@ -33,7 +35,7 @@ export class AlertService {
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      this.dangerToast('top-right', 'danger', error.statusText, error.status)
+      this.dangerToast('top-right', 'danger', error.statusText, error.status);
       return of(result as T);
     };
   }
@@ -93,38 +95,22 @@ export class AlertService {
   }
 
   getAlertStatus(): Observable<any> {
-    var data = this.http.get(APIurl + "status").pipe(
-      map(
-        this.extractData,
-      ),
-      catchError(
-        this.handleError<any>("failed")
-      )
-    );
-    data.subscribe(
-      val => {
-        if (this.tempToast && val){
-          this.tempToast.close()
-        }
-      }
-    )
-    return(data)
-  }
-
-  deleteAlertModules(module): Observable<any> {
-    return this.http.get(APIurl + "delete/" + module).pipe(
-      map(
-        this.extractData,
-        (response: Response) => {
-          this.successToast('top-right', 'success', response.statusText, response.status)
-        }
-      ),
+    return this.http.get(APIurl + "status").pipe(
+      map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );
   }
 
-  
- dangerToast(position, status, message, code) {
+  deleteAlertModule(uid): Observable<any> {
+    return this.http.get(APIurl + "delete/" + uid).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+
+
+  dangerToast(position, status, message, code) {
     var preventDuplicates = true
     var duration = 0
 
@@ -132,12 +118,18 @@ export class AlertService {
       'API call error - ' + code + ': ' + message,
       `Failed`,
       { position, status, preventDuplicates, duration });
-    
-    if (this.toastRef){
+
+    if (this.toastRef) {
       this.tempToast = this.toastRef
     }
-  }
 
+    if (this.delay){
+      clearTimeout(this.delay)
+    }
+    this.delay = setTimeout(() => {
+      this.clearToast(this.tempToast);
+    }, 5500);
+  }
 
   successToast(position, status, message, code) {
     var preventDuplicates = true
@@ -145,6 +137,12 @@ export class AlertService {
       'API call error - ' + code + ': ' + message,
       `Failed`,
       { position, status, preventDuplicates });
+  }
+
+  clearToast(toast) {
+    if (toast) {
+      toast.close()
+    }
   }
 
 

@@ -160,7 +160,7 @@ export class ListComponent implements OnDestroy, OnInit {
     var invalidData = false
     if (confirmation) {
       if (this.modifyType == 'delete') {
-        this.alerts.deleteAlertModules(this.tableEvent.data.uid).subscribe(
+        this.alerts.deleteAlertModule(this.tableEvent.data.uid).subscribe(
           (data: {}) => {
             this.postResult = data;
           }
