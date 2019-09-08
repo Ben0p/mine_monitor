@@ -10,7 +10,8 @@ import {
 
 import { StatusCardComponent } from './status-card/status-card.component'
 import { AlertSignComponent } from './alert-sign/alert-sign.component';
-import { AlertBeaconComponent } from './alert-beacon/alert-beacon.component'
+import { AlertBeaconComponent } from './alert-beacon/alert-beacon.component';
+import { AlertTrailerComponent } from './alert-trailer/alert-trailer.component'
  
 
 @NgModule({
@@ -18,6 +19,7 @@ import { AlertBeaconComponent } from './alert-beacon/alert-beacon.component'
         StatusCardComponent,
         AlertSignComponent,
         AlertBeaconComponent,
+        AlertTrailerComponent,
     ],
     imports: [
         CommonModule,
@@ -30,6 +32,7 @@ import { AlertBeaconComponent } from './alert-beacon/alert-beacon.component'
         StatusCardComponent,
         AlertSignComponent,
         AlertBeaconComponent,
+        AlertTrailerComponent
     ]
 })
 

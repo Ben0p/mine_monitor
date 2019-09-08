@@ -37,6 +37,61 @@ class alert_all(Resource):
         # Return collection as a massive json 
         return(jsonify(json.loads(dumps(alerts))))
 
+class alert_display(Resource):
+    """GET for alert data"""
+    def get(self):
+        lastTrailer = ''
+        display_array = []
+        modules = []
+        trailers = []
+
+        # Get all sign data from the signs collection in mongo
+        alerts = DB['alert_all'].find().sort("name",pymongo.ASCENDING)
+
+        # For each alert object
+        for alert in alerts:
+            # If the alert type is a trailer
+            if alert['type'] == 'Trailer':
+                # Less than 2 because if it was 3 it would be the next trailer
+                if len(trailers) < 2:
+                    trailers.append(alert)
+                else:
+                    trailers.append(alert)
+                    combined_trailer = {
+                        'type' : 'Trailer',
+                        'location' : trailers[0]['location'],
+                        'online' : trailers[0]['online'],
+                        'modules' : [
+                            {
+                                'zone' : trailers[0]['zone'],
+                                'b' : trailers[0]['b'],
+                                'c' : trailers[0]['c'],
+                            },
+                            {
+                                'zone' : trailers[1]['zone'],
+                                'b' : trailers[1]['b'],
+                                'c' : trailers[1]['c'],
+                            },
+                            {
+                                'zone' : trailers[2]['zone'],
+                                'b' : trailers[2]['b'],
+                                'c' : trailers[2]['c'],
+                            }
+                        ]
+                    }
+                    display_array.append(combined_trailer)
+                    trailers = []
+                    combined_trailer = {}
+
+            # If the alert is not a trailer
+            else:
+                display_array.append(alert)
+
+            
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(display_array))))
+
 
 class alert_detail(Resource):
     """GET for detailed alert data (output states)"""
@@ -396,6 +451,7 @@ class check(Resource):
 
 # Map URL's to resource classes
 API.add_resource(alert_all, "/alerts/all")
+API.add_resource(alert_display, "/alerts/display")
 API.add_resource(alert_modules, "/alerts/modules")
 API.add_resource(alert_overview, "/alerts/overview")
 API.add_resource(alert_zones, "/alerts/zones")

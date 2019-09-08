@@ -7,7 +7,7 @@ import { AlertService } from '../../../@core/data/alerts.service'
   styleUrls: ['./display.component.scss']
 })
 export class DisplayComponent implements OnInit, OnDestroy {
-  alerts$: Object;
+  alerts$: [];
   interval: any;
 
   constructor(
@@ -26,8 +26,8 @@ export class DisplayComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.alerts.getAlertAll().subscribe(
-      (data: {}) => {
+    this.alerts.getAlertDisplay().subscribe(
+      (data: []) => {
         this.alerts$ = data;
       }
     );

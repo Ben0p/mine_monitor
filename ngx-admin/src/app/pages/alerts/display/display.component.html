@@ -17,5 +17,15 @@
         [name]="alert.name"
         [c]="alert.c"
       ></ngx-alert-beacon>
+      <ngx-alert-trailer
+        *ngIf="alert.type == 'Trailer'"
+        [name]="alert.location"
+        [online]="alert.online"
+        [modules]="alert.modules"
+        >
+        <div *ngFor="let module of alert.modules">
+          {{module.zone}}
+        </div>
+      </ngx-alert-trailer>
   </div>
 </div>

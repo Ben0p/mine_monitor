@@ -27,7 +27,7 @@ export class AllComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.alerts.getAlerts().subscribe(
+    this.alerts.getAlertAll().subscribe(
       (data: {}) => {
         this.alerts$ = data;
       }

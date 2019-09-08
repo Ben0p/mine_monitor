@@ -1,0 +1,39 @@
+<nb-card>
+  <nb-card-header>
+    {{ name }}
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngFor="let module of modules" class="trailer_container">
+      <b>{{module.zone}}</b>
+      <table class="trailer">
+        <tr class="bc_row">
+          <!-- If B is ON -->
+          <td *ngIf="module.b; else TrailerBOff">
+            <div class="trailer_B_on"></div>
+          </td>
+
+          <!-- If B is OFF -->
+          <ng-template #TrailerBOff>
+            <td>
+              <div class="trailer_B_off"></div>
+            </td>
+          </ng-template>
+
+          <!-- If C is ON -->
+          <td *ngIf="module.c ; else TrailerCOff">
+            <div class="trailer_C_on"></div>
+          </td>
+
+          <!-- If C is OFF -->
+          <ng-template #TrailerCOff>
+            <td>
+              <div class="trailer_C_off"></div>
+            </td>
+          </ng-template>
+
+        </tr>
+      </table>
+      <br>
+    </div>
+  </nb-card-body>
+</nb-card>
