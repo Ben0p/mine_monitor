@@ -27,3 +27,18 @@
     margin-left: 52px;
     margin-top: 130px;
 }
+
+.offline_container {
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+.offline {
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+  }

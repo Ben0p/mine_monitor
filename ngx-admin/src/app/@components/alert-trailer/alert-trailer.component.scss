@@ -64,3 +64,19 @@ $common-height: 84px;
     margin-left: $blinker_margin-left;
     margin-top: $blinker_margin-top;
 }
+
+.offline_container {
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+
+.offline {
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+  }

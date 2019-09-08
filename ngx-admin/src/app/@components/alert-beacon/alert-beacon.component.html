@@ -4,13 +4,20 @@
   </nb-card-header>
   <nb-card-body>
     <!-- If a C Alert Beacon-->
-    <table class="calert">
-      <tr>
-        <div class="calert_on" *ngIf="c; else calertOff"></div>
-        <ng-template #calertOff>
-          <div class="calert_off"></div>
-        </ng-template>
-      </tr>
-    </table>
+    <div *ngIf="online; else offline">
+      <table class="calert">
+        <tr>
+          <div class="calert_on" *ngIf="c; else calertOff"></div>
+          <ng-template #calertOff>
+            <div class="calert_off"></div>
+          </ng-template>
+        </tr>
+      </table>
+    </div>
+    <ng-template #offline>
+      <div class="offline_container">
+        <img class="offline" src="../../../assets/images/thor.gif" />
+      </div>
+    </ng-template>
   </nb-card-body>
 </nb-card>
