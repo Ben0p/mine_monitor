@@ -8,6 +8,7 @@ import {
 import { ThemeModule } from '../../@theme/theme.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { RouterModule } from '@angular/router';
 
 import { AlertsRoutingModule, routedComponents } from './alerts-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -19,7 +20,8 @@ import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 
 import { ComponentsModule } from '../../@components/components.module';
-import { DisplayComponent } from './display/display.component'
+import { DisplayComponent } from './display/display.component';
+import { DetailComponent } from './detail/detail.component'
 
 
 
@@ -32,6 +34,7 @@ import { DisplayComponent } from './display/display.component'
     ListComponent,
     AllComponent,
     DisplayComponent,
+    DetailComponent,
   ],
   imports: [
     AlertsRoutingModule,
@@ -44,6 +47,7 @@ import { DisplayComponent } from './display/display.component'
     Ng2SmartTableModule,
     NbIconModule,
     ComponentsModule,
+    RouterModule
   ]
 })
 export class AlertsModule { }

@@ -85,11 +85,11 @@ def restAPI(ip):
     """Checks for active Rest API on supplied ip"""
 
     # xml url
-    do_xml = 'http://{ip}/digitaloutput/all/value'
+    do_xml = 'http://{}/digitaloutput/all/value'.format(ip)
     # Use requests to authenticate http session and get xml
     with requests.Session() as session:
         try:
-            response = session.get(do_xml, auth=(env.module_user, env.module_pass), timeout=1)
+            response = session.get(do_xml, auth=(env['module_user'], env['module_pass']), timeout=1)
             # Placeholder for xml response data (potential future use)
             ElementTree.fromstring(response.content)
             return(True)
@@ -142,6 +142,7 @@ def writeDB(alert):
                 'zone' : alert['zone'],
                 'ip' : alert['ip'],
                 'online' : alert['online'],
+                'rest' : alert['rest'],
                 'type' : alert['type'],
                 'status' : alert['status'],
                 'icon' : alert['icon'],

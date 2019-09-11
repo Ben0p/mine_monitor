@@ -1,0 +1,29 @@
+<div class="center">
+  <ngx-alert-sign
+    *ngIf="alert.type == 'Sign'"
+    [online]="alert.online"
+    [name]="alert.name"
+    [all_clear]="alert.all_clear"
+    [emergency]="alert.emergency"
+    [lightning]="alert.lightning"
+    [a]="alert.a"
+    [b]="alert.b"
+    [c]="alert.c"
+  ></ngx-alert-sign>
+  <ngx-alert-beacon
+    *ngIf="alert.type == 'Beacon'"
+    [online]="alert.online"
+    [name]="alert.name"
+    [c]="alert.c"
+  ></ngx-alert-beacon>
+  <ngx-alert-trailer
+    *ngIf="alert.type == 'Trailer'"
+    [name]="alert.location"
+    [online]="alert.online"
+    [modules]="alert.modules"
+    >
+    <div *ngFor="let module of alert.modules">
+      {{module.zone}}
+    </div>
+  </ngx-alert-trailer>
+</div>

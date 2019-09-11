@@ -101,6 +101,13 @@ export class AlertService {
     );
   }
 
+  getAlertDetail(uid): Observable<any> {
+    return this.http.get(APIurl + uid).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
   deleteAlertModule(name): Observable<any> {
     return this.http.delete(APIurl + "delete/" + name).pipe(
       map(this.extractData),

@@ -61,16 +61,19 @@ class alert_display(Resource):
                         'online' : trailers[0]['online'],
                         'modules' : [
                             {
+                                "_id": trailers[0]['_id'],
                                 'zone' : trailers[0]['zone'],
                                 'b' : trailers[0]['b'],
                                 'c' : trailers[0]['c'],
                             },
                             {
+                                "_id": trailers[1]['_id'],
                                 'zone' : trailers[1]['zone'],
                                 'b' : trailers[1]['b'],
                                 'c' : trailers[1]['c'],
                             },
                             {
+                                "_id": trailers[2 ]['_id'],
                                 'zone' : trailers[2]['zone'],
                                 'b' : trailers[2]['b'],
                                 'c' : trailers[2]['c'],
@@ -94,43 +97,57 @@ class alert_display(Resource):
 class alert_detail(Resource):
     """GET for detailed alert data (output states)"""
 
-    def get(self, name):
+    def get(self, uid):
 
         # Get alert details from database by ip
-        alert_document = DB['alert_data'].find_one({'location': name})
-        if alert_document == None:
-            return(404)
+        try:
+            alert_document = DB['alert_all'].find_one({'_id': ObjectId(uid)})
+            if alert_document == None:
+                return({'found' : False})
+            alert_document['found'] = True
+        except:
+            return({'found' : False})
 
         # Check if the name is a trailer
-        if name[:2] == 'TR':
-            west_ip = alert_document['areas'][0]['ip']
-            central_ip = alert_document['areas'][1]['ip']
-            east_ip = alert_document['areas'][2]['ip']
+        if alert_document['type'] == 'Trailer':
+            ips = []
+            modules = []
+            trailer_modules = DB['alert_all'].find({'location': alert_document['location']})
 
-            # Create list of ips
-            ips = [west_ip, central_ip, east_ip]
+            for module in trailer_modules:
+                ips.append(module['ip'])
 
             
-            for index, ip in enumerate(ips):
+            for ip in ips:
                 # Get outputs via modbus on GET request
                 c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
 
                 try:
                     bits = c.read_coils(16, 6)
-                    alert_document['areas'][index]["all_clear"] = bits[0]
-                    alert_document['areas'][index]["emergency"] = bits[1]
-                    alert_document['areas'][index]["lightning"] = bits[2]
-                    alert_document['areas'][index]["a"] = bits[3]
-                    alert_document['areas'][index]["b"] = bits[4]
-                    alert_document['areas'][index]["c"] = bits[5]
+                    new_module = {
+                        'zone' : module['zone'],
+                        'online' : module['online'],
+                        'rest' : module['rest'],
+                        'ip' : module['ip'],
+                        'latency' : module['latency'],
+                        'b': module['b'],
+                        'c' : module['c']
+                    }
                 
                 except: 
-                    alert_document['areas'][index]["all_clear"] = False
-                    alert_document['areas'][index]["emergency"] = False
-                    alert_document['areas'][index]["lightning"] = False
-                    alert_document['areas'][index]["a"] = False
-                    alert_document['areas'][index]["b"] = False
-                    alert_document['areas'][index]["c"] = False
+                    modules = {
+                        'zone' : module['zone'],
+                        'online' : False,
+                        'ip' : module['ip'],
+                        'rest' : False,
+                        'latency' : 999,
+                        'b': False,
+                        'c' : False
+                    }
+                
+                modules.append(new_module)
+            
+            alert_document['modules'] = modules
 
             # Return a json response
             return(jsonify(json.loads(dumps(alert_document))))
@@ -507,7 +524,7 @@ API.add_resource(alert_status, "/alerts/status")
 API.add_resource(alert_create, "/alerts/create")
 API.add_resource(alert_update, "/alerts/update")
 API.add_resource(alert_delete, "/alerts/delete/<string:name>")
-API.add_resource(alert_detail, "/alerts/<string:name>")
+API.add_resource(alert_detail, "/alerts/<string:uid>")
 API.add_resource(check, "/check")
 
 # Run flask

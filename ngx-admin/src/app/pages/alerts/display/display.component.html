@@ -1,5 +1,5 @@
 <div class='row'>
-  <div *ngFor="let alert of alerts$" class="col-xxxl-2 col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6">
+  <div *ngFor="let alert of alerts$" class="col-xxxl-2 col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6" >
     <ngx-alert-sign
       *ngIf="alert.type == 'Sign'"
       [online]="alert.online"
@@ -10,18 +10,21 @@
       [a]="alert.a"
       [b]="alert.b"
       [c]="alert.c"
+      routerLink="/pages/alerts/{{alert._id.$oid}}"
       ></ngx-alert-sign>
       <ngx-alert-beacon
         *ngIf="alert.type == 'Beacon'"
         [online]="alert.online"
         [name]="alert.name"
         [c]="alert.c"
+        routerLink="/pages/alerts/{{alert._id.$oid}}"
       ></ngx-alert-beacon>
       <ngx-alert-trailer
         *ngIf="alert.type == 'Trailer'"
         [name]="alert.location"
         [online]="alert.online"
         [modules]="alert.modules"
+        routerLink="/pages/alerts/{{alert.modules[0]._id.$oid}}"
         >
         <div *ngFor="let module of alert.modules">
           {{module.zone}}
