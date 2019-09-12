@@ -1,0 +1,55 @@
+<!-- Sign Controls-->
+<nb-card>
+  <nb-card-header>
+    Controls
+  </nb-card-header>
+  <nb-card-body>
+    <div class="controls" *ngIf="type == 'Sign'">
+      <div>
+        <button nbButton [status]="'success'" *ngIf="all_clear" hero>All Clear</button>
+        <button nbButton [status]="'success'" *ngIf="!all_clear" outline>All Clear</button>
+        <br>
+        <br>
+        <button nbButton [status]="'danger'" *ngIf="emergency" hero>Emergency</button>
+        <button nbButton [status]="'danger'" *ngIf="!emergency" outline>Emergency</button>
+
+        <br>
+        <br>
+        <button nbButton [status]="'info'" *ngIf="lightning" hero>Lightning</button>
+        <button nbButton [status]="'info'" *ngIf="!lightning" outline>Lightning</button>
+
+        <br>
+        <br>
+        <button nbButton [status]="'primary'" *ngIf="a" hero>A</button>
+        <button nbButton [status]="'primary'" *ngIf="!a" outline>A</button>
+        &nbsp;&nbsp;
+
+        <button nbButton [status]="'warning'" *ngIf="b" hero>B</button>
+        <button nbButton [status]="'warning'" *ngIf="!b" outline>B</button>
+        &nbsp;&nbsp;
+
+        <button nbButton [status]="'danger'" *ngIf="c" hero>C</button>
+        <button nbButton [status]="'danger'" *ngIf="!c" outline>C</button>
+      </div>
+    </div>
+
+    <!-- Beacon Controls-->
+    <div class="controls" *ngIf="type == 'Beacon'">
+      <br>
+      <button nbButton [status]="'danger'" *ngIf="c" hero>C</button>
+      <button nbButton [status]="'danger'" *ngIf="!c" outline>C</button>
+    </div>
+
+
+    <!-- Trailer Controls-->
+    <div class="controls" *ngIf="type == 'Trailer'">
+      <br>
+      <button nbButton [status]="'warning'" *ngIf="b" hero>B</button>
+      <button nbButton [status]="'warning'" *ngIf="!b" outline>B</button>
+      &nbsp;&nbsp;
+
+      <button nbButton [status]="'danger'" *ngIf="c" hero>C</button>
+      <button nbButton [status]="'danger'" *ngIf="!c" outline>C</button>
+    </div>
+  </nb-card-body>
+</nb-card>

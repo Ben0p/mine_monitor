@@ -7,9 +7,13 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.scss']
 })
+
 export class DetailComponent implements OnInit, OnDestroy {
   alert: {};
   interval: any;
+  uid: any;
+  dataAvailable: boolean = false;
+  authenticated: boolean = true;
 
   constructor(
     private alerts: AlertService,
@@ -17,6 +21,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    this.uid = this.route.snapshot.paramMap.get('uid');
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
@@ -27,12 +32,12 @@ export class DetailComponent implements OnInit, OnDestroy {
     clearInterval(this.interval);
   }
 
-  uid = this.route.snapshot.paramMap.get('uid');
-
+  
   refreshData() {
     this.alerts.getAlertDetail(this.uid).subscribe(
       (data: {}) => {
         this.alert = data;
+        this.dataAvailable = true;
       }
     );
   }
