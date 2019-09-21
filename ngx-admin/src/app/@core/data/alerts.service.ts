@@ -108,6 +108,15 @@ export class AlertService {
     );
   }
 
+  postAlertDetail(uid, payload): Observable<any> {
+    return this.http
+      .post<any>(APIurl + uid, JSON.stringify(payload), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
   deleteAlertModule(name): Observable<any> {
     return this.http.delete(APIurl + "delete/" + name).pipe(
       map(this.extractData),

@@ -176,110 +176,27 @@ class alert_detail(Resource):
             return(jsonify(json.loads(dumps(alert_document))))
 
 
-    def post(self, name):
+    def post(self, uid):
         """ POST to control module coil output states """
-
-        # Blank output array
-        outputs = []
-        trailer_outputs = []
 
         # Parse the form data
         parser = reqparse.RequestParser()
-        parser.add_argument("all_clear")
-        parser.add_argument("emergency")
-        parser.add_argument("lightning")
-        parser.add_argument("a")
-        parser.add_argument("b")
-        parser.add_argument("c")
+        parser.add_argument("type")
+        parser.add_argument("state")
         parser.add_argument("ip")
-        parser.add_argument("west_b")
-        parser.add_argument("west_c")
-        parser.add_argument("central_b")
-        parser.add_argument("central_c")
-        parser.add_argument("east_b")
-        parser.add_argument("east_c")
-
         args = parser.parse_args()
 
-        # False lookup
-        false_array = ['False', 'false', '0', False]
+        c = ModbusClient(host=args['ip'], port=502, auto_open=True, timeout=1)
+        types = ['all_clear', 'emergency', 'lightning', 'a', 'b', 'c']
 
-        # Get alert details from database by ip
-        alert_document = DB['alert_data'].find_one({'location': name})
-        if alert_document == None:
-            return(404)
+        for idx, _type in enumerate(types):
+            if _type == args['type']:
+                coil = idx+16
+                c.write_single_coil(coil, args['state'])
+        
+        return(200)
 
-        # Check if the name is a trailer
-        if name[:2] == 'TR':
-            west_ip = alert_document['areas'][0]['ip']
-            central_ip = alert_document['areas'][1]['ip']
-            east_ip = alert_document['areas'][2]['ip']
 
-            # Create list of ips
-            ips = [west_ip, central_ip, east_ip]
-            trailer_bits = [
-                [args['west_b'], args['west_c']],
-                [args['central_b'], args['central_c']],
-                [args['east_b'], args['east_c']]
-            ]
-
-            for index, ip in enumerate(ips):
-                # Get outputs via modbus on GET request
-                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
-                
-                try:
-
-                    # B
-                    output_b = trailer_bits[index][0]
-                    if output_b in false_array:
-                        output_b = ''
-                    
-                    # C
-                    output_c = trailer_bits[index][1]
-                    if output_c in false_array:
-                        output_c = ''                  
-
-                    # Set B Alert
-                    c.write_single_coil(20, output_b)
-                    # Set C Alert
-                    c.write_single_coil(21, output_c)
-                    # Read outputs
-                    bits = c.read_coils(16, 6)
-                    
-                    trailer_outputs.append([bits[4], bits[5]])
-                
-                except: 
-                    trailer_outputs.append([0,0])
-
-            # Return a json response
-            return(trailer_outputs)
-
-        else:
-            ip = args['ip']
-            c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
-            
-            outputs = [args['all_clear'], args['emergency'], args['lightning'], args['a'], args['b'], args['c']]
-
-            for index, output in enumerate(outputs):
-                if output in false_array:
-                    outputs[index] = ''
-
-            try:
-                # Set output states via modbus
-                c.write_single_coil(16, outputs[0])
-                c.write_single_coil(17, outputs[1])
-                c.write_single_coil(18, outputs[2])
-                c.write_single_coil(19, outputs[3])
-                c.write_single_coil(20, outputs[4])
-                c.write_single_coil(21, outputs[5])
-
-                # Read the outputs again
-                bits = c.read_coils(16, 6)
-            
-            except: 
-                return(404)
-            
-            return(bits)
 
 class alert_overview(Resource):
     """GET for alert overview data"""
@@ -380,26 +297,30 @@ class alert_status(Resource):
         # Zone status list
         zone_status = []
         
-        # Find first matching module for each zone
+        # Retrieve matching alerts in zone
         for zone in alert_zones:
-            module_zone = DB['alert_all'].find_one(
+            module_zones = DB['alert_all'].find(
                 {
                     'zone': zone['name']
                 }
             )
 
+            
+            for alert in module_zones:
+                if alert['online']:
 
-            if module_zone:
-                zone_status.append(
-                    {
-                        'zone' : module_zone['zone'],
-                        'status' : module_zone['status'],
-                        'icon' : module_zone['icon'],
-                        'state' : module_zone['state'],
-                        'online' : module_zone['online']
-                    }
-                )
-                        
+                    zone_status.append(
+                        {
+                            'zone' : alert['zone'],
+                            'status' : alert['status'],
+                            'icon' : alert['icon'],
+                            'state' : alert['state'],
+                            'online' : alert['online']
+                        }
+                    )
+                    break
+
+                            
 
         return(jsonify(json.loads(dumps(zone_status))))
 

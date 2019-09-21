@@ -1,5 +1,12 @@
 ## Mine Monitor To Do
 
+### Minimum to deploy
+- [ ] Controlls working
+- [x] Temp remove Sidebar and Layouts controlls
+- [x] Temp remove auth menu
+- [x] Change Title
+
+
 ### General
 - [ ] Towers
 - [ ] Pull tetra data somehow

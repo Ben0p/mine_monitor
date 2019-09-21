@@ -29,6 +29,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ]
   },
+  /*
   {
     title: 'Auth',
     icon: 'lock-outline',
@@ -51,6 +52,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  */
   {
     title: 'Settings',
     icon: 'options-2-outline',

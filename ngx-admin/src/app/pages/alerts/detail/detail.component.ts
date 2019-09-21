@@ -14,6 +14,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   uid: any;
   dataAvailable: boolean = false;
   authenticated: boolean = true;
+  payload: {};
 
   constructor(
     private alerts: AlertService,
@@ -40,6 +41,20 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.dataAvailable = true;
       }
     );
+  }
+
+  stateChange(p) {
+    this.payload = {
+      'ip' : this.alert['ip'],
+      'type' : p.type,
+      'state' : p.state
+    }
+    this.alerts.postAlertDetail(this.uid, this.payload).subscribe(
+      (data: {}) => {
+        this.refreshData();
+        console.log(data)
+      }
+    )
   }
 
 }
