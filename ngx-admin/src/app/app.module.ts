@@ -21,8 +21,7 @@ import {
   NbWindowModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
-import { ComponentsModule } from './@components/components.module'
-
+import { ComponentsModule } from './@components/components.module';
 
 
 @NgModule({
@@ -44,7 +43,7 @@ import { ComponentsModule } from './@components/components.module'
     }),
     CoreModule.forRoot(),
     NbEvaIconsModule,
-    ComponentsModule,
+    ComponentsModule
   ],
   bootstrap: [AppComponent],
 })

@@ -13,15 +13,17 @@ import { RouterModule } from '@angular/router';
 import { AlertsRoutingModule, routedComponents } from './alerts-routing.module';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
+import { ComponentsModule } from '../../@components/components.module';
+
 import { OverviewComponent } from './overview/overview.component';
+import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.component'
 import { AlertsComponent } from './alerts.component';
-import { AlertsD3AdvancedPieComponent } from './overview/alerts-d3-advanced-pie.component';
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
-
-import { ComponentsModule } from '../../@components/components.module';
 import { DisplayComponent } from './display/display.component';
 import { DetailComponent } from './detail/detail.component'
+
+
 
 
 
@@ -46,8 +48,8 @@ import { DetailComponent } from './detail/detail.component'
     NgxChartsModule,
     Ng2SmartTableModule,
     NbIconModule,
+    RouterModule,
     ComponentsModule,
-    RouterModule
   ]
 })
 export class AlertsModule { }

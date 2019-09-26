@@ -11,7 +11,7 @@
         <br>
         <br>
         <button nbButton (click)="toggle('emergency', '')" [status]="'danger'" *ngIf="emergency" hero>Emergency</button>
-        <button nbButton (click)="toggle('emergency', 'true')" *ngIf="!emergency" outline>Emergency</button>
+        <button nbButton (click)="toggle('emergency', 'true')" [status]="'danger'" *ngIf="!emergency" outline>Emergency</button>
 
         <br>
         <br>

@@ -44,11 +44,28 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   stateChange(p) {
-    this.payload = {
-      'ip' : this.alert['ip'],
-      'type' : p.type,
-      'state' : p.state
+    if (this.alert['type'] == 'Trailer'){
+      this.payload = {
+        'ips' : [
+          this.alert['modules'][0]['ip'],
+          this.alert['modules'][1]['ip'],
+          this.alert['modules'][2]['ip'],
+        ],
+        'type' : p.type,
+        'output' : p.output,
+        'state' : p.state
+      }
+    } else {
+      this.payload = {
+        'ips' : [
+          this.alert['ip'],
+        ],
+        'type' : p.type,
+        'output' : p.output,
+        'state' : p.state
+      }
     }
+
     this.alerts.postAlertDetail(this.uid, this.payload).subscribe(
       (data: {}) => {
         this.refreshData();

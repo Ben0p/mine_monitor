@@ -1,71 +1,164 @@
-#! /usr/bin/python3.6
-from flask import Flask, jsonify, send_file
+#! /usr/bin/python3.7
+
+from env.prod import env
+from flask import Flask, jsonify, send_file, Response
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
 from flask_cors import CORS
 import pymongo
 from bson.json_util import dumps
+from bson.objectid import ObjectId
 import json
 import copy
 
+""" Rest API for alerts
+Retrieves data from mongo 
+Serves as http json
+"""
 
 # Initialize flask
-app = Flask(__name__)
-api = Api(app)
-CORS(app)
+APP = Flask(__name__)
+API = Api(APP)
+CORS(APP)
 
-# Initialize mongo
-client = pymongo.MongoClient('mongodb://10.20.64.253:27017/')
-db = client['minemonitor']
+# Initialize mongo connection one time
+CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
+DB = CLIENT[env['database']]
 
 
-class alert(Resource):
+class alert_all(Resource):
+    """GET for alert data"""
     def get(self):
         # Get all sign data from the signs collection in mongo
-        alerts = db['alert_data'].find().sort("location",pymongo.ASCENDING)
+        alerts = DB['alert_all'].find().sort("name",pymongo.ASCENDING)
 
-        # Return collection as a massive json
+        # Return collection as a massive json 
         return(jsonify(json.loads(dumps(alerts))))
+
+class alert_display(Resource):
+    """GET for alert data"""
+    def get(self):
+        display_array = []
+        trailers = []
+
+        # Get all sign data from the signs collection in mongo
+        alerts = DB['alert_all'].find().sort("name",pymongo.ASCENDING)
+
+        # For each alert object
+        for alert in alerts:
+            # If the alert type is a trailer
+            if alert['type'] == 'Trailer':
+                # Less than 2 because if it was 3 it would be the next trailer
+                if len(trailers) < 2:
+                    trailers.append(alert)
+                else:
+                    trailers.append(alert)
+                    combined_trailer = {
+                        'type' : 'Trailer',
+                        'location' : trailers[0]['location'],
+                        'online' : trailers[0]['online'],
+                        'modules' : [
+                            {
+                                "_id": trailers[0]['_id'],
+                                'zone' : trailers[0]['zone'],
+                                'b' : trailers[0]['b'],
+                                'c' : trailers[0]['c'],
+                            },
+                            {
+                                "_id": trailers[1]['_id'],
+                                'zone' : trailers[1]['zone'],
+                                'b' : trailers[1]['b'],
+                                'c' : trailers[1]['c'],
+                            },
+                            {
+                                "_id": trailers[2 ]['_id'],
+                                'zone' : trailers[2]['zone'],
+                                'b' : trailers[2]['b'],
+                                'c' : trailers[2]['c'],
+                            }
+                        ]
+                    }
+                    display_array.append(combined_trailer)
+                    trailers = []
+                    combined_trailer = {}
+
+            # If the alert is not a trailer
+            else:
+                display_array.append(alert)
+
+            
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(display_array))))
 
 
 class alert_detail(Resource):
-    def get(self, name):
+    """GET for detailed alert data (output states)"""
+
+    def get(self, uid):
 
         # Get alert details from database by ip
-        alert_document = db['alert_data'].find_one({'location': name})
-        if alert_document == None:
-            return(404)
+        try:
+            alert_document = DB['alert_all'].find_one({'_id': ObjectId(uid)})
+            if alert_document == None:
+                return({'found' : False})
+            alert_document['found'] = True
+        except:
+            return({'found' : False})
 
         # Check if the name is a trailer
-        if name[:2] == 'TR':
-            west_ip = alert_document['areas'][0]['ip']
-            central_ip = alert_document['areas'][1]['ip']
-            east_ip = alert_document['areas'][2]['ip']
+        if alert_document['type'] == 'Trailer':
+            modules = []
+            trailer_modules = DB['alert_all'].find({'location': alert_document['location']})
 
-            # Create list of ips
-            ips = [west_ip, central_ip, east_ip]
+            bcount = 0
+            ccount = 0
 
-            
-            for index, ip in enumerate(ips):
+            for module in trailer_modules:
+
                 # Get outputs via modbus on GET request
-                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+                c = ModbusClient(host=module['ip'], port=502, auto_open=True, timeout=1)
 
                 try:
                     bits = c.read_coils(16, 6)
-                    alert_document['areas'][index]["all_clear"] = bits[0]
-                    alert_document['areas'][index]["emergency"] = bits[1]
-                    alert_document['areas'][index]["lightning"] = bits[2]
-                    alert_document['areas'][index]["a"] = bits[3]
-                    alert_document['areas'][index]["b"] = bits[4]
-                    alert_document['areas'][index]["c"] = bits[5]
+
+                    new_module = {
+                        'uid' : str(module['_id']),
+                        'name' : module['name'],
+                        'zone' : module['zone'],
+                        'online' : module['online'],
+                        'rest' : module['rest'],
+                        'ip' : module['ip'],
+                        'latency' : module['latency'],
+                        'b': bits[4],
+                        'c' : bits[5]
+                    }
+
+                    if bits[4]:
+                        bcount += 1
+                    if bits[5]:
+                        ccount += 1
+
                 
                 except: 
-                    alert_document['areas'][index]["all_clear"] = False
-                    alert_document['areas'][index]["emergency"] = False
-                    alert_document['areas'][index]["lightning"] = False
-                    alert_document['areas'][index]["a"] = False
-                    alert_document['areas'][index]["b"] = False
-                    alert_document['areas'][index]["c"] = False
+                    new_module = {
+                        'zone' : module['zone'],
+                        'online' : False,
+                        'ip' : module['ip'],
+                        'rest' : False,
+                        'latency' : 999,
+                        'b': False,
+                        'c' : False
+                    }
+                
+                module_deep_copy = copy.deepcopy(new_module)
+                modules.append(module_deep_copy)
+            
+            if bcount == 3:
+                alert_document['b'] = True
+            if ccount == 3:
+                alert_document['c'] = True
+            alert_document['modules'] = modules
 
             # Return a json response
             return(jsonify(json.loads(dumps(alert_document))))
@@ -94,407 +187,258 @@ class alert_detail(Resource):
             return(jsonify(json.loads(dumps(alert_document))))
 
 
-    def post(self, name):
-
-        # Blank output array
-        outputs = []
-        trailer_outputs = []
+    def post(self, uid):
+        """ POST to control module coil output states """
 
         # Parse the form data
         parser = reqparse.RequestParser()
-        parser.add_argument("all_clear")
-        parser.add_argument("emergency")
-        parser.add_argument("lightning")
-        parser.add_argument("a")
-        parser.add_argument("b")
-        parser.add_argument("c")
+        parser.add_argument("type")
+        parser.add_argument("output")
+        parser.add_argument("state")
+        parser.add_argument("ips", action='append')
+        args = parser.parse_args()
+
+        outputs = ['all_clear', 'emergency', 'lightning', 'a', 'b', 'c']
+
+
+        for idx, output in enumerate(outputs):
+            if output == args['output']:
+                for ip in args['ips']:
+                    print(f"{ip}:{output}:{args['state']}")
+                    c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+                    coil = idx+16
+                    c.write_single_coil(coil, args['state'])
+        
+        return(200)
+
+
+
+class alert_overview(Resource):
+    """GET for alert overview data"""
+    def get(self):
+
+        overview = {
+            'all_clear' : DB['alert_data'].count_documents({'all_clear':True}),
+            'emergency' : DB['alert_data'].count_documents({'emergency': True}),
+            'a' : DB['alert_data'].count_documents({'a': True}),
+            'b' : DB['alert_data'].count_documents({'b': True}),
+            'c' : DB['alert_data'].count_documents({'c': True}),
+            'offline' : DB['alert_data'].count_documents({'online': False}),
+        }
+
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(overview))))
+
+class alert_modules(Resource):
+    """GET for alert module info"""
+    def get(self):
+        #try:
+        alert_modules_uid = []
+        alert_modules = DB['alert_modules'].find().sort("location",pymongo.ASCENDING)
+
+        for alert in alert_modules:
+            try:
+                zone = alert['zone']
+            except KeyError:
+                zone = ''
+            try:
+                ip = alert['ip']
+            except KeyError:
+                ip = ''
+            try:
+                location = alert['location']
+            except KeyError:
+                location = ''
+            try:
+                _type = alert['type']
+            except KeyError:
+                _type = ''
+
+            alert_modules_uid.append(
+                {
+                    'uid': str(alert['_id']),
+                    'name': alert['name'],
+                    'location': location,
+                    'ip': ip,
+                    'type' : _type,
+                    'zone': zone
+                }
+            )
+
+        # Return collection as a massive json 
+        return(jsonify(json.loads(dumps(alert_modules_uid))))
+        #except:
+        #    return(Response(status=418))
+
+class alert_zones(Resource):
+
+    def get(self):
+        alert_zones = DB['alert_zones'].find().sort("name",pymongo.ASCENDING)
+        alert_zones_list = []
+
+        for zone in alert_zones:
+            alert_zones_list.append(
+                {
+                    'value': zone['name'],
+                    'title': zone['name']
+                }
+            )
+
+        return(jsonify(json.loads(dumps(alert_zones_list))))
+
+class alert_types(Resource):
+
+    def get(self):
+        alert_types = DB['alert_types'].find().sort("name",pymongo.ASCENDING)
+        alert_types_list = []
+
+        for types in alert_types:
+            alert_types_list.append(
+                {
+                    'value': types['name'],
+                    'title': types['name']
+                }
+            )
+
+        return(jsonify(json.loads(dumps(alert_types_list))))
+
+class alert_status(Resource):
+
+    def get(self):
+        # Get zone list
+        alert_zones = DB['alert_zones'].find()
+
+        # Zone status list
+        zone_status = []
+        
+        # Retrieve matching alerts in zone
+        for zone in alert_zones:
+            module_zones = DB['alert_all'].find(
+                {
+                    'zone': zone['name']
+                }
+            )
+
+            
+            for alert in module_zones:
+                if alert['online']:
+
+                    zone_status.append(
+                        {
+                            'zone' : alert['zone'],
+                            'status' : alert['status'],
+                            'icon' : alert['icon'],
+                            'state' : alert['state'],
+                            'online' : alert['online']
+                        }
+                    )
+                    break
+
+                            
+
+        return(jsonify(json.loads(dumps(zone_status))))
+
+class alert_create(Resource):
+
+    def post(self):
+    
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+        parser.add_argument("location")
         parser.add_argument("ip")
-        parser.add_argument("west_b")
-        parser.add_argument("west_c")
-        parser.add_argument("central_b")
-        parser.add_argument("central_c")
-        parser.add_argument("east_b")
-        parser.add_argument("east_c")
+        parser.add_argument("type")
+        parser.add_argument("zone")
 
         args = parser.parse_args()
 
-        # False lookup
-        false_array = ['False', 'false', '0', False]
+        data = {
+            "name" : args['name'],
+            "location": args['location'],
+            "ip": args['ip'],
+            "type": args['type'],
+            "zone": args['zone'],
+        }
 
-        # Get alert details from database by ip
-        alert_document = db['alert_data'].find_one({'location': name})
-        if alert_document == None:
-            return(404)
+        try:
+            DB['alert_modules'].insert_one(data)
 
-        # Check if the name is a trailer
-        if name[:2] == 'TR':
-            west_ip = alert_document['areas'][0]['ip']
-            central_ip = alert_document['areas'][1]['ip']
-            east_ip = alert_document['areas'][2]['ip']
+            return({'success' : True, 'message' : 'Created {}'.format(args['name'])})
 
-            # Create list of ips
-            ips = [west_ip, central_ip, east_ip]
-            trailer_bits = [
-                [args['west_b'], args['west_c']],
-                [args['central_b'], args['central_c']],
-                [args['east_b'], args['east_c']]
-            ]
-
-            for index, ip in enumerate(ips):
-                # Get outputs via modbus on GET request
-                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
-                
-                try:
-
-                    # B
-                    output_b = trailer_bits[index][0]
-                    if output_b in false_array:
-                        output_b = ''
-                    
-                    # C
-                    output_c = trailer_bits[index][1]
-                    if output_c in false_array:
-                        output_c = ''                  
-
-                    # Set B Alert
-                    c.write_single_coil(20, output_b)
-                    # Set C Alert
-                    c.write_single_coil(21, output_c)
-                    # Read outputs
-                    bits = c.read_coils(16, 6)
-                    
-                    trailer_outputs.append([bits[4], bits[5]])
-                
-                except: 
-                    trailer_outputs.append([0,0])
-
-            # Return a json response
-            return(trailer_outputs)
-
-        else:
-            ip = args['ip']
-            c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
-            
-            outputs = [args['all_clear'], args['emergency'], args['lightning'], args['a'], args['b'], args['c']]
-
-            for index, output in enumerate(outputs):
-                if output in false_array:
-                    outputs[index] = ''
-
-            try:
-                # Set output states via modbus
-                c.write_single_coil(16, outputs[0])
-                c.write_single_coil(17, outputs[1])
-                c.write_single_coil(18, outputs[2])
-                c.write_single_coil(19, outputs[3])
-                c.write_single_coil(20, outputs[4])
-                c.write_single_coil(21, outputs[5])
-
-                # Read the outputs again
-                bits = c.read_coils(16, 6)
-            
-            except: 
-                return(404)
-            
-            return(bits)
+        except:
+            return({'success' : False, 'message' : 'Failed to create'})
 
 
 
-class edit(Resource):
+
+class alert_update(Resource):
+    """POST to update an alert module"""
 
     def post(self):
 
+
         # Initilize request parser
         parser = reqparse.RequestParser()
-        # Get type
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+        parser.add_argument("location")
+        parser.add_argument("ip")
         parser.add_argument("type")
-
-        # Device parent
-        parser.add_argument("parent")
-
-        # Tetra
-        parser.add_argument("issi")
-
-        # Parse the form data (alert)
-        parser.add_argument("alert_location")
-        parser.add_argument("alert_ip")
-        parser.add_argument("alert_type")
-        parser.add_argument("west_ip")
-        parser.add_argument("central_ip")
-        parser.add_argument("east_ip")
-        parser.add_argument("trailer_number")
-
-        # Parse the form data (fleet)
-        parser.add_argument("fleet_name")
-        parser.add_argument("fleet_xim")
-        parser.add_argument("fleet_screen")
-        parser.add_argument("fleet_other")
-        parser.add_argument("fleet_2")
-        parser.add_argument("fleet_5")
-
-        # Parse the form data (trailer)
-        parser.add_argument("tristar")
-        parser.add_argument("tropos2")
-        parser.add_argument("tropos5")
-        parser.add_argument("troposLAN")
-        parser.add_argument("cisco1572")
-        parser.add_argument("ubi")
-
-        # Parse the form data (corrections)
-        parser.add_argument("correction_ip")
+        parser.add_argument("zone")
+        parser.add_argument("uid")
 
         args = parser.parse_args()
 
-        print(args)
-
-        # Check object type
-        if args['type'] == 'alert':
-
-            # Check if trailer or not
-            if args['alert_type'] == 'trailer':
-                # Set name as trailer number
-                name = args['trailer_number']
-            else:
-                # Set name as location
-                name = args['alert_location']
-
-            # Check if document exists
-            '''
-            ' Is this supposed to be db['alert'] ???
-            '''
-            existing_document = db['alert_data'].find({'location' : name})
-            print('Updating {}'.format(name))
-
-            # Delete any existing documents
-            if existing_document.count() >= 1:
-                db['alert'].delete_many({'location' : name})
-                db['alert_data'].delete_many({'location' : name})
-
-            # Check if object is a trailer 
-            if args['alert_type'] == 'trailer':
-                # Insert into database
-                db['alert'].insert_one(
-                    {
-                        "location": name,
-                        "west_ip": args['west_ip'],
-                        "central_ip": args['central_ip'],
-                        "east_ip": args['east_ip'],
-                        "type": args['alert_type']
-                    }
-                )
-
-            else:
-                # Insert into database
-                db['alert'].insert_one(
-                    {
-                        "location": name,
-                        "ip": args['alert_ip'],
-                        "type": args['alert_type']
-                    }
-                )
-
-            return(201)
-        elif (args['type'] == 'fleet'):
-
-            # Find existing document and update, create new if it doesn't exist
-            db['fleet'].find_one_and_update(
-                    {
-                        'name' : args['fleet_name']
-                    },
-                    {
-                        '$set': 
-                        {
-                            'name' : args['fleet_name'],
-                            'xim' : args['fleet_xim'],
-                            'screen' : args['fleet_screen'],
-                            'ms352' : args['fleet_other'],
-                            'five' : args['fleet_5'],
-                            'two' : args['fleet_2']
-                        }
-                    },
-                    upsert = True
-                )
-            return(201)
-
-
-        elif (args['type'] == 'trailer'):
-
-            # Find existing document and update, create new if it doesn't exist
-            db['trailers'].find_one_and_update(
-                    {
-                        'parent' : args['parent']
-                    },
-                    {
-                        '$set': 
-                        {
-                            'parent' : args['parent'],
-                            'tristar' : args['tristar'],
-                            'tropos2' : args['tropos2'],
-                            'tropos5' : args['tropos5'],
-                            'troposLAN' : args['troposLAN'],
-                            'cisco1572' : args['cisco1572'],
-                            'ubi' : args['ubi'],
-                            'issi' : args['issi']
-                        }
-                    },
-                    upsert = True
-                )
-
-            db['trailer_data'].find_one_and_update(
+        try:
+            DB['alert_modules'].find_one_and_update(
                 {
-                    'parent' : args['parent']
+                    "_id": ObjectId(args['uid']),
                 },
-                {
-                    '$set': 
+                { "$set":
                     {
-                        'parent' : args['parent'],
-                        'tristar' : { 'ip' : args['tristar'] },
-                        'tropos2' : { 'ip' : args['tropos2'] },
-                        'tropos5' : { 'ip' : args['tropos5'] },
-                        'troposLAN' : { 'ip' : args['troposLAN'] },
-                        'cisco1572' : { 'ip' : args['cisco1572'] },
-                        'ubi' : { 'ip' : args['ubi'] },
-                        'issi' : args['issi']
+                        "name" : args['name'],
+                        "location": args['location'],
+                        "ip": args['ip'],
+                        "type": args['type'],
+                        "zone": args['zone'],
                     }
-                },
-                upsert = True
+                }
             )
-            return(201)
 
-        elif (args['type'] == 'corrections'):
+            return({'success' : True, 'message' : 'Updated {}'.format(args['name'])})
 
-            # Find existing document and update, create new if it doesn't exist
-            db['corrections'].find_one_and_update(
-                    {
-                        'ip' : args['correction_ip']
-                    },
-                    {
-                        '$set': 
-                        {
-                        'ip' : args['correction_ip'],
-                        'parent' : args['parent']
-                        }
-                    },
-                    upsert = True
-                )
-            return(201)
+        except:
+            return({'success' : False, 'message' : 'Failed to update'})
+
+
+
+
+class alert_delete(Resource):
+    """ DELETE alert document """
+
+    def delete(self, name):
+
+        if not name:
+
+            return({'success' : False})
 
         else:
-            return(404)
+            modules_del_count = DB['alert_modules'].delete_many({"name" : name})
+            all_del_count = DB['alert_all'].delete_many({"name" : name})
+
+            total_del = modules_del_count.deleted_count + all_del_count.deleted_count
+
+            if total_del > 0:
+                return({'success' : True, 'message' : 'Deleted {} objects.'.format(total_del)})
+            else:
+                return({'success' : False, 'message' : '{} not found.'.format(name)})
 
 
-class delete(Resource):
 
-    def delete(self, device):
-
-        # Split string into type and device
-        _type, _device = device.split('-')
-        if not _device:
-            _device = ""
-            print("Blank device name")
-
-        try:
-            if _type == 'alert':
-                db['alert_data'].delete_one({"location": _device})
-                db['alert'].delete_one({"location":  _device})
-
-            elif _type == 'corrections':
-                db['corrections'].delete_one({"ip": _device})
-            
-            elif _type == 'fleet':
-                db['fleet_data'].delete_one({"name": _device})
-                db['fleet'].delete_one({"name":  _device})
-            
-            elif _type == 'trailer':
-                db['trailer_data'].delete_one({"parent": _device})
-                db['trailers'].delete_one({"parent":  _device})
-
-            print("Deleted {} - {}".format(_type, _device))
-            return(202)
-
-        except:
-            return(418)
-        
-
-
-class fleet(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        fleet_data = db['fleet_data'].find()
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(fleet_data))))
-        except:
-            return(False, 404)
-
-
-class fleet_detail(Resource):
-    def get(self, name):
-        # Get document with name
-        fleet_data = db['fleet_data'].find({'name': name})
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(fleet_data))))
-        except:
-            return(False, 404)
-
-
-class trailers(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        trailer_data = db['trailer_data'].find().sort("parent",pymongo.ASCENDING)
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(trailer_data))))
-        except:
-            return(False, 404)
-
-class trailers_detail(Resource):
-    def get(self, name):
-        # Get document with name
-        trailer_data = db['trailer_data'].find({'parent': name})
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(trailer_data))))
-        except:
-            return(False, 404)
-
-class corrections(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        correction_data = db['correction_data'].find()
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(correction_data))))
-        except:
-            return(False, 404)
-
-class services(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        services_data = db['services'].find()
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(services_data))))
-        except:
-            return(False, 404)
-
-class corrections_list(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        corrections = db['corrections'].find()
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(corrections))))
-        except:
-            return(False, 404)
 
 class check(Resource):
     def get(self):
@@ -504,49 +448,20 @@ class check(Resource):
         # Return response
         return(jsonify(json.loads(dumps(response))))
 
-class overview(Resource):
-    def get(self):
-        # Get all ping data from the pings collection in mongo
-        overview = db['overview'].find()
-
-        # Return collection as a massive json
-        try:
-            return(jsonify(json.loads(dumps(overview))))
-        except:
-            return(False, 404)
-
-def generateFinalConf():
-    # Get all ping data from the pings collection in mongo
-    corrections = db['corrections'].find()
-    with open('../../../home/minesys/Desktop/final.conf', 'w') as f:
-        for correction in corrections:
-            f.write('#{}\n'.format(correction['parent']))
-            f.write('10.20.23.230:{}/5019\n'.format(correction['ip']))
-        f.close()
-
-class corrections_file(Resource):
-    generateFinalConf()
-    def get(self):
-        return(send_file('../../../home/minesys/Desktop/final.conf', as_attachment = True))
-
-
-
 
 # Map URL's to resource classes
-api.add_resource(alert, "/alert")
-api.add_resource(alert_detail, "/alert/<string:name>")
-api.add_resource(fleet, "/fleet")
-api.add_resource(fleet_detail, "/fleet/<string:name>")
-api.add_resource(edit, "/edit")
-api.add_resource(delete, "/edit/<string:device>")
-api.add_resource(trailers, "/trailers")
-api.add_resource(trailers_detail, "/trailers/<string:name>")
-api.add_resource(corrections, "/corrections")
-api.add_resource(services, "/services")
-api.add_resource(corrections_list, "/corrections/list")
-api.add_resource(check, "/check")
-api.add_resource(overview, "/overview")
-api.add_resource(corrections_file, "/corrections/file")
+API.add_resource(alert_all, "/alerts/all")
+API.add_resource(alert_display, "/alerts/display")
+API.add_resource(alert_modules, "/alerts/modules")
+API.add_resource(alert_overview, "/alerts/overview")
+API.add_resource(alert_zones, "/alerts/zones")
+API.add_resource(alert_types, "/alerts/types")
+API.add_resource(alert_status, "/alerts/status")
+API.add_resource(alert_create, "/alerts/create")
+API.add_resource(alert_update, "/alerts/update")
+API.add_resource(alert_delete, "/alerts/delete/<string:name>")
+API.add_resource(alert_detail, "/alerts/<string:uid>")
+API.add_resource(check, "/check")
 
 # Run flask
-app.run(debug=True, host='0.0.0.0')
+APP.run(debug=True, host='0.0.0.0')

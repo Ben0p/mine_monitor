@@ -110,32 +110,40 @@ class alert_detail(Resource):
 
         # Check if the name is a trailer
         if alert_document['type'] == 'Trailer':
-            ips = []
             modules = []
             trailer_modules = DB['alert_all'].find({'location': alert_document['location']})
 
-            for module in trailer_modules:
-                ips.append(module['ip'])
+            bcount = 0
+            ccount = 0
 
-            
-            for ip in ips:
+            for module in trailer_modules:
+
                 # Get outputs via modbus on GET request
-                c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+                c = ModbusClient(host=module['ip'], port=502, auto_open=True, timeout=1)
 
                 try:
                     bits = c.read_coils(16, 6)
+
                     new_module = {
+                        'uid' : str(module['_id']),
+                        'name' : module['name'],
                         'zone' : module['zone'],
                         'online' : module['online'],
                         'rest' : module['rest'],
                         'ip' : module['ip'],
                         'latency' : module['latency'],
-                        'b': module['b'],
-                        'c' : module['c']
+                        'b': bits[4],
+                        'c' : bits[5]
                     }
+
+                    if bits[4]:
+                        bcount += 1
+                    if bits[5]:
+                        ccount += 1
+
                 
                 except: 
-                    modules = {
+                    new_module = {
                         'zone' : module['zone'],
                         'online' : False,
                         'ip' : module['ip'],
@@ -145,8 +153,13 @@ class alert_detail(Resource):
                         'c' : False
                     }
                 
-                modules.append(new_module)
+                module_deep_copy = copy.deepcopy(new_module)
+                modules.append(module_deep_copy)
             
+            if bcount == 3:
+                alert_document['b'] = True
+            if ccount == 3:
+                alert_document['c'] = True
             alert_document['modules'] = modules
 
             # Return a json response
@@ -182,17 +195,21 @@ class alert_detail(Resource):
         # Parse the form data
         parser = reqparse.RequestParser()
         parser.add_argument("type")
+        parser.add_argument("output")
         parser.add_argument("state")
-        parser.add_argument("ip")
+        parser.add_argument("ips", action='append')
         args = parser.parse_args()
 
-        c = ModbusClient(host=args['ip'], port=502, auto_open=True, timeout=1)
-        types = ['all_clear', 'emergency', 'lightning', 'a', 'b', 'c']
+        outputs = ['all_clear', 'emergency', 'lightning', 'a', 'b', 'c']
 
-        for idx, _type in enumerate(types):
-            if _type == args['type']:
-                coil = idx+16
-                c.write_single_coil(coil, args['state'])
+
+        for idx, output in enumerate(outputs):
+            if output == args['output']:
+                for ip in args['ips']:
+                    print(f"{ip}:{output}:{args['state']}")
+                    c = ModbusClient(host=ip, port=502, auto_open=True, timeout=1)
+                    coil = idx+16
+                    c.write_single_coil(coil, args['state'])
         
         return(200)
 

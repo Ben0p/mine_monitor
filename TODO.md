@@ -1,45 +1,33 @@
 ## Mine Monitor To Do
+*Deleted redundant tasks*
 
 ### Minimum to deploy
-- [ ] Controlls working
+- [x] Controlls working
 - [x] Temp remove Sidebar and Layouts controlls
 - [x] Temp remove auth menu
 - [x] Change Title
 
-
 ### General
-- [ ] Towers
 - [ ] Pull tetra data somehow
-- [ ] Master list
-- [ ] Terrain
-- [x] Fleet delete
-- [ ] Always general code cleaning, optimising, comments
-- [x] Organise TODO
-- [ ] Create README and docs
-- [ ] In-browser VNC
+- [ ] Create proper README and docs
 - [ ] Automate backups
-- [x] Main page indicates status (% offline)
 - [ ] nginx serve https
-- [ ] East Camera
-- [ ] RestAPI authentication token
+- [ ] CCTV
+- [ ] RestAPI authentication
 - [ ] Database backup
-- [ ] Multiple user accounts and authentication
-    - [ ] Tie into fmg.local or fmg.ops (long-term)
+- [ ] Kerberos authentication against domain
 - [ ] Pre-load pwa for offline mode
-- [ ] Tristar history + graphs
-- [ ] Migrate to ngx-admin
-- [ ] Remove redundant monitoring
+- [ ] Build number in footer
+- [ ] Editable header name
+- [ ] 
 
-
-
-### ngx-admin
+### Frontend
 
 #### General
-- [x] Git clone starter-kit
+- [x] Git-clone ngx-admin
 - [x] Install npm dependancies
 - [x] Settings module
 - [x] Alerts module
-
 
 #### Data Services
 - [ ] alerts.service
@@ -86,8 +74,11 @@
     - [x] ngx style popup
 - [x] Refresh on after operation
 
-
-
+##### Detail
+- [ ] 
+- [ ] Information card
+- [ ] Notes card
+    - [ ] Post
 
 #### Settings
 - [x] Create settings module
@@ -104,8 +95,7 @@
 
 #### Auth
 - [ ] Setup basic auth
-- [ ] OPS AD Auth
-
+- [ ] Domain AD Auth
 
 ### Backend
 #### General
@@ -145,6 +135,3 @@
 #### Alerts
 - [x] Poll alerts without a delay
 - [x] alerts_all collection clean up after module deleted
-
-#### Overview
-- [ ] Not implemented in new frontend

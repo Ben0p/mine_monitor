@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output, } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'ngx-alert-controls',
@@ -17,10 +17,11 @@ export class AlertControlsComponent{
   @Output() stateChange = new EventEmitter();
 
 
-  toggle(type, state){
+  toggle(output, state){
     this.stateChange.emit(
       {
-        'type' : type,
+        'type' : this.type,
+        'output' : output,
         'state' : state
       }
     )

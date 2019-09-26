@@ -1,5 +1,5 @@
 <div *ngIf="dataAvailable">
-  <div class="row" *ngIf="authenticated">
+  <div class="row" *ngIf="authenticated && alert.found">
     <div class="center">
       <ngx-alert-controls
         [type]="alert.type"
@@ -41,6 +41,10 @@
           {{module.zone}}
         </div>
       </ngx-alert-trailer>
+      <ngx-alert-info
+        [alert]="alert"
+        [uid]="uid">
+      </ngx-alert-info>
     </div>
     <div class="center" *ngIf="!alert.found">
       <nb-card>
