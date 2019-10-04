@@ -9,7 +9,7 @@
 
 <div class="header-container">
   <nb-actions size="small">
-    <nb-action class="user-action" *nbIsGranted="['view', 'user']" >
+    <nb-action class="user-action" *nbIsGranted="['view', 'dashboard']" >
       <nb-user [nbContextMenu]="userMenu"
                [onlyPicture]="userPictureOnly"
                [name]="user?.display_name"

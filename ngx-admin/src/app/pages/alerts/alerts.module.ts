@@ -5,6 +5,9 @@ import {
   NbButtonModule,
   NbIconModule
 } from '@nebular/theme';
+
+import { NbSecurityModule } from '@nebular/security';
+
 import { ThemeModule } from '../../@theme/theme.module';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -50,6 +53,7 @@ import { DetailComponent } from './detail/detail.component'
     NbIconModule,
     RouterModule,
     ComponentsModule,
+    NbSecurityModule
   ]
 })
 export class AlertsModule { }

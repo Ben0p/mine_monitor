@@ -508,6 +508,7 @@ class auth(Resource):
                     if CN == env['alert_admin']:
                         result['alert_admin'] = True
 
+
                 result['mail'] = e_dict['mail'][0]
                 result['description'] = e_dict['description'][0]
                 result['display_name'] = e_dict['displayName'][0]
@@ -516,10 +517,15 @@ class auth(Resource):
                 result['last_name'] = e_dict['sn'][0]
                 result['phone'] = e_dict['telephoneNumber'][0]
 
-                token = jwt.encode(result, args['password'], algorithm='HS256')
-                result['token'] = token.decode("utf-8")
+            if result['alert_admin'] == True:
+                result['role'] = 'alert_admin'
+            if result['alert_read'] == True and result['alert_admin'] == False:
+                result['role'] = 'alert_read'
 
-            return(jsonify(json.loads(dumps(result))))
+            token = jwt.encode(result, args['password'], algorithm='HS256')
+            response = {'token' : token.decode("utf-8")}
+
+            return(jsonify(json.loads(dumps(response))))
 
 
 class check(Resource):

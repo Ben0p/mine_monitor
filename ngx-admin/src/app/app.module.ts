@@ -23,6 +23,8 @@ import {
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ComponentsModule } from './@components/components.module';
 import { AuthGuard } from './@auth/auth-guard.service';
+import { RoleProvider } from './@auth/role.provider';
+import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 
 
 @NgModule({
@@ -46,12 +48,39 @@ import { AuthGuard } from './@auth/auth-guard.service';
     CoreModule.forRoot(),
     NbEvaIconsModule,
     ComponentsModule,
+    NbSecurityModule.forRoot({
+      accessControl: {
+        alert_read: {
+          view: [
+            'alerts',
+            'dashboard',
+            'alerts_overview',
+            'alerts_all',
+            'alerts_display',
+            'settings',
+            'settings_style'
+          ],
+        },
+        alert_admin: {
+          parent: 'view',
+          view: [
+            'alerts_list',
+            'alerts_controls',
+            'alerts_info'
+          ],
+        },
+      },
+    }),
   ],
   bootstrap: [
     AppComponent
   ],
   providers: [
-    AuthGuard
+    AuthGuard,
+    { 
+      provide: NbRoleProvider,
+      useClass: RoleProvider
+    },
   ]
 })
 export class AppModule {

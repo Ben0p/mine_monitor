@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NbMenuModule } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
 
 
 import { ThemeModule } from '../@theme/theme.module';
@@ -21,6 +22,7 @@ import { PagesComponent } from './pages.component';
     DashboardModule,
     AlertsModule,
     ComponentsModule,
+    NbSecurityModule,
   ],
   declarations: [
     PagesComponent,

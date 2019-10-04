@@ -1,16 +1,18 @@
 <div *ngIf="dataAvailable">
-  <div class="row" *ngIf="authenticated && alert.found">
-    <div class="center">
-      <ngx-alert-controls
-        [type]="alert.type"
-        [all_clear]="alert.all_clear"
-        [emergency]="alert.emergency"
-        [lightning]="alert.lightning"
-        [a]="alert.a"
-        [b]="alert.b"
-        [c]="alert.c"
-        (stateChange)="stateChange($event)"
-      ></ngx-alert-controls>
+  <div *nbIsGranted="['view', 'alerts_controls']">
+    <div class="row" *ngIf="alert.found">
+      <div class="center">
+        <ngx-alert-controls
+          [type]="alert.type"
+          [all_clear]="alert.all_clear"
+          [emergency]="alert.emergency"
+          [lightning]="alert.lightning"
+          [a]="alert.a"
+          [b]="alert.b"
+          [c]="alert.c"
+          (stateChange)="stateChange($event)"
+        ></ngx-alert-controls>
+      </div>
     </div>
   </div>
   <div class="row">
@@ -42,6 +44,7 @@
         </div>
       </ngx-alert-trailer>
       <ngx-alert-info
+        *nbIsGranted="['view', 'alerts_controls']"
         [alert]="alert"
         [uid]="uid">
       </ngx-alert-info>
