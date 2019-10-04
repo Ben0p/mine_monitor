@@ -22,10 +22,13 @@ import {
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ComponentsModule } from './@components/components.module';
+import { AuthGuard } from './@auth/auth-guard.service';
 
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,13 +42,17 @@ import { ComponentsModule } from './@components/components.module';
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
     NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
     CoreModule.forRoot(),
     NbEvaIconsModule,
-    ComponentsModule
+    ComponentsModule,
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [
+    AppComponent
+  ],
+  providers: [
+    AuthGuard
+  ]
 })
 export class AppModule {
 }

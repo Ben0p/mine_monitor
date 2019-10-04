@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://10.20.64.253:5000/alerts/';
+const APIurl: String = 'http://localhost:5000/alerts/';
 
 @Injectable({
   providedIn: 'root',

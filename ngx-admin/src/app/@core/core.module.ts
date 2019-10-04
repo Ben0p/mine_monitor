@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
+import { NbAuthModule, NbPasswordAuthStrategy, NbAuthJWTToken } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -10,23 +10,6 @@ import { UserData } from './data/users';
 import { UserService } from './mock/users.service';
 import { MockDataModule } from './mock/mock-data.module';
 
-const socialLinks = [
-  {
-    url: 'https://github.com/akveo/nebular',
-    target: '_blank',
-    icon: 'github',
-  },
-  {
-    url: 'https://www.facebook.com/akveo/',
-    target: '_blank',
-    icon: 'facebook',
-  },
-  {
-    url: 'https://twitter.com/akveo_inc',
-    target: '_blank',
-    icon: 'twitter',
-  },
-];
 
 const DATA_SERVICES = [
   { provide: UserData, useClass: UserService },
@@ -43,20 +26,30 @@ export const NB_CORE_PROVIDERS = [
   ...MockDataModule.forRoot().providers,
   ...DATA_SERVICES,
   ...NbAuthModule.forRoot({
-
     strategies: [
-      NbDummyAuthStrategy.setup({
+      NbPasswordAuthStrategy.setup({
         name: 'email',
-        delay: 3000,
+        token: {
+          class: NbAuthJWTToken,
+          key: 'token'
+        },
+        baseEndpoint: 'http://localhost:5000',
+        login: {
+          endpoint: '/auth',
+          method: 'post',
+          redirect: {
+            success: '/pages/dashboard/',
+            failure: null, // stay on the same page
+          },
+        },
       }),
     ],
     forms: {
-      login: {
-        socialLinks: socialLinks,
-      },
-      register: {
-        socialLinks: socialLinks,
-      },
+      validation: {
+        email: {
+          required: false,
+        },
+      }
     },
   }).providers,
 
@@ -73,6 +66,7 @@ export const NB_CORE_PROVIDERS = [
       },
     },
   }).providers,
+  
 
   {
     provide: NbRoleProvider, useClass: NbSimpleRoleProvider,
