@@ -6,6 +6,7 @@
 - [x] Temp remove Sidebar and Layouts controlls
 - [x] Temp remove auth menu
 - [x] Change Title
+- [ ] Auth
 
 ### General
 - [ ] Pull tetra data somehow
@@ -15,11 +16,11 @@
 - [ ] CCTV
 - [ ] RestAPI authentication
 - [ ] Database backup
-- [ ] Kerberos authentication against domain
+- [x] Kerberos authentication against domain
 - [ ] Pre-load pwa for offline mode
 - [ ] Build number in footer
 - [ ] Editable header name
-- [ ] 
+- [ ] Auth
 
 ### Frontend
 
@@ -75,8 +76,8 @@
 - [x] Refresh on after operation
 
 ##### Detail
-- [ ] 
-- [ ] Information card
+- [x] Controlls
+- [x] Information card
 - [ ] Notes card
     - [ ] Post
 
@@ -94,8 +95,21 @@
 - [ ] Save settings per user
 
 #### Auth
-- [ ] Setup basic auth
-- [ ] Domain AD Auth
+- [x] Domain AD Auth
+- [x] JWT auth
+- [x] JWT payload data
+- [x] User name
+- [ ] Role based ACL
+    - [x] Single role
+    - [ ] Multi-role (alerts, configs)
+- [ ] Log out
+
+#### User
+- [x] User name
+- [ ] Profile page
+- [ ] Save preferences
+- [ ] Log out
+- [ ] User Menu
 
 ### Backend
 #### General

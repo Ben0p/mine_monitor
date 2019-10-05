@@ -508,15 +508,36 @@ class auth(Resource):
                     if CN == env['alert_admin']:
                         result['alert_admin'] = True
 
+                try:
+                    result['mail'] = e_dict['mail'][0]
+                except KeyError:
+                    result['mail'] = ''
+                try:
+                    result['description'] = e_dict['description'][0]
+                except KeyError:
+                    result['description'] = ''
+                try:
+                    result['display_name'] = e_dict['displayName'][0]
+                except KeyError:
+                    result['display_name'] = ''
+                try:
+                    result['given_name'] = e_dict['givenName'][0]
+                except KeyError:
+                    result['given_name'] = ''
+                try:
+                    result['username'] = e_dict['sAMAccountName'][0]
+                except KeyError:
+                    result['username'] = ''
+                try:
+                    result['last_name'] = e_dict['sn'][0]
+                except KeyError:
+                    result['last_name'] = ''
+                try:
+                    result['phone'] = e_dict['telephoneNumber'][0]
+                except KeyError:
+                    result['phone'] = ''
 
-                result['mail'] = e_dict['mail'][0]
-                result['description'] = e_dict['description'][0]
-                result['display_name'] = e_dict['displayName'][0]
-                result['given_name'] = e_dict['givenName'][0]
-                result['username'] = e_dict['sAMAccountName'][0]
-                result['last_name'] = e_dict['sn'][0]
-                result['phone'] = e_dict['telephoneNumber'][0]
-
+                    
             if result['alert_admin'] == True:
                 result['role'] = 'alert_admin'
             if result['alert_read'] == True and result['alert_admin'] == False:

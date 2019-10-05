@@ -62,7 +62,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
           ],
         },
         alert_admin: {
-          parent: 'view',
+          parent: 'alert_read',
           view: [
             'alerts_list',
             'alerts_controls',
