@@ -6,7 +6,20 @@
 - [x] Temp remove Sidebar and Layouts controlls
 - [x] Temp remove auth menu
 - [x] Change Title
-- [ ] Auth
+- [x] Auth
+
+### Issues
+- [x] Scrollbar 
+- [x] Status card over-flow
+- [x] Emergency control set to default color
+- [ ] Status card sometimes offline but still 'ON'
+- [ ] Need to ping a few times rather than once
+- [ ] Flask https fails due to unsigned certificate
+
+### Security
+- [x] Domain auth through TLS
+- [ ] Rest API over HTTPS
+- [ ] API Proxy
 
 ### General
 - [ ] Pull tetra data somehow
@@ -19,8 +32,7 @@
 - [x] Kerberos authentication against domain
 - [ ] Pre-load pwa for offline mode
 - [ ] Build number in footer
-- [ ] Editable header name
-- [ ] Auth
+- [x] Auth
 
 ### Frontend
 
@@ -89,9 +101,6 @@
 ##### Style
 - [x] Create style page
 - [x] Theme
-- [x] Layout Direction
-- [ ] Sidebar (not working)
-- [ ] Layouts (not working)
 - [ ] Save settings per user
 
 #### Auth
@@ -102,14 +111,14 @@
 - [ ] Role based ACL
     - [x] Single role
     - [ ] Multi-role (alerts, configs)
-- [ ] Log out
+- [x] Log out
 
 #### User
 - [x] User name
 - [ ] Profile page
 - [ ] Save preferences
-- [ ] Log out
-- [ ] User Menu
+- [x] Log out
+- [x] User Menu
 
 ### Backend
 #### General
@@ -119,33 +128,35 @@
 
 
 #### RestAPI
-- [x] Delete
-    - [x] Alerts
+##### General
 - [x] Overview get request
-- [ ] Alerts
-    - [x] Change all to /alerts/{whatever}
-    - [x] Status
-        - [x] Only return one status per zone
-    - [x] Overview
-        - [x] Count status types
-    - [x] All
-        - [x] Return all
-    - [x] Display
-        - [x]  Add modules for trailers
-    - [x] Delete
-        - [x] Delete from all and modules collections
-        - [x] Return status
-    - [x] Update
-        - [x] Update module
-        - [x] Return status
-    - [x] Create
-        - [x] Create module
-        - [x] Return status
+- [x] Serve https
 
+##### Auth
+- [x] Login
+- [x] JWT token
 
-#### Services
+##### Services
 - [ ] Re-do for new frontend
 
-#### Alerts
+##### Alerts
 - [x] Poll alerts without a delay
 - [x] alerts_all collection clean up after module deleted
+- [x] Change all to /alerts/{whatever}
+- [x] Status
+    - [x] Only return one status per zone
+- [x] Overview
+    - [x] Count status types
+- [x] All
+    - [x] Return all
+- [x] Display
+    - [x]  Add modules for trailers
+- [x] Delete
+    - [x] Delete from all and modules collections
+    - [x] Return status
+- [x] Update
+    - [x] Update module
+    - [x] Return status
+- [x] Create
+    - [x] Create module
+    - [x] Return status

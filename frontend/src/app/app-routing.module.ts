@@ -1,69 +1,37 @@
+import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './@auth/auth-guard.service';
 
-// Components
-import { HomeComponent } from './home/home.component';
-import { SignsComponent } from './signs/signs.component';
-import { SignDetailComponent } from './sign-detail/sign-detail.component';
-import { TrucksComponent } from './trucks/trucks.component';
-import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
-import { LoginComponent } from './login/login.component';
-import { EditComponent } from './edit/edit.component';
-
-// Auth
-import { AuthGuard } from './_guards/auth.guard';
 
 const routes: Routes = [
   {
+    path: 'pages',
+    canActivate: [AuthGuard],
+    loadChildren: () => import('./pages/pages.module')
+      .then(m => m.PagesModule),
+  },
+  {
+    path: 'auth',
+    loadChildren: './@auth/auth.module#NgxAuthModule',
+  },
+  {
     path: '',
-    component: HomeComponent
-  },
-  {
-    path: 'alerts',
-    component: SignsComponent
-  },
-  {
-    path: 'alerts/:name',
-    component: SignDetailComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'fleet',
-    component: TrucksComponent
-  },
-  {
-    path: 'fleet/:name',
-    component: FleetDetailComponent
+    redirectTo: 'pages',
+    pathMatch: 'full' 
   },
   { 
-    path: 'login',
-    component: LoginComponent 
+    path: '**',
+    redirectTo: 'pages'
   },
-  { 
-    path: 'edit',
-    component: EditComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'trailers',
-    loadChildren: '../app/trailers/trailers.module#TrailersModule'
-  },
-  {
-    path: 'gps',
-    loadChildren: '../app/gps/gps.module#GpsModule'
-  },
-  {
-    path: 'services',
-    loadChildren: '../app/services/services.module#ServicesModule'
-  },
-  { 
-    path: '**', 
-    component: HomeComponent 
-  }
 ];
 
+const config: ExtraOptions = {
+  useHash: false,
+};
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forRoot(routes, config)],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

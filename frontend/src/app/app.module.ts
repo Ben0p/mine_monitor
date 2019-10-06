@@ -1,70 +1,87 @@
-// Modules
+/**
+ * @license
+ * Copyright Akveo. All Rights Reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from './app-routing.module';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
-import { FormsModule } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-
-// Material
-import { MaterialModule } from './material';
-
-// Components
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { CoreModule } from './@core/core.module';
+import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { SignsComponent } from './signs/signs.component';
-import { SignDetailComponent } from './sign-detail/sign-detail.component';
-import { TrucksComponent } from './trucks/trucks.component';
-import { FleetDetailComponent } from './fleet-detail/fleet-detail.component';
-import { LoginComponent } from './login/login.component';
-import { PizzaPartyComponent } from './app.component';
-
-// Helpers
-import { BasicAuthInterceptor } from './_helpers/basic-auth.Interceptor';
-import { ErrorInterceptor } from './_helpers/error.Interceptor';
-
-// Fake backend for the login component
-import { fakeBackendProvider } from './_helpers/fake-backend';
-import { EditComponent } from './edit/edit.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import {
+  NbChatModule,
+  NbDatepickerModule,
+  NbDialogModule,
+  NbMenuModule,
+  NbSidebarModule,
+  NbToastrModule,
+  NbWindowModule,
+} from '@nebular/theme';
+import { NbEvaIconsModule } from '@nebular/eva-icons';
+import { ComponentsModule } from './@components/components.module';
+import { AuthGuard } from './@auth/auth-guard.service';
+import { RoleProvider } from './@auth/role.provider';
+import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent,
-    SignsComponent,
-    SignDetailComponent,
-    TrucksComponent,
-    FleetDetailComponent,
-    LoginComponent,
-    EditComponent,
-    PizzaPartyComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule,
-    FlexLayoutModule,
-    HttpModule,
     HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    AppRoutingModule,
+    ThemeModule.forRoot(),
+    NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
+    NbDatepickerModule.forRoot(),
+    NbDialogModule.forRoot(),
+    NbWindowModule.forRoot(),
+    NbToastrModule.forRoot(),
+    NbChatModule.forRoot({
+    }),
+    CoreModule.forRoot(),
+    NbEvaIconsModule,
+    ComponentsModule,
+    NbSecurityModule.forRoot({
+      accessControl: {
+        alert_read: {
+          view: [
+            'alerts',
+            'dashboard',
+            'alerts_overview',
+            'alerts_all',
+            'alerts_display',
+            'settings',
+            'settings_style'
+          ],
+        },
+        alert_admin: {
+          parent: 'alert_read',
+          view: [
+            'alerts_list',
+            'alerts_controls',
+            'alerts_info'
+          ],
+        },
+      },
+    }),
+  ],
+  bootstrap: [
+    AppComponent
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    fakeBackendProvider
-  ],
-  entryComponents: [ 
-    PizzaPartyComponent
-  ],
-  bootstrap: [AppComponent]
+    AuthGuard,
+    { 
+      provide: NbRoleProvider,
+      useClass: RoleProvider
+    },
+  ]
 })
-export class AppModule { }
+export class AppModule {
+}

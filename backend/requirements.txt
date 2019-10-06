@@ -1,0 +1,8 @@
+flask
+flask_restful
+pyModbusTCP
+flask_cors
+ldap3
+pymongo
+bson
+pyjwt
