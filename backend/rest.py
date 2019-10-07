@@ -559,20 +559,20 @@ class check(Resource):
 
 
 # Map URL's to resource classes
-API.add_resource(alert_all, "/alerts/all")
-API.add_resource(alert_display, "/alerts/display")
-API.add_resource(alert_modules, "/alerts/modules")
-API.add_resource(alert_overview, "/alerts/overview")
-API.add_resource(alert_zones, "/alerts/zones")
-API.add_resource(alert_types, "/alerts/types")
-API.add_resource(alert_status, "/alerts/status")
-API.add_resource(alert_create, "/alerts/create")
-API.add_resource(alert_update, "/alerts/update")
-API.add_resource(alert_delete, "/alerts/delete/<string:name>")
-API.add_resource(alert_detail, "/alerts/<string:uid>")
-API.add_resource(check, "/check")
-API.add_resource(auth, "/auth")
+API.add_resource(alert_all, "/api/alerts/all")
+API.add_resource(alert_display, "/api/alerts/display")
+API.add_resource(alert_modules, "/api/alerts/modules")
+API.add_resource(alert_overview, "/api/alerts/overview")
+API.add_resource(alert_zones, "/api/alerts/zones")
+API.add_resource(alert_types, "/api/alerts/types")
+API.add_resource(alert_status, "/api/alerts/status")
+API.add_resource(alert_create, "/api/alerts/create")
+API.add_resource(alert_update, "/api/alerts/update")
+API.add_resource(alert_delete, "/api/alerts/delete/<string:name>")
+API.add_resource(alert_detail, "/api/alerts/<string:uid>")
+API.add_resource(check, "/api/check")
+API.add_resource(auth, "/api/auth")
 
 
 # Run flask
-APP.run(debug=True, host='0.0.0.0', ssl_context='adhoc', threaded=True)
+APP.run(debug=True, host='0.0.0.0')

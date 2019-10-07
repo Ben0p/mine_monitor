@@ -1,8 +1,6 @@
 #! /usr/bin/python3.7
 
-# from env.dev import env
-# from env.prod import env
-from env.devprod import env
+from env.docker import env
 from flask import Flask, jsonify, send_file, Response, make_response
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
@@ -24,9 +22,9 @@ Serves as http json
 """
 
 # Initialize flask
-APP = Flask(__name__)
-API = Api(APP)
-CORS(APP)
+app = Flask(__name__)
+API = Api(app)
+CORS(app)
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(
@@ -574,5 +572,6 @@ API.add_resource(check, "/check")
 API.add_resource(auth, "/auth")
 
 
-# Run flask
-APP.run(debug=True, host='0.0.0.0', ssl_context='adhoc', threaded=True)
+if __name__ == "__main__":
+    # Run flask
+    app.run(debug=True, host='0.0.0.0', ssl_context='adhoc', threaded=True)
