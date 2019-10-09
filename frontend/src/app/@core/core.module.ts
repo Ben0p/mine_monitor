@@ -33,7 +33,7 @@ export const NB_CORE_PROVIDERS = [
           class: NbAuthJWTToken,
           key: 'token'
         },
-        baseEndpoint: 'http://localhost:5000',
+        baseEndpoint: 'https://localhost/api',
         login: {
           endpoint: '/auth',
           method: 'post',

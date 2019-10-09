@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://localhost:5000/alerts/';
+const APIurl: String = 'https://localhost/api/alerts/';
 
 @Injectable({
   providedIn: 'root',

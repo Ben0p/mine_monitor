@@ -7,6 +7,26 @@
 - [x] Temp remove auth menu
 - [x] Change Title
 - [x] Auth
+- [ ] Frontend and API security
+
+### Dockerisation
+- [ ] Web Frontend
+    - [x] nginx
+    - [x] Self signed keys (localhost)
+    - [x] https
+    - [x] Redirect to https
+    - [x] Reverse proxy for API
+        - [x] API location */api/
+- [ ] Rest API
+    - [x] wsgi with gunicorn
+    - [x] working Dockerfile and docker-compose.yml
+    - [ ] Talk to docker mongo
+- [ ] Mongo
+    - [ ] password
+- [ ] Alerts
+    - [ ] Talk to docker mongo
+    - [x] Get alerts.py working
+    - [x] Log output
 
 ### Issues
 - [x] Scrollbar 
@@ -15,11 +35,13 @@
 - [ ] Status card sometimes offline but still 'ON'
 - [ ] Need to ping a few times rather than once
 - [ ] Flask https fails due to unsigned certificate
+    - [ ] Use nginx reverse proxy 
+- [ ] No way to create alert zones or locations
 
 ### Security
 - [x] Domain auth through TLS
-- [ ] Rest API over HTTPS
-- [ ] API Proxy
+- [x] Rest API over HTTPS
+- [x] API reverse proxy
 
 ### General
 - [ ] Pull tetra data somehow

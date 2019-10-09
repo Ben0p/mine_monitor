@@ -24,9 +24,9 @@ Serves as http json
 """
 
 # Initialize flask
-APP = Flask(__name__)
-API = Api(APP)
-CORS(APP)
+app = Flask(__name__)
+API = Api(app)
+CORS(app)
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(
@@ -573,6 +573,6 @@ API.add_resource(alert_detail, "/api/alerts/<string:uid>")
 API.add_resource(check, "/api/check")
 API.add_resource(auth, "/api/auth")
 
-
-# Run flask
-APP.run(debug=True, host='0.0.0.0')
+if __name__ == "__main__":
+    # Run flask
+    app.run(debug=True, host='0.0.0.0')
