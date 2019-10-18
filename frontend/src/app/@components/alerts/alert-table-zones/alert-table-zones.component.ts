@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from '../../../@core/data/alerts.service'
 import { NbDialogService, NbToastrService } from '@nebular/theme';
@@ -86,7 +87,8 @@ export class AlertTableZonesComponent implements OnDestroy, OnInit {
     private alerts: AlertService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {
 
   }
@@ -105,6 +107,11 @@ export class AlertTableZonesComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.refreshData()
+  }
+
+  refreshPage(){
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(()=>
+    this.router.navigate(['/pages/alerts/edit']));
   }
 
 
@@ -126,7 +133,7 @@ export class AlertTableZonesComponent implements OnDestroy, OnInit {
     var invalidData = false
     if (confirmation) {
       if (this.modifyType == 'delete') {
-        this.alerts.deleteAlertModule(this.tableEvent.data.name).subscribe(
+        this.alerts.deleteAlertZone(this.tableEvent.data).subscribe(
           (data: {}) => {
             this.postResult = data;
             if (this.postResult['success']) {
@@ -141,33 +148,14 @@ export class AlertTableZonesComponent implements OnDestroy, OnInit {
           }
         )
       } else if (this.modifyType == 'edit') {
-        if (this.ipPattern.test(this.tableEvent.newData.ip) == false) {
-          this.dangerToast('top-right', 'danger', 'IP Address invalid.')
-          invalidData = true
-        }
 
         if (this.tableEvent.newData.name === "") {
           this.dangerToast('top-right', 'danger', 'Name invalid.')
           invalidData = true
         }
-
-        if (this.tableEvent.newData.location === "") {
-          this.dangerToast('top-right', 'danger', 'Location invalid.')
-          invalidData = true
-        }
-
-        if (this.tableEvent.newData.type === "") {
-          this.dangerToast('top-right', 'danger', 'Type invalid.')
-          invalidData = true
-        }
-
-        if (this.tableEvent.newData.zone === "") {
-          this.dangerToast('top-right', 'danger', 'Zone invalid.')
-          invalidData = true
-        }
         
         if (invalidData == false){
-          this.alerts.updateAlertModule(this.tableEvent.newData).subscribe(
+          this.alerts.updateAlertZone(this.tableEvent.newData).subscribe(
             (data: {}) => {
               this.postResult = data;
               if (this.postResult['success']) {
@@ -212,6 +200,7 @@ export class AlertTableZonesComponent implements OnDestroy, OnInit {
   }
 
   successToast(position, status, message) {
+    this.refreshPage()
     if (this.modifyType == 'delete') {
       this.toastrService.show(
         message,

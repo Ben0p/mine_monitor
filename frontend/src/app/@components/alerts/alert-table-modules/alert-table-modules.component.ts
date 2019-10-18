@@ -273,6 +273,7 @@ export class AlertTableModulesComponent implements OnDestroy, OnInit {
   }
 
   successToast(position, status, message) {
+
     if (this.modifyType == 'delete') {
       this.toastrService.show(
         message,

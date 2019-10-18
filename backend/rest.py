@@ -330,6 +330,55 @@ class alert_zones_create(Resource):
         except:
             return({'success': False, 'message': 'Failed to update'})
 
+class alert_zones_update(Resource):
+
+    def post(self):
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+        parser.add_argument("uid")
+
+        args = parser.parse_args()
+
+        try:
+            DB['alert_zones'].find_one_and_update(
+                {
+                    "_id": ObjectId(args['uid']),
+                },
+                {"$set":
+                    {
+                        "name": args['name'],
+                    }
+                 }
+            )
+
+            return({'success': True, 'message': 'Updated {}'.format(args['name'])})
+
+        except:
+            return({'success': False, 'message': 'Failed to update'})
+
+class alert_zones_delete(Resource):
+
+    def post(self):
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+        parser.add_argument("uid")
+
+        args = parser.parse_args()
+
+        zones_del_count = DB['alert_zones'].delete_many({"name": args['name']})
+        zones_del_count = zones_del_count.deleted_count
+
+        if zones_del_count > 0:
+            return({'success': True, 'message': f'Deleted {zones_del_count} objects.'})
+        else:
+            return({'success': False, 'message': f"{args['name']} not found."})
+
 class alert_zones_list(Resource):
 
     def get(self):
@@ -612,8 +661,8 @@ API.add_resource(alert_overview, "/api/alerts/overview")
 API.add_resource(alert_zones, "/api/alerts/zones")
 API.add_resource(alert_zones_list, "/api/alerts/zones/list")
 API.add_resource(alert_zones_create, "/api/alerts/zones/create")
-#API.add_resource(alert_zones_update, "/api/alerts/zones/update")
-#API.add_resource(alert_zones_delete, "/api/alerts/zones/delete")
+API.add_resource(alert_zones_update, "/api/alerts/zones/update")
+API.add_resource(alert_zones_delete, "/api/alerts/zones/delete")
 #API.add_resource(alert_locations, "/api/alerts/locations")
 API.add_resource(alert_types, "/api/alerts/types")
 API.add_resource(alert_status, "/api/alerts/status")

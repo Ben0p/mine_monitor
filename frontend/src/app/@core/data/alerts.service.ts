@@ -89,6 +89,24 @@ export class AlertService {
       );
   }
 
+  updateAlertZone(module): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "zones/update", JSON.stringify(module), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
+  deleteAlertZone(zone): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "zones/delete", JSON.stringify(zone), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
   getAlertTypes(): Observable<any> {
     return this.http.get(APIurl + "types").pipe(
       map(this.extractData),
