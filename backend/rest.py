@@ -2,7 +2,8 @@
 
 # from env.dev import env
 # from env.prod import env
-from env.devprod import env
+# from env.devprod import env
+from env.docker import env
 from flask import Flask, jsonify, send_file, Response, make_response
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient
@@ -299,6 +300,51 @@ class alert_zones(Resource):
 
         return(jsonify(json.loads(dumps(alert_zones_list))))
 
+class alert_zones_create(Resource):
+    
+    def post(self):
+
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("name")
+
+        args = parser.parse_args()
+
+        try:
+            DB['alert_zones'].find_one_and_update(
+                {
+                    'name':args['name']
+                },
+                {
+                    '$set': {
+                        'name' : args['name'],
+                    }
+                },
+                upsert=True
+            )
+
+            return({'success': True, 'message': 'Updated {}'.format(args['name'])})
+
+        except:
+            return({'success': False, 'message': 'Failed to update'})
+
+class alert_zones_list(Resource):
+
+    def get(self):
+        alert_zones = DB['alert_zones'].find().sort("name", pymongo.ASCENDING)
+        alert_zones_list = []
+
+        for zone in alert_zones:
+            alert_zones_list.append(
+                {
+                    'uid': str(zone['_id']),
+                    'name': zone['name'],
+                }
+            )
+
+        return(jsonify(json.loads(dumps(alert_zones_list))))
 
 class alert_types(Resource):
 
@@ -564,6 +610,11 @@ API.add_resource(alert_display, "/api/alerts/display")
 API.add_resource(alert_modules, "/api/alerts/modules")
 API.add_resource(alert_overview, "/api/alerts/overview")
 API.add_resource(alert_zones, "/api/alerts/zones")
+API.add_resource(alert_zones_list, "/api/alerts/zones/list")
+API.add_resource(alert_zones_create, "/api/alerts/zones/create")
+#API.add_resource(alert_zones_update, "/api/alerts/zones/update")
+#API.add_resource(alert_zones_delete, "/api/alerts/zones/delete")
+#API.add_resource(alert_locations, "/api/alerts/locations")
 API.add_resource(alert_types, "/api/alerts/types")
 API.add_resource(alert_status, "/api/alerts/status")
 API.add_resource(alert_create, "/api/alerts/create")
@@ -575,4 +626,4 @@ API.add_resource(auth, "/api/auth")
 
 if __name__ == "__main__":
     # Run flask
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)

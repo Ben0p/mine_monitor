@@ -3,7 +3,9 @@ import {
   NbCardModule,
   NbSelectModule,
   NbButtonModule,
-  NbIconModule
+  NbIconModule,
+  NbTabsetModule,
+  NbListModule
 } from '@nebular/theme';
 
 import { NbSecurityModule } from '@nebular/security';
@@ -14,7 +16,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { RouterModule } from '@angular/router';
 
 import { AlertsRoutingModule, routedComponents } from './alerts-routing.module';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -24,7 +25,8 @@ import { AlertsComponent } from './alerts.component';
 import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 import { DisplayComponent } from './display/display.component';
-import { DetailComponent } from './detail/detail.component'
+import { DetailComponent } from './detail/detail.component';
+import { EditComponent } from './edit/edit.component'
 
 
 
@@ -40,6 +42,7 @@ import { DetailComponent } from './detail/detail.component'
     AllComponent,
     DisplayComponent,
     DetailComponent,
+    EditComponent,
   ],
   imports: [
     AlertsRoutingModule,
@@ -49,11 +52,12 @@ import { DetailComponent } from './detail/detail.component'
     NbButtonModule,
     NgxEchartsModule,
     NgxChartsModule,
-    Ng2SmartTableModule,
     NbIconModule,
     RouterModule,
     ComponentsModule,
-    NbSecurityModule
+    NbSecurityModule,
+    NbTabsetModule,
+    NbListModule,
   ]
 })
 export class AlertsModule { }

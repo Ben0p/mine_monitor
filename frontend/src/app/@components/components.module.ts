@@ -9,6 +9,9 @@ import {
     NbListModule,
     NbUserModule,
   } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
+
+import { ThemeModule } from '../@theme/theme.module';
 
 import { StatusCardComponent } from './status-card/status-card.component'
 import { AlertSignComponent } from './alerts/alert-sign/alert-sign.component';
@@ -16,6 +19,9 @@ import { AlertBeaconComponent } from './alerts/alert-beacon/alert-beacon.compone
 import { AlertTrailerComponent } from './alerts/alert-trailer/alert-trailer.component';
 import { AlertControlsComponent } from './alerts/alert-controls/alert-controls.component';
 import { AlertInfoComponent } from './alerts/alert-info/alert-info.component';
+import { AlertTableModulesComponent } from './alerts/alert-table-modules/alert-table-modules.component';
+import { AlertTableZonesComponent } from './alerts/alert-table-zones/alert-table-zones.component';
+
 
 
 @NgModule({
@@ -26,15 +32,19 @@ import { AlertInfoComponent } from './alerts/alert-info/alert-info.component';
         AlertTrailerComponent,
         AlertControlsComponent,
         AlertInfoComponent,
+        AlertTableModulesComponent,
+        AlertTableZonesComponent,
     ],
     imports: [
         CommonModule,
+        ThemeModule,
         NbCardModule,
         NbSelectModule,
         NbButtonModule,
         NbIconModule,
         NbListModule,
         NbUserModule,
+        Ng2SmartTableModule
     ],
     exports: [
         StatusCardComponent,
@@ -43,6 +53,8 @@ import { AlertInfoComponent } from './alerts/alert-info/alert-info.component';
         AlertTrailerComponent,
         AlertControlsComponent,
         AlertInfoComponent,
+        AlertTableModulesComponent,
+        AlertTableZonesComponent,
     ]
 })
 

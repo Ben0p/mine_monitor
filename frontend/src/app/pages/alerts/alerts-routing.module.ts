@@ -7,6 +7,7 @@ import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component';
 import { DisplayComponent } from './display/display.component';
 import { DetailComponent } from './detail/detail.component';
+import { EditComponent } from './edit/edit.component';
 
 const routes: Routes = [{
   path: '',
@@ -27,6 +28,10 @@ const routes: Routes = [{
     {
       path: 'list',
       component: ListComponent,
+    },
+    {
+      path: 'edit',
+      component: EditComponent,
     },
     {
       path: ':uid',

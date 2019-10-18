@@ -18,7 +18,7 @@ import {
   NbMenuModule,
   NbSidebarModule,
   NbToastrModule,
-  NbWindowModule,
+  NbWindowModule
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ComponentsModule } from './@components/components.module';
@@ -66,7 +66,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
           view: [
             'alerts_list',
             'alerts_controls',
-            'alerts_info'
+            'alerts_info',
+            'alerts_edit'
           ],
         },
       },

@@ -52,6 +52,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_list'
         },
       },
+      {
+        title: 'Edit',
+        link: '/pages/alerts/edit',
+        data: {
+          permission: 'view',
+          resource: 'alerts_edit'
+        },
+      },
     ]
   },
   {

@@ -73,6 +73,22 @@ export class AlertService {
     );
   }
 
+  getAlertZonesList(): Observable<any> {
+    return this.http.get(APIurl + "zones/list").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+  createAlertZone(payload): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "zones/create", JSON.stringify(payload), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
   getAlertTypes(): Observable<any> {
     return this.http.get(APIurl + "types").pipe(
       map(this.extractData),
