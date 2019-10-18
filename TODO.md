@@ -1,5 +1,4 @@
 ## Mine Monitor To Do
-*Deleted redundant tasks*
 
 ### Minimum to deploy
 - [x] Controlls working
@@ -8,6 +7,8 @@
 - [x] Change Title
 - [x] Auth
 - [ ] Frontend and API security
+- [ ] Add alert zone through UI
+- [ ] 
 
 ### Dockerisation
 - [ ] Web Frontend
