@@ -228,12 +228,12 @@ class alert_overview(Resource):
     def get(self):
 
         overview = {
-            'all_clear': DB['alert_data'].count_documents({'all_clear': True}),
-            'emergency': DB['alert_data'].count_documents({'emergency': True}),
-            'a': DB['alert_data'].count_documents({'a': True}),
-            'b': DB['alert_data'].count_documents({'b': True}),
-            'c': DB['alert_data'].count_documents({'c': True}),
-            'offline': DB['alert_data'].count_documents({'online': False}),
+            'all_clear': DB['alert_all'].count_documents({'state': 'All Clear'}),
+            'emergency': DB['alert_all'].count_documents({'state': 'Emergency'}),
+            'a': DB['alert_all'].count_documents({'state': 'A Alert'}),
+            'b': DB['alert_all'].count_documents({'state': 'B Alert'}),
+            'c': DB['alert_all'].count_documents({'state': 'C Alert'}),
+            'offline': DB['alert_all'].count_documents({'state': 'Offline'}),
         }
 
         # Return collection as a massive json
@@ -301,7 +301,7 @@ class alert_zones(Resource):
         return(jsonify(json.loads(dumps(alert_zones_list))))
 
 class alert_zones_create(Resource):
-    
+
     def post(self):
 
         # Initilize request parser
