@@ -1,9 +1,11 @@
+#! /usr/bin/python3.7
 
 from env.docker import env
 from xml.etree import ElementTree
 import requests
 import pymongo
 from bson.json_util import dumps
+import json
 import copy
 import time
 import json
@@ -19,10 +21,25 @@ Polls coil status of modbus devices
 Writes results back in mongo
 """
 
-
 # Initialize mongo connection one time
-CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
+CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
+
+
+def checkDB():
+    alert_types = ['Sign', 'Beacon', 'Trailer']
+    dbs = CLIENT.list_databases()
+
+    if env['database'] not in dbs:
+        for alert in alert_types:
+            DB['alert_types'].insert_one(
+                {
+                    "name": alert
+                }
+            )
+        print("Created new DB")
+    else:
+        print("Found Databse")
 
 
 def getModules():
@@ -232,6 +249,8 @@ def getAll():
 
 
 if __name__ == '__main__':
+
+    checkDB()
 
     while True:
         getAll()

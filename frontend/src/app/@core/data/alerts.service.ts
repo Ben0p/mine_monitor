@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError, tap } from 'rxjs/operators';
+import { map, catchError, tap, delay } from 'rxjs/operators';
 import { NbToastrService, NbToastRef } from '@nebular/theme';
 
 
@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://localhost/api/alerts/';
+const APIurl: String = 'https://clbopsmm01/api/alerts/';
 
 @Injectable({
   providedIn: 'root',
@@ -119,6 +119,18 @@ export class AlertService {
       map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );
+  }
+
+  loadAlertList(page: number, pageSize: number): Observable<any> {
+    const TOTAL_PAGES = 7;
+    const startIndex = ((page - 1) % TOTAL_PAGES) * pageSize;
+
+    return this.http
+      .get<any>(APIurl + "all")
+      .pipe(
+        map(data => data.splice(startIndex, pageSize)),
+        delay(1500),
+      );
   }
 
   getAlertDisplay(): Observable<any> {

@@ -21,6 +21,8 @@ import { AlertControlsComponent } from './alerts/alert-controls/alert-controls.c
 import { AlertInfoComponent } from './alerts/alert-info/alert-info.component';
 import { AlertTableModulesComponent } from './alerts/alert-table-modules/alert-table-modules.component';
 import { AlertTableZonesComponent } from './alerts/alert-table-zones/alert-table-zones.component';
+import { AlertListInfiniteComponent } from './alerts/alert-list-infinite/alert-list-infinite.component';
+import { AlertListComponent } from './alerts/alert-list/alert-list.component';
 
 
 
@@ -34,6 +36,8 @@ import { AlertTableZonesComponent } from './alerts/alert-table-zones/alert-table
         AlertInfoComponent,
         AlertTableModulesComponent,
         AlertTableZonesComponent,
+        AlertListInfiniteComponent,
+        AlertListComponent,
     ],
     imports: [
         CommonModule,
@@ -55,6 +59,8 @@ import { AlertTableZonesComponent } from './alerts/alert-table-zones/alert-table
         AlertInfoComponent,
         AlertTableModulesComponent,
         AlertTableZonesComponent,
+        AlertListInfiniteComponent,
+        AlertListComponent
     ]
 })
 

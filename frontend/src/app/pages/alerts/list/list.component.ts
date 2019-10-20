@@ -1,4 +1,5 @@
-import { Component} from '@angular/core';
+import { Component, OnInit} from '@angular/core';
+import { AlertService } from '../../../@core/data/alerts.service'
 
 
 @Component({
@@ -7,10 +8,23 @@ import { Component} from '@angular/core';
   styleUrls: ['./list.component.scss'],
 })
 
-export class ListComponent {
+export class ListComponent implements OnInit {
+  alert$: {};
 
+  constructor(
+    private alerts: AlertService,
+  ) { }
 
-  constructor() { }
+  ngOnInit() {
+    this.refreshData();
+  }
 
+  refreshData() {
+    this.alerts.getAlerts().subscribe(
+      (data: {}) => {
+        this.alert$ = data;
+      }
+    );
+  }
 
 }

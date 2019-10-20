@@ -44,6 +44,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_display'
         },
       },
+      /** 
       {
         title: 'List',
         link: '/pages/alerts/list',
@@ -52,6 +53,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_list'
         },
       },
+      */
       {
         title: 'Edit',
         link: '/pages/alerts/edit',
