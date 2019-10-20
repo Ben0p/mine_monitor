@@ -1,14 +1,22 @@
 ## Mine Monitor To Do
 
+### Feature requests
+- [ ] Alerts
+    - [ ] Set a board to out of service
+        - [ ] Ignore out of service boards in the donut graph
+        - [ ] Display "Out of Service" instead of "Offline"
+    - [ ] Add notes to a board
+    - [ ] 
+
 ### Minimum to deploy
 - [x] Controlls working
 - [x] Temp remove Sidebar and Layouts controlls
 - [x] Temp remove auth menu
 - [x] Change Title
 - [x] Auth
-- [ ] Frontend and API security
-- [ ] Add alert zone through UI
-- [ ] 
+- [x] Frontend and API security
+- [x] Add alert zone through UI
+
 
 ### Dockerisation
 - [ ] Web Frontend
@@ -21,11 +29,11 @@
 - [ ] Rest API
     - [x] wsgi with gunicorn
     - [x] working Dockerfile and docker-compose.yml
-    - [ ] Talk to docker mongo
+    - [x] Talk to docker mongo
 - [ ] Mongo
     - [ ] password
 - [ ] Alerts
-    - [ ] Talk to docker mongo
+    - [x] Talk to docker mongo
     - [x] Get alerts.py working
     - [x] Log output
 
@@ -35,9 +43,11 @@
 - [x] Emergency control set to default color
 - [ ] Status card sometimes offline but still 'ON'
 - [ ] Need to ping a few times rather than once
-- [ ] Flask https fails due to unsigned certificate
-    - [ ] Use nginx reverse proxy 
-- [ ] No way to create alert zones or locations
+- [ ] Smart table fields text invisible after touched
+- [ ] api/alerts/overview quering the wrong mongodb collection
+- [x] Flask https fails due to unsigned certificate
+    - [x] Use nginx reverse proxy 
+- [x] No way to create alert zones or locations
 
 ### Security
 - [x] Domain auth through TLS
@@ -47,15 +57,19 @@
 ### General
 - [ ] Pull tetra data somehow
 - [ ] Create proper README and docs
-- [ ] Automate backups
-- [ ] nginx serve https
-- [ ] CCTV
+- [ ] Automate device backups
+- [x] nginx serve https
+- [ ] CCTV?
 - [ ] RestAPI authentication
 - [ ] Database backup
 - [x] Kerberos authentication against domain
 - [ ] Pre-load pwa for offline mode
 - [ ] Build number in footer
 - [x] Auth
+- [ ] Incorporate Cisco Aironet automation scripts
+- [ ] Configuration Management
+    - [ ] Auditing
+    - [ ] Comparisons
 
 ### Frontend
 

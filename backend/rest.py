@@ -30,8 +30,7 @@ API = Api(app)
 CORS(app)
 
 # Initialize mongo connection one time
-CLIENT = pymongo.MongoClient(
-    'mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
+CLIENT = pymongo.MongoClient('mongodb://{}:{}/'.format(env['mongodb_ip'], env['mongodb_port']))
 DB = CLIENT[env['database']]
 
 
