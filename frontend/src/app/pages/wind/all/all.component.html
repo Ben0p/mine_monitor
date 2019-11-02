@@ -5,9 +5,21 @@
   {{wind.mac}} <br>
   {{wind.knots}} knots <br>
   {{wind.kmh}} km/h <br>
-  
-  <img [@rotatedState]="wind.direction" class="direction" src="../../../../assets/icons/arrow-circle-up-outline.png">
+
+  <img [@rotatedState]="wind.direction" class="direction" src="../../../../assets/icons/arrow-circle-up-outline.svg">
   {{wind.direction}}
+
+
+  <div class="row">
+    <div class="col-lg-12">
+      <nb-card>
+        <nb-card-body>
+          <ngx-wind-line-chart [title]="wind.name">
+          </ngx-wind-line-chart>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
 
 
 </div>

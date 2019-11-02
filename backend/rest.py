@@ -19,7 +19,8 @@ import copy
 import jwt
 import datetime
 
-from routes.wind import wind_collect, wind_all
+from routes.wind import wind_collect, wind_all, wind_hourly
+
 
 """ Rest API for alerts
 Retrieves data from mongo 
@@ -677,6 +678,7 @@ API.add_resource(auth, "/api/auth")
 # Wind
 API.add_resource(wind_collect, '/api/wind/<string:name>')
 API.add_resource(wind_all, '/api/wind/all')
+API.add_resource(wind_hourly, '/api/wind/hourly/<string:name>/<string:units>')
 
 if __name__ == "__main__":
     # Run flask

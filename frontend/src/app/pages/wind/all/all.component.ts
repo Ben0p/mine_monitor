@@ -33,7 +33,6 @@ export class AllComponent implements OnInit, OnDestroy {
   interval: any;
   direction: string = 'N';
 
-
   constructor(
     private wind: WindService,
   ) { }
@@ -42,7 +41,7 @@ export class AllComponent implements OnInit, OnDestroy {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 3000);
+    }, 60000);
   }
 
   ngOnDestroy() {
@@ -55,6 +54,7 @@ export class AllComponent implements OnInit, OnDestroy {
         this.winds = data;
       }
     );
+
   }
 
 

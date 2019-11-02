@@ -52,6 +52,13 @@ export class WindService {
     );
   }
 
+  getWindHourly(name, units): Observable<any> {
+    return this.http.get(APIurl + "hourly/" + name + "/" + units).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
 
   dangerToast(position, status, message, code) {
     var preventDuplicates = true

@@ -7,8 +7,9 @@ from bson.json_util import dumps
 from bson.objectid import ObjectId
 import json
 import copy
-import datetime
+import time
 from flask import jsonify
+import datetime
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
@@ -78,6 +79,10 @@ class wind_collect(Resource):
         parser.add_argument("speedV")
         args = parser.parse_args()
 
+        direction = windDirection(args['directionV'])
+        knots = windKnots(args['speedV'])
+        kmh = windKmh(args['speedV'])
+
         DB['wind_live'].find_one_and_update(
             {
                 'name':args['name']
@@ -87,14 +92,39 @@ class wind_collect(Resource):
                     'mac' : args['mac'],
                     'name' : args['name'],
                     'degrees' : args['directionV'],
-                    'direction' : windDirection(args['directionV']),
-                    'speed' : args['speedV'],
-                    'knots' : windKnots(args['speedV']),
-                    'kmh' : windKmh(args['speedV']),
+                    'direction' : direction,
+                    'ms' : args['speedV'],
+                    'knots' : knots,
+                    'kmh' : kmh,
                 }
             },
             upsert=True
         )
+
+        DB['wind_history'].update(
+            {
+                'name':args['name'],
+            },
+            {
+                '$push' :
+                {
+                    'hourly' : {
+                        'utc': datetime.datetime.utcnow(),
+                        'time': time.strftime('%d/%m/%Y %X'),
+                        'degrees' : args['directionV'],
+                        'direction' : direction,
+                        'ms' : args['speedV'],
+                        'knots' : knots,
+                        'kmh' : kmh,
+                    }
+                }
+            },
+            upsert = True
+        )
+
+        one_hour = datetime.now() - timedelta(days=30)
+
+        DB['wind_history'].
 
 
 class wind_all(Resource):
@@ -104,3 +134,32 @@ class wind_all(Resource):
         winds = DB['wind_live'].find().sort("name", pymongo.ASCENDING)
 
         return(jsonify(json.loads(dumps(winds))))
+
+class wind_hourly(Resource):
+
+    def get(self, name, units):
+    
+        end = datetime.datetime.utcnow()
+        start = end -  datetime.timedelta(minutes=60)
+
+        print(start)
+        print(end)
+
+        speed = DB['wind_history'].find_one(
+            {
+                'name': name,
+            }
+        )
+
+        time = [hourly['time'] for hourly in speed['hourly']]
+        speed = [hourly[units] for hourly in speed['hourly']]
+
+
+        result = {
+            'name' : name,
+            'time'  : time,
+            'speed' : speed
+        }
+
+
+        return(jsonify(json.loads(dumps(result))))

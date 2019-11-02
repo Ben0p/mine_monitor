@@ -10,6 +10,7 @@ import {
     NbUserModule,
   } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { ChartModule } from 'angular2-chartjs';
 
 import { ThemeModule } from '../@theme/theme.module';
 
@@ -23,7 +24,7 @@ import { AlertTableModulesComponent } from './alerts/alert-table-modules/alert-t
 import { AlertTableZonesComponent } from './alerts/alert-table-zones/alert-table-zones.component';
 import { AlertListInfiniteComponent } from './alerts/alert-list-infinite/alert-list-infinite.component';
 import { AlertListComponent } from './alerts/alert-list/alert-list.component';
-
+import { WindLineChart } from './wind/wind-line-chart/wind-line-chart.component'
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { AlertListComponent } from './alerts/alert-list/alert-list.component';
         AlertTableZonesComponent,
         AlertListInfiniteComponent,
         AlertListComponent,
+        WindLineChart
     ],
     imports: [
         CommonModule,
@@ -48,7 +50,8 @@ import { AlertListComponent } from './alerts/alert-list/alert-list.component';
         NbIconModule,
         NbListModule,
         NbUserModule,
-        Ng2SmartTableModule
+        Ng2SmartTableModule,
+        ChartModule,
     ],
     exports: [
         StatusCardComponent,
@@ -60,7 +63,8 @@ import { AlertListComponent } from './alerts/alert-list/alert-list.component';
         AlertTableModulesComponent,
         AlertTableZonesComponent,
         AlertListInfiniteComponent,
-        AlertListComponent
+        AlertListComponent,
+        WindLineChart
     ]
 })
 
