@@ -58,7 +58,9 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'alerts_all',
             'alerts_display',
             'settings',
-            'settings_style'
+            'settings_style',
+            'wind',
+            'wind_all'
           ],
         },
         alert_admin: {

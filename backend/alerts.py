@@ -1,6 +1,6 @@
 #! /usr/bin/python3.7
 
-from env.docker import env
+from env.devprod import env
 from xml.etree import ElementTree
 import requests
 import pymongo

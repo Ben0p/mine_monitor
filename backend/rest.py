@@ -2,8 +2,8 @@
 
 # from env.dev import env
 # from env.prod import env
-# from env.devprod import env
-from env.docker import env
+from env.devprod import env
+# from env.docker import env
 from flask import Flask, jsonify, send_file, Response, make_response
 from flask_restful import Api, Resource, reqparse
 from pyModbusTCP.client import ModbusClient

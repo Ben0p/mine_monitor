@@ -1,0 +1,13 @@
+<div *ngFor="let wind of winds">
+  {{wind.name}} <br>
+  {{wind.degrees}} deg <br>
+  {{wind.speed}} m/s <br>
+  {{wind.mac}} <br>
+  {{wind.knots}} knots <br>
+  {{wind.kmh}} km/h <br>
+  
+  <img [@rotatedState]="wind.direction" class="direction" src="../../../../assets/icons/arrow-circle-up-outline.png">
+  {{wind.direction}}
+
+
+</div>

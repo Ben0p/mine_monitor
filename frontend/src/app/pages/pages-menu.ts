@@ -65,6 +65,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'Wind',
+    icon: 'umbrella-outline',
+    data: {
+      permission: 'view',
+      resource: 'wind'
+    },
+    children: [
+      {
+        title: 'All',
+        link: '/pages/wind/all',
+        data: {
+          permission: 'view',
+          resource: 'wind_all'
+        },
+      },
+    ]
+  },
+  {
     title: 'Settings',
     icon: 'options-2-outline',
     data: {

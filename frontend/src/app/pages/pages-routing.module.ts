@@ -23,6 +23,11 @@ const routes: Routes = [{
         .then(m => m.AlertsModule),
     },
     {
+      path: 'wind',
+      loadChildren: () => import('./wind/wind.module')
+        .then(m => m.WindModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

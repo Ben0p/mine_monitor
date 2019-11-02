@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://clbopsmm01.fmgops.local/api/alerts/';
+const APIurl: String = 'http://localhost:5000/api/alerts/';
 
 @Injectable({
   providedIn: 'root',
