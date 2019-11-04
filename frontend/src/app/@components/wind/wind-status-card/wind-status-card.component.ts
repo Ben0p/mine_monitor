@@ -1,11 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WindService } from '../../../@core/data/wind.service'
-import { trigger, state, style } from '@angular/animations';
+import { Component, Input } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
-  selector: 'all',
-  templateUrl: './all.component.html',
-  styleUrls: ['./all.component.scss'],
+  selector: 'ngx-wind-status-card',
+  styleUrls: ['./wind-status-card.component.scss'],
   animations: [
     trigger('rotatedState', [
       state('N', style({ transform: 'rotate(0)' })),
@@ -25,37 +23,28 @@ import { trigger, state, style } from '@angular/animations';
       state('NW', style({ transform: 'rotate(315deg)' })),
       state('NNW', style({ transform: 'rotate(337.5deg)' })),
     ])
-  ]
+  ],
+  template: `
+    <nb-card [ngClass]="{'off': !on}">
+      <div class="icon-container">
+        <div class="icon status-{{ status }}">
+        <nb-icon [@rotatedState]="direction" icon="{{ icon }}" style="font-size: 50px"></nb-icon>
+        </div>
+      </div>
+      <div class="details">
+        <div class="title h5">{{ title }}</div>
+        <div class="status paragraph-2">{{ on ? info + ' km/h - ' + direction : 'Offline' }}</div>
+      </div>
+    </nb-card>
+  `,
 })
+export class WindStatusCardComponent {
 
-export class AllComponent implements OnInit, OnDestroy {
-  winds: Object;
-  interval: any;
-  direction: string = 'N';
-
-  constructor(
-    private wind: WindService,
-  ) { }
-
-  ngOnInit() {
-    this.refreshData();
-    this.interval = setInterval(() => {
-      this.refreshData();
-    }, 60000);
-  }
-
-  ngOnDestroy() {
-    clearInterval(this.interval);
-  }
-
-  refreshData() {
-    this.wind.getWindAll().subscribe(
-      (data: {}) => {
-        this.winds = data;
-      }
-    );
-
-  }
-
-
+  @Input() title: string;
+  @Input() status: string;
+  @Input() on = true;
+  @Input() icon: string = 'arrow-circle-up-outline';
+  @Input() info: string;
+  @Input() direction: string = 'N';
+  
 }

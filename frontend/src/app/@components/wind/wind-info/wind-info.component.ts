@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { WindService } from '../../../@core/data/wind.service'
+import { Component, OnDestroy, Input, OnInit } from '@angular/core';
+import { NbThemeService, NbColorHelper } from '@nebular/theme';
+import { WindService } from '../../../@core/data/wind.service';
 import { trigger, state, style } from '@angular/animations';
 
 @Component({
-  selector: 'all',
-  templateUrl: './all.component.html',
-  styleUrls: ['./all.component.scss'],
+  selector: 'ngx-wind-info',
+  templateUrl: './wind-info.component.html',
+  styleUrls: ['./wind-info.component.scss'],
   animations: [
     trigger('rotatedState', [
       state('N', style({ transform: 'rotate(0)' })),
@@ -28,10 +29,14 @@ import { trigger, state, style } from '@angular/animations';
   ]
 })
 
-export class AllComponent implements OnInit, OnDestroy {
-  winds: Object;
+export class WindInfoComponent implements OnInit, OnDestroy {
+
+  @Input() name: string;
+  icon: string = 'arrow-circle-up-outline';
+  windInfo: Object;
   interval: any;
   direction: string = 'N';
+  dataAvailable: boolean = false
 
   constructor(
     private wind: WindService,
@@ -49,13 +54,11 @@ export class AllComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.wind.getWindAll().subscribe(
+    this.wind.getWindInfo(this.name).subscribe(
       (data: {}) => {
-        this.winds = data;
+        this.windInfo = data;
+        this.dataAvailable = true;
       }
     );
-
   }
-
-
 }

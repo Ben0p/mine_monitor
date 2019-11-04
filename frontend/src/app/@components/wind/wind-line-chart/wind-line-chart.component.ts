@@ -4,13 +4,12 @@ import { WindService } from '../../../@core/data/wind.service'
 
 @Component({
   selector: 'ngx-wind-line-chart',
-  template: `
-    <chart type="line" [data]="data" [options]="options"></chart>
-  `,
+  templateUrl: './wind-line-chart.component.html',
+  styleUrls: ['./wind-line-chart.component.scss'],
 })
-export class WindLineChart implements OnInit, OnDestroy {
-  @Input() title: string;
-
+export class WindLineChartComponent implements OnInit, OnDestroy {
+  @Input() name: string;
+  @Input() range: string;
 
   data: any;
   options: any;
@@ -18,6 +17,7 @@ export class WindLineChart implements OnInit, OnDestroy {
   windspeed: Object;
   interval: any;
   colors: any;
+  unit = 'kmh';
 
   constructor(
     private theme: NbThemeService,
@@ -34,7 +34,7 @@ export class WindLineChart implements OnInit, OnDestroy {
         labels: [],
         datasets: [{
           data: [],
-          label: this.title,
+          label: this.range,
           backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
           borderColor: this.colors.primary,
         }
@@ -81,12 +81,21 @@ export class WindLineChart implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    this.wind.getWindHourly(this.title, 'kmh').subscribe(
-      (speeds: {}) => {
-        this.windspeed = speeds;
-        this.loadData(this.windspeed)
-      }
-    );
+    if (this.range == 'minute') {
+      this.wind.getWindMinute(this.name, this.unit).subscribe(
+        (speeds: {}) => {
+          this.windspeed = speeds;
+          this.loadData(this.windspeed)
+        }
+      );
+    } else if (this.range == 'hour') {
+      this.wind.getWindHourly(this.name, this.unit).subscribe(
+        (speeds: {}) => {
+          this.windspeed = speeds;
+          this.loadData(this.windspeed)
+        }
+      );
+    }
   }
 
   ngOnInit() {
@@ -106,14 +115,12 @@ export class WindLineChart implements OnInit, OnDestroy {
       labels: windspeed['time'],
       datasets: [{
         data: windspeed['speed'],
-        label: this.title,
+        label: this.unit,
         backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
         borderColor: this.colors.primary,
       }
       ],
     };
-
-
   }
 
 

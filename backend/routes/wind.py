@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 import json
 import copy
 import time
-from flask import jsonify
+from flask import jsonify, request
 import datetime
 
 # Initialize mongo connection one time
@@ -90,6 +90,7 @@ class wind_collect(Resource):
             {
                 '$set': {
                     'mac' : args['mac'],
+                    'ip': request.remote_addr,
                     'name' : args['name'],
                     'degrees' : args['directionV'],
                     'direction' : direction,
@@ -106,10 +107,10 @@ class wind_collect(Resource):
                 'name':args['name'],
             },
             {
-                '$push' :
-                {
-                    'hourly' : {
+                '$push' : {
+                    'minute' : {
                         'utc': datetime.datetime.utcnow(),
+                        'unix' : time.time(),
                         'time': time.strftime('%d/%m/%Y %X'),
                         'degrees' : args['directionV'],
                         'direction' : direction,
@@ -117,14 +118,25 @@ class wind_collect(Resource):
                         'knots' : knots,
                         'kmh' : kmh,
                     }
-                }
+                },
             },
             upsert = True
         )
 
-        one_hour = datetime.now() - timedelta(days=30)
-
-        DB['wind_history'].
+        DB['wind_history'].update(
+            {
+                'name': args['name'],
+            },
+            {
+                '$pull' : {
+                    'minute' : {
+                        'unix' : { 
+                            '$lte': time.time() - 3600
+                        }
+                    }
+                }
+            },
+        )
 
 
 class wind_all(Resource):
@@ -135,15 +147,32 @@ class wind_all(Resource):
 
         return(jsonify(json.loads(dumps(winds))))
 
-class wind_hourly(Resource):
+class wind_minute(Resource):
 
     def get(self, name, units):
-    
-        end = datetime.datetime.utcnow()
-        start = end -  datetime.timedelta(minutes=60)
 
-        print(start)
-        print(end)
+        speed = DB['wind_history'].find_one(
+            {
+                'name': name,
+            }
+        )
+
+        time = [minute['time'] for minute in speed['minute']]
+        speed = [minute[units] for minute in speed['minute']]
+
+
+        result = {
+            'name' : name,
+            'time'  : time,
+            'speed' : speed
+        }
+
+
+        return(jsonify(json.loads(dumps(result))))
+
+class wind_hour(Resource):
+
+    def get(self, name, units):
 
         speed = DB['wind_history'].find_one(
             {
@@ -163,3 +192,13 @@ class wind_hourly(Resource):
 
 
         return(jsonify(json.loads(dumps(result))))
+
+class wind_info(Resource):
+
+    def get(self, name):
+
+        wind = DB['wind_live'].find_one({'name': name})
+
+        return(jsonify(json.loads(dumps(wind))))
+
+

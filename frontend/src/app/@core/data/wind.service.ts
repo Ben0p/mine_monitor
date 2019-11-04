@@ -52,6 +52,21 @@ export class WindService {
     );
   }
 
+  getWindInfo(name): Observable<any> {
+    return this.http.get(APIurl + "info/" + name).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+
+  getWindMinute(name, units): Observable<any> {
+    return this.http.get(APIurl + "minute/" + name + "/" + units).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
   getWindHourly(name, units): Observable<any> {
     return this.http.get(APIurl + "hourly/" + name + "/" + units).pipe(
       map(this.extractData),

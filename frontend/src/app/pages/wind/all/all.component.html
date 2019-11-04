@@ -1,25 +1,15 @@
-<div *ngFor="let wind of winds">
-  {{wind.name}} <br>
-  {{wind.degrees}} deg <br>
-  {{wind.speed}} m/s <br>
-  {{wind.mac}} <br>
-  {{wind.knots}} knots <br>
-  {{wind.kmh}} km/h <br>
-
-  <img [@rotatedState]="wind.direction" class="direction" src="../../../../assets/icons/arrow-circle-up-outline.svg">
-  {{wind.direction}}
-
-
+<div>
   <div class="row">
-    <div class="col-lg-12">
-      <nb-card>
-        <nb-card-body>
-          <ngx-wind-line-chart [title]="wind.name">
-          </ngx-wind-line-chart>
-        </nb-card-body>
-      </nb-card>
+    <div *ngFor="let wind of winds" class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+      <ngx-wind-status-card
+        style="cursor: pointer;"
+        [title]="wind.name"
+        [status]="'success'"
+        [on]="'true'"
+        [info]="wind.kmh"
+        [direction]="wind.direction"
+        routerLink="/pages/wind/{{wind.name}}">
+      </ngx-wind-status-card>
     </div>
   </div>
-
-
 </div>

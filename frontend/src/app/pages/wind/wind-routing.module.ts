@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { WindComponent } from './wind.component';
 import { AllComponent } from './all/all.component';
+import { DetailComponent } from './detail/detail.component';
 
 const routes: Routes = [{
   path: '',
@@ -11,6 +12,10 @@ const routes: Routes = [{
     {
       path: 'all',
       component: AllComponent,
+    },
+    {
+      path: ':name',
+      component: DetailComponent,
     },
   ],
 }];
