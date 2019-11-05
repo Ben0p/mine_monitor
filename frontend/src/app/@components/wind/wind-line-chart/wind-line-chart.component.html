@@ -3,13 +3,13 @@
     <nb-card-header>
         {{name}} - {{range}}
         <nb-radio-group [(value)]="unit" (click)="refreshData()">
-            <nb-radio [value]="'kmh'">
+            <nb-radio [value]="'kmh'" (click)="refreshData()">
                 km/h
             </nb-radio>
-            <nb-radio [value]="'ms'">
+            <nb-radio [value]="'ms'" (click)="refreshData()">
                 m/s
             </nb-radio>
-            <nb-radio [value]="'knots'">
+            <nb-radio [value]="'knots'" (click)="refreshData()">
                 knots
              </nb-radio>
         </nb-radio-group>

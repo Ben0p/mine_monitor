@@ -67,8 +67,8 @@ export class WindService {
     );
   }
 
-  getWindHourly(name, units): Observable<any> {
-    return this.http.get(APIurl + "hourly/" + name + "/" + units).pipe(
+  getWindHour(name, units): Observable<any> {
+    return this.http.get(APIurl + "hour/" + name + "/" + units).pipe(
       map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );

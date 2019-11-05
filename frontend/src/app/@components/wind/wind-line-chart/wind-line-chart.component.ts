@@ -89,7 +89,7 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
         }
       );
     } else if (this.range == 'hour') {
-      this.wind.getWindHourly(this.name, this.unit).subscribe(
+      this.wind.getWindHour(this.name, this.unit).subscribe(
         (speeds: {}) => {
           this.windspeed = speeds;
           this.loadData(this.windspeed)
@@ -111,16 +111,43 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   loadData(windspeed) {
-    this.data = {
-      labels: windspeed['time'],
-      datasets: [{
-        data: windspeed['speed'],
-        label: this.unit,
-        backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
-        borderColor: this.colors.primary,
-      }
-      ],
-    };
+    if (this.range == 'minute') {
+      this.data = {
+        labels: windspeed['time'],
+        datasets: [{
+          data: windspeed['speed'],
+          label: 'avg',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
+          borderColor: this.colors.primary,
+        }
+        ],
+      };
+    } else if (this.range == 'hour') {
+      this.data = {
+        labels: windspeed['time'],
+        datasets: [{
+          data: windspeed[this.unit]['max'],
+          label: 'max',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.danger, 0.3),
+          borderColor: this.colors.danger,
+        },
+        {
+          data: windspeed[this.unit]['min'],
+          label: 'min',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.success, 0.3),
+          borderColor: this.colors.success,
+        },
+        {
+          data: windspeed[this.unit]['avg'],
+          label: 'avg',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
+          borderColor: this.colors.primary,
+        }
+        ],
+      };
+
+    }
+
   }
 
 

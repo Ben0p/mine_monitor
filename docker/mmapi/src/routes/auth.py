@@ -17,7 +17,6 @@ import copy
 import jwt
 import datetime
 
-
 class auth(Resource):
     """POST auth"""
 
