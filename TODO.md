@@ -6,7 +6,7 @@
         - [ ] Ignore out of service boards in the donut graph
         - [ ] Display "Out of Service" instead of "Offline"
     - [ ] Add notes to a board
-    - [ ] 
+    - [ ] Order pages by location or zone etc...
 
 ### Minimum to deploy
 - [x] Controlls working
@@ -42,9 +42,9 @@
 - [x] Status card over-flow
 - [x] Emergency control set to default color
 - [ ] Status card sometimes offline but still 'ON'
-- [ ] Need to ping a few times rather than once
-- [ ] Smart table fields text invisible after touched
-- [ ] api/alerts/overview quering the wrong mongodb collection
+- [ ] No point in pinging device, if it times out it's offline
+- [ ] Smart table fields text invisible after touched in dark themes
+- [x] api/alerts/overview quering the wrong mongodb collection
 - [x] Flask https fails due to unsigned certificate
     - [x] Use nginx reverse proxy 
 - [x] No way to create alert zones or locations
@@ -55,6 +55,7 @@
 - [x] API reverse proxy
 
 ### General
+- [x] Anemometer data
 - [ ] Pull tetra data somehow
 - [ ] Create proper README and docs
 - [ ] Automate device backups
@@ -64,7 +65,7 @@
 - [ ] Database backup
 - [x] Kerberos authentication against domain
 - [ ] Pre-load pwa for offline mode
-- [ ] Build number in footer
+- [x] Build number in footer
 - [x] Auth
 - [ ] Incorporate Cisco Aironet automation scripts
 - [ ] Configuration Management
@@ -80,7 +81,7 @@
 - [x] Alerts module
 
 #### Data Services
-- [ ] alerts.service
+- [x] alerts.service
     - [x] Rename alerts.ts to alerts.service.ts
     - [x] Danger toast on error
     - [x] Infinite danger toast on multiple API call fails
@@ -129,6 +130,14 @@
 - [x] Information card
 - [ ] Notes card
     - [ ] Post
+    
+#### Wind
+- [x] All
+- [x] Detail
+    - [x] Minute graph
+    - [x] Hour graph
+    - [x] Live info
+- [x] Rotate arrow to show direction
 
 #### Settings
 - [x] Create settings module
@@ -145,9 +154,9 @@
 - [x] JWT auth
 - [x] JWT payload data
 - [x] User name
-- [ ] Role based ACL
+- [x] Role based ACL
     - [x] Single role
-    - [ ] Multi-role (alerts, configs)
+    - [x] Multi-role (alerts, configs)
 - [x] Log out
 
 #### User
@@ -168,6 +177,7 @@
 ##### General
 - [x] Overview get request
 - [x] Serve https
+- [x] Split routes into separate modules
 
 ##### Auth
 - [x] Login
@@ -197,3 +207,9 @@
 - [x] Create
     - [x] Create module
     - [x] Return status
+  
+ #### Wind
+ - [x] All
+ - [x] Past hour per minute data
+ - [x] Past 48 hours per hour data
+ - [x] Live info
