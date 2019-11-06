@@ -9,7 +9,7 @@
 
 ## General
 - Angular 8+ Web frontend
-- Python flash Rest API
+- Python flask Rest API
 - No SQL MongoDB
 
 ## Frontend
