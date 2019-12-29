@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://10.58.10.24:5000/api/wind/';
+const APIurl: String = 'https://10.58.10.24/api/wind/';
 
 @Injectable({
   providedIn: 'root',
