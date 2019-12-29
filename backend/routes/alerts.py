@@ -1,7 +1,6 @@
-from flask_restful import Resource, reqparse
+from env.sol import env
 
-from env.devprod import env
-# from env.docker import env
+from flask_restful import Resource, reqparse
 import pymongo
 from bson.json_util import dumps
 from bson.objectid import ObjectId

@@ -13,7 +13,7 @@
 - No SQL MongoDB
 
 ## Frontend
-Migrating to ngx-admin based on Angular 8+
+ngx-admin based on Angular 8+
 
 ## Backend
 Various python scripts
