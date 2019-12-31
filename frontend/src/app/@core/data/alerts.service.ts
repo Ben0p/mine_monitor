@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://10.58.10.24/api/alerts/';
+const APIurl: String = 'https://10.58.10.8/api/alerts/';
 
 @Injectable({
   providedIn: 'root',
