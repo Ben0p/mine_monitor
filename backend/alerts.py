@@ -173,6 +173,7 @@ def writeDB(alert):
         upsert=True
     )
 
+
 def getAll():
     """Main function"""
 

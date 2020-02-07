@@ -60,7 +60,9 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'settings',
             'settings_style',
             'wind',
-            'wind_all'
+            'wind_all',
+            'tetra',
+            'tetra_nodes'
           ],
         },
         alert_admin: {

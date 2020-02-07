@@ -18,6 +18,7 @@ from routes.wind import wind_collect, wind_all, wind_minute, wind_hour, wind_inf
 from routes.alerts import alert_all, alert_display, alert_detail, alert_overview, alert_modules, alert_zones, alert_zones_create, \
     alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete
 from routes.auth import auth
+from routes.tetra import tetra_node_all, tetra_node_load
 
 
 
@@ -71,6 +72,10 @@ API.add_resource(wind_all, '/api/wind/all')
 API.add_resource(wind_minute, '/api/wind/minute/<string:name>/<string:units>')
 API.add_resource(wind_hour, '/api/wind/hour/<string:name>/<string:units>')
 API.add_resource(wind_info, '/api/wind/info/<string:name>')
+
+# Tetra
+API.add_resource(tetra_node_all, '/api/tetra/node/all')
+API.add_resource(tetra_node_load, '/api/tetra/node/load')
 
 if __name__ == "__main__":
     # Run flask

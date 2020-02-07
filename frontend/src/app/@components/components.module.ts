@@ -27,7 +27,8 @@ import { AlertListInfiniteComponent } from './alerts/alert-list-infinite/alert-l
 import { AlertListComponent } from './alerts/alert-list/alert-list.component';
 import { WindLineChartComponent } from './wind/wind-line-chart/wind-line-chart.component';
 import { WindStatusCardComponent } from './wind/wind-status-card/wind-status-card.component';
-import { WindInfoComponent } from './wind/wind-info/wind-info.component'
+import { WindInfoComponent } from './wind/wind-info/wind-info.component';
+import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.component'
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { WindInfoComponent } from './wind/wind-info/wind-info.component'
         AlertListComponent,
         WindLineChartComponent,
         WindStatusCardComponent,
-        WindInfoComponent
+        WindInfoComponent,
+        TetraBarChartComponent
     ],
     imports: [
         CommonModule,
@@ -72,7 +74,8 @@ import { WindInfoComponent } from './wind/wind-info/wind-info.component'
         AlertListComponent,
         WindLineChartComponent,
         WindStatusCardComponent,
-        WindInfoComponent
+        WindInfoComponent,
+        TetraBarChartComponent
     ]
 })
 

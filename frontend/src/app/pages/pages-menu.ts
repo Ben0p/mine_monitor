@@ -83,6 +83,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'Tetra',
+    icon: 'radio-outline',
+    data: {
+      permission: 'view',
+      resource: 'tetra'
+    },
+    children: [
+      {
+        title: 'Nodes',
+        link: '/pages/tetra/nodes',
+        data: {
+          permission: 'view',
+          resource: 'tetra_nodes'
+        },
+      },
+    ]
+  },
+  {
     title: 'Settings',
     icon: 'options-2-outline',
     data: {

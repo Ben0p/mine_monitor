@@ -28,6 +28,11 @@ const routes: Routes = [{
         .then(m => m.WindModule),
     },
     {
+      path: 'tetra',
+      loadChildren: () => import('./tetra/tetra.module')
+        .then(m => m.TetraModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
