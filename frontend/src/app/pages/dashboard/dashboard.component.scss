@@ -1,46 +1,33 @@
-@import '../../@theme/styles/themes.scss';
+@import '../../@theme/styles/themes';
 
 @include nb-install-component() {
-  ngx-d3-bar,
-  ngx-d3-pie,
-  ngx-alerts-d3-advanced-pie,
-  ngx-d3-area-stack,
-  ngx-d3-line,
-  ngx-d3-polar {
-    display: block;
-    width: 100%;
-    height: nb-theme(card-height-medium);
+  .show-grid {
+    .row {
+      margin: -0.5rem;
+    }
 
-    ::ng-deep {
-      .pie-label {
-        fill: nb-theme(text-basic-color);
-      }
+    div[class^=col-] {
+      padding: 0.5rem;
+      box-sizing: border-box;
 
-      text {
-        fill: nb-theme(text-hint-color);
-      }
-
-      .chart-legend {
-        .legend-labels {
-          background: nb-theme(background-basic-color-2);
-        }
-        .legend-label {
-          color: nb-theme(text-hint-color);
-          .active .legend-label-text {
-            color: nb-theme(text-basic-color);
-          }
-        }
-      }
-
-      .total-value,
-      .item-value,
-      .item-percent {
-        line-height: 1.25;
-      }
-
-      .legend-items {
-        overflow-y: hidden;
+      div {
+        text-align: center;
+        background-color: nb-theme(background-basic-color-2);
+        padding: 0.75rem 0.25rem;
+        border-radius: 0.25rem;
       }
     }
+  }
+
+  .grid-h {
+    margin-top: 1.5rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .table-responsive {
+    margin-top: 1rem;
   }
 }

@@ -13,6 +13,7 @@ import json
 from pyModbusTCP.client import ModbusClient
 import subprocess, platform
 import os
+import hashlib
 
 
 """"Alert polling script
@@ -248,9 +249,33 @@ def getAll():
 
         writeDB(module)
 
+def genWZKey():
+    day = time.strftime('%d')
+    month = time.strftime('%m')
+    year = time.strftime('%y')
+
+    key = (int(day) * 2) + (int(month) * 300) + (int(year) * 170000)
+
+    print(key)
+
+    key = f"{key}{env['weatherzone_password']}"
+
+    print(key)
+
+    key = hashlib.md5(key.encode('utf-8')).hexdigest()
+
+    print(len(key))
+
+    return(key)
+
 
 def weatherZone():
-    url = 'http://ws1.theweather.com.au/?lt=uwas&lc=183,179,180,574,570,1443,1442&alerts=1(client=337)&format=json&u=15566-1804&k=805a6dfa9a03c4e22c8dce2277c06c30'
+
+    key = genWZKey()
+    print(key)
+
+    url = f'http://ws1.theweather.com.au/?lt=uwas&lc=183,179,180,574,570,1443,1442&alerts=1(client=337)&format=json&u=15566-1804&k={key}'
+    print(url)
 
     response = requests.get(url = url)
     json_data = json.loads(response.text)

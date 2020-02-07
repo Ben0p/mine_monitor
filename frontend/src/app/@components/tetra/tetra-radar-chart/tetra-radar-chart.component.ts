@@ -3,11 +3,11 @@ import { NbThemeService, NbColorHelper } from '@nebular/theme';
 import { TetraService } from '../../../@core/data/tetra.service'
 
 @Component({
-  selector: 'ngx-tetra-bar-chart',
-  templateUrl: './tetra-bar-chart.component.html',
-  styleUrls: ['./tetra-bar-chart.component.scss'],
+  selector: 'ngx-tetra-radar-chart',
+  templateUrl: './tetra-radar-chart.component.html',
+  styleUrls: ['./tetra-radar-chart.component.scss'],
 })
-export class TetraBarChartComponent implements OnInit, OnDestroy {
+export class TetraRadarChartComponent implements OnInit, OnDestroy {
   @Input() label_title: string;
 
   data: any;
@@ -19,6 +19,7 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
   interval: any;
   colors: any;
   bar_colors = [{}]
+  border_colors = [{}]
 
 
   constructor(
@@ -33,13 +34,13 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
       this.colors = config.variables;
       const chartjs: any = config.variables.chartjs;
 
-
       this.data = {
         labels: [],
         datasets: [
           {
             data: [],
             label: "Loading...",
+            borderColor: this.colors.primary,
             backgroundColor: NbColorHelper.hexToRgbA(this.colors.primaryLight, 0.8),
           }
         ]
@@ -49,45 +50,32 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
         animation: {
           duration: 0
         },
-        maintainAspectRatio: false,
         responsive: true,
+        maintainAspectRatio: false,
+        scaleFontColor: 'white',
         legend: {
           labels: {
             fontColor: chartjs.textColor,
           },
         },
-        scales: {
-          xAxes: [
-            {
-              gridLines: {
-                display: true,
-                color: chartjs.axisLineColor,
-              },
-              ticks: {
-                fontColor: chartjs.textColor,
-              },
-            },
-          ],
-          yAxes: [
-            {
-              gridLines: {
-                display: true,
-                color: chartjs.axisLineColor,
-              },
-              ticks: {
-                fontColor: chartjs.textColor,
-              },
-            },
-          ],
+        scale: {
+          pointLabels: {
+            fontSize: 14,
+            fontColor: chartjs.textColor,
+          },
+          gridLines: {
+            color: "grey",
+          },
+          angleLines: {
+            color: "grey",
+          },
         },
       };
-
-
     });
   }
 
   refreshData() {
-    this.tetra.getTetraNodeLoad().subscribe(
+    this.tetra.getTetraTSLoad().subscribe(
       (loads: {}) => {
         this.loads = loads;
         this.loadData()
@@ -111,30 +99,39 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
   loadData() {
 
     this.bar_colors = []
+    this.border_colors = []
 
-    this.loads['node_colors'].forEach(
+    this.loads['ts_colors'].forEach(
       value => {
         if (value == 'warning') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.warning, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.warning, 1))
         } else if (value == 'danger') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.danger, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.danger, 1))
         } else if (value == 'success') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.success, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.success, 0.8))
+        } else if (value == 'info') {
+          this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.info, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.info, 0.8))
+        } else if (value == 'primary') {
+          this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.primary, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.primary, 0.8))
         }
 
       },
 
     )
 
-
-
     this.data = {
-      labels: this.loads['node_names'],
+      labels: this.loads['ts_type'],
       datasets: [
         {
-          data: this.loads['node_loads'],
+          data: this.loads['ts_load'],
           label: this.label_title,
-          backgroundColor: this.bar_colors
+          backgroundColor: this.bar_colors,
+          borderColor: this.border_colors
         }
       ]
     };

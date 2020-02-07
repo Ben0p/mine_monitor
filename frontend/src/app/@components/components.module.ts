@@ -28,7 +28,8 @@ import { AlertListComponent } from './alerts/alert-list/alert-list.component';
 import { WindLineChartComponent } from './wind/wind-line-chart/wind-line-chart.component';
 import { WindStatusCardComponent } from './wind/wind-status-card/wind-status-card.component';
 import { WindInfoComponent } from './wind/wind-info/wind-info.component';
-import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.component'
+import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.component';
+import { TetraRadarChartComponent } from './tetra/tetra-radar-chart/tetra-radar-chart.component'
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.
         WindLineChartComponent,
         WindStatusCardComponent,
         WindInfoComponent,
-        TetraBarChartComponent
+        TetraBarChartComponent,
+        TetraRadarChartComponent
     ],
     imports: [
         CommonModule,
@@ -75,7 +77,8 @@ import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.
         WindLineChartComponent,
         WindStatusCardComponent,
         WindInfoComponent,
-        TetraBarChartComponent
+        TetraBarChartComponent,
+        TetraRadarChartComponent
     ]
 })
 

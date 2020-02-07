@@ -90,52 +90,25 @@ class tetra_node_all(Resource):
 
 class tetra_node_load(Resource):
 
-    def get(self,):
-
-        node_names = []
-        node_loads = []
-        node_colors = []
-
-        # Initilize request parser
-        parser = reqparse.RequestParser()
-
-        # Execute MySQL query
-        CURSOR.execute("SELECT \
-            Description, \
-            RadioTsCountIdle, \
-            RadioTsCountTotal \
-            FROM `nodestatus` \
-            WHERE StdBy = '0' \
-            AND Description NOT LIKE 'ELI%';"
+    def get(self):
+        # Get zone list
+        node_loads = DB['tetra_node_load'].find_one(
+            {
+                'type': 'bar'
+            }
         )
 
-        myresult = CURSOR.fetchall()
+        return(jsonify(json.loads(dumps(node_loads))))
 
-        for x in myresult:
+class tetra_ts_load(Resource):
 
-            ts_used = int(x[2] or 0) - int(x[1] or 0)
-
-            try:
-                load = ts_used / int(x[2] or 0) * 100
-            except ZeroDivisionError:
-                load = 0
-            
-            if load >= 90:
-                color = 'danger'
-            elif 90 > load >= 75:
-                color = 'warning'
-            elif 75 > load >= 0:
-                color = 'success'
-
-            node_names.append(x[0])
-            node_loads.append(round(load))
-            node_colors.append(color)
-
-        node_load = {
-            'node_names' : node_names,
-            'node_loads' : node_loads,
-            'node_colors' : node_colors
-        }
-
-
-        return(jsonify(json.loads(dumps(node_load))))
+    def get(self):
+        # Get zone list
+        ts_loads = DB['tetra_node_load'].find_one(
+            {
+                'type': 'radar'
+            }
+        )
+ 
+        return(jsonify(json.loads(dumps(ts_loads))))
+        

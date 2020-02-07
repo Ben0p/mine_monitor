@@ -19,7 +19,7 @@ from routes.alerts import alert_all, alert_display, alert_detail, alert_overview
     alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
     alert_wz
 from routes.auth import auth
-from routes.tetra import tetra_node_all, tetra_node_load
+from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load
 
 
 
@@ -78,6 +78,7 @@ API.add_resource(wind_info, '/api/wind/info/<string:name>')
 # Tetra
 API.add_resource(tetra_node_all, '/api/tetra/node/all')
 API.add_resource(tetra_node_load, '/api/tetra/node/load')
+API.add_resource(tetra_ts_load, '/api/tetra/ts/load')
 
 if __name__ == "__main__":
     # Run flask
