@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://10.58.10.8/api/alerts/';
+const APIurl: String = 'http://10.58.10.31:5000/api/alerts/';
 
 @Injectable({
   providedIn: 'root',
@@ -87,6 +87,13 @@ export class AlertService {
         map(this.extractData),
         catchError(this.handleError<any>("error"))
       );
+  }
+
+  getAlertWZ(): Observable<any> {
+    return this.http.get(APIurl + "wz").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
   }
 
   updateAlertZone(module): Observable<any> {

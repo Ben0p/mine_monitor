@@ -16,7 +16,8 @@ import datetime
 
 from routes.wind import wind_collect, wind_all, wind_minute, wind_hour, wind_info
 from routes.alerts import alert_all, alert_display, alert_detail, alert_overview, alert_modules, alert_zones, alert_zones_create, \
-    alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete
+    alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
+    alert_wz
 from routes.auth import auth
 from routes.tetra import tetra_node_all, tetra_node_load
 
@@ -63,6 +64,7 @@ API.add_resource(alert_create, "/api/alerts/create")
 API.add_resource(alert_update, "/api/alerts/update")
 API.add_resource(alert_delete, "/api/alerts/delete/<string:name>")
 API.add_resource(alert_detail, "/api/alerts/<string:uid>")
+API.add_resource(alert_wz, "/api/alerts/wz")
 API.add_resource(check, "/api/check")
 API.add_resource(auth, "/api/auth")
 

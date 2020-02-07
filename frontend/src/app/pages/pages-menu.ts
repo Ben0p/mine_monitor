@@ -36,6 +36,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_all'
         },
       },
+            {
+        title: 'Weather Zone',
+        link: '/pages/alerts/weatherzone',
+        data: {
+          permission: 'view',
+          resource: 'alerts_display'
+        },
+      },
       {
         title: 'Display',
         link: '/pages/alerts/display',

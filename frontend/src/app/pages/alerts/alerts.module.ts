@@ -26,7 +26,8 @@ import { ListComponent } from './list/list.component';
 import { AllComponent } from './all/all.component'
 import { DisplayComponent } from './display/display.component';
 import { DetailComponent } from './detail/detail.component';
-import { EditComponent } from './edit/edit.component'
+import { EditComponent } from './edit/edit.component';
+import { WeatherzoneComponent } from './weatherzone/weatherzone.component'
 
 
 
@@ -43,6 +44,7 @@ import { EditComponent } from './edit/edit.component'
     DisplayComponent,
     DetailComponent,
     EditComponent,
+    WeatherzoneComponent,
   ],
   imports: [
     AlertsRoutingModule,

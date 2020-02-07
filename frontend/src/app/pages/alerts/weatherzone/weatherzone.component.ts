@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AlertService } from './../../@core/data/alerts.service'
+import { AlertService } from '../../../@core/data/alerts.service'
 
 @Component({
-  selector: 'ngx-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'weatherzone',
+  templateUrl: './weatherzone.component.html',
+  styleUrls: ['./weatherzone.component.scss'],
 })
 
 
-export class DashboardComponent implements OnInit, OnDestroy {
+export class WeatherzoneComponent implements OnInit, OnDestroy {
 
   alerts$: Object
   interval: any;

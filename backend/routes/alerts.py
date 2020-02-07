@@ -520,3 +520,12 @@ class alert_delete(Resource):
                 return({'success': True, 'message': 'Deleted {} objects.'.format(total_del)})
             else:
                 return({'success': False, 'message': '{} not found.'.format(name)})
+
+
+class alert_wz(Resource):
+
+    def get(self):
+        # Get zone list
+        wz_alerts = DB['alert_wz'].find()
+
+        return(jsonify(json.loads(dumps(wz_alerts))))
