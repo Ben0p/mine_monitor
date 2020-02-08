@@ -11,9 +11,29 @@
       </div>
     </nb-card-body>
   </nb-card>
-  <div class="col-xxl-7">
-      <ngx-tetra-bar-chart [label_title]="'Load %'"></ngx-tetra-bar-chart>
 
-      <ngx-tetra-radar-chart [label_title]="'Time Slots'"></ngx-tetra-radar-chart>
+  <div class="col-xxl-7">
+    <nb-card>
+      <nb-card-header>
+        Tetra
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div class="col-xxl-6">
+            <ngx-tetra-bar-chart [label_title]="'Load %'"></ngx-tetra-bar-chart>
+          </div>
+          <div class="col-xxl-6">
+            <ngx-tetra-radar-chart [label_title]="'Time Slots'"></ngx-tetra-radar-chart>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xxl-6">
+            <ngx-tetra-radio-count-card [title]="radios.name" [type]="radios.status" [on]="radios.online"
+              [count]="radios.count">
+            </ngx-tetra-radio-count-card>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
   </div>
 </div>

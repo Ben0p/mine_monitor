@@ -37,6 +37,7 @@ def tetraNodes():
     ts_gr = 0
     ts_mc = 0
     ts_sc = 0
+    radios = 0
 
     # Execute MySQL query
     CURSOR.execute("SELECT \
@@ -52,12 +53,13 @@ def tetraNodes():
         RadioTsCountScch \
         FROM `nodestatus` \
         WHERE StdBy = '0' \
-        AND Description NOT LIKE 'ELI%';"
+        AND Description NOT LIKE 'ELI%' \
+        AND Description NOT LIKE 'New%';"
     )
 
     myresult = CURSOR.fetchall()
 
-    print(f"{time.time()} - SQL query completed")
+    print(f"{time.strftime('%d/%m/%Y %X')} - SQL query completed")
 
 
     for x in myresult:
@@ -86,6 +88,7 @@ def tetraNodes():
         ts_gr += int(x[7] or 0)
         ts_mc += int(x[8] or 0)
         ts_sc += int(x[9] or 0)
+        radios += int(x[3] or 0)
 
 
         DB['tetra_nodes'].find_one_and_update(
@@ -127,7 +130,37 @@ def tetraNodes():
         upsert=True
     )
 
+    DB['tetra_radio_count'].find_one_and_update(
+        {
+            'node' : 'all',
+        },
+        {
+            '$set': {
+                'node' : 'all',
+                'name' : 'Total',
+                'status' : 'success',
+                'online' : True,
+                'count' : radios,
+            }
+        },
+        upsert=True
+    )
 
+    DB['tetra_call_count'].find_one_and_update(
+        {
+            'node' : 'all',
+        },
+        {
+            '$set': {
+                'node' : 'all',
+                'name' : 'Total',
+                'status' : 'success',
+                'online' : True,
+                'count' : ts_gr+ts_in,
+            }
+        },
+        upsert=True
+    )
 
 
     DB['tetra_node_load'].find_one_and_update(
@@ -158,8 +191,105 @@ def tetraNodes():
 
 
 
+
+def genPoints(points, start, finish):
+    print(start)
+    print(type(start))
+
+    return(None)
+
+
+
+def tetraNodesMinute():
+    node_names = []
+    node_loads = []
+    node_colors = []
+    
+    ts_idle = 0
+    ts_in = 0
+    ts_gr = 0
+    ts_mc = 0
+    ts_sc = 0
+
+    # Execute MySQL query
+    CURSOR.execute("SELECT \
+        NodeNo, \
+        Description, \
+        StatusCount, \
+        TimeFirst, \
+        TimeLast, \
+        TrafficTsPeak, \
+        ItchAvg, \
+        GtchAvg, \
+        IdleAvg, \
+        MissingTsAvg, \
+        TotalTsAvg, \
+        RadioCellCongestionTchPct, \
+        RadioCellCongestionFreePct, \
+        RadioCellCongestionMissingPct \
+        FROM `nodestatisticsrestenminute` \
+        WHERE Description NOT LIKE 'ELI%' \
+        AND Description NOT LIKE 'New%';"
+    )
+
+    myresult = CURSOR.fetchall()
+
+    points = genPoints(myresult[0][3], myresult[0][4], myresult[0][5])
+
+def tetraSubscribers():
+
+    # Execute MySQL query
+    CURSOR.execute("SELECT \
+        SSI, \
+        Description, \
+        SsiKind \
+        FROM `subscriber`;"
+    )
+
+    myresult = CURSOR.fetchall()
+
+    for subscriber in myresult:
+
+        if subscriber[2] == 1:
+            s_type = 'Subscriber'
+        elif subscriber[2] == 2:
+            s_type = 'Group'
+        elif subscriber[2] == 5:
+            s_type = 'Application'
+        elif subscriber[2] == 8:
+            s_type = 'Terminal'
+
+        
+        DB['tetra_subscribers'].find_one_and_update(
+            {
+                'ssi' : subscriber[0],
+            },
+            {
+                '$set': {
+                    'ssi' : subscriber[0],
+                    'description' : subscriber[1],
+                    'type' : s_type
+                }
+            },
+            upsert=True
+        )
+
+
+
 def main():
+    count = 0
+
     tetraNodes()
+
+    if count < 60:
+        count += 1
+    elif count >= 60:
+        count = 0
+        time.sleep(2)
+        tetraSubscribers()
+        print("Refreshed subscribers")
+
+    #tetraNodesMinute()
 
 
 if __name__ == "__main__":

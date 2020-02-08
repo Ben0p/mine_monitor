@@ -106,6 +106,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'tetra_nodes'
         },
       },
+      {
+        title: 'Subscribers',
+        link: '/pages/tetra/subscribers',
+        data: {
+          permission: 'view',
+          resource: 'tetra_subscribers'
+        },
+      },
     ]
   },
   {

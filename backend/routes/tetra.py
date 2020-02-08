@@ -111,4 +111,36 @@ class tetra_ts_load(Resource):
         )
  
         return(jsonify(json.loads(dumps(ts_loads))))
-        
+
+class tetra_radio_count(Resource):
+
+    def get(self, node):
+        # Get zone list
+        radio_count = DB['tetra_radio_count'].find_one(
+            {
+                'node': node
+            }
+        )
+ 
+        return(jsonify(json.loads(dumps(radio_count))))
+
+class tetra_call_count(Resource):
+
+    def get(self, node):
+        # Get zone list
+        radio_count = DB['tetra_call_count'].find_one(
+            {
+                'node': node
+            }
+        )
+ 
+        return(jsonify(json.loads(dumps(radio_count))))
+
+class tetra_subscribers(Resource):
+
+    def get(self,):
+
+        # Get subscriber list (all)
+        subscribers = DB['tetra_subscribers'].find({}, {'_id': False}).sort("ssi", pymongo.ASCENDING)
+ 
+        return(jsonify(json.loads(dumps(subscribers))))

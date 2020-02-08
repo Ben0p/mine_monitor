@@ -66,6 +66,20 @@ export class TetraService {
     );
   }
 
+  getTetraRadioCount(node): Observable<any> {
+    return this.http.get(APIurl + "radio/count/" + node).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+  getTetraSubscribers(): Observable<any> {
+    return this.http.get(APIurl + "subscribers").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
 
 
 

@@ -62,7 +62,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'wind',
             'wind_all',
             'tetra',
-            'tetra_nodes'
+            'tetra_nodes',
+            'tetra_subscribers'
           ],
         },
         alert_admin: {

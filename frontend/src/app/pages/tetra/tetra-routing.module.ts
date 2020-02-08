@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { TetraComponent } from './tetra.component';
 import { NodesComponent } from './nodes/nodes.component';
+import { SubscribersComponent } from './subscribers/subscribers.component';
 
 const routes: Routes = [{
   path: '',
@@ -11,6 +12,10 @@ const routes: Routes = [{
     {
       path: 'nodes',
       component: NodesComponent,
+    },
+    {
+      path: 'subscribers',
+      component: SubscribersComponent,
     },
   ],
 }];
@@ -22,5 +27,6 @@ const routes: Routes = [{
 export class TetraRoutingModule { }
 export const routedComponents = [
   TetraComponent,
-  NodesComponent
+  NodesComponent,
+  SubscribersComponent
 ];
