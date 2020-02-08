@@ -1,7 +1,6 @@
-from flask_restful import Resource, reqparse
+from env.sol import env
 
-from env.devprod import env
-# from env.docker import env
+from flask_restful import Resource, reqparse
 import pymongo
 from bson.json_util import dumps
 from bson.objectid import ObjectId
@@ -521,3 +520,12 @@ class alert_delete(Resource):
                 return({'success': True, 'message': 'Deleted {} objects.'.format(total_del)})
             else:
                 return({'success': False, 'message': '{} not found.'.format(name)})
+
+
+class alert_wz(Resource):
+
+    def get(self):
+        # Get zone list
+        wz_alerts = DB['alert_wz'].find()
+
+        return(jsonify(json.loads(dumps(wz_alerts))))

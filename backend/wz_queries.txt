@@ -1,0 +1,5 @@
+Forcast
+http://ws1.theweather.com.au/?lt=aploc&pc={postcode}&fc=1&format=json&u={user}&k={key}
+
+Alerts + Warnings (SOL)
+http://ws1.theweather.com.au/?lt=uwas&lc=183,179,180,574,570,1443,1442&alerts=1(client=337)&format=xml&warn=1(client=337)&u={user}&k={key}
