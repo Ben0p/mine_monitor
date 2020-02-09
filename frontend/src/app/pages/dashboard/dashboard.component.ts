@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   alerts$: Object;
   radios: Object;
+  calls: Object;
   interval: any;
 
   constructor(
@@ -42,7 +43,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       (
         data: {}) => {
         this.radios = data;
-        console.log(this.radios)
+      }
+    )
+    this.tetra.getTetraCallStats('group', 10).subscribe(
+      (
+        data: {}) => {
+        this.calls = data;
+        console.log(this.calls)
       }
     )
   }

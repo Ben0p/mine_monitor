@@ -59,8 +59,6 @@ def tetraNodes():
 
     myresult = CURSOR.fetchall()
 
-    print(f"{time.strftime('%d/%m/%Y %X')} - SQL query completed")
-
 
     for x in myresult:
 
@@ -146,23 +144,6 @@ def tetraNodes():
         upsert=True
     )
 
-    DB['tetra_call_count'].find_one_and_update(
-        {
-            'node' : 'all',
-        },
-        {
-            '$set': {
-                'node' : 'all',
-                'name' : 'Total',
-                'status' : 'success',
-                'online' : True,
-                'count' : ts_gr+ts_in,
-            }
-        },
-        upsert=True
-    )
-
-
     DB['tetra_node_load'].find_one_and_update(
         {
             'type': 'radar',
@@ -188,6 +169,8 @@ def tetraNodes():
         },
         upsert=True
     )
+
+    print(f"{time.strftime('%d/%m/%Y %X')} - Updated node status")
 
 
 
@@ -268,33 +251,124 @@ def tetraSubscribers():
                 '$set': {
                     'ssi' : subscriber[0],
                     'description' : subscriber[1],
-                    'type' : s_type
+                    'type' : s_type,
+                    'group' : 'None'
                 }
             },
             upsert=True
         )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Refreshed subscribers")
 
+def groupAttachment():
+
+    # Execute MySQL query
+    CURSOR.execute("SELECT \
+        Ssi, \
+        GroupSsi, \
+        Selected \
+        FROM `groupattachment` \
+        WHERE Selected = 1;"
+    )
+
+    myresult = CURSOR.fetchall()
+
+    groups_list = DB['tetra_subscribers'].find(
+        {
+            'type' : 'Group'
+        }
+    )
+
+    groups = {group['ssi'] : group['description'] for group in groups_list}
+
+
+    for subscriber in myresult:
+
+        attached_group = subscriber[1]
+        talkgroup = groups[attached_group]
+        
+        
+        DB['tetra_subscribers'].find_one_and_update(
+            {
+                'ssi' : subscriber[0],
+            },
+            {
+                '$set': {
+                    'talkgroup' : talkgroup
+                }
+            },
+            upsert=True
+        )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retrieved current group attachment")
+
+def groupCalls(seconds):
+    CURSOR.execute(f"SELECT \
+        DISTINCT \
+        CallId, \
+        CallInitEsn, \
+        CallSetupTimeMs, \
+        OriginatingNodeNo, \
+        CallingEsn, \
+        InitRssi, \
+        InitMsDistance \
+        FROM \
+        groupcall \
+        WHERE \
+        CallInitEsn \
+        NOT LIKE '' \
+        AND CallBegin > date_sub(now(), \
+        interval {28800 + seconds} second);")
+    
+    myresult = CURSOR.fetchall()
+
+    call_count = len(myresult)
+    
+    gr_calls_per_sec = round(int(call_count or 0) / seconds, 2)
+
+    DB['tetra_call_stats'].find_one_and_update(
+        {
+            'range_sec' : seconds,
+            'type' : 'group'
+        },
+        {
+            '$set': {
+                'calls' : call_count,
+                'calls_sec': gr_calls_per_sec
+            }
+        },
+        upsert=True
+    )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retreived group calls last {seconds}sec")
 
 
 def main():
-    count = 0
 
-    tetraNodes()
-
-    if count < 60:
-        count += 1
-    elif count >= 60:
-        count = 0
-        time.sleep(2)
-        tetraSubscribers()
-        print("Refreshed subscribers")
-
-    #tetraNodesMinute()
+    subscriber_count = 0
+    group_count = 0
 
 
-if __name__ == "__main__":
     while True:
 
-        main()
+        tetraNodes()
+        time.sleep(2)
+        groupCalls(10)
+
+        group_count += 1
+        subscriber_count += 0
+        
+        if group_count >= 6:
+            group_count = 0
+            time.sleep(2)
+            groupAttachment()
+
+        if subscriber_count >= 60:
+            subscriber_count = 0
+            time.sleep(2)
+            tetraSubscribers()
+
+        #tetraNodesMinute()
 
         time.sleep(10)
+
+if __name__ == "__main__":
+
+    main()

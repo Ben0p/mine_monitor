@@ -29,7 +29,12 @@
         <div class="row">
           <div class="col-xxl-6">
             <ngx-tetra-radio-count-card [title]="radios.name" [type]="radios.status" [on]="radios.online"
-              [count]="radios.count">
+              [count]="radios.count" [description]="'Radios Online'">
+            </ngx-tetra-radio-count-card>
+          </div>
+          <div class="col-xxl-6">
+            <ngx-tetra-radio-count-card [title]="'Group Calls'" [type]="'success'" [on]="'true'"
+              [count]="calls.calls" [description]="'Last 10 Sec'">
             </ngx-tetra-radio-count-card>
           </div>
         </div>

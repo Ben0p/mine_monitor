@@ -19,6 +19,16 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
         edit: false,
       },
       columns: {
+        description: {
+          title: 'Description',
+          type: 'text',
+          editable: false
+        },
+        talkgroup: {
+          title: 'Current Talkgroup',
+          type: 'text',
+          editable: false
+        },
         ssi: {
           title: 'SSI',
           type: 'text',
@@ -40,11 +50,6 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
               ],
             },
           },
-        },
-        description: {
-          title: 'Description',
-          type: 'text',
-          editable: false
         },
       },
     }

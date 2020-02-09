@@ -80,6 +80,13 @@ export class TetraService {
     );
   }
 
+  getTetraCallStats(call_type, range_sec): Observable<any> {
+    return this.http.get(APIurl + "callstats/" + call_type + '/' + range_sec).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
 
 
 

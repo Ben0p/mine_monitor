@@ -1,0 +1,1602 @@
+{ 
+   "api_version":"1.0",
+   "metadata":{ 
+      "sector":"weather",
+      "title":"Weatherzone",
+      "provider_name":"Weatherzone",
+      "provider_url":"http:\/\/www.weatherzone.com.au",
+      "project_version":"3.29",
+      "revision":30046,
+      "last_commit":"2020-01-29 17:38:00 +1100 (Wed, 29 Jan 2020)",
+      "create_time":"2020-02-09T09:40:57+1100",
+      "create_tz":"EDT",
+      "create_time_utc":"2020-02-08T22:40:57Z",
+      "validity":"2020-02-09"
+   },
+   "countries":[ 
+      { 
+         "code":"AU",
+         "name":"Australia",
+         "region":"Oceania",
+         "locations":[ 
+            { 
+               "type":"UWAS",
+               "code":"570",
+               "name":"Solomon Aerodrome",
+               "state":"WA",
+               "latitude":-22.2543,
+               "longitude":117.8492,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"5750701",
+                     "client_id":"337",
+                     "grouping":"2694",
+                     "loc_type":"UWAS",
+                     "loc_code":"570",
+                     "location_name":"Solomon Aerodrome",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-11-23 10:31:00.636",
+                     "issue_time_local":"2019-11-23 18:31:00.636",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-11-23 10:31:00.617",
+                     "event_end":"2019-11-23 10:31:00.617",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6112565",
+                     "client_id":"337",
+                     "grouping":"9233",
+                     "loc_type":"UWAS",
+                     "loc_code":"570",
+                     "location_name":"Solomon Aerodrome",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:12.899",
+                     "issue_time_local":"2019-12-28 18:41:12.899",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:12.872",
+                     "event_end":"2019-12-28 10:41:12.872",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614702",
+                     "client_id":"337",
+                     "grouping":"2694",
+                     "loc_type":"UWAS",
+                     "loc_code":"570",
+                     "location_name":"Solomon Aerodrome",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:33:19.634",
+                     "issue_time_local":"2020-02-06 18:33:19.634",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:33:19.595",
+                     "event_end":"2020-02-06 10:33:19.595",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"mining.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"574",
+               "name":"Solomon Camps",
+               "state":"WA",
+               "latitude":-22.2182,
+               "longitude":117.8203,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"6112553",
+                     "client_id":"337",
+                     "grouping":"9211",
+                     "loc_type":"UWAS",
+                     "loc_code":"574",
+                     "location_name":"Solomon Camps",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:11.098",
+                     "issue_time_local":"2019-12-28 18:41:11.098",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:11.073",
+                     "event_end":"2019-12-28 10:41:11.073",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614665",
+                     "client_id":"337",
+                     "grouping":"2103",
+                     "loc_type":"UWAS",
+                     "loc_code":"574",
+                     "location_name":"Solomon Camps",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:30:41.844",
+                     "issue_time_local":"2020-02-06 18:30:41.844",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:30:41.817",
+                     "event_end":"2020-02-06 10:30:41.817",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"183",
+               "name":"Solomon Firetail",
+               "state":"WA",
+               "time_zone":"Australia\/Perth",
+               "latitude":-22.135,
+               "longitude":117.9466,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"6112550",
+                     "client_id":"337",
+                     "grouping":"9213",
+                     "loc_type":"UWAS",
+                     "loc_code":"183",
+                     "location_name":"Solomon Firetail",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:10.383",
+                     "issue_time_local":"2019-12-28 18:41:10.383",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:10.349",
+                     "event_end":"2019-12-28 10:41:10.349",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614430",
+                     "client_id":"337",
+                     "grouping":"2105",
+                     "loc_type":"UWAS",
+                     "loc_code":"183",
+                     "location_name":"Solomon Firetail",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:20:44.392",
+                     "issue_time_local":"2020-02-06 18:20:44.392",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:20:44.354",
+                     "event_end":"2020-02-06 10:20:44.354",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"1443",
+               "name":"Solomon Frederick",
+               "state":"WA",
+               "latitude":-22.208,
+               "longitude":117.8964,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"6112566",
+                     "client_id":"337",
+                     "grouping":"9242",
+                     "loc_type":"UWAS",
+                     "loc_code":"1443",
+                     "location_name":"Solomon Frederick",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:12.997",
+                     "issue_time_local":"2019-12-28 18:41:12.997",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:12.977",
+                     "event_end":"2019-12-28 10:41:12.977",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614615",
+                     "client_id":"337",
+                     "grouping":"4798",
+                     "loc_type":"UWAS",
+                     "loc_code":"1443",
+                     "location_name":"Solomon Frederick",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:28:19.692",
+                     "issue_time_local":"2020-02-06 18:28:19.692",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:28:19.637",
+                     "event_end":"2020-02-06 10:28:19.637",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614616",
+                     "client_id":"337",
+                     "grouping":"4798",
+                     "loc_type":"UWAS",
+                     "loc_code":"1443",
+                     "location_name":"Solomon Frederick",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:28:19.828",
+                     "issue_time_local":"2020-02-06 18:28:19.828",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:28:19.795",
+                     "event_end":"2020-02-06 10:28:19.795",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"179",
+               "name":"Solomon Kings",
+               "state":"WA",
+               "time_zone":"Australia\/Perth",
+               "latitude":-22.1381,
+               "longitude":117.8842,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"6112556",
+                     "client_id":"337",
+                     "grouping":"9210",
+                     "loc_type":"UWAS",
+                     "loc_code":"179",
+                     "location_name":"Solomon Kings",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:11.267",
+                     "issue_time_local":"2019-12-28 18:41:11.267",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:11.235",
+                     "event_end":"2019-12-28 10:41:11.235",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614634",
+                     "client_id":"337",
+                     "grouping":"2101",
+                     "loc_type":"UWAS",
+                     "loc_code":"179",
+                     "location_name":"Solomon Kings",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:29:29.713",
+                     "issue_time_local":"2020-02-06 18:29:29.713",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:29:29.686",
+                     "event_end":"2020-02-06 10:29:29.686",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"1442",
+               "name":"Solomon Queens",
+               "state":"WA",
+               "latitude":-22.1293,
+               "longitude":117.7772,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"5886653",
+                     "client_id":"337",
+                     "grouping":"4797",
+                     "loc_type":"UWAS",
+                     "loc_code":"1442",
+                     "location_name":"Solomon Queens",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-10 05:06:23.296",
+                     "issue_time_local":"2019-12-10 13:06:23.296",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-10 05:06:23.277",
+                     "event_end":"2019-12-10 05:06:23.277",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6112549",
+                     "client_id":"337",
+                     "grouping":"9241",
+                     "loc_type":"UWAS",
+                     "loc_code":"1442",
+                     "location_name":"Solomon Queens",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:10.009",
+                     "issue_time_local":"2019-12-28 18:41:10.009",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:09.972",
+                     "event_end":"2019-12-28 10:41:09.972",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6408749",
+                     "client_id":"337",
+                     "grouping":"4797",
+                     "loc_type":"UWAS",
+                     "loc_code":"1442",
+                     "location_name":"Solomon Queens",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-01-17 13:47:39.427",
+                     "issue_time_local":"2020-01-17 21:47:39.427",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-01-17 13:47:39.405",
+                     "event_end":"2020-01-17 13:47:39.405",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614914",
+                     "client_id":"337",
+                     "grouping":"4797",
+                     "loc_type":"UWAS",
+                     "loc_code":"1442",
+                     "location_name":"Solomon Queens",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:44:45.342",
+                     "issue_time_local":"2020-02-06 18:44:45.342",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:44:45.303",
+                     "event_end":"2020-02-06 10:44:45.303",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/dashboard.weatherzone.com.au"
+                  }
+               ]
+            },
+            { 
+               "type":"UWAS",
+               "code":"180",
+               "name":"Solomon Trinity",
+               "state":"WA",
+               "time_zone":"Australia\/Perth",
+               "latitude":-22.1287,
+               "longitude":117.7728,
+               "warnings":{ 
+                  "summary":"7 current warnings",
+                  "current_warnings":[ 
+                     { 
+                        "id":"IDW24100",
+                        "type":"TC",
+                        "description":"Tropical cyclone",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:45:04Z",
+                           "local_time":"2020-02-09T05:45:04+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:45:04Z",
+                           "local_time":"2020-02-09T13:45:04+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Tropical Cyclone Warning: Inland parts of Pilbara and NE Gascoyne, inc Tom Price, Paraburdoo and Mt Augustus but not inc Newman",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW24100",
+                        "images":[ 
+                           { 
+                              "url":"http:\/\/data.weatherzone.com.au\/data\/hourly\/images\/warning\/IDW60280.gif"
+                           }
+                        ]
+                     },
+                     { 
+                        "id":"IDW30000",
+                        "type":"FIREW",
+                        "description":"Fire weather warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T21:12:12Z",
+                           "local_time":"2020-02-09T05:12:12+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T16:00:00Z",
+                           "local_time":"2020-02-10T00:00:00+0800"
+                        },
+                        "districts":"W09, W10",
+                        "summary":"Fire Weather Warning for West Pilbara Coast, Ashburton Inland, Gascoyne Coast and Eucla",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW30000",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW20100",
+                        "type":"CWIND",
+                        "description":"Coastal wind warning",
+                        "issued":{ 
+                           "day_name":"Sunday",
+                           "utc_time":"2020-02-08T20:00:00Z",
+                           "local_time":"2020-02-09T04:00:00+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-10T16:00:00Z",
+                           "local_time":"2020-02-11T00:00:00+0800"
+                        },
+                        "districts":"MW00, MW02, MW03, MW05, MW06, MW07, MW08, MW09, MW10, MW11, MW13, MW14",
+                        "summary":"Strong Wind Warning Pilbara E, Pilbara W, Per Local & Gascoyne, Geraldton, Lancelin, Perth, Bunbury Geographe, Esperance & Eucla coasts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW20100",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39835",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T05:50:19Z",
+                           "local_time":"2020-02-08T13:50:19+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T08:50:08Z",
+                           "local_time":"2020-02-09T16:50:08+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Initial Moderate Flood Warning for the Ashburton River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39835",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39840",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:53:59Z",
+                           "local_time":"2020-02-08T10:53:59+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:53:54Z",
+                           "local_time":"2020-02-09T13:53:54+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for the Fortescue River",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39840",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39830",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:50:55Z",
+                           "local_time":"2020-02-08T10:50:55+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:50:22Z",
+                           "local_time":"2020-02-09T13:50:22+0800"
+                        },
+                        "districts":"W10",
+                        "summary":"Flood Warning for Pilbara coastal rivers",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39830",
+                        "images":[ 
+
+                        ]
+                     },
+                     { 
+                        "id":"IDW39606",
+                        "type":"FLOOD",
+                        "description":"Flood warning",
+                        "issued":{ 
+                           "day_name":"Saturday",
+                           "utc_time":"2020-02-08T02:38:02Z",
+                           "local_time":"2020-02-08T10:38:02+0800"
+                        },
+                        "expires":{ 
+                           "utc_time":"2020-02-09T05:37:57Z",
+                           "local_time":"2020-02-09T13:37:57+0800"
+                        },
+                        "districts":"W07, W10",
+                        "summary":"Flood Watch for the Pilbara and Gascoyne districts",
+                        "url":"http:\/\/www.weatherzone.com.au\/warning.jsp?id=IDW39606",
+                        "images":[ 
+
+                        ]
+                     }
+                  ]
+               },
+               "alerts":[ 
+                  { 
+                     "id":"5567956",
+                     "client_id":"337",
+                     "grouping":"2102",
+                     "loc_type":"UWAS",
+                     "loc_code":"180",
+                     "location_name":"Solomon Trinity",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-10-22 05:45:05.089",
+                     "issue_time_local":"2019-10-22 13:45:05.089",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-10-22 05:45:05.063",
+                     "event_end":"2019-10-22 05:45:05.063",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6112568",
+                     "client_id":"337",
+                     "grouping":"9186",
+                     "loc_type":"UWAS",
+                     "loc_code":"180",
+                     "location_name":"Solomon Trinity",
+                     "alert_type":"FIRE",
+                     "template_name":"FIRE_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2019-12-28 10:41:13.459",
+                     "issue_time_local":"2019-12-28 21:11:13.459",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2019-12-28 10:41:13.415",
+                     "event_end":"2019-12-28 10:41:13.415",
+                     "timezone_name":"Australia\/Adelaide",
+                     "timezone_code":"CDT",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  },
+                  { 
+                     "id":"6614701",
+                     "client_id":"337",
+                     "grouping":"2102",
+                     "loc_type":"UWAS",
+                     "loc_code":"180",
+                     "location_name":"Solomon Trinity",
+                     "alert_type":"LIGHTNING",
+                     "template_name":"FMG_CLEAR",
+                     "status":"CLEAR",
+                     "embargo_period":"Infinite",
+                     "issue_time":"2020-02-06 10:32:58.928",
+                     "issue_time_local":"2020-02-06 18:32:58.928",
+                     "embargo_end":"9999-12-31 23:59:59.000",
+                     "embargo_end_local":"9999-12-31 23:59:59.000",
+                     "event_start":"2020-02-06 10:32:58.890",
+                     "event_end":"2020-02-06 10:32:58.890",
+                     "timezone_name":"Australia\/Perth",
+                     "timezone_code":"WST",
+                     "sms_enabled":"0",
+                     "sms_number":null,
+                     "email_enabled":"0",
+                     "email_address":null,
+                     "primary_url":"http:\/\/mining.weatherzone.com.au"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
