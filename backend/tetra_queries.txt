@@ -26,3 +26,6 @@ SELECT * FROM tetraflexlogdb.subscriber WHERE Description LIKE "%Mark%"
 
 Unique group calls last 10 sec (adjusted for UTC):
 SELECT DISTINCT CallId, CallInitEsn, CallSetupTimeMs, OriginatingNodeNo, CallingEsn, InitRssi, InitMsDistance FROM tetraflexlogdb.groupcall WHERE CallInitEsn NOT LIKE '' AND CallBegin > date_sub(now(), interval 28810 second);
+
+No GPS
+SELECT DISTINCT CallingSsi, CallingDescr FROM sdsdata WHERE UserDataLength = 44 and Timestamp >= '2020-02-08';

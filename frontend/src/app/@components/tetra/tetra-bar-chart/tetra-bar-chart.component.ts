@@ -8,7 +8,7 @@ import { TetraService } from '../../../@core/data/tetra.service'
   styleUrls: ['./tetra-bar-chart.component.scss'],
 })
 export class TetraBarChartComponent implements OnInit, OnDestroy {
-  @Input() label_title: string;
+  @Input() title: string;
 
   data: any;
   loads: any;
@@ -19,6 +19,7 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
   interval: any;
   colors: any;
   bar_colors = [{}]
+  border_colors = [{}]
 
 
   constructor(
@@ -41,6 +42,7 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
             data: [],
             label: "Loading...",
             backgroundColor: NbColorHelper.hexToRgbA(this.colors.primaryLight, 0.8),
+            borderColor: NbColorHelper.hexToRgbA(this.colors.primaryLight, 1),
           }
         ]
       };
@@ -111,21 +113,25 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
   loadData() {
 
     this.bar_colors = []
+    this.border_colors = []
 
     this.loads['node_colors'].forEach(
       value => {
         if (value == 'warning') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.warning, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.warning, 1))
         } else if (value == 'danger') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.danger, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.danger, 1))
         } else if (value == 'success') {
           this.bar_colors.push(NbColorHelper.hexToRgbA(this.colors.success, 0.8))
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.success, 1))
+        } else if (value == 'offline') {
+          this.bar_colors.push('grey')
+          this.border_colors.push(NbColorHelper.hexToRgbA(this.colors.danger, 1))
         }
-
       },
-
     )
-
 
 
     this.data = {
@@ -133,9 +139,11 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
       datasets: [
         {
           data: this.loads['node_loads'],
-          label: this.label_title,
-          backgroundColor: this.bar_colors
-        }
+          label: 'Load %',
+          backgroundColor: this.bar_colors,
+          borderColor: this.border_colors,
+          borderWidth: 2
+        },
       ]
     };
 

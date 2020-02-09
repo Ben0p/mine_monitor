@@ -76,17 +76,26 @@ def tetraNodes():
         elif 75 > load >= 0:
             color = 'success'
 
-
-        node_names.append(x[2])
-        node_loads.append(round(load))
-        node_colors.append(color)
-
         ts_idle += int(x[4] or 0)
         ts_in += int(x[6] or 0)
         ts_gr += int(x[7] or 0)
         ts_mc += int(x[8] or 0)
         ts_sc += int(x[9] or 0)
         radios += int(x[3] or 0)
+
+        online = True
+
+        # Override if offline   
+        if x[0].timestamp() < (time.time()-28810):
+            color = 'offline'
+            online = False
+            load = 100
+
+        
+        
+        node_names.append(x[2])
+        node_loads.append(round(load))
+        node_colors.append(color)
 
 
         DB['tetra_nodes'].find_one_and_update(
@@ -107,7 +116,8 @@ def tetraNodes():
                     'ts_sc' : x[9],
                     'ts_used' : ts_used,
                     'load' : round(load),
-                    'color' : color
+                    'color' : color,
+                    'online' : online
                 }
             },
             upsert=True
