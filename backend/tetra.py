@@ -350,6 +350,46 @@ def groupCalls(seconds):
     print(f"{time.strftime('%d/%m/%Y %X')} - Retreived group calls last {seconds}sec")
 
 
+def individualCalls(seconds):
+    CURSOR.execute(f"SELECT \
+        DISTINCT \
+        CallId, \
+        CallInitEsn, \
+        CallSetupTimeMs, \
+        OriginatingNodeNo, \
+        CallingEsn, \
+        CallInitRssi, \
+        CallInitMsDistance \
+        FROM \
+        individualcall \
+        WHERE \
+        CallInitEsn \
+        NOT LIKE '' \
+        AND CallBegin > date_sub(now(), \
+        interval {28800 + seconds} second);")
+    
+    myresult = CURSOR.fetchall()
+
+    call_count = len(myresult)
+    
+    in_calls_per_sec = round(int(call_count or 0) / seconds, 2)
+
+    DB['tetra_call_stats'].find_one_and_update(
+        {
+            'range_sec' : seconds,
+            'type' : 'individual'
+        },
+        {
+            '$set': {
+                'calls' : call_count,
+                'calls_sec': in_calls_per_sec
+            }
+        },
+        upsert=True
+    )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retreived individual calls last {seconds}sec")
+
+
 def main():
 
     subscriber_count = 0
@@ -361,6 +401,8 @@ def main():
         tetraNodes()
         time.sleep(2)
         groupCalls(10)
+        time.sleep(2)
+        individualCalls(10)
 
         group_count += 1
         subscriber_count += 0
