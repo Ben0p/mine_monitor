@@ -19,7 +19,8 @@ from routes.alerts import alert_all, alert_display, alert_detail, alert_overview
     alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
     alert_wz
 from routes.auth import auth
-from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats
+from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
+    tetra_call_history, tetra_subscriber_detail
 
 
 
@@ -82,6 +83,9 @@ API.add_resource(tetra_ts_load, '/api/tetra/ts/load')
 API.add_resource(tetra_radio_count, '/api/tetra/radio/count/<string:node>')
 API.add_resource(tetra_subscribers, '/api/tetra/subscribers')
 API.add_resource(tetra_call_stats, '/api/tetra/callstats/<string:call_type>/<int:range_sec>')
+API.add_resource(tetra_call_history, '/api/tetra/callstats/history/<string:time_range>')
+API.add_resource(tetra_subscriber_detail, '/api/tetra/subscribers/detail/<string:issi>')
+
 
 if __name__ == "__main__":
     # Run flask

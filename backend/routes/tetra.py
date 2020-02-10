@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 import json
 import copy
 import time
-from flask import jsonify, request
+from flask import jsonify, request, Response
 import datetime
 import mysql.connector
 
@@ -148,3 +148,73 @@ class tetra_call_stats(Resource):
             {'_id': False})
  
         return(jsonify(json.loads(dumps(stats))))
+
+class tetra_call_history(Resource):
+
+    def get(self, time_range):
+
+        # Get subscriber list (all)
+        stats = DB['tetra_call_stats'].find_one(
+            {
+                'type' : 'history',
+                'range' : time_range
+            },
+            {'_id': False})
+ 
+        return(jsonify(json.loads(dumps(stats))))
+
+
+class tetra_subscriber_detail(Resource):
+
+    def get(self, issi):
+        
+        # Execute MySQL query
+        CURSOR.execute(f"SELECT \
+            MAX(Timestamp), \
+            OriginatingNodeNo, \
+            UserDataLength, \
+            Rssi, \
+            MsDistance \
+            FROM sdsdata \
+            WHERE CallingSsi = {issi};"
+        )
+
+        myresult = CURSOR.fetchall()
+        
+        if not myresult[0][0]:
+            detail = {
+                'timestamp' : 'None',
+                'node' : 'None',
+                'gps' : 'None',
+                'rssi' : 'None',
+                'distance' :'None'
+            }
+            return(detail)
+
+        time = myresult[0][0] + datetime.timedelta(hours=8)
+        time = time.strftime('%d/%m/%Y %H:%M:%S')
+
+        node_name = DB['tetra_nodes'].find_one(
+            {
+                'node_number' : myresult[0][1],
+            },
+            {'_id': False}
+        )
+
+        if myresult[0][2] ==  129:
+            gps = True
+        elif myresult[0][2] == 44:
+            gps = False
+
+
+
+        detail = {
+            'timestamp' : time,
+            'node' : node_name['node_description'],
+            'gps' : gps,
+            'rssi' : myresult[0][3],
+            'distance' : myresult[0][4]
+        }
+
+ 
+        return(jsonify(json.loads(dumps(detail))))

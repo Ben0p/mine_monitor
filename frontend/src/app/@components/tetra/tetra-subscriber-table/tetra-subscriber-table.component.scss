@@ -4,8 +4,21 @@
   nb-card {
     transform: translate3d(0, 0, 0);
   }
+
 }
 
 .wrapper {
   text-align: center;
+}
+
+ng2-smart-table {
+    cursor: pointer;
+}
+
+:host /deep/ .ng-touched {
+    color:  #dc3545
+}
+
+:host /deep/ .user-picture {
+    color:  #dc3545
 }

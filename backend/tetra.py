@@ -227,7 +227,7 @@ def tetraNodesMinute():
 
     myresult = CURSOR.fetchall()
 
-    points = genPoints(myresult[0][3], myresult[0][4], myresult[0][5])
+    #points = genPoints(myresult[0][3], myresult[0][4], myresult[0][5])
 
 def tetraSubscribers():
 
@@ -363,9 +363,7 @@ def individualCalls(seconds):
         FROM \
         individualcall \
         WHERE \
-        CallInitEsn \
-        NOT LIKE '' \
-        AND CallBegin > date_sub(now(), \
+        CallInitiated > date_sub(now(), \
         interval {28800 + seconds} second);")
     
     myresult = CURSOR.fetchall()
@@ -390,6 +388,129 @@ def individualCalls(seconds):
     print(f"{time.strftime('%d/%m/%Y %X')} - Retreived individual calls last {seconds}sec")
 
 
+def groupCallsDay():
+    #115200 seconds = 24 hours +8 Timezone
+    CURSOR.execute(f"SELECT \
+        DISTINCT \
+        CallId, \
+        CallBegin,\
+        CallInitEsn, \
+        CallSetupTimeMs, \
+        OriginatingNodeNo, \
+        CallingEsn, \
+        InitRssi, \
+        InitMsDistance \
+        FROM \
+        groupcall \
+        WHERE \
+        CallInitEsn \
+        NOT LIKE '' \
+        AND CallBegin > date_sub(now(), \
+        interval 115200 second);")
+    
+    myresult = CURSOR.fetchall()
+
+    minutes = {}
+    call_counts = []
+    call_minutes = []
+
+    one_day_ago = time.time() - 115200
+
+    for step in range(0, 86400, 60):
+        minute = one_day_ago + step
+        minute = datetime.datetime.fromtimestamp(minute+28800).strftime('%d/%m/%Y %H:%M')
+        minutes[minute] = 0
+
+    for call in myresult:
+        minute = call[1].timestamp()+28800
+        minute = datetime.datetime.fromtimestamp(minute).strftime('%d/%m/%Y %H:%M')
+        try:
+            minutes[minute] += 1
+        except KeyError:
+            pass
+
+    
+    for key, value in minutes.items():
+        call_minutes.append(key)
+        call_counts.append(value) 
+
+    DB['tetra_call_stats'].find_one_and_update(
+        {
+            'range' : 'day',
+            'type' : 'history'
+        },
+        {
+            '$set': {
+                'minutes' : call_minutes,
+                'group_calls' : call_counts,
+            }
+        },
+        upsert=True
+    )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retreived group call counts last day")
+
+def IndividualCallsDay():
+    #115200 seconds = 24 hours +8 Timezone
+    CURSOR.execute(f"SELECT \
+        DISTINCT \
+        CallId, \
+        CallInitiated,\
+        CallInitEsn, \
+        CallSetupTimeMs, \
+        OriginatingNodeNo, \
+        CallingEsn, \
+        CallInitRssi, \
+        CallInitMsDistance \
+        FROM \
+        individualcall \
+        WHERE \
+        CallInitiated > date_sub(now(), \
+        interval 115200 second);")
+    
+    myresult = CURSOR.fetchall()
+
+    minutes = {}
+    call_counts = []
+    call_minutes = []
+
+    one_day_ago = time.time() - 115200
+
+    for step in range(0, 86400, 60):
+        minute = one_day_ago + step
+        minute = datetime.datetime.fromtimestamp(minute+28800).strftime('%d/%m/%Y %H:%M')
+        minutes[minute] = 0
+
+    for call in myresult:
+        try: 
+            minute = call[1].timestamp()+28800
+            minute = datetime.datetime.fromtimestamp(minute).strftime('%d/%m/%Y %H:%M')
+        except AttributeError:
+            pass
+        try:
+            minutes[minute] += 1
+        except KeyError:
+            pass
+
+    
+    for key, value in minutes.items():
+        call_minutes.append(key)
+        call_counts.append(value) 
+
+    DB['tetra_call_stats'].find_one_and_update(
+        {
+            'range' : 'day',
+            'type' : 'history'
+        },
+        {
+            '$set': {
+                'minutes' : call_minutes,
+                'individual_calls' : call_counts,
+            }
+        },
+        upsert=True
+    )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retreived individual call counts last day")
+
 def main():
 
     subscriber_count = 0
@@ -411,6 +532,11 @@ def main():
             group_count = 0
             time.sleep(2)
             groupAttachment()
+            time.sleep(2)
+            groupCallsDay()
+            time.sleep(2)
+            IndividualCallsDay()
+            time.sleep(2)
 
         if subscriber_count >= 60:
             subscriber_count = 0

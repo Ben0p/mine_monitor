@@ -87,6 +87,19 @@ export class TetraService {
     );
   }
 
+  getTetraCallHistory(range): Observable<any> {
+    return this.http.get(APIurl + "callstats/history/" + range).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+  getTetraSubscriberDetail(issi): Observable<any> {
+    return this.http.get(APIurl + "subscribers/detail/" + issi).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
 
 
 

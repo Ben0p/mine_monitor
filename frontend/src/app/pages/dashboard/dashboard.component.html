@@ -1,5 +1,5 @@
 <div class="row">
-  <nb-card class="col-xxl-5">
+  <nb-card class="col-xxl-4">
     <nb-card-header>
       Alerts - Weather Zone
     </nb-card-header>
@@ -12,7 +12,7 @@
     </nb-card-body>
   </nb-card>
 
-  <div class="col-xxl-7">
+  <div class="col-xxl-8">
     <nb-card>
       <nb-card-header>
         Tetra
@@ -42,6 +42,13 @@
           <div class="col-xxl-6">
             <ngx-tetra-radar-chart [label_title]="'Time Slots'"></ngx-tetra-radar-chart>
           </div>
+        </div>
+        <div class="row">
+          <div style="width: 100%;">
+          <div class="col-xxl-12" style="height: 400px">
+            <ngx-tetra-calls-line-chart [title]="'Calls - 24 Hours'"></ngx-tetra-calls-line-chart>
+          </div>
+        </div>
         </div>
       </nb-card-body>
     </nb-card>
