@@ -28,6 +28,20 @@ SQL = mysql.connector.connect(
 CURSOR = SQL.cursor()
 
 
+def reconnectSQL():
+    # Initialize mySQL connection
+    SQL = mysql.connector.connect(
+    host=f"{env['tetra_sql_host']}",
+    user=f"{env['tetra_sql_user']}",
+    passwd=f"{env['tetra_sql_passwd']}",
+    database=f"{env['tetra_sql_database']}"
+    )
+
+    CURSOR = SQL.cursor()
+
+    print("Re-connected SQL")
+
+
 class tetra_node_all(Resource):
 
     def get(self,):
@@ -168,53 +182,77 @@ class tetra_subscriber_detail(Resource):
 
     def get(self, issi):
         
-        # Execute MySQL query
-        CURSOR.execute(f"SELECT \
-            MAX(Timestamp), \
-            OriginatingNodeNo, \
-            UserDataLength, \
-            Rssi, \
-            MsDistance \
-            FROM sdsdata \
-            WHERE CallingSsi = {issi};"
-        )
+        try:
+            # Execute MySQL query
+            CURSOR.execute(f"SELECT \
+                Timestamp, \
+                OriginatingNodeNo, \
+                UserDataLength, \
+                Rssi, \
+                MsDistance \
+                FROM sdsdata \
+                WHERE CallingSsi = {issi} \
+                ORDER BY Timestamp \
+                DESC LIMIT 1;"
+            )
 
-        myresult = CURSOR.fetchall()
-        
-        if not myresult[0][0]:
-            detail = {
-                'timestamp' : 'None',
-                'node' : 'None',
-                'gps' : 'None',
-                'rssi' : 'None',
-                'distance' :'None'
-            }
-            return(detail)
+            myresult = CURSOR.fetchall()
+        except mysql.connector.errors.OperationalError:
 
-        time = myresult[0][0] + datetime.timedelta(hours=8)
-        time = time.strftime('%d/%m/%Y %H:%M:%S')
+            reconnectSQL()
 
-        node_name = DB['tetra_nodes'].find_one(
-            {
-                'node_number' : myresult[0][1],
-            },
-            {'_id': False}
-        )
+            # Execute MySQL query
+            CURSOR.execute(f"SELECT \
+                Timestamp, \
+                OriginatingNodeNo, \
+                UserDataLength, \
+                Rssi, \
+                MsDistance \
+                FROM sdsdata \
+                WHERE CallingSsi = {issi} \
+                ORDER BY Timestamp \
+                DESC LIMIT 1;"
+            )
 
-        if myresult[0][2] ==  129:
-            gps = True
-        elif myresult[0][2] == 44:
-            gps = False
+            myresult = CURSOR.fetchall()
 
-
-
+        # Placeholder default values
         detail = {
-            'timestamp' : time,
-            'node' : node_name['node_description'],
-            'gps' : gps,
-            'rssi' : myresult[0][3],
-            'distance' : myresult[0][4]
+            'timestamp' : 'None',
+            'node' : 'None',
+            'gps' : False,
+            'rssi' : 'None',
+            'distance' :'None'
         }
+
+        try:
+
+            time = myresult[0][0] + datetime.timedelta(hours=8)
+            time = time.strftime('%d/%m/%Y %H:%M:%S')
+
+            node_name = DB['tetra_nodes'].find_one(
+                {
+                    'node_number' : myresult[0][1],
+                },
+                {'_id': False}
+            )
+
+            if myresult[0][2] ==  129:
+                gps = True
+            elif myresult[0][2] == 44:
+                gps = False
+
+
+
+            detail = {
+                'timestamp' : time,
+                'node' : node_name['node_description'],
+                'gps' : gps,
+                'rssi' : myresult[0][3],
+                'distance' : myresult[0][4]
+            }
+        except IndexError:
+            return(detail)
 
  
         return(jsonify(json.loads(dumps(detail))))

@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 import json
 import copy
 import time
-from flask import jsonify, request
+from flask import jsonify, request, Response
 import datetime
 import mysql.connector
 
@@ -26,6 +26,20 @@ SQL = mysql.connector.connect(
 )
 
 CURSOR = SQL.cursor()
+
+
+def reconnectSQL():
+    # Initialize mySQL connection
+    SQL = mysql.connector.connect(
+    host=f"{env['tetra_sql_host']}",
+    user=f"{env['tetra_sql_user']}",
+    passwd=f"{env['tetra_sql_passwd']}",
+    database=f"{env['tetra_sql_database']}"
+    )
+
+    CURSOR = SQL.cursor()
+
+    print("Re-connected SQL")
 
 
 class tetra_node_all(Resource):
@@ -111,4 +125,134 @@ class tetra_ts_load(Resource):
         )
  
         return(jsonify(json.loads(dumps(ts_loads))))
+
+class tetra_radio_count(Resource):
+
+    def get(self, node):
+        # Get zone list
+        radio_count = DB['tetra_radio_count'].find_one(
+            {
+                'node': node
+            }
+        )
+ 
+        return(jsonify(json.loads(dumps(radio_count))))
+
+
+class tetra_subscribers(Resource):
+
+    def get(self,):
+
+        # Get subscriber list (all)
+        subscribers = DB['tetra_subscribers'].find({}, {'_id': False}).sort("ssi", pymongo.ASCENDING)
+ 
+        return(jsonify(json.loads(dumps(subscribers))))
+
+
+class tetra_call_stats(Resource):
+
+    def get(self, call_type, range_sec):
+
+        # Get subscriber list (all)
+        stats = DB['tetra_call_stats'].find_one(
+            {
+                'type' : call_type,
+                'range_sec' : range_sec
+            },
+            {'_id': False})
+ 
+        return(jsonify(json.loads(dumps(stats))))
+
+class tetra_call_history(Resource):
+
+    def get(self, time_range):
+
+        # Get subscriber list (all)
+        stats = DB['tetra_call_stats'].find_one(
+            {
+                'type' : 'history',
+                'range' : time_range
+            },
+            {'_id': False})
+ 
+        return(jsonify(json.loads(dumps(stats))))
+
+
+class tetra_subscriber_detail(Resource):
+
+    def get(self, issi):
         
+        try:
+            # Execute MySQL query
+            CURSOR.execute(f"SELECT \
+                Timestamp, \
+                OriginatingNodeNo, \
+                UserDataLength, \
+                Rssi, \
+                MsDistance \
+                FROM sdsdata \
+                WHERE CallingSsi = {issi} \
+                ORDER BY Timestamp \
+                DESC LIMIT 1;"
+            )
+
+            myresult = CURSOR.fetchall()
+        except mysql.connector.errors.OperationalError:
+
+            reconnectSQL()
+
+            # Execute MySQL query
+            CURSOR.execute(f"SELECT \
+                Timestamp, \
+                OriginatingNodeNo, \
+                UserDataLength, \
+                Rssi, \
+                MsDistance \
+                FROM sdsdata \
+                WHERE CallingSsi = {issi} \
+                ORDER BY Timestamp \
+                DESC LIMIT 1;"
+            )
+
+            myresult = CURSOR.fetchall()
+
+        # Placeholder default values
+        detail = {
+            'timestamp' : 'None',
+            'node' : 'None',
+            'gps' : False,
+            'rssi' : 'None',
+            'distance' :'None'
+        }
+
+        try:
+
+            time = myresult[0][0] + datetime.timedelta(hours=8)
+            time = time.strftime('%d/%m/%Y %H:%M:%S')
+
+            node_name = DB['tetra_nodes'].find_one(
+                {
+                    'node_number' : myresult[0][1],
+                },
+                {'_id': False}
+            )
+
+            if myresult[0][2] ==  129:
+                gps = True
+            elif myresult[0][2] == 44:
+                gps = False
+
+
+
+            detail = {
+                'timestamp' : time,
+                'node' : node_name['node_description'],
+                'gps' : gps,
+                'rssi' : myresult[0][3],
+                'distance' : myresult[0][4]
+            }
+        except IndexError:
+            return(detail)
+
+ 
+        return(jsonify(json.loads(dumps(detail))))

@@ -46,13 +46,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.radios = data;
       }
     )
-    this.tetra.getTetraCallStats('group', 10).subscribe(
+    this.tetra.getTetraCallStats('group', 60).subscribe(
       (
         data: {}) => {
         this.groupCalls = data;
       }
     )
-    this.tetra.getTetraCallStats('individual', 10).subscribe(
+    this.tetra.getTetraCallStats('individual', 60).subscribe(
       (
         data: {}) => {
         this.individualCalls = data;

@@ -521,9 +521,9 @@ def main():
 
         tetraNodes()
         time.sleep(2)
-        groupCalls(10)
+        groupCalls(60)
         time.sleep(2)
-        individualCalls(10)
+        individualCalls(60)
 
         group_count += 1
         subscriber_count += 0

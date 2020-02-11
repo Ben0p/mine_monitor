@@ -78,6 +78,7 @@ export class TetraBarChartComponent implements OnInit, OnDestroy {
               },
               ticks: {
                 fontColor: chartjs.textColor,
+                beginAtZero: true
               },
             },
           ],

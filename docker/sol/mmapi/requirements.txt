@@ -7,3 +7,4 @@ PyJWT==1.7.1
 pyModbusTCP==0.1.8
 pyopenssl==19.0.0
 gunicorn==19.9.0
+mysql-connector==2.2.9

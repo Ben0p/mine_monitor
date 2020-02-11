@@ -62,6 +62,7 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
   rssi: any = "Loading..."
   timestamp: any = "Loading..."
   node: any = "Loading..."
+  gps: any = "Loading..."
 
   constructor(
     private tetra: TetraService,
@@ -86,6 +87,12 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
           this.timestamp = data['timestamp']
           this.rssi = data['rssi']
           this.node = data['node']
+          
+          if(data['gps']){
+            this.gps = "Active"
+          } else {
+            this.gps = "Inactive"
+          }
         }
       )
     }
@@ -102,6 +109,7 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
     this.rssi = 'Loading...'
     this.node = 'Loading...'
     this.timestamp = 'Loading...'
+    this.gps = 'Loading...'
     this.getSubscriberDetail(this.tableEvent.data.ssi)
     this.dialogService.open(dialog, {
       context: this.tableEvent.data

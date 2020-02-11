@@ -1,7 +1,6 @@
 #! /usr/bin/python3.7
 
-from env.sol import env
-
+from env.docker import env
 from flask import Flask, jsonify, send_file, Response, make_response
 from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
@@ -16,10 +15,8 @@ import datetime
 
 from routes.wind import wind_collect, wind_all, wind_minute, wind_hour, wind_info
 from routes.alerts import alert_all, alert_display, alert_detail, alert_overview, alert_modules, alert_zones, alert_zones_create, \
-    alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
-    alert_wz
+    alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete
 from routes.auth import auth
-from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load
 
 
 
@@ -64,7 +61,6 @@ API.add_resource(alert_create, "/api/alerts/create")
 API.add_resource(alert_update, "/api/alerts/update")
 API.add_resource(alert_delete, "/api/alerts/delete/<string:name>")
 API.add_resource(alert_detail, "/api/alerts/<string:uid>")
-API.add_resource(alert_wz, "/api/alerts/wz")
 API.add_resource(check, "/api/check")
 API.add_resource(auth, "/api/auth")
 
@@ -74,11 +70,6 @@ API.add_resource(wind_all, '/api/wind/all')
 API.add_resource(wind_minute, '/api/wind/minute/<string:name>/<string:units>')
 API.add_resource(wind_hour, '/api/wind/hour/<string:name>/<string:units>')
 API.add_resource(wind_info, '/api/wind/info/<string:name>')
-
-# Tetra
-API.add_resource(tetra_node_all, '/api/tetra/node/all')
-API.add_resource(tetra_node_load, '/api/tetra/node/load')
-API.add_resource(tetra_ts_load, '/api/tetra/ts/load')
 
 if __name__ == "__main__":
     # Run flask
