@@ -310,6 +310,36 @@ def groupAttachment():
         )
     print(f"{time.strftime('%d/%m/%Y %X')} - Retrieved current group attachment")
 
+def msLocation():
+
+    # Execute MySQL query
+    CURSOR.execute("SELECT \
+        Ssi, \
+        NodeDescr \
+        FROM `mslocation`"
+    )
+
+    myresult = CURSOR.fetchall()
+
+
+    for subscriber in myresult:
+
+        node = subscriber[1]        
+        
+        DB['tetra_subscribers'].find_one_and_update(
+            {
+                'ssi' : subscriber[0],
+            },
+            {
+                '$set': {
+                    'node' : node
+                }
+            },
+            upsert=True
+        )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retrieved current node attachment")
+
+
 def groupCalls(seconds):
     CURSOR.execute(f"SELECT \
         DISTINCT \
@@ -387,6 +417,33 @@ def individualCalls(seconds):
     )
     print(f"{time.strftime('%d/%m/%Y %X')} - Retreived individual calls last {seconds}sec")
 
+def SdsCalls(seconds):
+    CURSOR.execute(f"SELECT \
+        COUNT(*) \
+        FROM \
+        sdsdata \
+        WHERE \
+        Timestamp >= date_sub(now(), \
+        interval {28800 + seconds} second);")
+    
+    myresult = CURSOR.fetchall()
+    
+    in_calls_per_sec = round(int(myresult[0][0] or 0) / seconds, 2)
+
+    DB['tetra_call_stats'].find_one_and_update(
+        {
+            'range_sec' : seconds,
+            'type' : 'sds'
+        },
+        {
+            '$set': {
+                'calls' : myresult[0][0],
+                'calls_sec': in_calls_per_sec
+            }
+        },
+        upsert=True
+    )
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retreived sds calls last {seconds}sec")
 
 def groupCallsDay():
     #115200 seconds = 24 hours +8 Timezone
@@ -414,7 +471,7 @@ def groupCallsDay():
     call_counts = []
     call_minutes = []
 
-    one_day_ago = time.time() - 115200
+    one_day_ago = time.time() - 86400
 
     for step in range(0, 86400, 60):
         minute = one_day_ago + step
@@ -473,7 +530,7 @@ def IndividualCallsDay():
     call_counts = []
     call_minutes = []
 
-    one_day_ago = time.time() - 115200
+    one_day_ago = time.time() - 86400
 
     for step in range(0, 86400, 60):
         minute = one_day_ago + step
@@ -524,6 +581,8 @@ def main():
         groupCalls(60)
         time.sleep(2)
         individualCalls(60)
+        time.sleep(2)
+        SdsCalls(60)
 
         group_count += 1
         subscriber_count += 0
@@ -532,6 +591,8 @@ def main():
             group_count = 0
             time.sleep(2)
             groupAttachment()
+            time.sleep(2)
+            msLocation()
             time.sleep(2)
             groupCallsDay()
             time.sleep(2)

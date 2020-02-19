@@ -9,3 +9,7 @@
 .wrapper {
   text-align: center;
 }
+
+:host /deep/ .ng-valid {
+  color: black;
+}

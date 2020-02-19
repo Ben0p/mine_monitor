@@ -1,5 +1,5 @@
 <div class="row">
-  <nb-card class="col-xxl-4">
+  <nb-card class="col-xxl-3">
     <nb-card-header>
       Alerts - Weather Zone
     </nb-card-header>
@@ -12,26 +12,31 @@
     </nb-card-body>
   </nb-card>
 
-  <div class="col-xxl-8">
+  <div class="col-xxl-9">
     <nb-card>
       <nb-card-header>
         Tetra
       </nb-card-header>
       <nb-card-body>
         <div class="row">
-          <div class="col-xxl-4">
-            <ngx-tetra-radio-count-card [title]="'Total Radios'" [type]="radios.status" [on]="radios.online"
+          <div class="col-xxl-3">
+            <ngx-tetra-radio-count-card [title]="'Radios'" [type]="radios.status" [on]="radios.online"
               [count]="radios.count" [description]="'Online'">
             </ngx-tetra-radio-count-card>
           </div>
-          <div class="col-xxl-4">
+          <div class="col-xxl-3">
             <ngx-tetra-radio-count-card [title]="'Group Calls'" [type]="'success'" [on]="'true'"
               [count]="groupCalls.calls" [description]="'Per Minute'">
             </ngx-tetra-radio-count-card>
           </div>
-          <div class="col-xxl-4">
+          <div class="col-xxl-3">
             <ngx-tetra-radio-count-card [title]="'Direct Calls'" [type]="'success'" [on]="'true'"
               [count]="individualCalls.calls" [description]="'Per Minute'">
+            </ngx-tetra-radio-count-card>
+          </div>
+          <div class="col-xxl-3">
+            <ngx-tetra-radio-count-card [title]="'SDS Calls'" [type]="'success'" [on]="'true'"
+              [count]="sdsCalls.calls" [description]="'Per Minute'">
             </ngx-tetra-radio-count-card>
           </div>
         </div>

@@ -11,10 +11,11 @@ import { TetraService } from './../../@core/data/tetra.service'
 
 export class DashboardComponent implements OnInit, OnDestroy {
 
-  alerts$: Object;
-  radios: Object;
-  groupCalls: Object;
-  individualCalls: Object;
+  alerts$: any;
+  radios: any;
+  groupCalls: any;
+  individualCalls: any;
+  sdsCalls: any;
   interval: any;
 
   constructor(
@@ -56,6 +57,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       (
         data: {}) => {
         this.individualCalls = data;
+      }
+    )
+    this.tetra.getTetraCallStats('sds', 60).subscribe(
+      (
+        data: {}) => {
+        this.sdsCalls = data;
       }
     )
   }

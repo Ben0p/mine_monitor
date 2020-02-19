@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://10.58.10.31:5000/api/tetra/';
+const APIurl: String = 'https://solmm01.fmg.local/api/tetra/';
 
 @Injectable({
   providedIn: 'root',

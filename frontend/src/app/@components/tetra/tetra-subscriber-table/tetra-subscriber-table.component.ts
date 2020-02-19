@@ -30,6 +30,11 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
           type: 'text',
           editable: false
         },
+        node: {
+          title: 'Current Node',
+          type: 'text',
+          editable: false
+        },
         ssi: {
           title: 'SSI',
           type: 'text',
