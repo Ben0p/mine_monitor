@@ -11,7 +11,8 @@ import copy
 import time
 import json
 from pyModbusTCP.client import ModbusClient
-import subprocess, platform
+import subprocess
+import platform
 import os
 import hashlib
 
@@ -24,7 +25,8 @@ Writes results back in mongo
 """
 
 # Initialize mongo connection one time
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+CLIENT = pymongo.MongoClient(
+    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
 
 
@@ -51,6 +53,7 @@ def getModules():
 
     return(list(modules))
 
+
 def getAlerts():
     '''Returns array of alert modules'''
 
@@ -64,7 +67,7 @@ def ping(host):
     host = ipv4 address
     """
 
-    if platform.system().lower()=="windows":
+    if platform.system().lower() == "windows":
 
         try:
             response = subprocess.check_output(
@@ -105,7 +108,8 @@ def restAPI(ip):
     # Use requests to authenticate http session and get xml
     with requests.Session() as session:
         try:
-            response = session.get(do_xml, auth=(env['module_user'], env['module_pass']), timeout=1)
+            response = session.get(do_xml, auth=(
+                env['module_user'], env['module_pass']), timeout=1)
             # Placeholder for xml response data (potential future use)
             ElementTree.fromstring(response.content)
             return(True)
@@ -118,14 +122,15 @@ def modbus(ip):
 
     # Setup modbus connection
     c = ModbusClient(host=ip, port=502, auto_open=True)
-    # Read Modbus outputs 
+    # Read Modbus outputs
     bits = c.read_coils(16, 6)
     # If there is a response
     if bits:
-        # Set output states   
+        # Set output states
         return([bits[0], bits[1], bits[2], bits[3], bits[4], bits[5]])
     else:
         return(['', '', '', '', '', ''])
+
 
 def cleanUp(module):
     alerts = getAlerts()
@@ -133,13 +138,13 @@ def cleanUp(module):
     for alert in alerts:
         count = DB['alert_modules'].count_documents(
             {
-                'name' : alert['name']
+                'name': alert['name']
             }
         )
 
         if count < 1:
             DB['alert_all'].delete_many(
-                {'name' : alert['name']}
+                {'name': alert['name']}
             )
             print("Deleted {}".format(alert['name']))
 
@@ -149,27 +154,27 @@ def writeDB(alert):
     print("Updating "+alert['name'])
     DB['alert_all'].find_one_and_update(
         {
-            'name':alert['name']
+            'name': alert['name']
         },
         {
             '$set': {
-                'name' : alert['name'],
-                'location' : alert['location'],
-                'zone' : alert['zone'],
-                'ip' : alert['ip'],
-                'online' : alert['online'],
-                'rest' : alert['rest'],
-                'type' : alert['type'],
-                'status' : alert['status'],
-                'icon' : alert['icon'],
-                'state' : alert['state'],
-                'latency' : alert['latency'],
-                'all_clear' : alert['all_clear'],
-                'emergency' : alert['emergency'],
-                'lightning' : alert['lightning'],
-                'a' :  alert['a'],
-                'b' :  alert['b'],
-                'c' : alert['c']
+                'name': alert['name'],
+                'location': alert['location'],
+                'zone': alert['zone'],
+                'ip': alert['ip'],
+                'online': alert['online'],
+                'rest': alert['rest'],
+                'type': alert['type'],
+                'status': alert['status'],
+                'icon': alert['icon'],
+                'state': alert['state'],
+                'latency': alert['latency'],
+                'all_clear': alert['all_clear'],
+                'emergency': alert['emergency'],
+                'lightning': alert['lightning'],
+                'a':  alert['a'],
+                'b':  alert['b'],
+                'c': alert['c']
             }
         },
         upsert=True
@@ -181,7 +186,6 @@ def getAll():
 
     modules = getModules()
     cleanUp(modules)
-
 
     # For each module
     for module in modules:
@@ -249,6 +253,7 @@ def getAll():
 
         writeDB(module)
 
+
 def genWZKey():
     day = time.strftime('%d')
     month = time.strftime('%m')
@@ -268,35 +273,41 @@ def weatherZone():
     url = f'http://ws1.theweather.com.au/?lt=uwas&lc=183,179,180,574,570,1443,1442&alerts=1(client=337)&format=json&u=15566-1804&k={key}'
     print(url)
 
-    response = requests.get(url = url)
+    response = requests.get(url=url)
     json_data = json.loads(response.text)
-    
+
     locations = json_data['countries'][0]['locations']
-
+    
     for location in locations:
-
-        if location['alerts'][0]['status'] == "CLEAR":
-            state = 'All Clear'
-            status = "success"
-            icon = "checkmark-circle-2-outline"
-        elif location['alerts'][0]['status'] == "ALPHA":
-            state = 'A Alert'
-            status = 'info'
-            icon = 'flash-outline'
-        elif location['alerts'][0]['status'] == "BRAVO":
-            state = 'B Alert'
-            status = 'warning'
-            icon = 'flash-outline'
-        elif location['alerts'][0]['status'] == "CHARLIE":
-            state = 'C Alert'
-            status = 'danger'
-            icon = 'flash-outline'
-        else:
-            status = 'primary'
-            state = 'Offline'
-            icon = 'close-circle-outline'
-
-
+        for alert in location['alerts']:
+            if alert['embargo_period'] != 'Infinite' and alert['alert_type'] == 'LIGHTNING':
+                print(f"{location['name']} - {alert['status']}")
+                if alert['status'] == "CLEAR":
+                    state = 'All Clear'
+                    status = "success"
+                    icon = "checkmark-circle-2-outline"
+                elif alert['status'] == "Alpha":
+                    state = 'A Alert'
+                    status = 'info'
+                    icon = 'flash-outline'
+                elif alert['status'] == "Bravo":
+                    state = 'B Alert'
+                    status = 'warning'
+                    icon = 'flash-outline'
+                elif alert['status'] == "Charlie":
+                    state = 'C Alert'
+                    status = 'danger'
+                    icon = 'flash-outline'
+                else:
+                    status = 'primary'
+                    state = 'Offline'
+                    icon = 'close-circle-outline'
+            elif alert['embargo_period'] == 'Infinite' and alert['alert_type'] == 'LIGHTNING':
+                print(f"{location['name']} - {alert['status']}")
+                if alert['status'] == "CLEAR":
+                    state = 'All Clear'
+                    status = "success"
+                    icon = "checkmark-circle-2-outline"
 
         DB['alert_wz'].find_one_and_update(
             {
