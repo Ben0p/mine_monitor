@@ -12,34 +12,25 @@ from flask import jsonify, request, Response
 import datetime
 import mysql.connector
 
+from tetra.decode import sds
+
+
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
 
-# Initialize mySQL connection
-SQL = mysql.connector.connect(
-  host=f"{env['tetra_sql_host']}",
-  user=f"{env['tetra_sql_user']}",
-  passwd=f"{env['tetra_sql_passwd']}",
-  database=f"{env['tetra_sql_database']}"
-)
-
-CURSOR = SQL.cursor()
-
 
 def reconnectSQL():
     # Initialize mySQL connection
-    SQL = mysql.connector.connect(
+    sql = mysql.connector.connect(
     host=f"{env['tetra_sql_host']}",
     user=f"{env['tetra_sql_user']}",
     passwd=f"{env['tetra_sql_passwd']}",
     database=f"{env['tetra_sql_database']}"
     )
 
-    CURSOR = SQL.cursor()
-
-    print("Re-connected SQL")
+    return(sql)
 
 
 class tetra_node_all(Resource):
@@ -51,8 +42,11 @@ class tetra_node_all(Resource):
         # Initilize request parser
         parser = reqparse.RequestParser()
 
+        sql = reconnectSQL()
+        cursor = sql.cursor()
+
         # Execute MySQL query
-        CURSOR.execute("SELECT \
+        cursor.execute("SELECT \
             Timestamp, \
             NodeNo, \
             Description, \
@@ -68,7 +62,7 @@ class tetra_node_all(Resource):
             AND Description NOT LIKE 'ELI%';"
         )
 
-        myresult = CURSOR.fetchall()
+        myresult = cursor.fetchall()
 
         for x in myresult:
 
@@ -181,40 +175,26 @@ class tetra_call_history(Resource):
 class tetra_subscriber_detail(Resource):
 
     def get(self, issi):
+
+        sql = reconnectSQL()
+        cursor = sql.cursor()
         
-        try:
-            # Execute MySQL query
-            CURSOR.execute(f"SELECT \
-                Timestamp, \
-                OriginatingNodeNo, \
-                UserDataLength, \
-                Rssi, \
-                MsDistance \
-                FROM sdsdata \
-                WHERE CallingSsi = {issi} \
-                ORDER BY Timestamp \
-                DESC LIMIT 1;"
-            )
+        # Execute MySQL query
+        cursor.execute(f"SELECT \
+            Timestamp, \
+            OriginatingNodeNo, \
+            UserDataLength, \
+            Rssi, \
+            MsDistance, \
+            UserData \
+            FROM sdsdata \
+            WHERE CallingSsi = {issi} \
+            AND UserDataLength = 129 \
+            ORDER BY Timestamp \
+            DESC LIMIT 1;"
+        )
 
-            myresult = CURSOR.fetchall()
-        except mysql.connector.errors.OperationalError:
-
-            reconnectSQL()
-
-            # Execute MySQL query
-            CURSOR.execute(f"SELECT \
-                Timestamp, \
-                OriginatingNodeNo, \
-                UserDataLength, \
-                Rssi, \
-                MsDistance \
-                FROM sdsdata \
-                WHERE CallingSsi = {issi} \
-                ORDER BY Timestamp \
-                DESC LIMIT 1;"
-            )
-
-            myresult = CURSOR.fetchall()
+        myresult = cursor.fetchall()
 
         # Placeholder default values
         detail = {
@@ -222,8 +202,13 @@ class tetra_subscriber_detail(Resource):
             'node' : 'None',
             'gps' : False,
             'rssi' : 'None',
-            'distance' :'None'
+            'distance' :'None',
+            'location' : False
         }
+
+        hex_string = myresult[0][5].hex()
+        hex_string = hex_string.rstrip("0")
+        location = sds(str(hex_string))
 
         try:
 
@@ -249,7 +234,8 @@ class tetra_subscriber_detail(Resource):
                 'node' : node_name['node_description'],
                 'gps' : gps,
                 'rssi' : myresult[0][3],
-                'distance' : myresult[0][4]
+                'distance' : myresult[0][4],
+                'location' : location
             }
         except IndexError:
             return(detail)
