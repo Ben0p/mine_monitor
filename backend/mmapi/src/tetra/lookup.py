@@ -108,6 +108,7 @@ reason_for_sending = {
     '31' : 'Reserved',
     '32' : 'Response to an immediate location request',
     '33' : 'Reserved',
+    '65' : 'Reserved',
     '128' : 'Reserved',
     '129' : 'Maximum reporting interval exceeded since the last location information report',
     '130' : 'Maximum reporting distance limit travelled since last location information report',

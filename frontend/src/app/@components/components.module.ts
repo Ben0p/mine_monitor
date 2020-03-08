@@ -9,6 +9,7 @@ import {
     NbListModule,
     NbUserModule,
     NbRadioModule,
+    NbTabsetModule,
   } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ChartModule } from 'angular2-chartjs';
@@ -68,6 +69,7 @@ import { TetraCallsLineChartComponent } from './tetra/tetra-calls-line-chart/tet
         Ng2SmartTableModule,
         ChartModule,
         NbRadioModule,
+        NbTabsetModule,
     ],
     exports: [
         StatusCardComponent,

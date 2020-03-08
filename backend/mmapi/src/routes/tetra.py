@@ -203,14 +203,39 @@ class tetra_subscriber_detail(Resource):
             'gps' : False,
             'rssi' : 'None',
             'distance' :'None',
-            'location' : False
+            'location' : {
+                'location' : {
+                    'latitude' : {
+                        'decimal_degrees' : 'None',
+                        'meridian' : ''
+                    },
+                    'longitude' : {
+                        'decimal_degrees' : 'None',
+                        'meridian' : ''
+                    },
+                    'altitude' : {
+                        'meters' : 'None'
+                    },
+                    'uncertainty' : 'None'
+                },
+                'velocity' : {
+                    'kmh' : 'None'
+                },
+                'time' : {
+                    'local' : 'None'
+                },
+            }
         }
 
-        hex_string = myresult[0][5].hex()
-        hex_string = hex_string.rstrip("0")
-        location = sds(str(hex_string))
 
         try:
+            hex_string = myresult[0][5].hex()
+            hex_string = hex_string.rstrip("0")
+            location = sds(str(hex_string))
+            lat = location['location']['latitude']['decimal_degrees']
+            lon = location['location']['longitude']['decimal_degrees']
+            maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
+            location['location']['maps_url'] = maps_url
 
             time = myresult[0][0] + datetime.timedelta(hours=8)
             time = time.strftime('%d/%m/%Y %H:%M:%S')
@@ -233,7 +258,7 @@ class tetra_subscriber_detail(Resource):
                 'timestamp' : time,
                 'node' : node_name['node_description'],
                 'gps' : gps,
-                'rssi' : myresult[0][3],
+                'rssi' : myresult[0][3] * -1,
                 'distance' : myresult[0][4],
                 'location' : location
             }

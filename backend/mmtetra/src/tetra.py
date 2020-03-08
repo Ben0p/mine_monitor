@@ -54,7 +54,8 @@ def tetraNodes():
         FROM `nodestatus` \
         WHERE StdBy = '0' \
         AND Description NOT LIKE 'ELI%' \
-        AND Description NOT LIKE 'New%';"
+        AND Description NOT LIKE 'New%' \
+        AND Description NOT LIKE 'Solomon Server';"
     )
 
     myresult = CURSOR.fetchall()
@@ -86,11 +87,16 @@ def tetraNodes():
         online = True
 
         # Override if offline   
-        if x[0].timestamp() < (time.time()-28810):
+        if x[0].timestamp() < (time.time()-10):
             color = 'offline'
             online = False
             load = 100
-
+            radios = 0
+            ts_idle = 0
+            ts_in = 0
+            ts_gr = 0
+            ts_mc = 0
+            ts_sc = 0
         
         
         node_names.append(x[2])

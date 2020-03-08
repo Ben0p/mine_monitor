@@ -6,7 +6,7 @@ import copy
 from tetra.lookup import pdu_type, pdu_type_extension, time_type, location_shape, altitude_type, velocity_type, acknowledgement_request, \
     additional_data_type, reason_for_sending
 
-
+from env.sol import env
 
 def get_time_data(bits):
     '''Takes binary string, returns time information dictionary
@@ -40,6 +40,12 @@ def get_time_data(bits):
     time_data['full'] = datetime_utc.strftime("%d/%m/%Y %H:%M:%S")
     # UTC epoc
     time_data['epoc'] = datetime_utc.timestamp()
+
+    local = time_data['epoc'] + (env['time_offset'] * 3600)
+    local = datetime.fromtimestamp(local)
+    local = local.strftime("%d/%m/%Y %H:%M:%S")
+    time_data['local'] = local
+
 
     return(time_data)
 
@@ -211,7 +217,9 @@ def get_direction(bits):
     angle = angle * 1.40625
     direction['angle'] = angle
     
-    if 11 >= angle >= 349:
+    if  360 >= angle >= 349:
+        direction['direction'] = 'N'
+    elif 11 >= angle >= 0:
         direction['direction'] = 'N'
     elif 33 >= angle >= 12:
         direction['direction'] = 'NNE'
@@ -266,7 +274,6 @@ def sds(hex_string):
 
     # Convert hex to binary (add a 0 to the start)
     binary_string = '0'+"{0:08b}".format(int(hex_string, 16))
-    print(binary_string)
 
     # Look up PDU type in pdu_type dictionary
     # Bits 1-2 (2 bits)
