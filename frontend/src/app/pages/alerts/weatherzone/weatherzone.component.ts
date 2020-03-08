@@ -7,7 +7,6 @@ import { AlertService } from '../../../@core/data/alerts.service'
   styleUrls: ['./weatherzone.component.scss'],
 })
 
-
 export class WeatherzoneComponent implements OnInit, OnDestroy {
 
   alerts$: Object
