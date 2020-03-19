@@ -299,6 +299,7 @@ def groupAttachment():
 
     for subscriber in myresult:
 
+
         attached_group = subscriber[1]
         talkgroup = groups[attached_group]
         
@@ -314,6 +315,8 @@ def groupAttachment():
             },
             upsert=True
         )
+
+
     print(f"{time.strftime('%d/%m/%Y %X')} - Retrieved current group attachment")
 
 def msLocation():
@@ -579,6 +582,7 @@ def main():
     subscriber_count = 0
     group_count = 0
 
+    tetraSubscribers()
 
     while True:
 
@@ -591,7 +595,7 @@ def main():
         SdsCalls(60)
 
         group_count += 1
-        subscriber_count += 0
+        subscriber_count += 1
         
         if group_count >= 6:
             group_count = 0

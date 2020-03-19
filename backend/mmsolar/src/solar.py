@@ -1,0 +1,230 @@
+
+from env.sol import env
+
+from pyModbusTCP.client import ModbusClient
+import pymongo
+import multiprocessing
+import time
+
+
+'''
+Scrapes data for the comms trailers
+Gets details from mongo which has been added through the web UI
+'''
+
+
+def calcVolts(hi, lo, v):
+    '''
+    Converts raw modbus voltage value to actual volts
+    '''
+    v_scaling = hi + (lo/(2**16))
+    volts = v*v_scaling*(2**-15)
+    return(format(volts, '.2f'))
+
+
+def calcCurrent(hi, lo, i):
+    '''
+    Converts raw modbus current value to actual current
+    '''
+    c_scaling = hi * lo
+    current = i*c_scaling*(2**-15)
+
+    return(format(current, '.2f'))
+
+
+def calcPower(vhi, vlo, ihi, ilo, w):
+    '''
+    Converts raw modbus power value to actual power
+    '''
+    V_PU = vhi + vlo/(2**16)
+    I_PU = ihi + ilo/(2**16)
+    power = w*V_PU*I_PU*(2**-17)
+    return(format(power, '.2f'))
+
+
+def chargeState(state):
+    '''
+    Matches modbus value to a charge state
+    '''
+
+    states = {
+        "0": "START",
+        "1": "NIGHT_CHECK",
+        "2": "DISCONNECT",
+        "3": "NIGHT",
+        "4": "FAULT",
+        "5": "MPPT",
+        "6": "ABSORPTION",
+        "7": "FLOAT",
+        "8": "EQUALIZE",
+        "9": "SLAVE"
+    }
+
+    return(states[str(state)])
+
+
+def parseTristar(tristar):
+    '''
+    Gets tristar data via modbus and writes to tristar_data db
+    This function is threaded for each trailer
+    '''
+
+    # Have to create a new mongo connection for each thread or it wigs out
+    client = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+    db = client[env['database']]
+
+    # Initialize modbus connection
+    c = ModbusClient(host=tristar['ip'], port=502, auto_open=True, timeout=1)
+
+
+    while True:
+        # Read up to modbus register 60
+        values = c.read_holding_registers(0, 60)
+
+        if values:
+            # Save modbus values to dictionary
+            raw_values = {
+                'V_PU_hi': values[0],
+                'V_PU_lo': values[1],
+                'I_PU_hi': values[2],
+                'I_PU_lo': values[3],
+                'adc_vb_f_med': values[24],
+                'adc_vbterm_f': values[25],
+                'adc_vbs_f': values[26],
+                'adc_va_f': values[27],
+                'adc_ib_f_shadow': values[28],
+                'adc_ia_f_shadow': values[29],
+                'T_hs': values[35],
+                'charge_state': values[50],
+                'power_out_shadow': values[58]
+            }
+
+            # Save converted values to dictionary
+            live_values = {
+                'online' : True,
+                'batt_volts': calcVolts(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['adc_vb_f_med']),
+                'batt_current': calcCurrent(
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['adc_ib_f_shadow']),
+                'solar_volts': calcVolts(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['adc_va_f']),
+                'solar_current': calcCurrent(
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['adc_ia_f_shadow']),
+                'charge_state': chargeState(
+                    raw_values['charge_state']),
+                'output_power': calcPower(
+                    raw_values['V_PU_hi'],
+                    raw_values['V_PU_lo'],
+                    raw_values['I_PU_hi'],
+                    raw_values['I_PU_lo'],
+                    raw_values['power_out_shadow']
+                ),
+                'heatsink_temp': raw_values['T_hs']
+            }
+
+        # Blank values if there is no connection
+        else: 
+            live_values = {
+                'online' : False,
+                'batt_volts': '',
+                'batt_current': '',
+                'solar_volts': '',
+                'solar_current': '',
+                'charge_state': '',
+                'output_power': '',
+                'heatsink_temp': ''
+            }
+
+        # Dump into tristar_data collection
+        db['solar_data'].find_one_and_update(
+            {
+                'name': tristar['name']
+            },
+            {
+                '$set': {
+                    'ip': tristar['ip'],
+                    'name': tristar['name'],
+                    'live' : live_values
+                }
+            },
+            upsert=True
+        )
+
+        # Every 2 seconds so it doesn't go out of control
+        time.sleep(2)
+
+def main():
+    '''
+    Continually checks for new MPPT Controllers and polls the modbus
+    '''
+
+    # Initialize mongo
+    client = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+    db = client[env['database']]
+
+    active_processes = []
+    process_match = {}
+
+    while True:
+        # Get tristar documents
+        docs = db['solar_modules'].find(
+            {
+                'model' : 'Tristar-60 MPPT'
+            }
+        )
+
+        # Reset list of tristars in db
+        tristar_list = []
+
+        for tristar in docs:
+
+            # Get OID
+            oid = tristar['_id']
+
+            # Append name to list
+            tristar_list.append(oid)
+
+            # Check if parent name is in active processes
+            if oid not in active_processes:
+
+                # Create process
+                p = multiprocessing.Process(
+                    target=parseTristar, args=(tristar,))
+
+                # Append name to active process list
+                active_processes.append(oid)
+
+                # Add process ID to dictionary
+                process_match[oid] = p
+
+                # Start process
+                p.start()
+
+                print(f"Started {oid}")
+
+        # Stop process if the tristar has been removed from db
+        for process in active_processes:
+            # If there is a process running that isn't in the db
+            if process not in tristar_list:
+                # Terminate that process
+                process_match[process].terminate()
+                # Remove from active processes
+                active_processes.remove(process)
+                # Remove from process match dictionary
+                del process_match[process]
+
+                print(f"Stopped {oid}")
+
+        time.sleep(10)
+
+
+if __name__ == '__main__':
+    main()
