@@ -36,7 +36,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_all'
         },
       },
-            {
+      {
         title: 'Weather Zone',
         link: '/pages/alerts/weatherzone',
         data: {
@@ -113,6 +113,33 @@ export const MENU_ITEMS: NbMenuItem[] = [
           permission: 'view',
           resource: 'tetra_subscribers'
         },
+      },
+    ]
+  },
+  {
+    title: 'Solar',
+    icon: 'sun-outline',
+    data: {
+      permission: 'view',
+      resource: 'solar'
+    },
+    children: [
+      {
+        title: 'Controllers',
+        link: '/pages/solar/controllers',
+        data: {
+          permission: 'view',
+          resource: 'solar_controllers'
+        },
+      },
+      {
+        title: 'Edit',
+        link: '/pages/solar/edit',
+        data: {
+          permission: 'view',
+          resource: 'solar_controllers'
+        },
+
       },
     ]
   },

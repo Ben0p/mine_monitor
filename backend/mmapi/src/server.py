@@ -21,6 +21,7 @@ from routes.alerts import alert_all, alert_display, alert_detail, alert_overview
 from routes.auth import auth
 from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
     tetra_call_history, tetra_subscriber_detail
+from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 
 
 
@@ -85,6 +86,13 @@ API.add_resource(tetra_subscribers, '/api/tetra/subscribers')
 API.add_resource(tetra_call_stats, '/api/tetra/callstats/<string:call_type>/<int:range_sec>')
 API.add_resource(tetra_call_history, '/api/tetra/callstats/history/<string:time_range>')
 API.add_resource(tetra_subscriber_detail, '/api/tetra/subscribers/detail/<string:issi>')
+
+# Solar
+API.add_resource(solar_create, "/api/solar/create")
+API.add_resource(solar_update, "/api/solar/update")
+API.add_resource(solar_delete, "/api/solar/delete/<string:oid>")
+API.add_resource(solar_controllers, '/api/solar/controllers')
+API.add_resource(solar_data, '/api/solar/data')
 
 
 if __name__ == "__main__":

@@ -33,6 +33,11 @@ const routes: Routes = [{
         .then(m => m.TetraModule),
     },
     {
+      path: 'solar',
+      loadChildren: () => import('./solar/solar.module')
+        .then(m => m.SolarModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
