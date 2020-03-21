@@ -219,4 +219,4 @@ def parse(tristar):
 
 
         # Every 2 seconds so it doesn't go out of control
-        time.sleep(2)
+        time.sleep(5)
