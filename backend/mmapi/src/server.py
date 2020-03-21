@@ -22,6 +22,7 @@ from routes.auth import auth
 from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
     tetra_call_history, tetra_subscriber_detail
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
+from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
 
 
 
@@ -93,6 +94,13 @@ API.add_resource(solar_update, "/api/solar/update")
 API.add_resource(solar_delete, "/api/solar/delete/<string:oid>")
 API.add_resource(solar_controllers, '/api/solar/controllers')
 API.add_resource(solar_data, '/api/solar/data')
+
+# Generators
+API.add_resource(gen_create, "/api/gen/create")
+API.add_resource(gen_update, "/api/gen/update")
+API.add_resource(gen_delete, "/api/gen/delete/<string:oid>")
+API.add_resource(gen_modules, '/api/gen/modules')
+API.add_resource(gen_status, '/api/gen/status')
 
 
 if __name__ == "__main__":

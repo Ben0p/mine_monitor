@@ -144,6 +144,33 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'Generators',
+    icon: 'settings-2-outline',
+    data: {
+      permission: 'view',
+      resource: 'solar'
+    },
+    children: [
+      {
+        title: 'Status',
+        link: '/pages/solar/controllers',
+        data: {
+          permission: 'view',
+          resource: 'solar_controllers'
+        },
+      },
+      {
+        title: 'Edit',
+        link: '/pages/solar/edit',
+        data: {
+          permission: 'view',
+          resource: 'solar_controllers'
+        },
+
+      },
+    ]
+  },
+  {
     title: 'Settings',
     icon: 'options-2-outline',
     data: {
