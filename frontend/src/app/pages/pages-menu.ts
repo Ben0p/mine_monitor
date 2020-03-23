@@ -3,14 +3,24 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'Dashboard',
+    title: 'Dashboards',
     icon: 'home-outline',
-    link: '/pages/dashboard',
+    link: '/pages/dashboards',
     home: true,
     data: {
       permission: 'view',
-      resource: 'dashboard'
+      resource: 'dashboards'
     },
+    children: [
+      {
+        title: 'Alerts / Tetra',
+        link: '/pages/dashboards/alerts-tetra',
+        data: {
+          permission: 'view',
+          resource: 'dashboards'
+        },
+      },
+    ]
   },
   {
     title: 'Alerts',

@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AlertService } from './../../@core/data/alerts.service'
-import { TetraService } from './../../@core/data/tetra.service'
+import { AlertService } from './../../../@core/data/alerts.service'
+import { TetraService } from './../../../@core/data/tetra.service'
 
 @Component({
-  selector: 'ngx-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  selector: 'dash-alerts-tetra',
+  templateUrl: './dash-alerts-tetra.component.html',
+  styleUrls: ['./dash-alerts-tetra.component.scss']
 })
 
 
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashAlertsTetraComponent implements OnInit, OnDestroy {
 
   alerts$: any;
   radios: any;

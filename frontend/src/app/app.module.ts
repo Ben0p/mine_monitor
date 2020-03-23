@@ -53,7 +53,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
         alert_read: {
           view: [
             'alerts',
-            'dashboard',
+            'dashboards',
             'alerts_overview',
             'alerts_all',
             'alerts_display',
