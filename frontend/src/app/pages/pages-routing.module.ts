@@ -38,6 +38,11 @@ const routes: Routes = [{
         .then(m => m.SolarModule),
     },
     {
+      path: 'gen',
+      loadChildren: () => import('./gen/gen.module')
+        .then(m => m.GenModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

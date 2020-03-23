@@ -53,7 +53,93 @@ def walk(host, oid):
     return(results)
 
 
+def modelE2210(module):
+    # Get all SNMP values
+    results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2210')
 
+    # Get only DI values
+    di = {}
+    for i in range(12):
+        try:
+            di[f'di_{i}'] = results[f'1.3.6.1.4.1.8691.10.2210.10.1.1.4.{i}']
+        except KeyError:
+            di[f'di_{i}'] = None
+
+    try:
+        oil = di[module['oil_di']]
+
+        # Reverse logic, activated input = not running
+        if oil:
+            oil = False
+        elif not oil:
+            oil = True
+    except KeyError:
+        oil = None
+    
+    try:
+        flex = di[module['flex_di']]
+    except KeyError:
+        flex = None
+    
+    try:
+        fuel = di[module['fuel_di']]
+    except KeyError:
+        fuel = None
+
+    
+    status = {
+        'oil' : oil,
+        'flex' : flex,
+        'fuel' : fuel,
+        'di' : di
+    }
+
+    return(status)
+
+
+def modelE2214(module):
+
+    # Get all SNMP values
+    results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2214.1.0')
+
+    # Get only DI values
+    di = {}
+    for i in range(5):
+        try:
+            di[f'di_{i}'] = results[f'1.3.6.1.4.1.8691.10.2214.10.1.1.4.{i}']
+        except KeyError:
+            di[f'di_{i}'] = None
+
+    try:
+        oil = di[module['oil_di']]
+
+        # Reverse logic, activated input = not running
+        if oil:
+            oil = False
+        elif not oil:
+            oil = True
+    except KeyError:
+        oil = None
+    
+    try:
+        flex = di[module['flex_di']]
+    except KeyError:
+        flex = None
+    
+    try:
+        fuel = di[module['fuel_di']]
+    except KeyError:
+        fuel = None
+
+    
+    status = {
+        'oil' : oil,
+        'flex' : flex,
+        'fuel' : fuel,
+        'di' : di
+    }
+
+    return(status)  
 
 if __name__ == '__main__':
 
@@ -62,33 +148,17 @@ if __name__ == '__main__':
         modules = DB['gen_modules'].find()
         
         for module in modules:
-
-            # Get all SNMP values
-            results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2210')
-
-            # Get only DI values
-            di = {}
-            for i in range(12):
-                di[f'di_{i}'] = results[f'1.3.6.1.4.1.8691.10.2210.10.1.1.4.{i}']
-
-            try:
-                oil = di[module['oil_di']]
-                # Reverse logic, activated input = not running
-                if oil:
-                    oil = False
-            except KeyError:
-                oil = None
+            status = {
+                'di' : {},
+                'oil' : None,
+                'flex' : None,
+                'fuel' : None
+            }
             
-            try:
-                flex = di[module['flex_di']]
-            except KeyError:
-                flex = None
-            
-            try:
-                fuel = di[module['fuel_di']]
-            except KeyError:
-                fuel = None
-
+            if module['model'] == 'E2210':
+                status = modelE2210(module)
+            elif module['model'] == 'E2214':
+                status = modelE2214(module)
             
             # Insert into DB
             DB['gen_status'].find_one_and_update(
@@ -100,10 +170,10 @@ if __name__ == '__main__':
                         'ip': module['ip'],
                         'name': module['name'],
                         'module_oid' : module['_id'],
-                        'inputs' : di,
-                        'oil' : oil,
-                        'flex' : flex,
-                        'fuel' : fuel,
+                        'inputs' : status['di'],
+                        'oil' : status['oil'],
+                        'flex' : status['flex'],
+                        'fuel' : status['fuel'],
                     }
                 },
                 upsert=True

@@ -148,25 +148,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'settings-2-outline',
     data: {
       permission: 'view',
-      resource: 'solar'
+      resource: 'gen'
     },
     children: [
       {
         title: 'Status',
-        link: '/pages/solar/controllers',
+        link: '/pages/gen/status',
         data: {
           permission: 'view',
-          resource: 'solar_controllers'
+          resource: 'gen_status'
         },
-      },
-      {
-        title: 'Edit',
-        link: '/pages/solar/edit',
-        data: {
-          permission: 'view',
-          resource: 'solar_controllers'
-        },
-
       },
     ]
   },

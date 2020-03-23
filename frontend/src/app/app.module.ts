@@ -66,6 +66,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'tetra_subscribers',
             'solar',
             'solar_controllers',
+            'gen',
+            'gen_status',
           ],
         },
         alert_admin: {
