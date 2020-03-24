@@ -220,6 +220,6 @@ def parse(tristar):
                 upsert=True
             )
 
-
+        print(f"{time.strftime('%d/%m/%Y %X')} - Polled {tristar['name']}")
         # Every 2 seconds so it doesn't go out of control
         time.sleep(5)

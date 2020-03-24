@@ -5,6 +5,7 @@ from pyModbusTCP.client import ModbusClient
 import pymongo
 import multiprocessing
 import time
+import datetime
 
 from models import mppt60, mppt600
 
@@ -62,7 +63,7 @@ def main():
                 # Start process
                 p.start()
 
-                print(f"Started {oid}")
+                print(f"{time.strftime('%d/%m/%Y %X')} - Started {oid}")
 
         # Stop process if the tristar has been removed from db
         for process in active_processes:
@@ -75,7 +76,7 @@ def main():
                 # Remove from process match dictionary
                 del process_match[process]
 
-                print(f"Stopped {oid}")
+                print(f"{time.strftime('%d/%m/%Y %X')} - Stopped {oid}")
 
 
 
