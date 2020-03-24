@@ -41,6 +41,8 @@ import { TetraCallsLineChartComponent } from './tetra/tetra-calls-line-chart/tet
 
 import { SolarDoughnutComponent } from './solar/solar-doughnut/solar-doughnut.component';
 
+import { GenStatusComponent } from './gen/gen-status/gen-status.component';
+
 
 
 @NgModule({
@@ -64,6 +66,7 @@ import { SolarDoughnutComponent } from './solar/solar-doughnut/solar-doughnut.co
         TetraSubscriberTableComponent,
         TetraCallsLineChartComponent,
         SolarDoughnutComponent,
+        GenStatusComponent,
     ],
     imports: [
         CommonModule,
@@ -100,6 +103,7 @@ import { SolarDoughnutComponent } from './solar/solar-doughnut/solar-doughnut.co
         TetraSubscriberTableComponent,
         TetraCallsLineChartComponent,
         SolarDoughnutComponent,
+        GenStatusComponent,
     ]
 })
 

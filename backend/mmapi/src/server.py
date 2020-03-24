@@ -23,12 +23,10 @@ from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_r
     tetra_call_history, tetra_subscriber_detail
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
+from routes.dash import dash_power
 
 
-
-""" Rest API for alerts
-Retrieves data from mongo 
-Serves as http json
+""" Main rest API router
 """
 
 # Initialize flask
@@ -51,6 +49,10 @@ class check(Resource):
 
 
 # Map URL's to resource classes
+# Dashboards
+API.add_resource(dash_power, "/api/dash/power")
+
+# Alerts
 API.add_resource(alert_all, "/api/alerts/all")
 API.add_resource(alert_display, "/api/alerts/display")
 API.add_resource(alert_modules, "/api/alerts/modules")
@@ -60,7 +62,6 @@ API.add_resource(alert_zones_list, "/api/alerts/zones/list")
 API.add_resource(alert_zones_create, "/api/alerts/zones/create")
 API.add_resource(alert_zones_update, "/api/alerts/zones/update")
 API.add_resource(alert_zones_delete, "/api/alerts/zones/delete")
-#API.add_resource(alert_locations, "/api/alerts/locations")
 API.add_resource(alert_types, "/api/alerts/types")
 API.add_resource(alert_status, "/api/alerts/status")
 API.add_resource(alert_create, "/api/alerts/create")

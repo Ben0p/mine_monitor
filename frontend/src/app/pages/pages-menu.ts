@@ -20,6 +20,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'dashboards'
         },
       },
+      {
+        title: 'Power',
+        link: '/pages/dashboards/power',
+        data: {
+          permission: 'view',
+          resource: 'dashboards'
+        },
+      },
     ]
   },
   {

@@ -1,0 +1,44 @@
+<div class="row">
+  <div class="col-xxl-12">
+    <nb-card>
+      <nb-card-header>
+        Generators
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div *ngFor="let gen of sites.gens" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <ngx-gen-status [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel">
+            </ngx-gen-status>
+
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xxl-12">
+    <nb-card>
+      <nb-card-header>
+        Solar Controllers
+      </nb-card-header>
+      <nb-card-body>
+        <div class="row">
+          <div *ngFor="let solar of sites.solars" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+            <nb-card style= "height: 200px">
+              <nb-card-header>
+                {{solar.name}}
+              </nb-card-header>
+              <nb-card-body>
+                <ngx-solar-doughnut [chartValue]="solar.live.batt_volts" [targetVoltage]="solar.live.batt_target"
+                  [pieColor]="solar.live.color">
+                </ngx-solar-doughnut>
+              </nb-card-body>
+            </nb-card>
+          </div>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import pymongo
 import time
 
 
+
 def calcVolts(hi, lo, v):
     '''
     Converts raw modbus voltage value to actual volts
@@ -193,6 +194,7 @@ def parse(tristar):
                     '$set': {
                         'ip': controller['ip'],
                         'name': controller['name'],
+                        'location': controller['location'],
                         'controller_oid' : tristar['_id'],
                         'live' : live_values
                     }
@@ -210,6 +212,7 @@ def parse(tristar):
                     '$set': {
                         'ip': tristar['ip'],
                         'name': tristar['name'],
+                        'location': tristar['location'],
                         'controller_oid' : tristar['_id'],
                         'live' : live_values
                     }

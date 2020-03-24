@@ -1,0 +1,43 @@
+<nb-card>
+  <nb-card-header>
+    {{name}}
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-4">
+        <div class="row">
+          <div class="col-2">
+            <button nbButton [status]="'success'" *ngIf="flex" hero>Flex</button>
+            <button nbButton [status]="'success'" *ngIf="!flex" outline>Flex</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button nbButton [status]="'success'" *ngIf="!fuel" hero>Fuel</button>
+            <button nbButton [status]="'danger'" *ngIf="fuel" hero>Fuel</button>
+          </div>
+        </div>
+  
+      </div>
+
+      <div  class="col-8">
+        <div *ngIf="oil == true" class="rotating-wrapper">
+          <nb-icon icon="settings-2-outline" class="rotating"></nb-icon> <br>
+          Running...
+        </div>
+
+        <div *ngIf="oil == false" class="static-wrapper">
+          <nb-icon icon="settings-2-outline" class="static"></nb-icon> <br>
+          Stopped
+        </div>
+
+        <div *ngIf="oil == null" class="unknown-wrapper">
+          <nb-icon icon="settings-2-outline" class="unknown"></nb-icon> <br>
+          Unknown
+        </div>
+      </div>
+
+    </div>
+
+  </nb-card-body>
+</nb-card>
