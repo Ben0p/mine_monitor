@@ -44,6 +44,11 @@ const routes: Routes = [{
         .then(m => m.GenModule),
     },
     {
+      path: 'fm',
+      loadChildren: () => import('./fm/fm.module')
+        .then(m => m.FmModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboards/alerts-tetra',
       pathMatch: 'full',

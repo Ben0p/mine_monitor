@@ -43,6 +43,8 @@ import { SolarDoughnutComponent } from './solar/solar-doughnut/solar-doughnut.co
 
 import { GenStatusComponent } from './gen/gen-status/gen-status.component';
 
+import { FmLiveComponent } from './fm/fm-live/fm-live.component';
+
 
 
 @NgModule({
@@ -67,6 +69,7 @@ import { GenStatusComponent } from './gen/gen-status/gen-status.component';
         TetraCallsLineChartComponent,
         SolarDoughnutComponent,
         GenStatusComponent,
+        FmLiveComponent,
     ],
     imports: [
         CommonModule,

@@ -1,0 +1,20 @@
+<div class="row">
+  <div *ngFor="let fm_status of fm_statuses" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+    <nb-card>
+      <nb-card-header>
+        {{fm_status.station}}
+      </nb-card-header>
+      <nb-card-body>
+
+        <div *ngIf="fm_status.state == 'Playing'" class="pulse-wrapper">
+          <nb-icon icon="play-circle-outline" class="pulsate"></nb-icon> <br>
+          <h6>{{fm_status.artist}}</h6>
+          {{fm_status.song}}
+        </div>
+
+        
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>

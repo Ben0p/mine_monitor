@@ -180,6 +180,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'FM',
+    icon: 'music-outline',
+    data: {
+      permission: 'view',
+      resource: 'gen'
+    },
+    children: [
+      {
+        title: 'Status',
+        link: '/pages/fm/status',
+        data: {
+          permission: 'view',
+          resource: 'fm_status'
+        },
+      },
+    ]
+  },
+  {
     title: 'Settings',
     icon: 'options-2-outline',
     data: {

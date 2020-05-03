@@ -24,6 +24,7 @@ from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_r
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
 from routes.dash import dash_power
+from routes.fm import fm_live
 
 
 """ Main rest API router
@@ -102,6 +103,9 @@ API.add_resource(gen_update, "/api/gen/update")
 API.add_resource(gen_delete, "/api/gen/delete/<string:oid>")
 API.add_resource(gen_modules, '/api/gen/modules')
 API.add_resource(gen_status, '/api/gen/status')
+
+# FM
+API.add_resource(fm_live, "/api/fm/live")
 
 
 if __name__ == "__main__":

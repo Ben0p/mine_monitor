@@ -68,6 +68,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'solar_controllers',
             'gen',
             'gen_status',
+            'fm',
+            'fm_status',
           ],
         },
         alert_admin: {
