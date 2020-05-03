@@ -107,6 +107,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         TetraCallsLineChartComponent,
         SolarDoughnutComponent,
         GenStatusComponent,
+        FmLiveComponent,
     ]
 })
 

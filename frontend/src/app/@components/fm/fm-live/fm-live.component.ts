@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'fm-live',
+  selector: 'ngx-fm-live',
   templateUrl: './fm-live.component.html',
   styleUrls: ['./fm-live.component.scss']
 })
-export class FmLiveComponent implements OnInit {
 
-  constructor() { }
+export class FmLiveComponent {
 
-  ngOnInit() {
-  }
+  @Input() station: string = 'Station';
+  @Input() state: string = 'State';
+  @Input() artist: string = 'Artist';
+  @Input() song: string = 'Song';
 
 }
