@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://localhost:5000/api/fm/';
+const APIurl: String = 'https://solmm01.fmg.local/api/fm/';
 
 @Injectable({
   providedIn: 'root',

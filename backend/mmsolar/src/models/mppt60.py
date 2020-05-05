@@ -15,6 +15,27 @@ def calcVolts(hi, lo, v):
     return(format(volts, '.2f'))
 
 
+def targetVoltage(hi, lo, target, batt):
+    ''' Caclulates target voltage, accounts for night mode
+    '''
+
+    target = float(calcVolts(hi, lo, target))
+    batt = float(calcVolts(hi, lo, batt))
+
+    if target < 1:
+        if batt < 30:
+            sys_v = 25.8
+        elif batt > 30:
+            sys_v = 51.6
+        return(sys_v)
+    else:
+        return(target)
+
+
+    
+    
+
+
 def calcCurrent(hi, lo, i):
     '''
     Converts raw modbus current value to actual current
@@ -139,10 +160,12 @@ def parse(tristar):
                     raw_values['adc_ia_f_shadow']),
                 'charge_state': chargeState(
                     raw_values['charge_state']),
-                'batt_target': calcVolts(
+                'batt_target': targetVoltage(
                     raw_values['V_PU_hi'],
                     raw_values['V_PU_lo'],
-                    raw_values['vb_ref']),
+                    raw_values['vb_ref'],
+                    raw_values['adc_vb_f_med'],
+                    ),
                 'output_power': calcPower(
                     raw_values['V_PU_hi'],
                     raw_values['V_PU_lo'],
@@ -222,4 +245,4 @@ def parse(tristar):
 
         print(f"{time.strftime('%d/%m/%Y %X')} - Polled {tristar['name']}")
         # Every 2 seconds so it doesn't go out of control
-        time.sleep(5)
+        time.sleep(10)

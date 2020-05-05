@@ -21,6 +21,21 @@ def toFloat16(value):
 
     return(result)
 
+def targetVoltage(target, batt):
+    ''' Caclulates target voltage, accounts for night mode
+    '''
+
+    target = float(toFloat16(target))
+    batt = float(toFloat16(batt))
+
+    if target < 1:
+        if batt < 30:
+            sys_v = 25.8
+        elif batt > 30:
+            sys_v = 51.6
+        return(sys_v)
+    else:
+        return(target)
 
 def chargeState(state):
     '''
@@ -118,8 +133,9 @@ def parse(tristar):
                     raw_values['adc_ia_f_shadow']),
                 'charge_state': chargeState(
                     raw_values['charge_state']),
-                'batt_target': toFloat16(
-                    raw_values['vb_ref']),
+                'batt_target': targetVoltage(
+                    raw_values['vb_ref'],
+                    raw_values['adc_vb_f_med']),
                 'output_power': toFloat16(
                     raw_values['power_out_shadow']
                 ),
