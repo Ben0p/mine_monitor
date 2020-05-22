@@ -69,9 +69,10 @@ def modelE2210(module):
         oil = di[module['oil_di']]
 
         # Reverse logic, activated input = not running
-        if oil:
+        # Explicitly defined because None was being read as False
+        if oil == True:
             oil = False
-        elif not oil:
+        elif oil == False:
             oil = True
     except KeyError:
         oil = None
@@ -91,7 +92,9 @@ def modelE2210(module):
         'oil' : oil,
         'flex' : flex,
         'fuel' : fuel,
-        'di' : di
+        'fuel_level' : None,
+        'di' : di,
+        'ai' : None
     }
 
     return(status)
@@ -114,9 +117,10 @@ def modelE2214(module):
         oil = di[module['oil_di']]
 
         # Reverse logic, activated input = not running
-        if oil:
+        # Explicitly defined because None was being read as False
+        if oil == True:
             oil = False
-        elif not oil:
+        elif oil == False:
             oil = True
     except KeyError:
         oil = None
@@ -136,10 +140,97 @@ def modelE2214(module):
         'oil' : oil,
         'flex' : flex,
         'fuel' : fuel,
-        'di' : di
+        'fuel_level' : None,
+        'di' : di,
+        'ai' : None
     }
 
-    return(status)  
+    return(status)
+
+
+def modelE2242(module):
+    # Get all SNMP values
+    ''' 
+    AI0:
+    value = 1.3.6.1.4.1.8691.10.2242.10.2.1.4.0
+    min = 1.3.6.1.4.1.8691.10.2242.10.2.1.5.0
+    max = 1.3.6.1.4.1.8691.10.2242.10.2.1.6.0
+
+    DI0:
+    start = 1.3.6.1.4.1.8691.10.2242.10.1.1.4.{i}
+    '''
+
+    # DI snmp results
+    di_results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2242.10.1.1.4')
+    # AI snmp results
+    ai_results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2242.10.2.1')
+
+
+    # Get DI values
+    di = {}
+    for i in range(5):
+        try:
+            di[f'di_{i}'] = di_results[f'1.3.6.1.4.1.8691.10.2242.10.1.1.4.{i}']
+        except KeyError:
+            di[f'di_{i}'] = None
+
+    try:
+        oil = di[module['oil_di']]
+
+        # Reverse logic, activated input = not running
+        # Explicitly defined because None was being read as False
+        if oil == True:
+            oil = False
+        elif oil == False:
+            oil = True
+    except KeyError:
+        oil = None
+    
+    try:
+        flex = di[module['flex_di']]
+    except KeyError:
+        flex = None
+    
+    try:
+        fuel = di[module['fuel_di']]
+    except KeyError:
+        fuel = None
+
+    # Get AI values
+    ai = {}
+    for i in range(4):
+        try:
+            ai[f'ai_{i}'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.4.{i}']
+            ai[f'ai_{i}_min'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.5.{i}']
+            ai[f'ai_{i}_max'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.6.{i}']
+        except KeyError:
+            ai[f'ai_{i}'] = None
+            ai[f'ai_{i}_min'] = None
+            ai[f'ai_{i}_max'] = None
+    
+
+
+    ai_input = module['level_ai']
+    level = int(ai[ai_input])
+    fuel_min = int(ai[f'{ai_input}_min'])
+    fuel_max = int(ai[f'{ai_input}_max'])
+    fuel_range = fuel_max - fuel_min
+    fuel_level = ((level-fuel_min) / fuel_range) * 100
+    fuel_level = round(fuel_level, 2)
+
+
+    status = {
+        'oil' : oil,
+        'flex' : flex,
+        'fuel' : fuel,
+        'fuel_level' : fuel_level,
+        'di' : di,
+        'ai' : ai
+    }
+
+    return(status)
+
+
 
 if __name__ == '__main__':
 
@@ -150,6 +241,7 @@ if __name__ == '__main__':
         for module in modules:
             status = {
                 'di' : {},
+                'ai' : {},
                 'oil' : None,
                 'flex' : None,
                 'fuel' : None
@@ -159,6 +251,8 @@ if __name__ == '__main__':
                 status = modelE2210(module)
             elif module['model'] == 'E2214':
                 status = modelE2214(module)
+            elif module['model'] == 'E2242':
+                status = modelE2242(module)
             
             # Insert into DB
             DB['gen_status'].find_one_and_update(
@@ -170,10 +264,12 @@ if __name__ == '__main__':
                         'ip': module['ip'],
                         'name': module['name'],
                         'module_oid' : module['_id'],
-                        'inputs' : status['di'],
+                        'di' : status['di'],
+                        'ai' : status['ai'],
                         'oil' : status['oil'],
                         'flex' : status['flex'],
                         'fuel' : status['fuel'],
+                        'fuel_level' : status['fuel_level']
                     }
                 },
                 upsert=True
