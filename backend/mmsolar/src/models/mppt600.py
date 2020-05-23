@@ -30,9 +30,9 @@ def targetVoltage(target, batt):
 
     if target < 1:
         if batt < 30:
-            sys_v = 25.8
+            sys_v = 28
         elif batt > 30:
-            sys_v = 51.6
+            sys_v = 57
         return(sys_v)
     else:
         return(target)

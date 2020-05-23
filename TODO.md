@@ -7,6 +7,11 @@
         - [ ] Display "Out of Service" instead of "Offline"
     - [ ] Add notes to a board
     - [ ] Order pages by location or zone etc...
+- [ ] Tetra
+    - [x] Subscibers per node
+- [ ] Poll UPS / PDUs
+- [ ] Generators
+    - [x] Fuel Level
 
 ### Minimum to deploy
 - [x] Controlls working
