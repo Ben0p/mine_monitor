@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01.fmg.local/api/tetra/';
+const APIurl: String = 'http://localhost:5000/api/tetra/';
 
 @Injectable({
   providedIn: 'root',
@@ -58,6 +58,14 @@ export class TetraService {
       catchError(this.handleError<any>("failed"))
     );
   }
+
+  getTetraNodeSubscribers(): Observable<any> {
+    return this.http.get(APIurl + "node/subscribers").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
 
   getTetraTSLoad(): Observable<any> {
     return this.http.get(APIurl + "ts/load").pipe(

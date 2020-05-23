@@ -19,7 +19,7 @@ from routes.alerts import alert_all, alert_display, alert_detail, alert_overview
     alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
     alert_wz
 from routes.auth import auth
-from routes.tetra import tetra_node_all, tetra_node_load, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
+from routes.tetra import tetra_node_all, tetra_node_load, tetra_node_subscribers, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
     tetra_call_history, tetra_subscriber_detail
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
@@ -83,6 +83,7 @@ API.add_resource(wind_info, '/api/wind/info/<string:name>')
 # Tetra
 API.add_resource(tetra_node_all, '/api/tetra/node/all')
 API.add_resource(tetra_node_load, '/api/tetra/node/load')
+API.add_resource(tetra_node_subscribers, '/api/tetra/node/subscribers')
 API.add_resource(tetra_ts_load, '/api/tetra/ts/load')
 API.add_resource(tetra_radio_count, '/api/tetra/radio/count/<string:node>')
 API.add_resource(tetra_subscribers, '/api/tetra/subscribers')

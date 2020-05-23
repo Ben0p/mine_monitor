@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./footer.component.scss'],
   template: `
     <span style="float:left;">Created by <b>Ben Gorham</b> 2020</span>
-    <span style="float:right;">Ver. <b>2020.03.24</b></span>
+    <span style="float:right;">Ver. <b>2020.05.25</b></span>
   `,
 })
 export class FooterComponent {

@@ -108,6 +108,20 @@ class tetra_node_load(Resource):
 
         return(jsonify(json.loads(dumps(node_loads))))
 
+
+class tetra_node_subscribers(Resource):
+
+    def get(self):
+        # Get zone list
+        node_loads = DB['tetra_node_subscribers'].find_one(
+            {
+                'type': 'bar'
+            }
+        )
+
+        return(jsonify(json.loads(dumps(node_loads))))
+
+
 class tetra_ts_load(Resource):
 
     def get(self):

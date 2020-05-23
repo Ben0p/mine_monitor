@@ -35,6 +35,7 @@ import { WindStatusCardComponent } from './wind/wind-status-card/wind-status-car
 import { WindInfoComponent } from './wind/wind-info/wind-info.component';
 
 import { TetraBarChartComponent } from './tetra/tetra-bar-chart/tetra-bar-chart.component';
+import { TetraSubsChartComponent } from './tetra/tetra-subs-chart/tetra-subs-chart.component';
 import { TetraRadarChartComponent } from './tetra/tetra-radar-chart/tetra-radar-chart.component';
 import { TetraRadioCountCardComponent } from './tetra/tetra-radio-count-card/tetra-radio-count-card.component';
 import { TetraSubscriberTableComponent } from './tetra/tetra-subscriber-table/tetra-subscriber-table.component';
@@ -64,6 +65,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         WindStatusCardComponent,
         WindInfoComponent,
         TetraBarChartComponent,
+        TetraSubsChartComponent,
         TetraRadarChartComponent,
         TetraRadioCountCardComponent,
         TetraSubscriberTableComponent,
@@ -103,6 +105,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         WindStatusCardComponent,
         WindInfoComponent,
         TetraBarChartComponent,
+        TetraSubsChartComponent,
         TetraRadarChartComponent,
         TetraRadioCountCardComponent,
         TetraSubscriberTableComponent,
