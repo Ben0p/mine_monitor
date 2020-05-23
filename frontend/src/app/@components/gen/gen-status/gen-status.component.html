@@ -17,10 +17,10 @@
             <button nbButton [status]="'danger'" *ngIf="fuel" hero>Fuel</button>
           </div>
         </div>
-  
+
       </div>
 
-      <div  class="col-8">
+      <div class="col-8">
         <div *ngIf="oil == true" class="rotating-wrapper">
           <nb-icon icon="settings-2-outline" class="rotating"></nb-icon> <br>
           Running...
@@ -37,6 +37,12 @@
         </div>
       </div>
 
+    </div>
+    <div  *ngIf="level">
+      <nb-progress-bar [value]="level" status="{{color}}">{{level}}%</nb-progress-bar>
+    </div>
+    <div  *ngIf="level == null">
+      <nb-progress-bar [value]="100" status="primary">Unknown</nb-progress-bar>
     </div>
 
   </nb-card-body>

@@ -93,6 +93,7 @@ def modelE2210(module):
         'flex' : flex,
         'fuel' : fuel,
         'fuel_level' : None,
+        'fuel_color' : "primary",
         'di' : di,
         'ai' : None
     }
@@ -141,6 +142,7 @@ def modelE2214(module):
         'flex' : flex,
         'fuel' : fuel,
         'fuel_level' : None,
+        'fuel_color' : "primary",
         'di' : di,
         'ai' : None
     }
@@ -212,11 +214,24 @@ def modelE2242(module):
 
     ai_input = module['level_ai']
     level = int(ai[ai_input])
-    fuel_min = int(ai[f'{ai_input}_min'])
-    fuel_max = int(ai[f'{ai_input}_max'])
+    try:
+        fuel_min = int(module['fuel_min'])
+        fuel_max = int(module['fuel_max'])
+    except KeyError:
+        fuel_min = 1
+        fuel_max = 1
+
     fuel_range = fuel_max - fuel_min
     fuel_level = ((level-fuel_min) / fuel_range) * 100
-    fuel_level = round(fuel_level, 2)
+    fuel_level = round(fuel_level)
+
+    if fuel_level > 70:
+        fuel_color = "success"
+    elif 30 < fuel_level < 70:
+        fuel_color = "warning"
+    elif fuel_level < 30:
+        fuel_color = "danger"
+
 
 
     status = {
@@ -224,6 +239,7 @@ def modelE2242(module):
         'flex' : flex,
         'fuel' : fuel,
         'fuel_level' : fuel_level,
+        'fuel_color' : fuel_color,
         'di' : di,
         'ai' : ai
     }
@@ -269,12 +285,13 @@ if __name__ == '__main__':
                         'oil' : status['oil'],
                         'flex' : status['flex'],
                         'fuel' : status['fuel'],
-                        'fuel_level' : status['fuel_level']
+                        'fuel_level' : status['fuel_level'],
+                        'fuel_color' : status['fuel_color']
                     }
                 },
                 upsert=True
             )
 
-            print(f"Polled {module['name']}")
+            print(f"{time.strftime('%d/%m/%Y %X')} - Polled {module['name']}")
         
         time.sleep(10)

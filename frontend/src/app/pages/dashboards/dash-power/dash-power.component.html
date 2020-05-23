@@ -7,9 +7,9 @@
       <nb-card-body>
         <div class="row">
           <div *ngFor="let gen of sites.gens" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-            <ngx-gen-status [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel">
+            <ngx-gen-status [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel"
+              [level]="gen.fuel_level" [color]="gen.fuel_color">
             </ngx-gen-status>
-
           </div>
         </div>
       </nb-card-body>
@@ -26,7 +26,7 @@
       <nb-card-body>
         <div class="row">
           <div *ngFor="let solar of sites.solars" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-            <nb-card style= "height: 200px">
+            <nb-card style="height: 200px">
               <nb-card-header>
                 {{solar.name}}
               </nb-card-header>

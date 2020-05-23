@@ -11,6 +11,8 @@ export class GenStatusComponent {
   @Input() oil: any;
   @Input() flex: any;
   @Input() fuel: any;
+  @Input() level: any;
+  @Input() color: any;
 
   constructor() { }
 

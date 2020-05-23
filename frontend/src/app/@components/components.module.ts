@@ -10,6 +10,7 @@ import {
     NbUserModule,
     NbRadioModule,
     NbTabsetModule,
+    NbProgressBarModule,
   } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { ChartModule } from 'angular2-chartjs';
@@ -85,6 +86,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         NgxEchartsModule,
         NbRadioModule,
         NbTabsetModule,
+        NbProgressBarModule,
     ],
     exports: [
         StatusCardComponent,
