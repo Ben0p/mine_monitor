@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01.fmg.local/api/fm/';
+const APIurl: String = 'https://ccmopsmm01.fmgops.local/api/fm/';
 
 @Injectable({
   providedIn: 'root',
