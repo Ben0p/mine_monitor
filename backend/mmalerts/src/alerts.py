@@ -270,12 +270,15 @@ def weatherZone():
 
     key = genWZKey()
 
-    url = f'http://ws1.theweather.com.au/?lt=uwas&lc=183,179,180,574,570,1443,1442&alerts=1(client=337)&format=json&u=15566-1804&k={key}'
+    url = f"http://ws1.theweather.com.au/?lt=uwas&lc={env['weatherzone_zones']}&alerts=1(client=337)&format=json&u=15566-1804&k={key}"
     print(url)
 
-    response = requests.get(url=url, proxies={"http":env['proxy']})
-    json_data = json.loads(response.text)
+    if env['proxy']:
+        response = requests.get(url=url, proxies={"http":env['proxy']})
+    else:
+        response = requests.get(url=url)
 
+    json_data = json.loads(response.text)
     locations = json_data['countries'][0]['locations']
     
     for location in locations:

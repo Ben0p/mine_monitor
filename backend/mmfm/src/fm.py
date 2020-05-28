@@ -3,60 +3,38 @@ from env.sol import env
 import time
 import pymongo
 
+from devices import extreamer500, odroid
 
 
-# Initialize mongo
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
-DB = CLIENT[env['database']]
-
-
-
-
-def pollOdroid(ip, station):
-
-    timestamp = f"{time.strftime('%d/%m/%Y %X')}"
-
-    try:
-        c = pymongo.MongoClient(f"mongodb://{ip}:{env['mongodb_port']}/")
-        d = c['fm_stream']
-
-        data = d['fm_live'].find_one()
-
-    except:
-        data = {
-            'station' : station,
-            'time' : timestamp,
-            'artist' : '',
-            'song' : '',
-            'state' : 'Offline'
-        }
-
-    return(data)
 
 
 
 
 def main():
 
+    # Initialize mongo
+    CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+    DB = CLIENT[env['database']]
+
     while True:
         # Get odroid IP addresses
         odroids = DB['fm_odroids'].find()
 
         for odroid in odroids:
-            data = pollOdroid(odroid['ip'], odroid['station'])
+            odroid_data = odroid.poll(odroid['ip'], odroid['station'])
 
 
             DB['fm_live'].find_one_and_update(
                     {
-                        'station' : data['station'],
+                        'station' : odroid_data['station'],
                     },
                     {
                         '$set': {
-                            'station' : data['station'],
-                            'time': data['time'],
-                            'artist': data['artist'],
-                            'song' : data['song'],
-                            'state' : data['state']
+                            'station' : odroid_data['station'],
+                            'time': odroid_data['time'],
+                            'artist': odroid_data['artist'],
+                            'song' : odroid_data['song'],
+                            'state' : odroid_data['state']
                         }
                     },
                     upsert=True

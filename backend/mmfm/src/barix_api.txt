@@ -1,0 +1,6 @@
+http://{ip}/rc.cgi?{request}
+
+
+Requests:
+L=status - sysinfo
+L=realtime_status.txt
