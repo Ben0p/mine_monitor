@@ -66,23 +66,48 @@ def poll_anemometers():
                     datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
                 except ValueError:
                     datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S')
-                datapoint_time = datapoint_time.strftime('%d/%m/%Y %H:%M:%S')
+
+                # Add time offset and format to readable string
+                datapoint_time = datapoint_time + datetime.timedelta(hours=env['time_offset'])
+                datapoint_time_string = datapoint_time.strftime('%d/%m/%Y %H:%M:%S')
+
+                # Offline if time stamp is older than 30sec
+                if datapoint_time < datetime.datetime.fromtimestamp(time.time() - 30):
+                    online = False
+                else:
+                    online = True
+
+                if kmh <= 20:
+                    speed = 'slow'
+                    status = 'success'
+                elif 20 < kmh <= 40:
+                    speed = 'medium'
+                    status = 'warning'
+                elif 40 < kmh:
+                    speed = 'fast'
+                    status = 'danger'
+
                 
                 print(f"    {datapoint_time} - {datapoint['V']} m/s")
+
             
             # Insert into mongo DB
-            DB['pcs_wind'].find_one_and_update(
+            DB['wind_live'].find_one_and_update(
                         {
                             'name' : location,
                         },
                         {
                             '$set': {
+                                'type' : "speed",
                                 'name': location,
-                                'timestamp' : timestamp,
-                                'time' : time_string,
+                                'timestamp' : datapoint_time,
+                                'time' : datapoint_time_string,
                                 'ms' : ms,
                                 'kmh' : kmh,
-                                'knots' : knots
+                                'knots' : knots,
+                                'online' : online,
+                                'speed' : speed,
+                                'status' : status,
                             }
                         },
                         upsert=True

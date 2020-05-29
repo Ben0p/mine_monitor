@@ -1,15 +1,5 @@
-<div>
-  <div class="row">
-    <div *ngFor="let wind of winds" class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-      <ngx-wind-status-card
-        style="cursor: pointer;"
-        [title]="wind.name"
-        [status]="'success'"
-        [on]="'true'"
-        [info]="wind.kmh"
-        [direction]="wind.direction"
-        routerLink="/pages/wind/{{wind.name}}">
-      </ngx-wind-status-card>
-    </div>
+<div class="row">
+  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+    <ngx-wind-speed-card [location]="'test'" [speed]="'fast'" [info]="'12.6'" [status]="'danger'"></ngx-wind-speed-card>
   </div>
 </div>

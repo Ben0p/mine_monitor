@@ -33,7 +33,7 @@ export const NB_CORE_PROVIDERS = [
           class: NbAuthJWTToken,
           key: 'token'
         },
-        baseEndpoint: 'https://ccmopsmm01.fmgops.local/api',
+        baseEndpoint: 'https://solmm01/api',
         login: {
           endpoint: '/auth',
           method: 'post',

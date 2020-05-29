@@ -1,0 +1,13 @@
+<nb-card [ngClass]="{'off': !on}">
+    <div class="icon-container">
+        <div class="icon status-{{ status }}">
+            <img class="rotating"
+                [ngClass]="{'rotating-slow': speed === 'slow', 'rotating-medium': speed === 'medium', 'rotating-fast': speed === 'fast'}"
+                src="../../../../assets/images/fan.png">
+        </div>
+    </div>
+    <div class="details">
+        <div class="title h5">{{ location }}</div>
+        <div class="status paragraph-2">{{ on ? info + ' km/h' : 'Offline' }}</div>
+    </div>
+</nb-card>
