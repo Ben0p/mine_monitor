@@ -7,9 +7,6 @@ from devices import extreamer500, odroid
 
 
 
-
-
-
 def main():
 
     # Initialize mongo

@@ -1,5 +1,6 @@
 <div class="row">
-  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-    <ngx-wind-speed-card [location]="'test'" [speed]="'fast'" [info]="'12.6'" [status]="'danger'"></ngx-wind-speed-card>
+  <div *ngFor="let wind of winds" class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+    <ngx-wind-speed-card *ngIf="wind.type=='speed'" [location]="wind.name" [speed]="wind.speed" [info]="wind.kmh"
+      [status]="wind.status" [on]="wind.online"></ngx-wind-speed-card>
   </div>
 </div>

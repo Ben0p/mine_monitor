@@ -41,7 +41,7 @@ export class AllComponent implements OnInit, OnDestroy {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 60000);
+    }, 10000);
   }
 
   ngOnDestroy() {

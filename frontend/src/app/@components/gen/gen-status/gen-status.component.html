@@ -41,6 +41,7 @@
     <div  *ngIf="level">
       <nb-progress-bar [value]="level" status="{{color}}">{{level}}%</nb-progress-bar>
     </div>
+
     <div  *ngIf="level == null">
       <nb-progress-bar [value]="100" status="primary">Unknown</nb-progress-bar>
     </div>

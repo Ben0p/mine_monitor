@@ -2,7 +2,7 @@
     <div class="icon-container">
         <div class="icon status-{{ status }}">
             <img class="rotating"
-                [ngClass]="{'rotating-slow': speed === 'slow', 'rotating-medium': speed === 'medium', 'rotating-fast': speed === 'fast'}"
+                [ngClass]="{'rotating-slow': speed === 'slow', 'rotating-medium': speed === 'medium', 'rotating-fast': speed === 'fast', 'rotating-stop': speed === 'stop'}"
                 src="../../../../assets/images/fan.png">
         </div>
     </div>

@@ -1,0 +1,51 @@
+FROM aliyunfc/runtime-python3.6
+
+ENTRYPOINT [ "/bin/sh" "aliyunfc/runtime-python3.6" ]
+
+RUN mssql-builder pip install -t /code pymssql
+
+
+
+
+# Installing system utilities
+RUN apk add --no-cache curl gnupg
+
+# Adding custom MS repository for mssql-tools and msodbcsql
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.5.2.1-1_amd64.apk
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.5.2.1-1_amd64.apk
+
+# Verifying signature
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.5.2.1-1_amd64.sig
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.5.2.1-1_amd64.sig
+
+# Importing gpg key
+RUN curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import -
+RUN gpg --verify msodbcsql17_17.5.2.1-1_amd64.sig msodbcsql17_17.5.2.1-1_amd64.apk && gpg --verify mssql-tools_17.5.2.1-1_amd64.sig mssql-tools_17.5.2.1-1_amd64.apk
+
+# Installing packages 
+RUN echo y | apk add --allow-untrusted msodbcsql17_17.5.2.1-1_amd64.apk mssql-tools_17.5.2.1-1_amd64.apk
+
+RUN apk add freetds-dev
+RUN apk add g++ gcc unixodbc-dev
+RUN apk add python-dev
+
+RUN apk update
+
+RUN pip3 install --upgrade pip
+
+RUN pip3 install Cython
+
+COPY ./requirements.txt /project/requirements.txt
+
+RUN pip3 install -r /project/requirements.txt
+
+RUN pip3 install pymssql==2.1.3
+
+# Adding SQL Server tools to $PATH
+ENV PATH=$PATH:/opt/mssql-tools/bin
+
+COPY src /app
+
+WORKDIR /app/src
+
+CMD ["python", "-u", "windy.py"]
