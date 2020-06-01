@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertService } from './../../../@core/data/alerts.service'
 import { TetraService } from './../../../@core/data/tetra.service'
 import { FmService } from './../../../@core/data/fm.service'
+import { WindService } from '../../../@core/data/wind.service'
 
 @Component({
   selector: 'dash-alerts-tetra',
@@ -25,6 +26,7 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
   indCallsLoaded: boolean = false;
   sdsCallsLoaded: boolean = false;
   fmLoaded: boolean = true;
+  winds: Object;
   
 
 
@@ -32,7 +34,8 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
   constructor(
     private alerts: AlertService,
     private tetra: TetraService,
-    private fm: FmService
+    private fm: FmService,
+    private wind: WindService,
   ) { }
 
   ngOnInit() {
@@ -87,6 +90,11 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
         data: {}) => {
         this.fmLive = data;
         this.fmLoaded = true;
+      }
+    )
+    this.wind.getWindAll().subscribe(
+      (data: {}) => {
+        this.winds = data;
       }
     )
   }

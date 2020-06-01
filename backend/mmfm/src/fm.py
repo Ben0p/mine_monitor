@@ -3,7 +3,7 @@ from env.sol import env
 import time
 import pymongo
 
-from devices import extreamer500, odroid
+from devices import exstreamer500, odroid
 
 
 
@@ -15,11 +15,11 @@ def main():
 
     while True:
         # Get odroid IP addresses
-        odroids = DB['fm_odroids'].find()
+        modules = DB['fm_modules'].find()
 
-        for odroid in odroids:
-            odroid_data = odroid.poll(odroid['ip'], odroid['station'])
-
+        for module in modules:
+            if module['type'] == 'Odroid':
+                odroid_data = odroid.poll(module['ip'], module['station'])
 
             DB['fm_live'].find_one_and_update(
                     {
@@ -38,7 +38,7 @@ def main():
                 )
 
             timestamp = f"{time.strftime('%d/%m/%Y %X')}"
-            print(f"{timestamp} - Polled {data['station']}")
+            print(f"{timestamp} - Polled {module['station']}")
             
         
         time.sleep(10)

@@ -1,18 +1,13 @@
-<div class="row">
-  <div style="width: 100%;">
-    <nb-card>
-      <nb-card-header>
-        {{station}}
-      </nb-card-header>
-      <nb-card-body>
-
-        <div class="pulse-wrapper">
-          <nb-icon icon="music-outline" class="static"></nb-icon> <br>
-          <h6>{{artist}}</h6>
-          {{song}}
-        </div>
-
-      </nb-card-body>
-    </nb-card>
-  </div>
-</div>
+<nb-card>
+  <nb-card-body>
+    <div class="status">
+      <div [ngClass]="{'playing': state === 'Playing', 'stopped': state !== 'Playing'}">
+      </div>
+    </div>
+    <div class="track">
+      <b style="font-size: 18px;">{{station}}</b> <br>
+      {{artist}} - {{song}} <br>
+      {{state}}
+    </div>
+  </nb-card-body>
+</nb-card>

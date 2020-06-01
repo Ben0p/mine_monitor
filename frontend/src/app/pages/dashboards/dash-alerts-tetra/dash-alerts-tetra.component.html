@@ -1,65 +1,94 @@
 <div class="row">
-  <nb-card class="col-xxl-3">
-    <nb-card-header>
-      Alerts - Weather Zone
-    </nb-card-header>
-    <nb-card-body *ngIf="alertsLoaded">
-      <div *ngFor="let alert of alerts$">
-        <ngx-status-card [title]="alert.zone" [type]="alert.status" [on]="alert.online" [icon]="alert.icon"
-          [state]="alert.state">
-        </ngx-status-card>
-      </div>
-    </nb-card-body>
-  </nb-card>
-
-  <div class="col-xxl-9">
+  <div class="col-xxl-3">
     <nb-card>
       <nb-card-header>
-        Tetra
+        Alerts - Weather Zone
       </nb-card-header>
-      <nb-card-body style="overflow: hidden">
-        <div class="row">
-          <div class="col-xxl-3">
-            <ngx-tetra-radio-count-card *ngIf="radiosLoaded" [title]="'Radios'" [type]="radios.status"
-              [on]="radios.online" [count]="radios.count" [description]="'Online'">
-            </ngx-tetra-radio-count-card>
-          </div>
-          <div class="col-xxl-3">
-            <ngx-tetra-radio-count-card *ngIf="groupCallsLoaded" [title]="'Group Calls'" [type]="'success'"
-              [on]="'true'" [count]="groupCalls.calls" [description]="'Per Minute'">
-            </ngx-tetra-radio-count-card>
-          </div>
-          <div class="col-xxl-3">
-            <ngx-tetra-radio-count-card *ngIf="indCallsLoaded" [title]="'Direct Calls'" [type]="'success'" [on]="'true'"
-              [count]="individualCalls.calls" [description]="'Per Minute'">
-            </ngx-tetra-radio-count-card>
-          </div>
-          <div class="col-xxl-3">
-            <ngx-tetra-radio-count-card *ngIf="sdsCallsLoaded" [title]="'SDS Calls'" [type]="'success'" [on]="'true'"
-              [count]="sdsCalls.calls" [description]="'Per Minute'">
-            </ngx-tetra-radio-count-card>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xxl-4">
-            <ngx-tetra-bar-chart [title]="'Tetra Node Load'"></ngx-tetra-bar-chart>
-          </div>
-          <div class="col-xxl-4">
-            <ngx-tetra-radar-chart [label_title]="'Tetra Time Slots'"></ngx-tetra-radar-chart>
-          </div>
-          <div class="col-xxl-4">
-            <ngx-tetra-subs-chart [title]="'Tetra Subscribers'"></ngx-tetra-subs-chart>
-          </div>
-        </div>
-
-        <div class="row">
-          <div style="width: 100%;">
-            <div class="col-xxl-12" style="height: 400px">
-              <ngx-tetra-calls-line-chart [title]="'Calls - 24 Hours'"></ngx-tetra-calls-line-chart>
-            </div>
-          </div>
+      <nb-card-body *ngIf="alertsLoaded">
+        <div *ngFor="let alert of alerts$">
+          <ngx-status-card [title]="alert.zone" [type]="alert.status" [on]="alert.online" [icon]="alert.icon"
+            [state]="alert.state">
+          </ngx-status-card>
         </div>
       </nb-card-body>
     </nb-card>
+  </div>
+  <div class="col-xxl-9">
+    <div class="row">
+      <div class="col-xxl-12">
+        <nb-card>
+          <nb-card-header>
+            Tetra
+          </nb-card-header>
+          <nb-card-body style="overflow: hidden">
+            <div class="row">
+              <div class="col-xxl-3">
+                <ngx-tetra-radio-count-card *ngIf="radiosLoaded" [title]="'Radios'" [type]="radios.status"
+                  [on]="radios.online" [count]="radios.count" [description]="'Online'">
+                </ngx-tetra-radio-count-card>
+              </div>
+              <div class="col-xxl-3">
+                <ngx-tetra-radio-count-card *ngIf="groupCallsLoaded" [title]="'Group Calls'" [type]="'success'"
+                  [on]="'true'" [count]="groupCalls.calls" [description]="'Per Minute'">
+                </ngx-tetra-radio-count-card>
+              </div>
+              <div class="col-xxl-3">
+                <ngx-tetra-radio-count-card *ngIf="indCallsLoaded" [title]="'Direct Calls'" [type]="'success'"
+                  [on]="'true'" [count]="individualCalls.calls" [description]="'Per Minute'">
+                </ngx-tetra-radio-count-card>
+              </div>
+              <div class="col-xxl-3">
+                <ngx-tetra-radio-count-card *ngIf="sdsCallsLoaded" [title]="'SDS Calls'" [type]="'success'"
+                  [on]="'true'" [count]="sdsCalls.calls" [description]="'Per Minute'">
+                </ngx-tetra-radio-count-card>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xxl-4">
+                <ngx-tetra-bar-chart [title]="'Tetra Node Load'"></ngx-tetra-bar-chart>
+              </div>
+              <div class="col-xxl-4">
+                <ngx-tetra-radar-chart [label_title]="'Tetra Time Slots'"></ngx-tetra-radar-chart>
+              </div>
+              <div class="col-xxl-4">
+                <ngx-tetra-subs-chart [title]="'Tetra Subscribers'"></ngx-tetra-subs-chart>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xxl-8">
+        <nb-card>
+          <nb-card-header>
+            Wind
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div *ngFor="let wind of winds" class="col-xxl-4">
+                <ngx-wind-speed-card *ngIf="wind.type=='speed'" [location]="wind.name" [speed]="wind.speed"
+                  [info]="wind.kmh" [status]="wind.status" [on]="wind.online"></ngx-wind-speed-card>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-xxl-4">
+        <nb-card>
+          <nb-card-header>
+            FM Radio
+          </nb-card-header>
+          <nb-card-body>
+            <div class="row">
+              <div *ngFor="let fm of fmLive" class="col-xxl-6">
+                <ngx-fm-live [station]="fm.station" [state]="fm.state" [artist]="fm.artist" [song]="fm.song">
+                </ngx-fm-live>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+    </div>
   </div>
 </div>

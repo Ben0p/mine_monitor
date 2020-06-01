@@ -2,12 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-  NbCardModule,
-  NbSelectModule,
-  NbButtonModule,
-  NbIconModule,
-  NbTabsetModule,
-  NbListModule
+  NbCardModule
 } from '@nebular/theme';
 
 import { ComponentsModule } from '../../@components/components.module';

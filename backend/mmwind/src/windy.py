@@ -1,6 +1,8 @@
 from env.sol import env
 
-import pyodbc
+import pymssql
+#import pyodbc
+
 import json
 import datetime
 import time
@@ -10,22 +12,13 @@ import pymongo
 CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
 
-
-# Initialize SQL (Docker pyodbc)
-
-driver = "{ODBC Driver 17 for SQL Server}"
-server = 'SOLOPSRS02' 
-username = 'FMG\\svc.sol.wind' 
-password = '5U!Y7$gaxS!NVnO78l$c' 
-
-cnxn = pyodbc.connect(f'DRIVER={driver}; \
-    SERVER=SOLOPSRS02; \
-    UID={username}; \
-    PWD={password}; \
-    Trusted_connection=yes')
-
+# Initialize SQL
+cnxn = pymssql.connect(
+    server = env['pcs_sql_server'],
+    user = f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
+    password = env['pcs_sql_password']
+)
 cursor = cnxn.cursor()
-
 
 def poll_anemometers():
 
@@ -43,6 +36,7 @@ def poll_anemometers():
     # Iterate rows (should only be one anyway)
     for row in rows:
 
+
         # Get time object and format it
         timestamp = row[0]
         time_string = timestamp.strftime('%d/%m/%Y %H:%M:%S')
@@ -56,72 +50,80 @@ def poll_anemometers():
         # Iterate over aneometers in json (dictionary) object
         for key, value in data.items():
 
-            # Strip just the first part of the name
-            location = key.split(".")[0]
+            module = DB['wind_modules'].find_one(
+                {
+                    'tag' : key,
+                }
+            )
 
-            # Speed unit conversions
-            ms = float(value[-1]['V'])
-            kmh = ms * 3.6
-            kmh = round(kmh, 2)
-            knots = ms * 1.944
-            knots = round(knots,2)
+            if module:
 
-            # Print out the data points (for each unit)
-            print(f"{location}:")
-            for datapoint in value:
-                try:
-                    datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
-                except ValueError:
-                    datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S')
+                if module['units'] == 'ms':
+                    # Speed unit conversions
+                    ms = float(value[-1]['V'])
+                    kmh = ms * 3.6
+                    kmh = round(kmh, 2)
+                    knots = ms * 1.944
+                    knots = round(knots,2)
 
-                # Add time offset and format to readable string
-                datapoint_time = datapoint_time + datetime.timedelta(hours=env['time_offset'])
-                datapoint_time_string = datapoint_time.strftime('%d/%m/%Y %H:%M:%S')
+                # Print out the data points (for each unit)
+                print(f"{module['name']}:")
+                for datapoint in value:
+                    try:
+                        datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
+                    except ValueError:
+                        datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S')
 
-                if kmh <= 20:
-                    speed = 'slow'
-                    status = 'success'
-                elif 20 < kmh <= 40:
-                    speed = 'medium'
-                    status = 'warning'
-                elif 40 < kmh:
-                    speed = 'fast'
-                    status = 'danger'
+                    # Add time offset and format to readable string
+                    datapoint_time = datapoint_time + datetime.timedelta(hours=env['time_offset'])
+                    datapoint_time_string = datapoint_time.strftime('%d/%m/%Y %H:%M:%S')
 
-                # Offline if time stamp is older than 30sec
-                if datapoint_time < datetime.datetime.fromtimestamp(time.time() - 30):
-                    online = False
-                    speed = 'stop'
-                    status = 'primary'
-                else:
-                    online = True
+                    if kmh <= 20:
+                        speed = 'slow'
+                        status = 'success'
+                    elif 20 < kmh <= 40:
+                        speed = 'medium'
+                        status = 'warning'
+                    elif 40 < kmh:
+                        speed = 'fast'
+                        status = 'danger'
+
+                    # Offline if time stamp is older than 30sec
+                    if datapoint_time < datetime.datetime.fromtimestamp(time.time() - 30):
+                        online = False
+                        speed = 'stop'
+                        status = 'primary'
+                    else:
+                        online = True
+
+                    
+                    print(f"    {datapoint_time} - {datapoint['V']} m/s")
 
                 
-                print(f"    {datapoint_time} - {datapoint['V']} m/s")
+                # Insert into mongo DB
 
-            
-            # Insert into mongo DB
-
-            DB['wind_live'].find_one_and_update(
-                        {
-                            'name' : location,
-                        },
-                        {
-                            '$set': {
-                                'type' : "speed",
-                                'name': location,
-                                'timestamp' : datapoint_time,
-                                'time' : datapoint_time_string,
-                                'ms' : ms,
-                                'kmh' : kmh,
-                                'knots' : knots,
-                                'online' : online,
-                                'speed' : speed,
-                                'status' : status,
-                            }
-                        },
-                        upsert=True
-                    )
+                DB['wind_live'].find_one_and_update(
+                            {
+                                'name' : module['name'],
+                            },
+                            {
+                                '$set': {
+                                    'type' : "speed",
+                                    'name': module['name'],
+                                    'timestamp' : datapoint_time,
+                                    'time' : datapoint_time_string,
+                                    'ms' : ms,
+                                    'kmh' : kmh,
+                                    'knots' : knots,
+                                    'online' : online,
+                                    'speed' : speed,
+                                    'status' : status,
+                                    'description' : module['description'],
+                                    'tag' : module['tag']
+                                }
+                            },
+                            upsert=True
+                        )
 
 
 

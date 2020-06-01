@@ -41,9 +41,9 @@ def walk(host, oid):
 
 
 
-while True:
+def poll(ip):
 
-    results = walk("10.243.228.22", '1.3.6.1.4.1.17491.1.5.1.1.1.2')
+    results = walk(ip, '1.3.6.1.4.1.17491.1.5.1.1.1.2')
 
     IAL = "1.3.6.1.4.1.17491.1.5.1.1.1.2.3"
     IAL = results[IAL]

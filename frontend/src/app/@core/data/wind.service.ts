@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01/api/wind/';
+const APIurl: String = 'https://solmm01.fmg.local/api/wind/';
 
 @Injectable({
   providedIn: 'root',

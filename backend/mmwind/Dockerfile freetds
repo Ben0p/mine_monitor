@@ -1,0 +1,23 @@
+FROM ubuntu:18.04
+
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get install -y apt-transport-https
+RUN apt-get install -y gnupg2
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
+RUN curl https://packages.microsoft.com/config/ubuntu/18.04/prod.list > /etc/apt/sources.list.d/mssql-release.list
+
+RUN apt-get update
+ENV ACCEPT_EULA=y DEBIAN_FRONTEND=noninteractive
+RUN apt-get install mssql-tools unixodbc-dev -y
+RUN apt-get install -y python3.7 python3-pip
+
+ADD odbcinst.ini /etc/odbcinst.ini
+
+RUN pip3 install --upgrade pip
+RUN pip3 install pyodbc
+RUN pip3 install pymongo
+
+COPY src /app
+WORKDIR /app/src
+CMD ["python3", "-u", "windy.py"]

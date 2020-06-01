@@ -4,30 +4,37 @@
 
 
 
-.pulsate {
-    -webkit-animation: pulsate 3s ease-out;
-    -webkit-animation-iteration-count: infinite; 
-    opacity: 0.5;
-    font-size: 70px;
-    color: nb-theme(text-success-color);
-}
-@-webkit-keyframes pulsate {
-    0% { 
-        opacity: 0.5;
-    }
-    50% { 
-        opacity: 1.0;
-    }
-    100% { 
-        opacity: 0.5;
-    }
+.container {
+    width: 100%;
+    height: 100%;
+  }
+
+.status {
+    width: 5%;
+    height: 100%;
+    float: left;
+    border-radius: nb-theme(card-border-radius);
+    margin-left: -4px;
 }
 
-.pulse-wrapper {
-    text-align: center;
+.playing {
+    background-color: nb-theme(color-success-400);
+    height: 100%;
+    width: 100%;
 }
 
-.static {
-    color: nb-theme(text-success-color);
-    font-size: 70px;
+.stopped {
+    background-color: nb-theme(color-danger-400);
+    height: 100%;
+    width: 100%;
+}
+
+.track {
+    padding-left: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+nb-card {
+    height: 6rem;
 }

@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01/api/alerts/';
+const APIurl: String = 'https://solmm01.fmg.local/api/alerts/';
 
 @Injectable({
   providedIn: 'root',

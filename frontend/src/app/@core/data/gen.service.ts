@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01/api/gen/';
+const APIurl: String = 'https://solmm01.fmg.local/api/gen/';
 
 @Injectable({
   providedIn: 'root',

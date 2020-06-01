@@ -1,6 +1,7 @@
+from env.sol import env
 
 import time
-
+import pymongo
 
 def poll(ip, station):
 
