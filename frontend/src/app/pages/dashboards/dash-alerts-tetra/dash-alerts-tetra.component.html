@@ -82,7 +82,8 @@
           <nb-card-body>
             <div class="row">
               <div *ngFor="let fm of fmLive" class="col-xxl-6">
-                <ngx-fm-live [station]="fm.station" [state]="fm.state" [artist]="fm.artist" [song]="fm.song">
+                <ngx-fm-live [station]="fm.station" [state]="fm.state" [artist]="fm.artist" [song]="fm.song"
+                  [t_minus]="fm.t_minus">
                 </ngx-fm-live>
               </div>
             </div>

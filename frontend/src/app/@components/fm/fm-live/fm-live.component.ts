@@ -12,5 +12,6 @@ export class FmLiveComponent {
   @Input() state: string = 'State';
   @Input() artist: string = 'Artist';
   @Input() song: string = 'Song';
+  @Input() t_minus: string;
 
 }

@@ -8,6 +8,13 @@ import datetime
 import time
 import pymongo
 
+
+'''
+TODO:
+    - try except around sql connection and query, exception = offline.
+    - handle no data in json = offline
+'''
+
 # Initialize mongo
 CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
@@ -21,7 +28,6 @@ cnxn = pymssql.connect(
 cursor = cnxn.cursor()
 
 def poll_anemometers():
-
 
     # SQL Query
     cursor.execute("SELECT top 1 \

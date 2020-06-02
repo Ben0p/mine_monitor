@@ -331,9 +331,10 @@ def weatherZone():
     
     print("Polled Weather Zone")
 
+
 if __name__ == '__main__':
 
-    checkDB()
+    # checkDB()
 
     while True:
         getAll()
