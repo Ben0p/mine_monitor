@@ -225,14 +225,15 @@ def modelE2242(module):
     fuel_level = ((level-fuel_min) / fuel_range) * 100
     fuel_level = round(fuel_level)
 
-    if fuel_level > 70:
+    if fuel_level > 100:
+        fuel_level = 100
         fuel_color = "success"
-    elif 30 < fuel_level < 70:
+    if 70 <= fuel_level <= 100:
+        fuel_color = "success"
+    elif 30 <= fuel_level < 70:
         fuel_color = "warning"
-    elif fuel_level < 30:
+    elif fuel_level <= 30:
         fuel_color = "danger"
-
-
 
     status = {
         'oil' : oil,
