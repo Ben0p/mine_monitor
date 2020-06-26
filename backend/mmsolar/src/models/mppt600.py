@@ -29,13 +29,16 @@ def targetVoltage(target, batt):
     batt = float(toFloat16(batt))
 
     if target < 1:
-        if batt < 30:
+        if batt <= 18:
+            sys_v = 14
+        elif 18 < batt <= 30:
             sys_v = 28
-        elif batt > 30:
+        elif batt >= 30:
             sys_v = 57
         return(sys_v)
     else:
         return(target)
+
 
 def chargeState(state):
     '''

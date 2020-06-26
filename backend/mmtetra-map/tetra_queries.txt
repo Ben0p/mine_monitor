@@ -1,0 +1,31 @@
+What talkgroup a radio is on
+SELECT * FROM tetraflexlogdb.groupattachment WHERE Ssi = 23071 AND Selected = 1;
+
+What talkgroups a radio is scanning
+SELECT * FROM tetraflexlogdb.groupattachment WHERE Ssi = 23071 AND AlwaysScanned = 1;
+
+What radios are on a talkgroup
+SELECT * FROM tetraflexlogdb.groupattachment WHERE GroupSsi = 20015 AND Selected = 1;
+
+Count how many radios on a talkgroup
+SELECT Ssi, count(*) FROM groupattachment GROUP BY GroupSsi;
+
+List talkgroups
+SELECT * FROM tetraflexlogdb.subscriber WHERE GroupSubscriber = 1;
+
+List subscribers
+SELECT * FROM tetraflexlogdb.subscriber WHERE GroupSubscriber = 0;
+SsiKind:
+1=Subsciber
+2=Group
+5=Application
+8=Terminal
+
+Search subscribers
+SELECT * FROM tetraflexlogdb.subscriber WHERE Description LIKE "%Mark%"
+
+Unique group calls last 10 sec (adjusted for UTC):
+SELECT DISTINCT CallId, CallInitEsn, CallSetupTimeMs, OriginatingNodeNo, CallingEsn, InitRssi, InitMsDistance FROM tetraflexlogdb.groupcall WHERE CallInitEsn NOT LIKE '' AND CallBegin > date_sub(now(), interval 28810 second);
+
+No GPS
+SELECT DISTINCT CallingSsi, CallingDescr FROM sdsdata WHERE UserDataLength = 44 and Timestamp >= '2020-02-08';
