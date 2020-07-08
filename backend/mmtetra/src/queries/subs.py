@@ -42,3 +42,32 @@ def tetraSubscribers(CURSOR, DB):
             upsert=True
         )
     print(f"{time.strftime('%d/%m/%Y %X')} - Refreshed subscribers")
+
+
+def msLocation(CURSOR, DB):
+    ''' Get current node a subscriber is associated to
+    '''
+
+    # Execute MySQL query
+    CURSOR.execute("SELECT \
+        Ssi, \
+        NodeDescr \
+        FROM `mslocation`"
+    )
+    myresult = CURSOR.fetchall()
+
+    for subscriber in myresult:
+        node = subscriber[1]        
+        DB['tetra_subscribers'].find_one_and_update(
+            {
+                'ssi' : subscriber[0],
+            },
+            {
+                '$set': {
+                    'node' : node
+                }
+            },
+            upsert=True
+        )
+
+    print(f"{time.strftime('%d/%m/%Y %X')} - Retrieved current node attachment")

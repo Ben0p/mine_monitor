@@ -8,6 +8,7 @@ import json
 import copy
 import time
 import datetime
+from datetime import timedelta
 from pytz import timezone
 import mysql.connector
 import math
@@ -54,12 +55,17 @@ def geodetic_to_geocentric(lat, lon, h):
 
 def processData(data):
 
-    print("Processing data..")
+    print("Processing data...")
+
+    # Get subscriber list from mongo
+    subs = DB['tetra_subscribers'].find()
+    sub_list = {sub['ssi'] : sub for sub in subs}
 
     for row in data:
 
         location = {}
 
+        # Process raw binary into location data
         hex_string = row[5].hex()
         hex_string = hex_string.rstrip("0")
         try:
@@ -68,18 +74,79 @@ def processData(data):
             # TODO fix some of those erros within the teta sds module
             continue
 
-        timestamp = row[0]
-        timestamp = timestamp.isoformat() + 'Z'
-
-        
+        # Convert lat, lon into geocentric
+        # TODO incorporate into SDS module
         lat = location['location']['latitude']['decimal_degrees']
         lon = location['location']['longitude']['decimal_degrees']
         alt = location['location']['altitude']['meters']
-
         lat, lon, alt = geodetic_to_geocentric(lat, lon, alt)
 
+        # Time Stamp
+        timestamp = row[0]
+        timestamp = timestamp.isoformat()
+        timestamp = timestamp + 'Z'
+
+        # Availability start time
+        availability_start = row[0]
+        availability_start = availability_start + timedelta(minutes=-30)
+        availability_start = availability_start.isoformat()
+        availability_start = availability_start + 'Z'  
+
+        # Availability finish time
+        availability_end = row[0]
+        availability_end = availability_end + timedelta(minutes=1)
+        availability_end = availability_end.isoformat()
+        availability_end = availability_end + 'Z'
+
+        # Properties start time
+        properties_start = row[0]
+        properties_start = properties_start + timedelta(minutes=-1)
+        properties_start = properties_start.isoformat()
+        properties_start = properties_start + 'Z'  
+
+        # Properties end time
+        properties_end = row[0]
+        properties_end = properties_end + timedelta(minutes=15)
+        properties_end = properties_end.isoformat()
+        properties_end = properties_end + 'Z'
+
+        
+
+     
+
+        # Combine into timestamped point
         point = [timestamp, lat, lon, alt]
 
+        # Test key values
+        try:
+            sub_list[row[6]]['description']
+        except KeyError:
+            sub_list[row[6]]['description'] = ''
+        try:
+            sub_list[row[6]]['node']
+        except KeyError:
+            sub_list[row[6]]['node'] = ''
+        try:
+            sub_list[row[6]]['talkgroup']
+        except KeyError:
+            sub_list[row[6]]['talkgroup'] = ''
+
+        # Process RSSI
+        if row[3] >= -70:
+            rssi_color = [63, 191, 63, 128]
+        elif -70 > row[3] >= -90:
+            rssi_color = [191, 178, 63, 128]
+        elif -90 > row[3]:
+            rssi_color = [191, 63, 63, 128]
+
+        # Process speed
+        if location['velocity']['kmh'] > 60:
+            velocity_color = [191, 63, 63, 128]
+        else:
+            velocity_color = [63, 191, 63, 128]
+
+            
+        # Insert into Mongo
         DB['map_tetra'].find_one_and_update(
             {
                 'timestamp' : timestamp,
@@ -89,11 +156,21 @@ def processData(data):
                 '$set' : {
                     'unix' : time.time(),
                     'issi' : row[6],
+                    'description' : sub_list[row[6]]['description'],
+                    'node' : sub_list[row[6]]['node'],
+                    'talkgroup': sub_list[row[6]]['talkgroup'],
                     'type' : 'subscriber',
                     'timestamp' : timestamp,
+                    'availability_start' : availability_start,
+                    'availability_end' : availability_end,
+                    'properties_start' : properties_start,
+                    'properties_end' : properties_end,
                     'point' : point,
+                    'rssi' : row[3],
+                    'rssi_color' : rssi_color,
                     'uncertainty' : location['location']['uncertainty'],
                     'velocity' : location['velocity']['kmh'],
+                    'velocity_color' : velocity_color,
                     'direction' : location['direction']['direction'],
                     'angle' : location['direction']['angle']
                 }
@@ -166,25 +243,24 @@ def main():
     end = time.time()
     total = round(end - start, 2)
     print(f"{datetime.datetime.now()} - Retrieved last 30min of SDS data in {total}s")
-    '''
+
     # Get specific time range
     start = time.time()
     processData(getTimeRange('2020-06-21 18:00:00', '2020-06-21 20:00:00'))
     end = time.time()
     total = round(end - start, 2)
     print(f"{datetime.datetime.now()} - Retrieved range of SDS data in {total}s")
-
-    # Polling interval (Seconds)
-    interval = 60
+    '''
 
     # Main loop
     while True:
         start = time.time()
-        getSDS(interval)
+        data = getSDS(60)
+        processData(data)
         end = time.time()
         total = round(end - start, 2)
         print(f'{datetime.datetime.now()} - Polled SDS in {total}s')
-        time.sleep(interval)
+        time.sleep(30)
 
 
 
