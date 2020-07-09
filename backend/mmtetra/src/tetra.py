@@ -27,6 +27,27 @@ SQL = mysql.connector.connect(
 CURSOR = SQL.cursor()
 
 
+def getMaintenance():
+    # Execute MySQL query
+    CURSOR.execute("SELECT * from databasemaintenancevalues;")
+
+    myresult = CURSOR.fetchall()
+    next_maint = myresult[0][2]
+    next_maint = time.mktime(next_maint.timetuple())
+    next_maint = next_maint + (8 * 60 * 60)
+    
+    maint_start = next_maint - (30 * 60)
+    maint_end = next_maint + (2 * 60 * 60)
+
+    if maint_start < time.time() < maint_end:
+        under_maintenance = True
+    else:
+        under_maintenance = False
+    
+    return(under_maintenance)
+
+
+
 def main():
 
     # Polling interval counter
@@ -37,6 +58,15 @@ def main():
     subs.tetraSubscribers(CURSOR, DB)
 
     while True:
+        # Get DB maintenance time
+        under_maintenance = getMaintenance()
+
+        # Sleep for 60 and skip iteration if under maintenance
+        if under_maintenance:
+            print("DB under maintenance, sleeping for 60 sec...")
+            time.sleep(60)
+            continue
+
 
         nodes.tetraNodes(CURSOR, DB)
         time.sleep(2)
