@@ -55,11 +55,16 @@ def geodetic_to_geocentric(lat, lon, h):
 
 def processData(data):
 
-    print("Processing data...")
+    start_process_time = time.time()
 
     # Get subscriber list from mongo
     subs = DB['tetra_subscribers'].find()
     sub_list = {sub['ssi'] : sub for sub in subs}
+
+    generate_sub_dictionary = time.time()
+    gen_sub_time = round(generate_sub_dictionary - start_process_time,2)
+    print(f"Generate subscriber list...........{gen_sub_time}s")
+
 
     for row in data:
 
@@ -147,13 +152,8 @@ def processData(data):
 
             
         # Insert into Mongo
-        DB['map_tetra'].find_one_and_update(
+        DB['map_tetra'].insert_one(
             {
-                'timestamp' : timestamp,
-                'issi' : row[6]
-            },
-            {
-                '$set' : {
                     'unix' : time.time(),
                     'issi' : row[6],
                     'description' : sub_list[row[6]]['description'],
@@ -173,11 +173,12 @@ def processData(data):
                     'velocity_color' : velocity_color,
                     'direction' : location['direction']['direction'],
                     'angle' : location['direction']['angle']
-                }
             },
-            upsert=True
         )
-    print("Finished processing data.")
+    finish_process_time = time.time()
+    insert_mongo = round(finish_process_time - generate_sub_dictionary, 2)
+    print(f"Update database....................{insert_mongo}s")
+
 
 
 def getSDS(interval):
@@ -254,12 +255,24 @@ def main():
 
     # Main loop
     while True:
+        print('-'*40)
+        print(datetime.datetime.now())
+        print('-'*40)
         start = time.time()
+
         data = getSDS(60)
+
+        finish_data = time.time()
+        get_data_time = round(finish_data - start, 2)
+        print(f"Get raw sds data...................{get_data_time}s")
+
         processData(data)
+
+
         end = time.time()
         total = round(end - start, 2)
-        print(f'{datetime.datetime.now()} - Polled SDS in {total}s')
+        print(f'Total..............................{total}s')
+
         time.sleep(30)
 
 

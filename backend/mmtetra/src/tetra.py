@@ -24,27 +24,28 @@ SQL = mysql.connector.connect(
   passwd=f"{env['tetra_sql_passwd']}",
   database=f"{env['tetra_sql_database']}"
 )
-CURSOR = SQL.cursor()
 
 
-def getMaintenance():
+
+def getMaintenance(CURSOR):
     # Execute MySQL query
     CURSOR.execute("SELECT * from databasemaintenancevalues;")
-
     myresult = CURSOR.fetchall()
+
     next_maint = myresult[0][2]
     next_maint = time.mktime(next_maint.timetuple())
-    next_maint = next_maint + (8 * 60 * 60)
     
     maint_start = next_maint - (30 * 60)
     maint_end = next_maint + (2 * 60 * 60)
+    time_remaining = maint_end - time.time()
+    time_remaining = round(time_remaining)
 
     if maint_start < time.time() < maint_end:
         under_maintenance = True
     else:
         under_maintenance = False
     
-    return(under_maintenance)
+    return(under_maintenance, time_remaining)
 
 
 
@@ -55,25 +56,27 @@ def main():
     group_count = 0
 
     # Do initial subscriber update
-    subs.tetraSubscribers(CURSOR, DB)
+    # subs.tetraSubscribers(CURSOR, DB)
 
     while True:
+        CURSOR = SQL.cursor()
         # Get DB maintenance time
-        under_maintenance = getMaintenance()
+        under_maintenance, time_remaining = getMaintenance(CURSOR)
 
         # Sleep for 60 and skip iteration if under maintenance
         if under_maintenance:
-            print("DB under maintenance, sleeping for 60 sec...")
-            time.sleep(60)
+            print(f"DB under maintenance, sleeping for {time_remaining} sec...")
+            CURSOR.close()
+            time.sleep(time_remaining)
             continue
 
 
         nodes.tetraNodes(CURSOR, DB)
-        time.sleep(2)
+        time.sleep(0.5)
         calls.group(CURSOR, DB, seconds=60)
-        time.sleep(2)
+        time.sleep(0.5)
         calls.individual(CURSOR, DB, seconds=60)
-        time.sleep(2)
+        time.sleep(0.5)
         calls.sds(CURSOR, DB, seconds=60)
 
         group_count += 1
@@ -81,9 +84,9 @@ def main():
         
         if group_count >= 6:
             group_count = 0
-            time.sleep(2)
+            time.sleep(0.5)
             groups.attachment(CURSOR, DB)
-            time.sleep(2)
+            time.sleep(0.5)
             subs.msLocation(CURSOR, DB)
             time.sleep(2)
             calls.groupDay(CURSOR, DB)
@@ -96,6 +99,8 @@ def main():
             time.sleep(2)
             subs.tetraSubscribers(CURSOR, DB)
 
+        CURSOR.close()
+        print("Closed cursor, sleeping for 10 sec")
         time.sleep(10)
 
 

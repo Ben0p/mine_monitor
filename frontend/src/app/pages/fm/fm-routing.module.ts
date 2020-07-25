@@ -13,6 +13,10 @@ const routes: Routes = [{
       path: 'status',
       component: FmStatusComponent,
     },
+    {
+      path: 'edit',
+      component: FmStatusComponent,
+    },
   ],
 }];
 

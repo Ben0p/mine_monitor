@@ -12,12 +12,14 @@ import { ComponentsModule } from '../../@components/components.module';
 
 import { FmComponent } from './fm.component';
 import { FmStatusComponent } from './fm-status/fm-status.component';
+import { FmEditComponent } from './fm-edit/fm-edit.component';
 
 @NgModule({
   declarations: [
     ...routedComponents,
     FmComponent,
     FmStatusComponent,
+    FmEditComponent,
   ],
   imports: [
     CommonModule,

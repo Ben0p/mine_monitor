@@ -195,6 +195,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'fm_status'
         },
       },
+      {
+        title: 'Status',
+        link: '/pages/fm/edit',
+        data: {
+          permission: 'view',
+          resource: 'fm_edit'
+        },
+      },
     ]
   },
   {
