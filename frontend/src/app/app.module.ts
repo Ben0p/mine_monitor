@@ -70,6 +70,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'gen_status',
             'fm',
             'fm_status',
+            'fm_edit',
           ],
         },
         alert_admin: {

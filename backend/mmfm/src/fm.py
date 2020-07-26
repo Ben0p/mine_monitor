@@ -7,7 +7,31 @@ import datetime
 from devices import exstreamer500, odroid
 
 
+def cleanUp(DB):
+    fm_live = DB['fm_live'].find()
 
+    for live in fm_live:
+        count = DB['fm_modules'].count_documents(
+            {
+                'station': live['station']
+            }
+        )
+
+        if count < 1:
+            try:
+                DB['fm_live'].delete_many(
+                    {'module_uid': live['module_uid']}
+                )
+                print(f"Deleted {live['station']}")
+            except:
+                pass
+            try:
+                DB['fm_live'].delete_many(
+                    {'station': live['station']}
+                )
+                print(f"Deleted {live['station']}")
+            except:
+                pass
 def main():
 
     # Initialize mongo
@@ -15,6 +39,8 @@ def main():
     DB = CLIENT[env['database']]
 
     while True:
+        # Clean up
+        cleanUp(DB)
         # Get fm streaming modules ips and stations
         modules = DB['fm_modules'].find()
 
@@ -25,7 +51,7 @@ def main():
                 # Try (if online it will time out)
                 try:
                     # Get live info from the odroid MongoDB
-                    odroid_data = odroid.poll(module['ip'], module['station'])
+                    odroid_data = odroid.poll(module['ip'])
                     # Calc time offset, if the fm service has crashed the timestamp will be stale
                     try:
                         t_minus = time.time() - odroid_data['unix']
@@ -40,7 +66,7 @@ def main():
                 except:
                     # If modules times out (offline)
                     odroid_data = {
-                        'station' : module['station'],
+                        'station' : '',
                         'time': '',
                         'artist': '',
                         'song' : '',
@@ -49,27 +75,32 @@ def main():
                         't_minus' : '',
                     }
 
-            # Push to live collection
-            DB['fm_live'].find_one_and_update(
-                    {
-                        'station' : odroid_data['station'],
-                    },
-                    {
-                        '$set': {
+            try:
+                # Push to live collection
+                DB['fm_live'].find_one_and_update(
+                        {
                             'station' : odroid_data['station'],
-                            'time': odroid_data['time'],
-                            'artist': odroid_data['artist'],
-                            'song' : odroid_data['song'],
-                            'state' : odroid_data['state'],
-                            'unix' : odroid_data['unix'],
-                            't_minus' : odroid_data['t_minus'],
-                        }
-                    },
-                    upsert=True
-                )
+                        },
+                        {
+                            '$set': {
+                                'station' : odroid_data['station'],
+                                'url' : odroid_data['url'],
+                                'time': odroid_data['time'],
+                                'artist': odroid_data['artist'],
+                                'song' : odroid_data['song'],
+                                'state' : odroid_data['state'],
+                                'unix' : odroid_data['unix'],
+                                't_minus' : odroid_data['t_minus'],
+                                'module_uid' : str(module['_id']),
+                            }
+                        },
+                        upsert=True
+                    )
+            except:
+                pass
 
             timestamp = f"{time.strftime('%d/%m/%Y %X')}"
-            print(f"{timestamp} - Polled {module['station']}")
+            print(f"{timestamp} - Polled {odroid_data['station']}")
         
         time.sleep(10)
 

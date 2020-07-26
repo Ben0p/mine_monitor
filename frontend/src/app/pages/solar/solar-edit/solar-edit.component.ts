@@ -113,9 +113,7 @@ export class SolarEditComponent implements OnDestroy, OnInit {
     private solar: SolarService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-  ) {
-
-  }
+  ) {}
 
     refreshData(){
       this.solar.getSolarControllers().subscribe(
@@ -152,7 +150,7 @@ export class SolarEditComponent implements OnDestroy, OnInit {
     var invalidData = false
     if (confirmation) {
       if (this.modifyType == 'delete') {
-        this.solar.deleteSolarController(this.tableEvent.data.name).subscribe(
+        this.solar.deleteSolarController(this.tableEvent.data.uid).subscribe(
           (data: {}) => {
             this.postResult = data;
             if (this.postResult['success']) {

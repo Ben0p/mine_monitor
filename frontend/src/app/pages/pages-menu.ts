@@ -196,7 +196,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         },
       },
       {
-        title: 'Status',
+        title: 'Edit',
         link: '/pages/fm/edit',
         data: {
           permission: 'view',

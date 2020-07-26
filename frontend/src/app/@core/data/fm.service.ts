@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01.fmg.local/api/fm/';
+const APIurl: String = 'http://localhost:5000/api/fm/';
 
 @Injectable({
   providedIn: 'root',
@@ -54,6 +54,37 @@ export class FmService {
     );
   }
 
+  getFmModules(): Observable<any> {
+    return this.http.get(APIurl + "modules").pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
+  createFmModule(module): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "create", JSON.stringify(module), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
+  updateFmModule(module): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "update", JSON.stringify(module), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
+  deleteFmModule(uid): Observable<any> {
+    return this.http.delete(APIurl + "delete/" + uid).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
 
 
 

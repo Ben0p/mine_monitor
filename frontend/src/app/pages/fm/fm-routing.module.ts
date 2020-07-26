@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { FmComponent } from './fm.component';
 import { FmStatusComponent } from './fm-status/fm-status.component';
-
+import { FmEditComponent } from './fm-edit/fm-edit.component';
 
 const routes: Routes = [{
   path: '',
@@ -15,7 +15,7 @@ const routes: Routes = [{
     },
     {
       path: 'edit',
-      component: FmStatusComponent,
+      component: FmEditComponent,
     },
   ],
 }];

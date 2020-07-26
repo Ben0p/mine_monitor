@@ -7,6 +7,7 @@ import {
   NbButtonModule,
   NbIconModule,
 } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -28,6 +29,7 @@ import { FmEditComponent } from './fm-edit/fm-edit.component';
     NbCardModule,
     NbButtonModule,
     NbIconModule,
+    Ng2SmartTableModule,
   ]
 })
 export class FmModule { }

@@ -24,7 +24,7 @@ from routes.tetra import tetra_node_all, tetra_node_load, tetra_node_subscribers
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
 from routes.dash import dash_power
-from routes.fm import fm_live
+from routes.fm import fm_live, fm_modules, fm_create, fm_update, fm_delete
 from routes.map import test_czml, test_tetra, tetra_all
 
 """ Main rest API router
@@ -107,6 +107,10 @@ API.add_resource(gen_status, '/api/gen/status')
 
 # FM
 API.add_resource(fm_live, "/api/fm/live")
+API.add_resource(fm_modules, "/api/fm/modules")
+API.add_resource(fm_create, "/api/fm/create")
+API.add_resource(fm_update, "/api/fm/update")
+API.add_resource(fm_delete, "/api/fm/delete/<string:oid>")
 
 # Map
 API.add_resource(test_czml, "/api/map/test")
