@@ -12,7 +12,7 @@ def poll(ip):
         d = c['fm_stream']
 
         data = d['fm_live'].find(sort=[("changed", pymongo.DESCENDING)])
-        data = data[1]
+        data = data[0]
 
     except:
         data = {
