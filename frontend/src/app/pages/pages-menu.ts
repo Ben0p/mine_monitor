@@ -155,7 +155,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/solar/edit',
         data: {
           permission: 'view',
-          resource: 'solar_controllers'
+          resource: 'solar_edit'
         },
 
       },

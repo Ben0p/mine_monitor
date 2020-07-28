@@ -8,7 +8,7 @@ import { GenService } from '../../../@core/data/gen.service'
 })
 
 export class GenStatusComponent implements OnInit, OnDestroy{
-  gen_statuses: Object;
+  gen$: Object;
   interval: any;
 
   constructor(
@@ -29,7 +29,7 @@ export class GenStatusComponent implements OnInit, OnDestroy{
   refreshData() {
     this.gen.getGenStatus().subscribe(
       (data: {}) => {
-        this.gen_statuses = data;
+        this.gen$ = data;
       }
     );
   }

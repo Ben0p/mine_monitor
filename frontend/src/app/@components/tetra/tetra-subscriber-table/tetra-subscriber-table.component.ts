@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TetraService } from '../../../@core/data/tetra.service'
-import { NbDialogService } from '@nebular/theme';
+import {  NbDialogService, NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-tetra-subscriber-table',
@@ -14,10 +13,16 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
 
   loadTetraTableSettings() {
     return {
+      edit: {
+        editButtonContent: '<i class="nb-edit"></i>',
+        saveButtonContent: '<i class="nb-checkmark"></i>',
+        cancelButtonContent: '<i class="nb-close"></i>',
+        confirmSave: true,
+      },
       actions: {
         delete: false,
         add: false,
-        edit: false,
+        edit: true,
       },
       columns: {
         description: {
@@ -40,6 +45,11 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
           type: 'text',
           editable: false
         },
+        comment: {
+          title: 'Comment',
+          type: 'text',
+          editable: true
+        },
         type: {
           title: 'Type',
           type: 'text',
@@ -61,9 +71,12 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
     }
   };
 
+  unloadAddNew(){
+    (document.getElementsByClassName('ng2-smart-action-add-add') as HTMLCollection)[0].remove();
+  }
+
   subscriberSource: Object
   subscriberDetail: Object
-  tableEvent: any
   rssi: any = "Loading..."
   rssi_units: any = ""
   timestamp: any = "Loading..."
@@ -85,10 +98,20 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
   angle: any = 'Loading...'
   angle_units: any = ''
 
+
+  tableEvent: any
+  modifyType: string
+  dialogMessage: string
+  private index: number = 0;
+  postResult: object
+  ipPattern = new RegExp("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
+  whiteSpace = new RegExp("([^\\s]*)")
+
   constructor(
     private tetra: TetraService,
     private dialogService: NbDialogService,
-  ) { }
+    private toastrService: NbToastrService,
+  ) {  }
 
   refreshData(){
     this.tetra.getTetraSubscribers().subscribe(
@@ -96,6 +119,7 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
         data: {}) => {
         this.subscriberSource = data;
         this.subscriberSettings = this.loadTetraTableSettings()
+        this.unloadAddNew()
       }
     )
     }
@@ -159,6 +183,77 @@ export class TetraSubscriberTableComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy(): void { }
+
+  onDialog(dialog: TemplateRef<any>, crud, event) {
+    this.tableEvent = event;
+    this.modifyType = crud;
+    if (crud == 'edit') {
+      this.dialogMessage = 'Edit comment for ' + this.tableEvent.newData.ssi + ' to "' + this.tableEvent.newData.comment + '"?'
+    }
+    this.dialogService.open(dialog, {
+      context: this.dialogMessage
+    });
+  }
+
+  onModifyConfirm(confirmation): void {
+    var invalidData = false
+    if (confirmation) {
+      if (this.modifyType == 'edit') {
+
+        if (this.tableEvent.newData.comment === "") {
+          this.dangerToast('top-right', 'danger', "Comment can't be blank.")
+          invalidData = true
+        }
+        
+        if (invalidData == false){
+          this.tetra.updateTetraComment(this.tableEvent.newData).subscribe(
+            (data: {}) => {
+              this.postResult = data;
+              if (this.postResult['success']) {
+                this.successToast('top-right', 'success', this.postResult['message'])
+                this.tableEvent.confirm.resolve();
+                this.refreshData()
+              } else {
+                this.dangerToast('top-right', 'danger', this.postResult['message'])
+                this.tableEvent.confirm.reject();
+              }
+            }
+          )
+        }
+
+      }
+    } else {
+      this.tableEvent.confirm.reject();
+    }
+  }
+
+  successToast(position, status, message) {
+
+    if (this.modifyType == 'delete') {
+      this.toastrService.show(
+        message,
+        `Success`,
+        { position, status });
+    } else if (this.modifyType == 'edit') {
+      this.toastrService.show(
+        message,
+        `Success`,
+        { position, status });
+    } else if (this.modifyType == 'create') {
+      this.toastrService.show(
+        "Created  " + this.tableEvent.newData.name,
+        `Success`,
+        { position, status });
+    }
+  }
+
+  dangerToast(position, status, message) {
+    this.toastrService.show(
+      message,
+      `Error`,
+      { position, status });
+  }
+
 
   onSelect(dialog: TemplateRef<any>, event){
     this.tableEvent = event;

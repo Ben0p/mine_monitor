@@ -177,7 +177,7 @@ def processData(data):
         )
     finish_process_time = time.time()
     insert_mongo = round(finish_process_time - generate_sub_dictionary, 2)
-    print(f"Update database....................{insert_mongo}s")
+    print(f"Process SDS data and update DB.....{insert_mongo}s")
 
 
 
@@ -202,6 +202,7 @@ def getSDS(interval):
     )
 
     myresult = cursor.fetchall()
+    cursor.close()
 
     return(myresult)
 
@@ -237,21 +238,6 @@ def getTimeRange(start, end):
 
 def main():
 
-    # Do initial data sync (30min)
-    '''
-    start = time.time()
-    processData(getSDS(1800))
-    end = time.time()
-    total = round(end - start, 2)
-    print(f"{datetime.datetime.now()} - Retrieved last 30min of SDS data in {total}s")
-
-    # Get specific time range
-    start = time.time()
-    processData(getTimeRange('2020-06-21 18:00:00', '2020-06-21 20:00:00'))
-    end = time.time()
-    total = round(end - start, 2)
-    print(f"{datetime.datetime.now()} - Retrieved range of SDS data in {total}s")
-    '''
 
     # Main loop
     while True:

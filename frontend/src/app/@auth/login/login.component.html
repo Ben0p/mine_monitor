@@ -1,5 +1,5 @@
 <h1 id="title" class="title">Login</h1>
-<p class="sub-title">Hello! Log in with your FMGOPS username.</p>
+<p class="sub-title">Hello! Log in with your FMG username.</p>
 
 <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
   <p class="alert-title"><b>Oh snap!</b></p>
@@ -33,10 +33,10 @@
            [attr.aria-invalid]="email.invalid && email.touched ? true : null">
     <ng-container *ngIf="email.invalid && email.touched">
       <p class="error-message" *ngIf="email.errors?.required">
-        Email is required!
+        Username is required!
       </p>
       <p class="error-message" *ngIf="email.errors?.pattern">
-        Email should be the real one!
+        Username should be the real one!
       </p>
     </ng-container>
   </div>
@@ -101,5 +101,5 @@
 </section>
 
 <section class="another-action" aria-label="Register">
-  Don't have access? Email your local freindly neighbourhood OT Specialist.
+  Don't have access? Email FMGOTSpecialists@fmgl.com.au
 </section>

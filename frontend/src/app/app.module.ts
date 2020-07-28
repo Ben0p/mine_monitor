@@ -50,7 +50,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
     ComponentsModule,
     NbSecurityModule.forRoot({
       accessControl: {
-        alert_read: {
+        view: {
           view: [
             'alerts',
             'dashboards',
@@ -69,17 +69,18 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'gen',
             'gen_status',
             'fm',
-            'fm_status',
-            'fm_edit',
+            'fm_status'
           ],
         },
-        alert_admin: {
-          parent: 'alert_read',
+        admin: {
+          parent: 'view',
           view: [
             'alerts_list',
             'alerts_controls',
             'alerts_info',
-            'alerts_edit'
+            'alerts_edit',
+            'fm_edit',
+            'solar_edit',
           ],
         },
       },

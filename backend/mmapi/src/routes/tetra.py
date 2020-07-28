@@ -281,3 +281,39 @@ class tetra_subscriber_detail(Resource):
 
  
         return(jsonify(json.loads(dumps(detail))))
+
+
+class tetra_subscriber_update(Resource):
+
+    def post(self):
+
+        # Initilize request parser
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("ssi")
+        parser.add_argument("comment")
+
+
+        args = parser.parse_args()
+        print(args)
+
+        try:
+            DB['tetra_subscribers'].find_one_and_update(
+                {
+                    "ssi": int(args['ssi']),
+                },
+                {
+                    "$set":
+                        {
+                            "comment": args['comment'],
+                        }
+                 },
+                 upsert=True
+            )
+            
+
+            return({'success': True, 'message': 'Updated {}'.format(args['ssi'])})
+
+        except Exception as e:
+            return({'success': False, 'message': f'{str(e)}'})

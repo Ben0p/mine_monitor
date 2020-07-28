@@ -32,6 +32,7 @@ def tetraNodes(CURSOR, DB):
         WHERE StdBy = '0' \
         AND Description NOT LIKE 'ELI%' \
         AND Description NOT LIKE 'New%' \
+        AND Description NOT LIKE 'SOL_GW_NODE%' \
         AND Description NOT LIKE 'Solomon Server';"
     )
 

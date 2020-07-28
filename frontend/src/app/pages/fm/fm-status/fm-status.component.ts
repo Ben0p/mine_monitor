@@ -10,7 +10,7 @@ import { FmService } from '../../../@core/data/fm.service'
 
 
 export class FmStatusComponent implements OnInit, OnDestroy{
-  fm_statuses: Object;
+  fm$: Object;
   interval: any;
 
   constructor(
@@ -31,7 +31,7 @@ export class FmStatusComponent implements OnInit, OnDestroy{
   refreshData() {
     this.fm.getFmLive().subscribe(
       (data: {}) => {
-        this.fm_statuses = data;
+        this.fm$ = data;
       }
     );
   }

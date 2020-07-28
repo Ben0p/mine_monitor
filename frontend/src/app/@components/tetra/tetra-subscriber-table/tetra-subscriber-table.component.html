@@ -1,8 +1,26 @@
-<ng2-smart-table [settings]="subscriberSettings" [source]="subscriberSource" (userRowSelect)="onSelect(dialog, $event)">
+<ng2-smart-table 
+[settings]="subscriberSettings"
+[source]="subscriberSource"
+(userRowSelect)="onSelect(detail, $event)"
+(editConfirm)="onDialog(dialog, 'edit', $event)"
+>
 </ng2-smart-table>
 
-
 <ng-template #dialog let-data let-ref="dialogRef">
+  <nb-card status="danger">
+      <nb-card-header>Warning</nb-card-header>
+      <nb-card-body>{{ data }}</nb-card-body>
+      <nb-card-footer>
+          <div class=wrapper>
+              <button nbButton (click)="onModifyConfirm(true); ref.close()">Yes</button>
+              &nbsp;&nbsp;
+              <button nbButton (click)="onModifyConfirm(false); ref.close()">No</button>
+          </div>
+      </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #detail let-data let-ref="dialogRef">
   <nb-card status="primary">
     <nb-card-header>Details for {{data.description}}</nb-card-header>
     <nb-card-body>

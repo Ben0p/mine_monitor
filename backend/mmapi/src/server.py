@@ -20,7 +20,7 @@ from routes.alerts import alert_all, alert_display, alert_detail, alert_overview
     alert_wz
 from routes.auth import auth
 from routes.tetra import tetra_node_all, tetra_node_load, tetra_node_subscribers, tetra_ts_load, tetra_radio_count, tetra_subscribers, tetra_call_stats, \
-    tetra_call_history, tetra_subscriber_detail
+    tetra_call_history, tetra_subscriber_detail, tetra_subscriber_update
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
 from routes.dash import dash_power
@@ -90,6 +90,7 @@ API.add_resource(tetra_subscribers, '/api/tetra/subscribers')
 API.add_resource(tetra_call_stats, '/api/tetra/callstats/<string:call_type>/<int:range_sec>')
 API.add_resource(tetra_call_history, '/api/tetra/callstats/history/<string:time_range>')
 API.add_resource(tetra_subscriber_detail, '/api/tetra/subscribers/detail/<string:issi>')
+API.add_resource(tetra_subscriber_update, '/api/tetra/subscribers/update')
 
 # Solar
 API.add_resource(solar_create, "/api/solar/create")

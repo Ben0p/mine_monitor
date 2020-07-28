@@ -109,6 +109,15 @@ export class TetraService {
     );
   }
 
+  updateTetraComment(subscriber): Observable<any> {
+    return this.http
+      .post<any>(APIurl + "subscribers/update", JSON.stringify(subscriber), httpOptions)
+      .pipe(
+        map(this.extractData),
+        catchError(this.handleError<any>("error"))
+      );
+  }
+
 
 
 

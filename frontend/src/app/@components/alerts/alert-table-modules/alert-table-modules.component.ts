@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AlertService } from '../../../@core/data/alerts.service'
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 
@@ -11,7 +10,6 @@ import { NbDialogService, NbToastrService } from '@nebular/theme';
 
 export class AlertTableModulesComponent implements OnDestroy, OnInit {
 
-  alertForm: FormGroup;
   submitted = false;
   alertZones: Object;
   alertTypes: Object;
@@ -114,7 +112,6 @@ export class AlertTableModulesComponent implements OnDestroy, OnInit {
     private alerts: AlertService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-    private formBuilder: FormBuilder
   ) {
 
   }
