@@ -1,19 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GenRoutingModule, routedComponents } from './map-routing.module';
+import { MapRoutingModule, routedComponents } from './map-routing.module';
 
 import { MapComponent } from './map.component';
-import { MapBaseComponent } from './map-base/map-base.component';
+import { AngularCesiumModule, AngularCesiumWidgetsModule } from 'angular-cesium';
 
 @NgModule({
   declarations: [
     ...routedComponents,
     MapComponent,
-    MapBaseComponent
   ],
   imports: [
     CommonModule,
-    GenRoutingModule
+    MapRoutingModule,
+    AngularCesiumWidgetsModule,
+    AngularCesiumModule.forRoot(
+      {
+        fixEntitiesShadows: false,
+        customPipes: []
+      }
+    ),
   ]
 })
 export class MapModule { }

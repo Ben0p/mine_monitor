@@ -25,7 +25,6 @@ import { ComponentsModule } from './@components/components.module';
 import { AuthGuard } from './@auth/auth-guard.service';
 import { RoleProvider } from './@auth/role.provider';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
-import { AngularCesiumModule, AngularCesiumWidgetsModule } from 'angular-cesium';
 
 
 @NgModule({
@@ -46,13 +45,6 @@ import { AngularCesiumModule, AngularCesiumWidgetsModule } from 'angular-cesium'
     ThemeModule.forRoot(),
     NbEvaIconsModule,
     ComponentsModule,
-    AngularCesiumWidgetsModule,
-    AngularCesiumModule.forRoot(
-      {
-        fixEntitiesShadows: false,
-        customPipes: []
-      }
-    ),
     NbSecurityModule.forRoot({
       accessControl: {
         view: {

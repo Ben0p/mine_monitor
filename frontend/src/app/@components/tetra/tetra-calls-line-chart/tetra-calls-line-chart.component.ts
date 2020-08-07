@@ -42,6 +42,7 @@ export class TetraCallsLineChartComponent implements OnInit, OnDestroy {
       this.options = {
         responsive: true,
         maintainAspectRatio: false,
+        showXLabels: 10,
         animation: {
           duration: 0
         },

@@ -67,6 +67,7 @@ export class TetraSubsChartComponent implements OnInit, OnDestroy {
               },
               ticks: {
                 fontColor: chartjs.textColor,
+                autoSkip: false,
               },
             },
           ],

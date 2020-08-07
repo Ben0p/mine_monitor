@@ -1,0 +1,32 @@
+<div class="row">
+    <ac-map>
+        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=3 [options]="{
+            url: 'https://solmm01.fmg.local/geoserver/mmodel/wms',
+            parameters: {
+              format: 'image/png',
+              transparent: 'true',
+              version: '1.3.0'
+            },
+            layers: 'ms_lanes',
+            enablePickFeatures: false
+          }">
+        </ac-map-layer-provider>
+        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=2 [options]="{
+          url: 'https://solmm01.fmg.local/geoserver/mmodel/wms',
+          parameters: {
+            format: 'image/png',
+            transparent: 'true',
+            version: '1.3.0'
+          },
+          layers: 'ms_zones',
+          enablePickFeatures: false
+        }">
+        </ac-map-layer-provider>
+        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=1 [options]="{
+          url: 'https://fortescuesky.fmgl.com.au/SG/Streamer.ashx',
+          layers: 'BaseGlobe',
+          enablePickFeatures: false
+        }">
+        </ac-map-layer-provider>
+    </ac-map>
+</div>
