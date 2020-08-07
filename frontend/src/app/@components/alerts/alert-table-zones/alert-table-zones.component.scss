@@ -10,6 +10,6 @@
   text-align: center;
 }
 
-:host /deep/ .ng-valid {
+:host ::ng-deep .ng-valid {
   color: black;
 }

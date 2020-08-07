@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { AuthGuard } from './@auth/auth-guard.service';
 
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'pages',
     canActivate: [AuthGuard],
@@ -12,7 +12,7 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: './@auth/auth.module#NgxAuthModule',
+    loadChildren: () => import('./@auth/auth.module').then(m => m.NgxAuthModule),
   },
   {
     path: '',

@@ -22,9 +22,9 @@ SQL = mysql.connector.connect(
   host=f"{env['tetra_sql_host']}",
   user=f"{env['tetra_sql_user']}",
   passwd=f"{env['tetra_sql_passwd']}",
-  database=f"{env['tetra_sql_database']}"
+  database=f"{env['tetra_sql_database']}",
+  autocommit=True
 )
-
 
 
 def getMaintenance(CURSOR):

@@ -70,16 +70,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'alerts_display'
         },
       },
-      /** 
-      {
-        title: 'List',
-        link: '/pages/alerts/list',
-        data: {
-          permission: 'view',
-          resource: 'alerts_list'
-        },
-      },
-      */
       {
         title: 'Edit',
         link: '/pages/alerts/edit',
@@ -204,6 +194,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
         },
       },
     ]
+  },
+  {
+    title: 'MAP',
+    icon: 'map-outline',
+    link: '/pages/map/base',
+    data: {
+      permission: 'view',
+      resource: 'map'
+    },
   },
   {
     title: 'Settings',

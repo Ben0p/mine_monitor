@@ -15,7 +15,7 @@ ng2-smart-table {
     cursor: pointer;
 }
 
-:host /deep/ .ng-valid {
+:host ::ng-deep .ng-valid {
   color: black;
 }
 

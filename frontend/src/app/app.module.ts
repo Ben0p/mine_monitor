@@ -18,36 +18,41 @@ import {
   NbMenuModule,
   NbSidebarModule,
   NbToastrModule,
-  NbWindowModule
+  NbWindowModule,
 } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { ComponentsModule } from './@components/components.module';
 import { AuthGuard } from './@auth/auth-guard.service';
 import { RoleProvider } from './@auth/role.provider';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
+import { AngularCesiumModule, AngularCesiumWidgetsModule } from 'angular-cesium';
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    ThemeModule.forRoot(),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    NbChatModule.forRoot({
-    }),
+    NbChatModule.forRoot(),
     CoreModule.forRoot(),
+    ThemeModule.forRoot(),
     NbEvaIconsModule,
     ComponentsModule,
+    AngularCesiumWidgetsModule,
+    AngularCesiumModule.forRoot(
+      {
+        fixEntitiesShadows: false,
+        customPipes: []
+      }
+    ),
     NbSecurityModule.forRoot({
       accessControl: {
         view: {
@@ -69,7 +74,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'gen',
             'gen_status',
             'fm',
-            'fm_status'
+            'fm_status',
+            'map'
           ],
         },
         admin: {
