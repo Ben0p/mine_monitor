@@ -196,7 +196,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'MAP',
+    title: 'Map',
     icon: 'map-outline',
     link: '/pages/map',
     data: {

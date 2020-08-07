@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ViewerConfiguration, MapLayerProviderOptions } from 'angular-cesium'
+import { MapService } from '../../@core/data/map.service'
+
 
 @Component({
   selector: 'ngx-map',
@@ -10,12 +12,16 @@ import { ViewerConfiguration, MapLayerProviderOptions } from 'angular-cesium'
   ],
 })
 
-export class MapComponent {
+export class MapComponent implements OnInit, OnDestroy{
 
+  layers$: Object;
+  interval: any;
   MapLayerProviderOptions = MapLayerProviderOptions
+  dataLoaded: Boolean = false
 
   constructor(
     private viewerConf: ViewerConfiguration,
+    private map: MapService,
   ) {
 
     const extent = Cesium.Rectangle.fromDegrees(117.702242, -22.260914, 117.981473, -22.089772);
@@ -39,6 +45,24 @@ export class MapComponent {
       automaticallyTrackDataSourceClocks: false,
       vrButton: true,
     };
+
+  }
+
+  ngOnInit() {
+    this.map.getMapLayers().subscribe(
+      (data: {}) => {
+        this.layers$ = data;
+        console.log(this.layers$);
+        this.dataLoaded = true
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval);
+  }
+  
+  refreshData() {
 
   }
 }

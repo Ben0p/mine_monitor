@@ -25,7 +25,7 @@ from routes.solar import solar_create, solar_update, solar_delete, solar_control
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
 from routes.dash import dash_power
 from routes.fm import fm_live, fm_modules, fm_create, fm_update, fm_delete
-from routes.map import test_czml, test_tetra, tetra_all
+from routes.map import test_czml, test_tetra, tetra_all, map_layers, map_sds
 
 """ Main rest API router
 """
@@ -117,6 +117,8 @@ API.add_resource(fm_delete, "/api/fm/delete/<string:oid>")
 API.add_resource(test_czml, "/api/map/test")
 API.add_resource(test_tetra, "/api/map/test_tetra")
 API.add_resource(tetra_all, "/api/map/tetra_all")
+API.add_resource(map_layers, "/api/map/layers")
+API.add_resource(map_sds, "/api/map/sds")
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.8-alpine
 
 RUN apk update
 
@@ -10,4 +10,4 @@ COPY src /app
 
 WORKDIR /app/src
 
-CMD ["python", "-u", "tetra.py"]
+CMD ["python", "-u", "sds.py"]

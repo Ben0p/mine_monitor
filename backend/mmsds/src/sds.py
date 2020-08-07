@@ -27,7 +27,8 @@ def reconnectSQL():
     host=f"{env['tetra_sql_host']}",
     user=f"{env['tetra_sql_user']}",
     passwd=f"{env['tetra_sql_passwd']}",
-    database=f"{env['tetra_sql_database']}"
+    database=f"{env['tetra_sql_database']}",
+    autocommit=True
     )
 
     return(sql)
@@ -86,7 +87,7 @@ def processData(data):
         alt = location['location']['altitude']['meters']
         lat, lon, alt = geodetic_to_geocentric(lat, lon, alt)
 
-        # Time Stamp
+        # MySQL timestamp
         timestamp = row[0]
         timestamp = timestamp.isoformat()
         timestamp = timestamp + 'Z'
@@ -152,7 +153,7 @@ def processData(data):
 
             
         # Insert into Mongo
-        DB['map_tetra'].insert_one(
+        DB['sds_data'].insert_one(
             {
                     'unix' : time.time(),
                     'issi' : row[6],
@@ -161,6 +162,7 @@ def processData(data):
                     'talkgroup': sub_list[row[6]]['talkgroup'],
                     'type' : 'subscriber',
                     'timestamp' : timestamp,
+                    'processed_time' : datetime.datetime.utcnow(),
                     'availability_start' : availability_start,
                     'availability_end' : availability_end,
                     'properties_start' : properties_start,
@@ -235,6 +237,18 @@ def getTimeRange(start, end):
 
     return(myresult)
 
+def truncate_data(seconds):
+    ''' Delete SDS data older than 1 week
+    '''
+
+    DB['sds_data'].delete_many(
+        {
+            'unix' : {
+                '$lte' : time.time() - seconds
+            }
+        },
+    )
+
 
 def main():
 
@@ -254,6 +268,11 @@ def main():
 
         processData(data)
 
+        truncate_start = time.time()
+        truncate_data(604800)
+        truncate_finish = time.time()
+        truncate_total = round(truncate_finish - truncate_start, 2)
+        print(f'Trunkate SDS data..................{truncate_total}s')
 
         end = time.time()
         total = round(end - start, 2)

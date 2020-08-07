@@ -1,32 +1,16 @@
-<div class="row">
-    <ac-map>
-        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=3 [options]="{
-            url: 'https://solmm01.fmg.local/geoserver/mmodel/wms',
+<div class="row" *ngIf="dataLoaded">
+    <ac-map >
+        <ac-map-layer-provider *ngFor="let layer of layers$" [provider]='MapLayerProviderOptions.WebMapService' [index]='layer.index'
+            [options]="{
+            url: layer.url,
             parameters: {
-              format: 'image/png',
-              transparent: 'true',
-              version: '1.3.0'
+              format: layer.format,
+              transparent: layer.transparent,
+              version: layer.version
             },
-            layers: 'ms_lanes',
-            enablePickFeatures: false
+            layers: layer.layers,
+            enablePickFeatures: layer.pick_features
           }">
-        </ac-map-layer-provider>
-        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=2 [options]="{
-          url: 'https://solmm01.fmg.local/geoserver/mmodel/wms',
-          parameters: {
-            format: 'image/png',
-            transparent: 'true',
-            version: '1.3.0'
-          },
-          layers: 'ms_zones',
-          enablePickFeatures: false
-        }">
-        </ac-map-layer-provider>
-        <ac-map-layer-provider [provider]="MapLayerProviderOptions.WebMapService" [index]=1 [options]="{
-          url: 'https://fortescuesky.fmgl.com.au/SG/Streamer.ashx',
-          layers: 'BaseGlobe',
-          enablePickFeatures: false
-        }">
         </ac-map-layer-provider>
     </ac-map>
 </div>

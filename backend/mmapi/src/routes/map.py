@@ -232,3 +232,89 @@ class tetra_all(Resource):
             )
 
         return(jsonify(json.loads(json.dumps(czml))))
+
+
+class map_layers(Resource):
+
+    def get(self):
+        # Get list of layers
+        map_layers = DB['map_layers'].find()
+        
+        return(jsonify(json.loads(dumps(map_layers))))
+
+
+class map_sds(Resource):
+
+    def get(self):
+
+        points = DB['sds_data'].find(
+            {
+                'unix' : {
+                    '$gte' : time.time() - 60
+                }
+            },
+        )
+
+        # First packet id NEEDS to be "document"
+        czml = [
+            {
+                'id': "document",
+                'name': "Tetra CZML data",
+                'version': "1.0",
+            }
+        ]
+
+        for point in points:
+
+            description = "LIVE INFORMATION<br>" \
+                          f"&nbsp;&nbsp;ISSI: {point['issi']}<br>"\
+                          f"&nbsp;&nbsp;Node: {point['node']}<br>"\
+                          f"&nbsp;&nbsp;Group: {point['talkgroup']}<br>"\
+                          f"&nbsp;&nbsp;Speed: {point['velocity']}kmh - {point['direction']}<br>"\
+                          f"&nbsp;&nbsp;RSSI: {point['rssi']}dBm<br>"\
+                          f"&nbsp;&nbsp;Accuracy: {point['uncertainty']}m"
+
+            czml.append(
+                {
+                    'id': point['issi'],
+                    'name' : point['description'],
+                    'description' : description,
+                    'availability' : f"{point['availability_start']}/{point['availability_end']}",
+                    'position': {
+                        'cartesian': point['point'],
+                    },
+                    'point': {
+                        'color': {
+                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'rgba': point['rssi_color'],
+                        },
+                        'outlineColor': {
+                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'rgba': point['velocity_color'],
+                        },
+                        'outlineWidth': 3,
+                        'pixelSize': 15,
+                        "heightReference" : "CLAMP_TO_GROUND",
+                    },
+                    'label' : {
+                        'show' : False,
+                        'fillColor': {
+                            'rgba': [255, 255, 255, 255],
+                        },
+                        'font': "12pt Lucida Console",
+                        'horizontalOrigin': "LEFT",
+                        'pixelOffset': {
+                            'cartesian2': [8, 0],
+                        },
+                        'style': "FILL",
+                        'text': f"{point['velocity']} kmh",
+                        'showBackground': False,
+                        'backgroundColor': {
+                            'rgba': [112, 89, 57, 200],
+                        },
+                        "heightReference" : "CLAMP_TO_GROUND",
+                    },
+                }
+            )
+
+        return(jsonify(json.loads(json.dumps(czml))))
