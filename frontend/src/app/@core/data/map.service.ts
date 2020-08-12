@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://localhost:5000/api/map/';
+const APIurl: String = 'https://solmm01.fmg.local/api/map/';
 
 @Injectable({
   providedIn: 'root',

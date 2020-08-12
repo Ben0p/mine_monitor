@@ -1,5 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ViewerConfiguration, MapLayerProviderOptions } from 'angular-cesium'
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  ViewerConfiguration,
+  MapLayerProviderOptions
+} from 'angular-cesium'
 import { MapService } from '../../@core/data/map.service'
 
 
@@ -12,7 +15,7 @@ import { MapService } from '../../@core/data/map.service'
   ],
 })
 
-export class MapComponent implements OnInit, OnDestroy{
+export class MapComponent implements OnInit, OnDestroy {
 
   layers$: Object;
   interval: any;
@@ -42,17 +45,18 @@ export class MapComponent implements OnInit, OnDestroy{
       navigationHelpButton: true,
       navigationInstructionsInitiallyVisible: false,
       mapMode2D: Cesium.MapMode2D.ROTATE,
-      automaticallyTrackDataSourceClocks: false,
+      automaticallyTrackDataSourceClocks: true,
       vrButton: true,
     };
 
   }
 
+  blocks: boolean
+
   ngOnInit() {
     this.map.getMapLayers().subscribe(
       (data: {}) => {
         this.layers$ = data;
-        console.log(this.layers$);
         this.dataLoaded = true
       }
     );
@@ -61,7 +65,7 @@ export class MapComponent implements OnInit, OnDestroy{
   ngOnDestroy() {
     clearInterval(this.interval);
   }
-  
+
   refreshData() {
 
   }

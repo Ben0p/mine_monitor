@@ -272,13 +272,13 @@ def main():
         truncate_data(604800)
         truncate_finish = time.time()
         truncate_total = round(truncate_finish - truncate_start, 2)
-        print(f'Trunkate SDS data..................{truncate_total}s')
+        print(f'Truncate SDS data..................{truncate_total}s')
 
         end = time.time()
         total = round(end - start, 2)
         print(f'Total..............................{total}s')
 
-        time.sleep(30)
+        time.sleep(60)
 
 
 

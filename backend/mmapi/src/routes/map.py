@@ -14,18 +14,16 @@ import datetime
 import mysql.connector
 
 
-
 # Initialize mongo connection one time
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+CLIENT = pymongo.MongoClient(
+    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
-
 
 
 class test_czml(Resource):
 
     def get(self):
         # test data
-
         """
         czml = [
             {
@@ -59,7 +57,6 @@ class test_czml(Resource):
         ]
         """
 
-
         # First packet id NEEDS to be "document"
         czml = [
             {
@@ -80,10 +77,10 @@ class test_czml(Resource):
                 },
                 'point': {
                     'color': {
-                    'rgba': [255, 255, 255, 128],
+                        'rgba': [255, 255, 255, 128],
                     },
                     'outlineColor': {
-                    'rgba': [255, 0, 0, 128],
+                        'rgba': [255, 0, 0, 128],
                     },
                     'outlineWidth': 3,
                     'pixelSize': 15,
@@ -101,18 +98,16 @@ class test_czml(Resource):
                 },
                 'point': {
                     'color': {
-                    'rgba': [255, 255, 255, 128],
+                        'rgba': [255, 255, 255, 128],
                     },
                     'outlineColor': {
-                    'rgba': [255, 0, 0, 128],
+                        'rgba': [255, 0, 0, 128],
                     },
                     'outlineWidth': 3,
                     'pixelSize': 15,
                 },
             },
         ]
-
-
 
         return(jsonify(json.loads(dumps(czml))))
 
@@ -123,8 +118,8 @@ class test_tetra(Resource):
 
         points = DB['map_tetra'].find(
             {
-                'unix' : {
-                    '$gte' : time.time() - 60
+                'unix': {
+                    '$gte': time.time() - 60
                 }
             },
         )
@@ -151,27 +146,27 @@ class test_tetra(Resource):
             czml.append(
                 {
                     'id': point['issi'],
-                    'name' : point['description'],
-                    'description' : description,
-                    'availability' : f"{point['availability_start']}/{point['availability_end']}",
+                    'name': point['description'],
+                    'description': description,
+                    'availability': f"{point['availability_start']}/{point['availability_end']}",
                     'position': {
                         'cartesian': point['point'],
                     },
                     'point': {
                         'color': {
-                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
                             'rgba': point['rssi_color'],
                         },
                         'outlineColor': {
-                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
                             'rgba': point['velocity_color'],
                         },
                         'outlineWidth': 3,
                         'pixelSize': 15,
-                        "heightReference" : "CLAMP_TO_GROUND",
+                        "heightReference": "CLAMP_TO_GROUND",
                     },
-                    'label' : {
-                        'show' : False,
+                    'label': {
+                        'show': False,
                         'fillColor': {
                             'rgba': [255, 255, 255, 255],
                         },
@@ -186,7 +181,7 @@ class test_tetra(Resource):
                         'backgroundColor': {
                             'rgba': [112, 89, 57, 200],
                         },
-                        "heightReference" : "CLAMP_TO_GROUND",
+                        "heightReference": "CLAMP_TO_GROUND",
                     },
                 }
             )
@@ -198,7 +193,6 @@ class tetra_all(Resource):
     def get(self):
 
         points = DB['map_tetra'].find()
-
 
         # First packet id NEEDS to be "document"
         czml = [
@@ -226,7 +220,7 @@ class tetra_all(Resource):
                         },
                         'outlineWidth': 3,
                         'pixelSize': 15,
-                        "heightReference" : "CLAMP_TO_GROUND",
+                        "heightReference": "CLAMP_TO_GROUND",
                     },
                 }
             )
@@ -239,7 +233,7 @@ class map_layers(Resource):
     def get(self):
         # Get list of layers
         map_layers = DB['map_layers'].find()
-        
+
         return(jsonify(json.loads(dumps(map_layers))))
 
 
@@ -249,8 +243,128 @@ class map_sds(Resource):
 
         points = DB['sds_data'].find(
             {
-                'unix' : {
-                    '$gte' : time.time() - 60
+                'unix': {
+                    '$gte': time.time() - 1800
+                }
+            },
+        )
+
+        # "%Y-%M-%dT%H:%M:%SZ"
+
+        '''
+        REMEMBER to remove the -2880 when deploying to server running on UTC
+        '''
+        utc_unix = time.time() -28800
+
+        # -8 hours -30 minutes
+        start = datetime.datetime.fromtimestamp(utc_unix - 1800)
+        start = start.strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(start)
+
+        # -8 hours
+        end = datetime.datetime.fromtimestamp(utc_unix)
+        end = end.strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(end)
+
+        # -8 hours -5 minutes
+        current = datetime.datetime.fromtimestamp(utc_unix - 300)
+        current = current.strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(current)
+
+        # First packet id NEEDS to be "document"
+        czml = [
+            {
+                'id': "document",
+                'name': "Tetra CZML data",
+                'version': "1.0",
+                'clock': {
+                    'interval': f"{start}/{end}",
+                    'currentTime': f"{current}",
+                    'multiplier': 1,
+                },
+            }
+        ]
+
+        for point in points:
+
+            description = "LIVE INFORMATION<br>" \
+                          f"&nbsp;&nbsp;ISSI: {point['issi']}<br>"\
+                          f"&nbsp;&nbsp;Node: {point['node']}<br>"\
+                          f"&nbsp;&nbsp;Group: {point['talkgroup']}<br>"\
+                          f"&nbsp;&nbsp;Speed: {point['velocity']}kmh - {point['direction']}<br>"\
+                          f"&nbsp;&nbsp;RSSI: {point['rssi']}dBm<br>"\
+                          f"&nbsp;&nbsp;Accuracy: {point['uncertainty']}m"
+
+            czml.append(
+                {
+                    'id': point['issi'],
+                    'name': point['description'],
+                    'description': description,
+                    'availability': f"{point['availability_start']}/{point['availability_end']}",
+                    'position': {
+                        'cartesian': point['point'],
+                    },
+                    'point': {
+                        'color': {
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
+                            'rgba': point['rssi_color'],
+                        },
+                        'outlineColor': {
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
+                            'rgba': point['velocity_color'],
+                        },
+                        'outlineWidth': 3,
+                        'pixelSize': 15,
+                        "heightReference": "CLAMP_TO_GROUND",
+                    },
+                    'label': {
+                        'show': False,
+                        'fillColor': {
+                            'rgba': [255, 255, 255, 255],
+                        },
+                        'font': "12pt Lucida Console",
+                        'horizontalOrigin': "LEFT",
+                        'pixelOffset': {
+                            'cartesian2': [8, 0],
+                        },
+                        'style': "FILL",
+                        'text': f"{point['velocity']} kmh",
+                        'showBackground': False,
+                        'backgroundColor': {
+                            'rgba': [112, 89, 57, 200],
+                        },
+                        "heightReference": "CLAMP_TO_GROUND",
+                    },
+                }
+            )
+
+        return(jsonify(json.loads(json.dumps(czml))))
+
+
+class map_sds_range(Resource):
+
+    def get(self, range):
+
+        parser = reqparse.RequestParser()
+
+        # Parse arguments from form data
+        parser.add_argument("start")
+        parser.add_argument("end")
+        args = parser.parse_args()
+
+        print(args)
+        start = float(args['start'])
+        end = float(args['end'])
+
+        # Limit query to 30mins
+        if (end - start) > 1800:
+            start = end - 1800
+
+        points = DB['sds_data'].find(
+            {
+                'unix': {
+                    '$gt': start,
+                    '$lte': end
                 }
             },
         )
@@ -277,27 +391,27 @@ class map_sds(Resource):
             czml.append(
                 {
                     'id': point['issi'],
-                    'name' : point['description'],
-                    'description' : description,
-                    'availability' : f"{point['availability_start']}/{point['availability_end']}",
+                    'name': point['description'],
+                    'description': description,
+                    'availability': f"{point['availability_start']}/{point['availability_end']}",
                     'position': {
                         'cartesian': point['point'],
                     },
                     'point': {
                         'color': {
-                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
                             'rgba': point['rssi_color'],
                         },
                         'outlineColor': {
-                            'interval' : f"{point['properties_start']}/{point['properties_end']}",
+                            'interval': f"{point['properties_start']}/{point['properties_end']}",
                             'rgba': point['velocity_color'],
                         },
                         'outlineWidth': 3,
                         'pixelSize': 15,
-                        "heightReference" : "CLAMP_TO_GROUND",
+                        "heightReference": "CLAMP_TO_GROUND",
                     },
-                    'label' : {
-                        'show' : False,
+                    'label': {
+                        'show': False,
                         'fillColor': {
                             'rgba': [255, 255, 255, 255],
                         },
@@ -312,7 +426,7 @@ class map_sds(Resource):
                         'backgroundColor': {
                             'rgba': [112, 89, 57, 200],
                         },
-                        "heightReference" : "CLAMP_TO_GROUND",
+                        "heightReference": "CLAMP_TO_GROUND",
                     },
                 }
             )
