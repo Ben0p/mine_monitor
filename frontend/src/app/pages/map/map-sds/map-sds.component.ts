@@ -1,6 +1,6 @@
 import { Component, OnInit, ɵsetCurrentInjector } from '@angular/core';
-import { from, Observable, interval } from 'rxjs';
-import { map, throttle, subscribeOn, throttleTime } from 'rxjs/operators';
+import { from, Observable, interval, fromEvent, Subject } from 'rxjs';
+import { map, timeInterval, distinctUntilChanged, windowTime, concatMap } from 'rxjs/operators';
 
 import { AcNotification, ActionType, MapsManagerService } from 'angular-cesium';
 import { MapSdsService } from './map-sds.service';
@@ -31,6 +31,30 @@ export class MapSdsComponent implements OnInit {
     const viewer = this.mapsManagerService.getMap().getCesiumViewer();
     const clockStream = Cesium.knockout.getObservable(viewer.clockViewModel, 'currentTime')
 
+    const source = viewer.clockViewModel.currentTime
+
+    const ticks = interval(1000)
+    /** 
+    ticks.pipe(
+      timeInterval()
+      )
+      .subscribe(
+        value => console.log(viewer.clockViewModel.currentTime)
+      )
+      */
+
+
+      const subject = new Subject();
+
+      subject
+        .pipe(
+          windowTime(1000),
+          concatMap(obs => obs.pipe(distinctUntilChanged())),
+        )
+        .subscribe(val => console.log(viewer.clockViewModel.currentTime));
+      
+
+
 
     /** 
     Cesium.knockout.getObservable(viewer.clockViewModel,
@@ -42,17 +66,26 @@ export class MapSdsComponent implements OnInit {
         }
       });
     */
+    
+    /** 
+    viewer.clock.onTick.addEventListener(function (clock) {
+      console.log(clock)
+    })
+    */
 
-    //viewer.clock.onTick.addEventListener(function (clock) {
-    //  clock.pipe(
-    //    val => console.log(val)
-    //  )
+
+
+
+
+
+
+
     //var currentJulianTime = clock.currentTime
     //var end = Cesium.JulianDate.toDate(currentJulianTime)
     //var start = new Date(end.getTime() + -5*60000);
 
-    // this.entities$ = this.sdsData.getSdsRange$(start, end)
-    //})
+    //this.entities$ = this.sdsData.getSdsRange$(start, end)
+
 
 
     this.entities$ = this.sdsData.getDataSteam$(60000)

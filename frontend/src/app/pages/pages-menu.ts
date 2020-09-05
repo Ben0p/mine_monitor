@@ -14,6 +14,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Alerts / Tetra',
+        icon: 'keypad-outline',
         link: '/pages/dashboards/alerts-tetra',
         data: {
           permission: 'view',
@@ -22,6 +23,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Power',
+        icon: 'keypad-outline',
         link: '/pages/dashboards/power',
         data: {
           permission: 'view',
@@ -40,6 +42,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Overview',
+        icon: 'pie-chart-outline',
         link: '/pages/alerts/overview',
         data: {
           permission: 'view',
@@ -48,6 +51,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'All',
+        icon: 'keypad-outline',
         link: '/pages/alerts/all',
         data: {
           permission: 'view',
@@ -56,6 +60,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Weather Zone',
+        icon: 'flash-outline',
         link: '/pages/alerts/weatherzone',
         data: {
           permission: 'view',
@@ -64,6 +69,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Display',
+        icon: 'loader-outline',
         link: '/pages/alerts/display',
         data: {
           permission: 'view',
@@ -72,11 +78,89 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Edit',
+        icon: 'edit-outline',
         link: '/pages/alerts/edit',
         data: {
           permission: 'view',
           resource: 'alerts_edit'
         },
+      },
+    ]
+  },
+  {
+    title: 'Power',
+    icon: 'power-outline',
+    data: {
+      permission: 'view',
+      resource: 'settings'
+    },
+    children: [
+      {
+        title: 'Generators',
+        icon: 'settings-2-outline',
+        data: {
+          permission: 'view',
+          resource: 'gen'
+        },
+        children: [
+          {
+            title: 'Status',
+            icon: 'pie-chart-outline',
+            link: '/pages/gen/status',
+            data: {
+              permission: 'view',
+              resource: 'gen_status'
+            },
+          },
+        ]
+      },
+      {
+        title: 'Solar',
+        icon: 'sun-outline',
+        data: {
+          permission: 'view',
+          resource: 'solar'
+        },
+        children: [
+          {
+            title: 'Controllers',
+            icon: 'pie-chart-outline',
+            link: '/pages/solar/controllers',
+            data: {
+              permission: 'view',
+              resource: 'solar_controllers'
+            },
+          },
+          {
+            title: 'Edit',
+            icon: 'edit-outline',
+            link: '/pages/solar/edit',
+            data: {
+              permission: 'view',
+              resource: 'solar_edit'
+            },
+    
+          },
+        ]
+      },
+      {
+        title: 'UPS',
+        icon: 'battery-outline',
+        data: {
+          permission: 'view',
+          resource: 'ups'
+        },
+        children: [
+          {
+            title: 'Status',
+            icon: 'pie-chart-outline',
+            link: '/pages/ups/status',
+            data: {
+              permission: 'view',
+              resource: 'ups_status'
+            },
+          },
+        ]
       },
     ]
   },
@@ -90,6 +174,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'All',
+        icon: 'keypad-outline',
         link: '/pages/wind/all',
         data: {
           permission: 'view',
@@ -108,6 +193,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Nodes',
+        icon: 'shake-outline',
         link: '/pages/tetra/nodes',
         data: {
           permission: 'view',
@@ -116,55 +202,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Subscribers',
+        icon: 'person-outline',
         link: '/pages/tetra/subscribers',
         data: {
           permission: 'view',
           resource: 'tetra_subscribers'
-        },
-      },
-    ]
-  },
-  {
-    title: 'Solar',
-    icon: 'sun-outline',
-    data: {
-      permission: 'view',
-      resource: 'solar'
-    },
-    children: [
-      {
-        title: 'Controllers',
-        link: '/pages/solar/controllers',
-        data: {
-          permission: 'view',
-          resource: 'solar_controllers'
-        },
-      },
-      {
-        title: 'Edit',
-        link: '/pages/solar/edit',
-        data: {
-          permission: 'view',
-          resource: 'solar_edit'
-        },
-
-      },
-    ]
-  },
-  {
-    title: 'Generators',
-    icon: 'settings-2-outline',
-    data: {
-      permission: 'view',
-      resource: 'gen'
-    },
-    children: [
-      {
-        title: 'Status',
-        link: '/pages/gen/status',
-        data: {
-          permission: 'view',
-          resource: 'gen_status'
         },
       },
     ]
@@ -179,6 +221,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Status',
+        icon: 'keypad-outline',
         link: '/pages/fm/status',
         data: {
           permission: 'view',
@@ -187,6 +230,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Edit',
+        icon: 'edit-outline',
         link: '/pages/fm/edit',
         data: {
           permission: 'view',
@@ -214,6 +258,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Style',
+        icon: 'color-palette-outline',
         link: '/pages/settings/style',
         data: {
           permission: 'view',

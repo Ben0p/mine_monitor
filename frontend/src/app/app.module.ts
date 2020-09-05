@@ -67,7 +67,9 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'gen_status',
             'fm',
             'fm_status',
-            'map'
+            'map',
+            'ups',
+            'ups_status'
           ],
         },
         admin: {

@@ -1,0 +1,234 @@
+Parameter Name,Display Name,Base Address (0-based),Discrete,Units,Type,Size (bytes),Is Timestamp,Swap Bytes,Swap Words,Writable,Modbus Value,Possible Values,Description
+VendorName,Vendor Name,1032,No,no-units,STRING,64,No,No,No,No,EATON,,Name of the device manufacturer.
+ModelName,Model Name,1064,No,no-units,STRING,64,No,No,No,No,BladeUPS 0,,Model Name of the device.
+iDisplayName,Display Name,1096,No,no-units,STRING,64,No,No,No,Yes,EATON BladeUPS 0,,Display Name of the device.
+iDeviceType,Device Type,1128,No,no-units,STRING,64,No,No,No,No,Uninterruptible Power System,,Device Type of the device.
+iDeviceFamilyType,System Topology,1160,No,no-units,STRING,64,No,No,No,No,0x0062,,System Topology.
+iDeviceID,OEM Code,1192,No,no-units,STRING,64,No,No,No,No,0,,OEM Code.
+iDeviceGuid,Device GUID,1256,No,no-units,STRING,40,No,No,No,No,738fca46-04c2-5607-8628-08aa8b8d8c07,,Type 3 or 5 UUID string that uniquely identifies the device.
+SerialNumber,Serial Number,1276,No,no-units,STRING,64,No,No,No,No,BH184P0010,,Serial number of the device.
+iTimeSyncPeriod,Check Device Clock Sychronization Every,1347,No,minutes,UINT,4,No,No,No,Yes,120,,How often the current system time is pushed down to the device.
+iDeviceVoltsInRating,Nominal Input Voltage,1357,No,volts,UINT,4,No,No,No,No,230,,Nominal input voltage rating.
+iDeviceVoltsOutRating,Nominal Output Voltage,1359,No,volts,UINT,4,No,No,No,No,230,,Nominal output voltage rating.
+iNumPhases,Number of Phases,1361,No,no-units,UINT,2,No,No,No,No,3,,Number of phases the device supports.
+iParallelSysFlag,Parallel System,1362,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Is device in parallel with other devices.
+iNumControlledBanks,Individual Load Segments,1363,No,no-units,UINT,2,No,No,No,No,0,,Number of individually contollable load banks.
+iDeviceTopology,Topology Index,1364,No,no-units,UINT,2,No,No,No,No,1281,,Enumeration of the device topology.
+iAssetID,Asset Identification Tag,1477,No,no-units,STRING,128,No,No,No,Yes,Not Set,,Device asset identity tag for inventory purposes.
+iBatteryLastReplacedDate,Battery Last Replaced Date,1620,No,no-units,STRING,32,No,No,No,Yes,Not Set,,The date when the Batteries in this system were last replaced.
+iDateLastService,Date Last Serviced,1636,No,no-units,STRING,32,No,No,No,Yes,Not Set,,The date when this system was last serviced.
+iInstallationDate,Installation Date,1652,No,no-units,STRING,32,No,No,No,Yes,Not Set,,The date when this system was installed.
+iNominalInputFrequency,Nominal Input Frequency,1669,No,hertz,UINT,2,No,No,No,No,50,,
+iNominalOutputFrequency,Nominal Output Frequency,1670,No,hertz,UINT,2,No,No,No,No,50,,
+iLowVoltageTransfer,Low Voltage Transfer Point,1671,No,volts,UINT,2,No,No,No,No,161,,Minumum input voltage level below which the system transfers to battery power.
+iBoostVoltageSetpoint,Boost Step-Up Point,1672,No,volts,UINT,2,No,No,No,No,207,,Input voltage level below which the system transfers to Boost/Step-Up mode.
+iBuckVoltageSetpoint,Buck Reducer Point,1673,No,volts,UINT,2,No,No,No,No,253,,Input voltage level above which the system transfers to Buck/Reducer mode.
+iHighVoltageTransfer,High Voltage Transfer Point,1674,No,volts,UINT,2,No,No,No,No,299,,Maximum input voltage level above which the system transfers to battery power.
+iLowRuntimeSetpoint,Low Runtime Alarm Setpoint,1675,No,minutes,UINT,2,No,No,No,Yes,1,,When runtime drops to this point; the system generates a Low Runtime alarm.
+iDeviceNumber,Device Number,1807,No,no-units,UINT,2,No,No,No,No,2,,
+iInputPhases,Input Phases,1808,No,no-units,UINT,2,No,No,No,No,3,,
+iOutputPhases,Output Phases,1809,No,no-units,UINT,2,No,No,No,No,3,,
+iDeviceAmpsRating,Output Current Rating,1810,No,amperes,UINT,2,No,No,No,No,34,,Maximum output current supported by the system.
+iSystemType,System Type,1811,No,no-units,UINT,2,No,No,No,No,5,Single UPS(1);Internal Redundant UPS(2);SBM(3),
+iBypassInstalled,Bypass Installed,1812,No,no-units,UINT,2,No,No,No,No,1,No(0);Yes(1),Is a Bypass Installed?
+iBatteryInstalled,Battery Installed,1814,No,no-units,UINT,2,No,No,No,No,0,No(0);Yes(1),Is the Battery Installed?
+iDistributedParallel,Distributed Parallel,1815,No,no-units,UINT,2,No,No,No,No,0,No(0);Yes(1),Is the system Distributed Parallel?
+iSBMPresent,Connected to SBM,1816,No,no-units,UINT,2,No,No,No,No,0,No(0);Yes(1),System is connected to a Switch Bypass Module.
+iSubDevices,Number of Sub Devices,1817,No,no-units,UINT,2,No,No,No,No,2,,
+iPartNumber,Part Number,2076,No,no-units,STRING,64,No,No,No,No,ZC122P060100000,,
+SoftwareVersion,Software Version,2108,No,no-units,STRING,48,No,No,No,No,2.1,,Software version of the device.
+tBattTestResult,Battery Test Result,2801,No,no-units,UINT,2,No,No,No,No,5,No Test(0);In Progress(1);Passed(2);Aborted(3);Failed(4);Scheduled(5);Battery String Removed(6);Battery String Not Installed(7),Result of the last Battery Test.
+tSysTestResult,System Test Result,2803,No,no-units,UINT,2,No,No,No,No,0,No Test(0);In Progress(1);Passed(2);Aborted(3);Failed(4);No Test Yet(5),Result of the last System Test.
+sStatus,System Status,3000,No,no-units,UINT,2,No,No,No,No,80,Off(0);System Normal(1);System Normal - UPS Redundant(2);System Normal - Not Redundant(3);System On DC Source(4);System On DC Source - Shutdown Imminent(5);System Normal - Bypass Not Available(6);System Normal - On Line(7);System Normal - Energy Saver System(8);System Normal - VMMS(9);System Normal - HRS(10);Output Overload(13);System Normal - On Buck(14);System Normal - On Boost(15);On Bypass(16);On Bypass - Starting(17);On Bypass - Ready(18);On Maintenance Bypass(32);On MBS - UPS On Line(33);ON MBS - UPS On Bypass(34);ON MBS - UPS OFF(35);ON MBS - UPS on Battery(36);On MBS - UPS On Line + ESS(37);On MBS - UPS On Line + VMMS(38);On MBS - UPS On Line + HRS(39);On MBS - Starting(40);On MBS - Ready(41);Load Off(48);Load Off - Starting(49);Load Off - Ready(50);Supporting Load(64);System Normal(80);System Normal - Energy Saver System(81);System On Bypass(96);System On Manual/Maintenance Bypass(100);Load Segment Overload(224);System On DC Source(240);System Off(241),Overall status of the system.
+sOutputState,Output State,3002,No,no-units,UINT,2,No,No,No,No,1,Unknown(0);On(1);Off(2);On with pending Off(3);Off with pending On(4);Unknown(5);Unknown(6);Failed and Closed(7);Failed and Open(8),Output state of the system.
+sPowerStrategy,Power Strategy,3003,No,no-units,UINT,2,No,No,No,Yes,3,High Alert(1);Standard(2);High Efficiency Enabled(3);Forced High Efficiency(4),Current Power Strategy of the system.
+sRedundantState,Redundant State,3004,No,no-units,UINT,2,No,No,No,No,0,true;false,Redundant state of the system.
+sHornStatus,Horn Status,3005,No,no-units,UINT,2,No,No,No,Yes,2,Disabled(0);Enabled(1);Muted(2);Unknown(3),Current Horn mode.
+sChargerOffCmd,Charger Off Command,3038,No,no-units,UINT,2,No,No,No,No,0,true;false,The Charger Off Command was entered by the operator or a communication device.
+sABMStatus,ABM Status,3145,No,no-units,UINT,2,No,No,No,No,4,ABM Disabled(0);Charging the Battery String(1);Discharging the Battery String(2);Charging the Battery String(3);Battery String is Resting(4);Battery State Unknown(5);Battery String is Disconnected(6);Testing the Battery String(7);Check the Battery String(8),Current Advanced Battery Management mode.
+sOutputAmpAvailable,Output Current Available,3149,No,amperes,FLOAT,4,No,No,No,No,23.7,,Output Current Available. How much of the rated system current is available.
+sOutputVAAvailable,Output VA Available,3151,No,volt-amperes,FLOAT,4,No,No,No,No,16200,,Output VA Available. How much of the rated system VA is available.
+sOutputWattAvailable,Output Watts Available,3153,No,watts,FLOAT,4,No,No,No,No,18600,,Output Watts Available. How much of the rated system Watts are available.
+mACVinAB,Vab Input,4028,No,volts,FLOAT,4,No,No,No,No,410,,Phase A to B RMS input (utility) voltage.
+mACVinBC,Vbc Input,4030,No,volts,FLOAT,4,No,No,No,No,410,,Phase B to C RMS input (utility) voltage.
+mACVinCA,Vca Input,4032,No,volts,FLOAT,4,No,No,No,No,411.102,,Phase C to A RMS input (utility) voltage.
+mACVoutAB,Vab Output,4034,No,volts,FLOAT,4,No,No,No,No,411.898,,Phase A to B RMS output (utility) voltage.
+mACVoutBC,Vbc Output,4036,No,volts,FLOAT,4,No,No,No,No,411,,Phase B to C RMS output (load) voltage.
+mACVoutCA,Vca Output,4038,No,volts,FLOAT,4,No,No,No,No,410.398,,Phase C to A RMS output (load) voltage.
+mACVinA,Van Input,4040,No,volts,FLOAT,4,No,No,No,No,235,,Phase A to Neutral RMS input (utility) voltage.
+mACVinB,Vbn Input,4042,No,volts,FLOAT,4,No,No,No,No,238.898,,Phase B to Neutral RMS input (utility) voltage.
+mACVinC,Vcn Input,4044,No,volts,FLOAT,4,No,No,No,No,238.102,,Phase C to Neutral RMS input (utility) voltage.
+mACVoutA,Van Output,4046,No,volts,FLOAT,4,No,No,No,No,237.5,,Phase A to Neutral RMS output (load) voltage.
+mACVoutB,Vbn Output,4048,No,volts,FLOAT,4,No,No,No,No,237.801,,Phase B to Neutral RMS output (load) voltage.
+mACVoutC,Vcn Output,4050,No,volts,FLOAT,4,No,No,No,No,236.699,,Phase C to Neutral RMS output (load) voltage.
+mACVbypassA,Van Bypass,4058,No,volts,FLOAT,4,No,No,No,No,235,,Phase A to Neutral RMS voltage at the input of the bypass feed; if the UPS has a separate bypass feed.
+mACVbypassB,Vbn Bypass,4060,No,volts,FLOAT,4,No,No,No,No,238.9,,Phase B to Neutral RMS voltage at the input of the bypass feed; if the UPS has a separate bypass feed.
+mACVbypassC,Vcn Bypass,4062,No,volts,FLOAT,4,No,No,No,No,238,,Phase C to Neutral RMS voltage at the input of the bypass feed; if the UPS has a separate bypass feed.
+mACVinverterAB,Vab Inverter,4064,No,volts,FLOAT,4,No,No,No,No,415,,Phase A to B RMS inverter output voltage.
+mACVinverterBC,Vbc Inverter,4066,No,volts,FLOAT,4,No,No,No,No,414.801,,Phase B to C RMS inverter output voltage.
+mACVinverterCA,Vca Inverter,4068,No,volts,FLOAT,4,No,No,No,No,414.102,,Phase C to A RMS inverter output voltage.
+mACVinverterA,Van Inverter,4070,No,volts,FLOAT,4,No,No,No,No,239.699,,Phase A to Neutral RMS apparent inverter output voltage (may be scaled by transformer).
+mACVinverterB,Vbn Inverter,4072,No,volts,FLOAT,4,No,No,No,No,239.602,,Phase B to Neutral RMS apparent inverter output voltage (may be scaled by transformer).
+mACVinverterC,Vcn Inverter,4074,No,volts,FLOAT,4,No,No,No,No,238.602,,Phase C to Neutral RMS apparent inverter output voltage (may be scaled by transformer).
+mDCVBatt,Battery Voltage,4377,No,volts,FLOAT,4,No,No,No,No,257.398,,Total UPS Battery Voltage reading (DC Volts).
+mDCVLowBattShutDown,Low Battery Shutdown Voltage,4379,No,volts,FLOAT,4,No,No,No,No,210,,Battery voltage lower limit at which inverter must shut down; may vary dynamically with load.
+mDCVLinkPositive,Link Voltage,4385,No,volts,FLOAT,4,No,No,No,No,366.398,,Voltage for bipolar + DC link.
+mDCVLinkNegative,Negative Link Voltage,4387,No,volts,FLOAT,4,No,No,No,No,-376.398,,Voltage for bipolar - DC link.
+mACIinA,IinA,5022,No,amperes,FLOAT,4,No,No,No,No,6.71875,,Phase A RMS input (utility) current.
+mACIinB,IinB,5024,No,amperes,FLOAT,4,No,No,No,No,7.19141,,Phase B RMS input (utility) current.
+mACIinC,IinC,5026,No,amperes,FLOAT,4,No,No,No,No,7.60938,,Phase C RMS input (utility) current.
+mACIoutA,IoutA,5028,No,amperes,FLOAT,4,No,No,No,No,9.9,,Phase A RMS output (load) current.
+mACIoutB,IoutB,5030,No,amperes,FLOAT,4,No,No,No,No,7.6,,Phase B RMS output (load) current.
+mACIoutC,IoutC,5032,No,amperes,FLOAT,4,No,No,No,No,15.4,,Phase C RMS output (load) current.
+mDCIBatt,Battery Current,5190,No,amperes,FLOAT,4,No,No,No,No,0,,Battery current measurement; discharge current is a negative current reading.
+mACIoutGnd,IoutGnd,5560,No,amperes,FLOAT,4,No,No,No,No,0,,Output Ground current.
+mACIinN,IinN,5562,No,amperes,FLOAT,4,No,No,No,No,15518925,,Output Neutral current.
+mACIbypassA,IbypassA,5576,No,amperes,FLOAT,4,No,No,No,No,6.7,,Bypass current Phase A.
+mACIbypassB,IbypassB,5578,No,amperes,FLOAT,4,No,No,No,No,7.1,,Bypass current Phase B.
+mACIbypassC,IbypassC,5580,No,amperes,FLOAT,4,No,No,No,No,7.6,,Bypass current Phase C.
+mACIbypassGnd,IbypassGnd,5584,No,amperes,FLOAT,4,No,No,No,No,15518925,,Bypass Ground current.
+mWattsOutA,Watts Out Phase A,6016,No,watts,FLOAT,4,No,No,No,No,1349,,Phase A output (load) watts.
+mWattsOutB,Watts Out Phase B,6018,No,watts,FLOAT,4,No,No,No,No,983,,Phase B output (load) watts.
+mWattsOutC,Watts Out Phase C,6020,No,watts,FLOAT,4,No,No,No,No,3126,,Phase C output (load) watts.
+mWattsOutTotal,Watts Out,6024,No,watts,FLOAT,4,No,No,No,No,5400,,Total Output true power measurement.
+mVAoutTotal,VA Out,6088,No,volt-amperes,FLOAT,4,No,No,No,No,7900,,Total Output VA measurement.
+mPercentLoad,Percent Full Load,6184,No,percent,FLOAT,4,No,No,No,No,32,,
+mPFdispOut,Output PF,6202,No,power-factor,FLOAT,4,No,No,No,No,0.691406,,Output displacement power factor.
+mWattsBypassA,Watts Bypass Phase A,6559,No,watts,FLOAT,4,No,No,No,No,0,,
+mWattsBypassC,Watts Bypass Phase C,6563,No,watts,FLOAT,4,No,No,No,No,0,,
+mWattsBypassTotal,Total Bypass Watts,6565,No,watts,FLOAT,4,No,No,No,No,5100,,3 Phase Total Bypass Watts.
+mVABypassTotal,Total Bypass VA,6567,No,volt-amperes,FLOAT,4,No,No,No,No,5100,,3 Phase Total Bypass VA.
+mPercentBattRemain,Battery Capacity Remaining,7000,No,percent,FLOAT,4,No,No,No,No,97.8008,,% of useful battery capacity remaining (0% is fully discharged).
+mOutputKWHour,Output KW Hours,7002,No,kilowatt-hours,FLOAT,4,No,No,No,No,57153,,Output KW Hours.
+mOutputDemandWatts,Output Demand KW,7873,No,kilowatts,FLOAT,4,No,No,No,No,5.4,,Output Demand KW over the last interval.
+mOutputFreq,Output Frequency,11002,No,hertz,FLOAT,4,No,No,No,No,50,,
+mInputFreq,Input Frequency,11004,No,hertz,FLOAT,4,No,No,No,No,50,,
+mInverterFreq,Inverter Frequency,11006,No,hertz,FLOAT,4,No,No,No,No,50,,
+mBypassFreq,Bypass Frequency,11008,No,hertz,FLOAT,4,No,No,No,No,50,,
+mTempAmbient,Ambient Temperature,12000,No,degrees-Celsius,FLOAT,4,No,No,No,No,16.1016,,Temperature measurement of the room or cabinet; may be indirectly measured.
+mBattTimeRemain,Battery Time Remaining,12206,No,seconds-formatted,UINT,4,No,No,No,No,3315,,Estimated seconds until DCUV for the current load and state of charge of the battery (even if not On Battery).
+mShutdownTimer,Shutdown Timer,12218,No,seconds,INT,4,No,No,No,No,1,,Time before shutdown.
+mStartupTimer,Startup Timer,12220,No,seconds,INT,4,No,No,No,No,1,,Time before startup.
+mCounterLineEvents,Line Event Counter,12400,No,no-units,UINT,4,No,No,No,No,119,,Count of Input Line Events which the UPS protected against. Normally counts unfiltered On Battery events; but may include other protection events.
+sUPMRedundancyLevel,Redundancy Level,12625,No,no-units,UINT,2,No,No,No,No,0,,Parallel syste Redundancy Level.
+mUPMShutdownImminentTime,Shutdown Imminent Time,12626,No,seconds,UINT,2,No,No,No,No,65535,,System Shutdown Imminent Time.
+sUPMVoltBypassInLimits,Bypass In Limits,12627,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Bypass In Limits (Yes=1;No=0).
+sUPMVoltInputInLimits,Input In Limits,12629,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Input In Limits (Yes=1;No=0).
+sUPMVoltOutputInLimits,Output In Limits,12630,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Output In Limits (Yes=1;No=0).
+sUPMSwitchgear08,MBS,12638,No,no-units,UINT,2,No,No,No,No,0,Closed;Open,Maintenance Bypass Switch [MBS] (Closed=1;Open=0).
+sUPMIndicatorNormal,Indicator - Normal,12647,No,no-units,UINT,2,No,No,No,No,2,Grey(1);Green-Solid(2);Green-Flashing(3);Amber-Solid(4);Amber-Flashing(5);Yellow-Solid(6);Yellow-Flashing(7);Red-Solid(8);Red-Flashing(9),Normal Indicator [Grey-Off; Green-OK; Amber-Attention; Yellow-Warning; Red-Alarm].
+sUPMIndicatorBattery,Indicator - Battery,12648,No,no-units,UINT,2,No,No,No,No,1,Grey(1);Green-Solid(2);Green-Flashing(3);Amber-Solid(4);Amber-Flashing(5);Yellow-Solid(6);Yellow-Flashing(7);Red-Solid(8);Red-Flashing(9),Battery Indicator [Grey-Off; Green-OK; Amber-Attention; Yellow-Warning; Red-Alarm].
+sUPMIndicatorBypass,Indicator - Bypass,12649,No,no-units,UINT,2,No,No,No,No,1,Grey(1);Green-Solid(2);Green-Flashing(3);Amber-Solid(4);Amber-Flashing(5);Yellow-Solid(6);Yellow-Flashing(7);Red-Solid(8);Red-Flashing(9),Bypass Indicator [Grey-Off; Green-OK; Amber-Attention; Yellow-Warning; Red-Alarm].
+sUPMIndicatorAlarm,Indicator - Alarm,12650,No,no-units,UINT,2,No,No,No,No,1,Grey(1);Green-Solid(2);Green-Flashing(3);Amber-Solid(4);Amber-Flashing(5);Yellow-Solid(6);Yellow-Flashing(7);Red-Solid(8);Red-Flashing(9),Alarm Indicator [Grey-Off; Green-OK; Amber-Attention; Yellow-Warning; Red-Alarm].
+zOneline1,System On Bypass,12663,No,no-units,UINT,2,No,No,No,No,0,Yes;No,Status Flag - System On Bypass (Yes=1;No=0).
+zOneline2,System On Maintenance Bypass,12664,No,no-units,UINT,2,No,No,No,No,0,Yes;No,Status Flag - System On Maintenance Bypass (Yes=1;No=0).
+zOneline3,System Output On,12665,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - System Output On (Yes=1;No=0).
+zOneline4,Battery Energized,12666,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Battery Energized (Yes=1;No=0).
+zOneline5,Utility Present,12667,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Utility Present (Yes=1;No=0).
+zOneline6,Rectifier Output On,12668,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Rectifier Output On (Yes=1;No=0).
+zOneline7,Inverter Output On,12669,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Inverter Output On (Yes=1;No=0).
+zOneline8,Charger On,12670,No,no-units,UINT,2,No,No,No,No,0,Yes;No,Status Flag - Charger On (Yes=1;No=0).
+zOneline9,Batteries Depleted,12671,No,no-units,UINT,2,No,No,No,No,0,Yes;No,Status Flag - Batteries Depleted (Yes=1;No=0).
+zOneline10,Utility Input Breaker,12672,No,no-units,UINT,2,No,No,No,No,1,Closed;Open,Status Flag - Utility Input Breaker-Contactor [CB1/K1 Rectifier Input] (Closed=1;Open=0).
+zOneline11,Bypass Breaker-Contactor,12673,No,no-units,UINT,2,No,No,No,No,0,Closed;Open,Status Flag - Bypass Breaker-Contactor [K5] (Closed=1;Open=0).
+zOneline12,Static Switch,12674,No,no-units,UINT,2,No,No,No,No,0,Closed;Open,Status Flag - Static Switch [STSW] (Closed=1;Open=0).
+zOneline13,Battery Breaker,12675,No,no-units,UINT,2,No,No,No,No,1,Closed;Open,Status Flag - Battery Breaker-Contactor [CB2/K2] (Closed=1;Open=0).
+zOneline14,Inverter Output Breaker-Contactor,12676,No,no-units,UINT,2,No,No,No,No,1,Closed;Open,Status Flag - Inverter Output Breaker-Contactor [K3] (Closed=1;Open=0).
+zOneline22,System Normal,12680,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - System Normal (Yes=1;No=0).
+zTemplate4,Indicator - Bypass Not Available,12683,No,no-units,UINT,2,No,No,No,No,0,On;Off,PowerXpert Status - Bypass Not Available Indicator.
+zOneline18,High Efficiency/ESS,12698,No,no-units,UINT,2,No,No,No,No,0,Yes;No,Status Flag - System in High Efficiency/ESS mode (Yes=1;No=0).
+sUPMVoltBypassAvailable,Bypass Available,12699,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Bypass Available (Yes=1;No=0).
+zOneline19,Bypass Present/Installed,17010,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Bypass Present (Yes=1;No=0).
+zOneline20,System Not On Maintenance Bypass,17011,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - System Not On Maintenance Bypass  (Yes=1;No=0).
+zOneline21,Bypass Utility Present,17012,No,no-units,UINT,2,No,No,No,No,1,Yes;No,Status Flag - Bypass Utility Present (Yes=1;No=0).
+iAttachedDevices,Attached Devices,18000,No,no-units,STRING,128,No,No,No,Yes,None,,
+iDeviceOutputVARating,Output VA Rating,18118,No,volt-amperes,UINT,4,No,No,No,No,24000,,Nominal output VA rating.
+iDeviceOutputWattsRating,Output Watts Rating,18120,No,watts,UINT,4,No,No,No,No,24000,,Nominal output watts rating.
+iReferenceNumber,Reference Number,18422,No,no-units,UINT,2,No,No,No,No,510,,
+iUtilXferDelay,Utility Transfer Delay,18488,No,seconds,UINT,2,No,No,No,No,10,,
+iMinBattCapforReturn,Min Battery Capacity for Restart,18489,No,percent,UINT,2,No,No,No,Yes,0,,The battery capacity level must reach this threshold to allow a restart.
+iMaxLoadforSleep,Max Load for Sleep,18490,No,percent,UINT,2,No,No,No,No,0,,
+iOnsetDelayforSleep,Onset Delay for Sleep,18491,No,percent,UINT,2,No,No,No,No,0,,
+iFreqDevLimit,Frequency Deviation Limit,18503,No,hertz,FLOAT,4,No,No,No,No,2,,
+iPhaseDevLimit,Phase Deviation Limit,18505,No,degrees-phase,FLOAT,4,No,No,No,No,5,,
+iUpperAmbTempAlarm,Upper Ambient Temp Alarm,18509,No,degrees-Celsius,FLOAT,4,No,No,No,No,95,,
+iSwitchableStatus,Switchable Status,18511,No,no-units,UINT,2,No,No,No,No,1,System Load is NOT Controllable(0);System Load is Controllable(1),
+aInvACUnderVoltage,Inverter AC Under Voltage,1001,Yes,,,,,,,No,FALSE,true;false,Alarm 1 - Inverter fault: Inverter output voltage is less than the lower voltage limit specification for normal operation.
+aACinputOverVolts,Input AC Over Voltage,1006,Yes,,,,,,,No,FALSE,true;false,Alarm 6 - Input (Utility) fault: Input voltage has exceeded the upper voltage limit specification for normal operation.
+aACinputUnderVolts,Input AC Under Voltage,1007,Yes,,,,,,,No,FALSE,true;false,Alarm 7 - Input (Utility) fault: Input voltage is less than the lower voltage limit specification for normal operation.
+aInputFreqFault,Input Under Or Over Frequency,1008,Yes,,,,,,,No,FALSE,true;false,Alarm 8 - Input (Utility) fault: Input frequency is outside of either the upper or lower frequency limit specification for normal operation.
+aACoutputUnderVolts,Output AC Under Voltage,1010,Yes,,,,,,,No,FALSE,true;false,Alarm 10 - Output fault: Output voltage is less than the lower voltage limit specification for normal operation.
+aRemoteEPO,Remote Emergency Power Off,1012,Yes,,,,,,,No,FALSE,true;false,Alarm 12 - The UPS has shutdown due to the activation of the remote EPO signal.
+aOutputOverload,Output Overload,1025,Yes,,,,,,,No,FALSE,true;false,Alarm 25 - Output fault: UPS output current limit or calculated or measured power limit has been exceeded longer than allowed by the internal time limit.
+aRectInputOverCurrent,Rectifier Input Over Current,1026,Yes,,,,,,,No,FALSE,true;false,Alarm 26 - Rectifier fault: Rectifier input current exceeds the upper current limit specification for normal operation.
+aInverterOutOverCurrent,Inverter Output Over Current,1027,Yes,,,,,,,No,FALSE,true;false,Alarm 27 - Inverter fault: Inverter output current exceeds the upper current limit specification for normal operation.
+aDCLinkOverVolts,DC Link Over Voltage,1028,Yes,,,,,,,No,FALSE,true;false,Alarm 28 - DC Link fault: DC link voltage has exceeded the upper voltage limit specification for normal operation.
+aDClinkUnderVolts,DC Link Under Voltage,1029,Yes,,,,,,,No,FALSE,true;false,Alarm 29 - DC Link fault: DC link voltage is less than the lower voltage limit specification for normal operation.
+aCheckRectifier,Check Rectifier,1030,Yes,,,,,,,No,FALSE,true;false,Alarm 30 - Rectifier fault: The rectifier appears to have failed.
+aCheckStaticSwitch,Check Static Switch,1036,Yes,,,,,,,No,FALSE,true;false,Alarm 36 - Static switch fault: The static switch appears to have failed.
+aBypassUncal,Bypass Uncalibrated,1038,Yes,,,,,,,No,FALSE,true;false,Alarm 38 - This is a warning that the bypass input voltage sensor has not been calibrated.
+aInverterUncal,Inverter Uncalibrated,1041,Yes,,,,,,,No,FALSE,true;false,Alarm 41 - This is a warning that the inverter output voltage sensor has not been calibrated.
+aDCVoltsUncal,DC Voltage Uncalibrated,1042,Yes,,,,,,,No,FALSE,true;false,Alarm 42 - This is a warning that the DC link voltage sensor has not been calibrated.
+aBattCurrentLimt,Battery Current Limit,1047,Yes,,,,,,,No,FALSE,true;false,Alarm 47 - Indicates that the battery is operating at maximum current capability.
+aInverterStartFail,Inverter Startup Failure,1048,Yes,,,,,,,No,FALSE,true;false,Alarm 48 - An attempt to start the Inverter module failed.
+aNVMemFail,Non-Volatile Memory Failure,1053,Yes,,,,,,,No,FALSE,true;false,Alarm 53 - Indicates that a non-volatile memory device (Flash; EEPROM; or NVRAM) in the UPS control or communications logic has failed.
+aShutdownImminent,Shutdown Imminent,1055,Yes,,,,,,,No,FALSE,true;false,Alarm 55 - Indicates that the UPS has entered a state where it may abruptly stop operating without further notice; in less than the Low Battery Warning time. However; it may continue to operate indefinitely; even with this alarm being asserted.
+aBattLowVolts,Battery Voltage Low,1056,Yes,,,,,,,No,FALSE,true;false,Alarm 56 - Indicates that the battery voltage and/or energy is below the predetermined low battery warning level.
+aUtilityOutOfLimits,Utility Out Of Limits,1057,Yes,,,,,,,No,FALSE,true;false,Alarm 57 - Indicates that the utility input power is not within predetermined limits. This could be over voltage; under voltage; over or under frequency.
+aOutputShortCircuit,Output Short Circuit,1058,Yes,,,,,,,No,FALSE,true;false,Alarm 58 - Indicates that the UPS has detected an abnormally low impedance placed on its output.
+aUtilityNotPresent,Utility Not Present,1059,Yes,,,,,,,No,FALSE,true;false,Alarm 59 - Indicates that the utility input is not present.
+aBattVoltsHigh,Battery Voltage High,1067,Yes,,,,,,,No,FALSE,true;false,Alarm 68 - Indicates that the battery voltage has exceeded a predetermined limit. Operating with this alarm set will likely cause permanent battery and/or system damage.
+aCheckPowerSupply,Check Power Supply,1069,Yes,,,,,,,No,FALSE,true;false,Alarm 70 - One or more of the control or logic power supplies in the UPS appears to have failed.
+aCheckLogicSupply,Check Logic Power Supply,1070,Yes,,,,,,,No,FALSE,true;false,Alarm 71 - The primary logic supply in the UPS appears to have failed.
+aCheckAuxSupply,Check Secondary Power Supply,1071,Yes,,,,,,,No,FALSE,true;false,Alarm 72 - The secondary logic supply in the UPS appears to have failed.
+aCheckHeatsinkSensor,Check Heatsink Temperature Sensor,1073,Yes,,,,,,,No,FALSE,true;false,Alarm 74 - A heatsink temperature sensor at some unspecified location in the UPS appears to have failed.
+aToBypassCommand,To Bypass Command,1092,Yes,,,,,,,No,FALSE,true;false,Alarm 94 - A command has been received to transfer the load from the inverter to bypass. This command may come from a local control panel or from a remote source.
+aBypassSourceLimit,Bypass Source Out Of Tolerance,1101,Yes,,,,,,,No,FALSE,true;false,Alarm 105 - The bypass power source is not available to transfer to. This may be due to: over/under voltage; over/under frequency; out of phase lock.
+aBattSwitchOpen,Battery Switchgear CB2 Open,1103,Yes,,,,,,,No,FALSE,Open;Closed,Status Flag (Alarm 107) - The battery contactor/breaker [CB2] is open (Closed=0;Open=1).
+aBypassswitchOpen,Bypass Switchgear CB4 Open,1105,Yes,,,,,,,No,FALSE,Open;Closed,Status Flag (Alarm 109) - The bypass breaker [CB4] is open (Closed=0;Open=1).
+aMultiPhaseRotation,Multi Phase Rotation,1114,Yes,,,,,,,No,FALSE,true;false,Alarm 118 - On a multi-phase system; the utililty input phases are out of sequence.
+aCheckParallelBoard,Check Parallel Board,1117,Yes,,,,,,,No,FALSE,true;false,Alarm 121 - The board used for paralleling control appears to have failed.
+aSystemNotRedundant,System Not Redundant,1127,Yes,,,,,,,No,FALSE,true;false,Alarm 132 - For an n+1 parallel system; the load is supported; but the system is no longer has redundant protection.
+aBypassModeActive,Maintenance Bypass Mode,1134,Yes,,,,,,,No,FALSE,true;false,Alarm 143 - The load is being supplied power by a wrap-around maintenace bypass switch.
+aCPUisrError,CPU ISR Error,1135,Yes,,,,,,,No,FALSE,true;false,Alarm 146 - One of the Central Processing Units (CPU or control microprocessor) has erroneously entered one of its Interrupt Service Routines (ISR); implying that it has received a spurious interrupt input.
+aBatteryCheck,Check Battery,1137,Yes,,,,,,,No,FALSE,true;false,Alarm 149 - A battery problem has been detected. It may need to be replaced; or its connections and fuses need to be checked.
+aOverloadA,Phase A Overload,1139,Yes,,,,,,,No,FALSE,true;false,Alarm 159 - The load on this UPS output phase (1) exceeds the rated current or power of the UPS. If On Inverter; the UPS may transfer to Bypass or shutdown after a timeout period of some minutes.
+aOverloadB,Phase B Overload,1140,Yes,,,,,,,No,FALSE,true;false,Alarm 160 - The load on this UPS output phase (2) exceeds the rated current or power of the UPS. If On Inverter; the UPS may transfer to Bypass or shutdown after a timeout period of some minutes.
+aOverloadC,Phase C Overload,1141,Yes,,,,,,,No,FALSE,true;false,Alarm 161 - The load on this UPS output phase (3) exceeds the rated current or power of the UPS. If On Inverter; the UPS may transfer to Bypass or shutdown after a timeout period of some minutes.
+aOverloadHighA,Phase A Overload (High Level/Level 2),1142,Yes,,,,,,,No,FALSE,true;false,Alarm 162 - The load on this UPS output phase (1) exceeds its rated current or power by a substantial amount. The inverter can only sustain this overload for a short time (seconds) without shutting down due to overheating.
+aOverloadHighB,Phase B Overload (High Level/Level 2),1143,Yes,,,,,,,No,FALSE,true;false,Alarm 163 - The load on this UPS output phase (2) exceeds its rated current or power by a substantial amount. The inverter can only sustain this overload for a short time (seconds) without shutting down due to overheating.
+aOverloadHighC,Phase C Overload (High Level/Level 2),1144,Yes,,,,,,,No,FALSE,true;false,Alarm 164 - The load on this UPS output phase (3) exceeds its rated current or power by a substantial amount. The inverter can only sustain this overload for a short time (seconds) without shutting down due to overheating.
+aOverloadExtremeA,Phase A Overload (Extreme Level/Level 3),1145,Yes,,,,,,,No,FALSE,true;false,Alarm 165 -  The load on this UPS output phase (1) exceeds its rated current or power by an extreme amount. The inverter cannot sustain this excessive overload and will shut down immediately or within seconds; transferring the load to bypass; if available.
+aOverloadExtremeB,Phase B Overload (Extreme Level/Level 3),1146,Yes,,,,,,,No,FALSE,true;false,Alarm 166 - The load on this UPS output phase (2) exceeds its rated current or power by an extreme amount. The inverter cannot sustain this excessive overload and will shut down immediately or within seconds; transferring the load to bypass; if available.
+aOverloadExtremeC,Phase C Overload (Extreme Level/Level 3),1147,Yes,,,,,,,No,FALSE,true;false,Alarm 167 - The load on this UPS output phase (3) exceeds its rated current or power by an extreme amount. The inverter cannot sustain this excessive overload and will shut down immediately or within seconds; transferring the load to bypass; if available.
+aUPSOnBattery,UPS On Battery,1148,Yes,,,,,,,No,FALSE,true;false,Alarm 168 - The UPS is drawing power from the battery in order to power the load. This alarm is not activated during non-alarming On Battery events; such as Quick Battery Test or Tap Switching.
+aUPSOnBypass,UPS On Bypass,1149,Yes,,,,,,,No,FALSE,true;false,Alarm 169 - The UPS is on bypass. The critical load does not have protection against power loss or disturbances.
+aLowBattShutdown,Low Battery Shutdown,1151,Yes,,,,,,,No,FALSE,true;false,Alarm 174 - The UPS has shutdown due to running on battery for a long enough time to exhaust the battery capacity.
+aSoftwareRevProblem,Software Incompatibility Detected,1152,Yes,,,,,,,No,FALSE,true;false,Alarm 176 - In a multi-module system or internally to a UPS with multiple controllers; the firmware versions in place are not compatible with each other.
+aBattTestFail,Battery Test Failed,1157,Yes,,,,,,,No,FALSE,true;false,Alarm 190 - A battery test has been executed and the results appear to indicate that the battery has failed and needs to be replaced.
+aCheckFuse,Check Fuse,1158,Yes,,,,,,,No,FALSE,true;false,Alarm 191 - At least one fuse in the UPS has failed and needs to be replaced.
+aCheckFan,Check Fan,1159,Yes,,,,,,,No,FALSE,true;false,Alarm 192 - At least one fan in the UPS appears to have failed.
+aSiteWiringFault,Site Wiring Fault,1160,Yes,,,,,,,No,FALSE,true;false,Alarm 194 - There is a fault in the input wiring; other than Phase Rotation; e.g.; Ground/Neutral reversed.
+aBattDisconnected,Battery Disconnected,1162,Yes,,,,,,,No,FALSE,true;false,Alarm 199 - The UPS has detected that the battery is not connected.
+aAmbientUnderTemp,Ambient Under Temperature,1165,Yes,,,,,,,No,FALSE,true;false,Alarm 202 - An ambient temperature probe has detected that the temperature is below its lower limit.
+aAmbientOverTemp,Ambient Over Temperature,1166,Yes,,,,,,,No,FALSE,true;false,Alarm 203 - An ambient temperature probe has detected that the temperature is above its upper limit.
+aShutdownPending,Automatic Shutdown Pending,1169,Yes,,,,,,,No,FALSE,true;false,Alarm 206 - A condition exists in the UPS which will lead to the loss of power to the loads in less than the Low Battery Warning Time; unless the condition is cleared/removed.
+aCheckModem,Check Modem,1174,Yes,,,,,,,No,FALSE,true;false,Alarm 211 - The UPS has detected that a modem connected to it has failed or the UPS is unable to communicate with the modem.
+aModemCallFail,Modem Call Completion Failed,1175,Yes,,,,,,,No,FALSE,true;false,Alarm 216 - A modem connected to the UPS has failed to successfully complete a transaction sequence as expected.
+aAutoCalFail,Autocalibration Failed,1177,Yes,,,,,,,No,FALSE,true;false,Alarm 219 - An attempt to automatically (re-) calibrate the UPS has failed.
+aSelectiveModuleTrip,Selective Trip Of Module,1178,Yes,,,,,,,No,FALSE,true;false,Alarm 220 - A UPS module has been automatically removed from a parallel system; usually due to improper load sharing or other fault.
+aInverterOutputFail,Inverter Output Failure,1179,Yes,,,,,,,No,FALSE,true;false,Alarm 221 - The inverter output has failed; and cannot support the load.The reasons for this alarm are; for example: inverter over or under voltage; over or under frequency; distorted waveform; output out-of window; etc.
+aOutputVoltsAbnormal,Abnormal Output Voltage At Startup,1180,Yes,,,,,,,No,FALSE,true;false,Alarm 222 - The UPS has detected an inappropriate voltage at its output before it is providing output. For example: some output voltage is detected before the UPS is supplying output power; in a parallel system; the output voltage is not in an acceptable range.
+aConfigError,Configuration Error,1182,Yes,,,,,,,No,FALSE,true;false,Alarm 224 - Improper system configuration has been detected. The reasons for this alarm are; for example: unmatched power rating data; conf data out of limits; improper sub-unit identification; etc.
+aNoRedundancyOL,Redundancy Loss Due To Overload,1183,Yes,,,,,,,No,FALSE,true;false,Alarm 225 - The specified power rating of an n+1 parallel system has been exceeded. The load is supported; but the system lacks redundant protection while this overload persists.
+aSystemNoticeActive,System Notice Active,1185,Yes,,,,,,,No,FALSE,true;false,Alarm 228 - Cautionary Alert: If non-zero; there is at least one notice-level condition active at the System level at this time.
+aSystemAlarmActive,System Alarm Active,1186,Yes,,,,,,,No,FALSE,true;false,Alarm 229 - Critical Alert: If non-zero; there is at least one severe alarm active at the system level at this time.
+aSubsystemAlarm,Subsystem Alarm Active,1191,Yes,,,,,,,No,FALSE,true;false,Alarm 234 - If non-zero; there is at least one alarm active in a subsystem at this time.
+aInvalidBoardID,Invalid Board ID,1195,Yes,,,,,,,No,FALSE,true;false,Alarm 241 - A system module or board has an invalid hardware address; type; or node ID.
+aCheckPrecharge,Check Precharge,1198,Yes,,,,,,,No,FALSE,true;false,Alarm 244 - The Precharge circuit appears to have failed.
+aUPSOnGen,UPS On Generator,1201,Yes,,,,,,,No,FALSE,true;false,Alarm 248 - The power source for the UPS is currently a Generator.
+aUPMAlmCalluser,Call User,3002,Yes,,,,,,,No,FALSE,true;false,Alarm 383 - Call User.
+aUPMAlmMajorAlarm,Major Alarm,3003,Yes,,,,,,,No,FALSE,true;false,Alarm 384 - A major alarm condition indicates that the device has failed and needs attention immediately.
+aUPMAlmScheduleService,Schedule Service,3004,Yes,,,,,,,No,FALSE,true;false,Alarm 385 - The device has determined that service should occur some time in the future.
+aUPMAlmServiceRequired,Service Required,3005,Yes,,,,,,,No,FALSE,true;false,Alarm 386 - A severe alarm condition has occurred which indicates that the device has failed and needs attention immediately.
+aUPMVoltDcuv,Battery Voltage Extremely Low,3006,Yes,,,,,,,No,FALSE,true;false,Alarm 387 - The battery voltage has dropped below the shutdown warning level; and the battery will only supply power for a short time.

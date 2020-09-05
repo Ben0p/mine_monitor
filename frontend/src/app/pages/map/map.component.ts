@@ -45,7 +45,7 @@ export class MapComponent implements OnInit, OnDestroy {
       navigationHelpButton: true,
       navigationInstructionsInitiallyVisible: false,
       mapMode2D: Cesium.MapMode2D.ROTATE,
-      automaticallyTrackDataSourceClocks: true,
+      automaticallyTrackDataSourceClocks: false,
       vrButton: true,
     };
 
