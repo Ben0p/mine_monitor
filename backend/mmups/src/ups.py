@@ -39,6 +39,18 @@ def updateDB(ups):
     )
 
 
+def truncate_data(seconds):
+    ''' Delete UPS data older than 1 week
+    '''
+
+    DB['ups_data'].delete_many(
+        {
+            'unix' : {
+                '$lte' : time.time() - seconds
+            }
+        },
+    )
+
 
 def poll():
 
@@ -56,6 +68,8 @@ def poll():
 
             updateDB(processed)
         
+        print("Truncate Data")
+        truncate_data(604800)
         print("Sleep 10sec")
         time.sleep(10)
 

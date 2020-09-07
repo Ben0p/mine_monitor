@@ -13,13 +13,15 @@ import { ComponentsModule } from '../../@components/components.module';
 
 import { UpsComponent } from './ups.component';
 import { UpsStatusComponent } from './ups-status/ups-status.component';
+import { UpsEditComponent } from './ups-edit/ups-edit.component';
 
 
 @NgModule({
   declarations: [
     ...routedComponents,
     UpsComponent,
-    UpsStatusComponent
+    UpsStatusComponent,
+    UpsEditComponent
   ],
   imports: [
     CommonModule,

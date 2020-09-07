@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { UpsComponent } from './ups.component';
 import { UpsStatusComponent } from './ups-status/ups-status.component';
+import { UpsEditComponent } from './ups-edit/ups-edit.component';
 
 
 const routes: Routes = [{
@@ -12,6 +13,10 @@ const routes: Routes = [{
     {
       path: 'status',
       component: UpsStatusComponent,
+    },
+    {
+      path: 'edit',
+      component: UpsEditComponent,
     },
   ],
 }];
@@ -24,4 +29,5 @@ export class UpsRoutingModule { }
 export const routedComponents = [
   UpsComponent,
   UpsStatusComponent,
+  UpsEditComponent
 ];

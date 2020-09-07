@@ -139,7 +139,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
               permission: 'view',
               resource: 'solar_edit'
             },
-    
           },
         ]
       },
@@ -158,6 +157,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
             data: {
               permission: 'view',
               resource: 'ups_status'
+            },
+          },
+          {
+            title: 'Edit',
+            icon: 'edit-outline',
+            link: '/pages/ups/edit',
+            data: {
+              permission: 'admin',
+              resource: 'ups_edit'
             },
           },
         ]

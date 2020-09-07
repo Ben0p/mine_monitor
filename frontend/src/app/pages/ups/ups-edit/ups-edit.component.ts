@@ -1,31 +1,29 @@
 import { Component, OnDestroy, OnInit, TemplateRef } from '@angular/core';
-import { FormGroup} from '@angular/forms';
-import { SolarService } from '../../../@core/data/solar.service'
+import { FormGroup } from '@angular/forms';
+import { UpsEditService } from './ups-edit.service'
 import { NbDialogService, NbToastrService } from '@nebular/theme';
 
 @Component({
-  selector: 'solar-edit',
-  templateUrl: './solar-edit.component.html',
-  styleUrls: ['./solar-edit.component.scss'],
+  selector: 'ups-edit',
+  templateUrl: './ups-edit.component.html',
+  styleUrls: ['./ups-edit.component.scss']
 })
-
-export class SolarEditComponent implements OnDestroy, OnInit {
+export class UpsEditComponent implements OnDestroy, OnInit {
 
   alertForm: FormGroup;
   submitted = false;
-  alertZones: Object;
-  models = [
+  types = [
     {
-      'title': 'Tristar-60 MPPT',
-      'value': 'Tristar-60 MPPT'
+      'title': 'Management Card',
+      'value': 'NMC'
     },
     {
-      'title': 'Tristar MPPT 600V',
-      'value': 'Tristar MPPT 600V'
+      'title': 'Power Xpert',
+      'value': 'PXGX'
     }
   ];
 
-  controllerSettings: Object = {
+  upsSettings: Object = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -33,7 +31,6 @@ export class SolarEditComponent implements OnDestroy, OnInit {
       confirmCreate: true,
     },
   }
-
 
   loadModuleTableSettings() {
     return {
@@ -67,13 +64,13 @@ export class SolarEditComponent implements OnDestroy, OnInit {
           title: 'IP',
           type: 'string',
         },
-        model: {
-          title: 'Model',
+        type: {
+          title: 'Type',
           type: 'string',
           editor: {
             type: 'list',
             config: {
-              list: this.models
+              list: this.types
             }
           }
         },
@@ -97,41 +94,38 @@ export class SolarEditComponent implements OnDestroy, OnInit {
     }
   };
 
-
-  controllerSource: Object
+  upsSource: Object
   tableEvent: any
   modifyType: string
   dialogMessage: string
   private index: number = 0;
   postResult: object
-  alertsArray: Object
+  upsArray: Object
   ipPattern = new RegExp("(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)")
   whiteSpace = new RegExp("([^\\s]*)")
 
-
   constructor(
-    private solar: SolarService,
+    private ups: UpsEditService,
     private dialogService: NbDialogService,
     private toastrService: NbToastrService,
-  ) {}
+  ) { }
 
-    refreshData(){
-      this.solar.getSolarControllers().subscribe(
-        (
-          data: {}) => {
-          this.controllerSource = data;
-          this.controllerSettings = this.loadModuleTableSettings();
-        }
-      )
-  
-    }
+  refreshData(){
+    this.ups.getUpsList().subscribe(
+      (
+        data: {}) => {
+        this.upsSource = data;
+        this.upsSettings = this.loadModuleTableSettings();
+      }
+    )
+
+  }
 
   ngOnDestroy(): void { }
 
   ngOnInit() {
     this.refreshData()
   }
-
 
   onDialog(dialog: TemplateRef<any>, crud, event) {
     this.tableEvent = event;
@@ -150,7 +144,7 @@ export class SolarEditComponent implements OnDestroy, OnInit {
     var invalidData = false
     if (confirmation) {
       if (this.modifyType == 'delete') {
-        this.solar.deleteSolarController(this.tableEvent.data.uid).subscribe(
+        this.ups.deleteUpsModule(this.tableEvent.data.uid).subscribe(
           (data: {}) => {
             this.postResult = data;
             if (this.postResult['success']) {
@@ -187,7 +181,7 @@ export class SolarEditComponent implements OnDestroy, OnInit {
 
         
         if (invalidData == false){
-          this.solar.updateSolarController(this.tableEvent.newData).subscribe(
+          this.ups.updateUpsModule(this.tableEvent.newData).subscribe(
             (data: {}) => {
               this.postResult = data;
               if (this.postResult['success']) {
@@ -225,7 +219,7 @@ export class SolarEditComponent implements OnDestroy, OnInit {
 
         
         if (invalidData == false){
-          this.solar.createSolarController(this.tableEvent.newData).subscribe(
+          this.ups.createUpsModule(this.tableEvent.newData).subscribe(
             (data: {}) => {
               this.postResult = data;
               if (this.postResult['success']) {

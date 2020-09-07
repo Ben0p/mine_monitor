@@ -81,6 +81,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'alerts_edit',
             'fm_edit',
             'solar_edit',
+            'ups_edit'
           ],
         },
       },

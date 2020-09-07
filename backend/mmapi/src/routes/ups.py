@@ -33,7 +33,7 @@ class ups_create(Resource):
 
         args = parser.parse_args()
 
-        data = {
+        module = {
             "name": args['name'],
             "location": args['location'],
             "ip": args['ip'],
@@ -41,12 +41,49 @@ class ups_create(Resource):
         }
 
         try:
-            DB['ups_modules'].insert_one(data)
-
-            return({'success': True, 'message': 'Created {}'.format(args['name'])})
+            module_uid = DB['ups_modules'].insert_one(module).inserted_id
 
         except:
             return({'success': False, 'message': 'Failed to create'})
+
+
+        blank_data = {
+            'unix' : time.time(),
+            'module_uid' : module_uid,
+            'status' : [{
+                'status' : "Unknown",
+                'system_status' : 'basic',
+                'system_icon' : 'question-mark-circle-outline'
+            }],
+            'batt_remaining' : 0,
+            'batt_status' : 'basic',
+            'batt_icon' : 'battery-outline',
+            'temp_status' : 'basic',
+            'temp_icon' : 'thermometer-outline',
+            'kw_out' : 0,
+            'load_percent' : 0,
+            'load_status' : 'basic',
+            'load_icon' : 'bulb-outline',
+            'phases' : [{
+                    'phase_voltage' : 0,
+                    'phase_icon' : 'activity-outline',
+                    'phase_status' : 'basic'
+                }]
+        }
+
+        try:
+            DB['ups_data'].insert_one(blank_data)
+            return({'success': True, 'message': 'Created {}'.format(args['name'])})
+        except:
+            # Delete the module if the blank data fails to insert (Frontend wigs out)
+            DB['ups_modules'].delete_many(
+                {
+                    "_id": module_uid,
+                },
+            )
+            return({'success': False, 'message': 'Failed to create'})
+
+
 
 
 class ups_update(Resource):
@@ -84,6 +121,7 @@ class ups_update(Resource):
             return({'success': True, 'message': 'Updated {}'.format(args['name'])})
 
         except:
+
             return({'success': False, 'message': 'Failed to update'})
 
 
@@ -103,7 +141,13 @@ class ups_delete(Resource):
                 },
             )
 
-            total_del = module_del_count.deleted_count
+            data_del_count = DB['ups_data'].delete_many(
+                {
+                    "module_uid": ObjectId(oid),
+                },
+            )
+
+            total_del = module_del_count.deleted_count + data_del_count.deleted_count 
 
             if total_del > 0:
                 return({'success': True, 'message': 'Deleted {} objects.'.format(total_del)})
@@ -119,6 +163,26 @@ class ups_modules(Resource):
 
         return(jsonify(json.loads(dumps(ups_modules))))
 
+
+class ups_list(Resource):
+
+    def get(self):
+        ups_modules = DB['ups_modules'].find().sort("location",pymongo.ASCENDING)
+
+        ups_list = []
+
+        for module in ups_modules:
+            ups_module = {
+                'ip' : module['ip'],
+                'name' : module['name'],
+                'location' : module['location'],
+                'type' : module['type'],
+                'uid' : str(module['_id'])
+            }
+
+            ups_list.append(ups_module)
+
+        return(jsonify(json.loads(dumps(ups_list))))
 
 class ups_status(Resource):
 

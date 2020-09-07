@@ -143,7 +143,7 @@ class solar_controllers(Resource):
             solar_controllers_uid.append(
                 {
                     'uid': str(controller['_id']),
-                    'name': controller['name'],
+                    'name': name,
                     'location': location,
                     'ip': ip,
                     'model': model,
