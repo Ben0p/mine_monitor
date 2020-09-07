@@ -1,7 +1,7 @@
 master = {
-    "Van Input" : 4040,
-    "Vbn Input" : 4042,
-    "Vcn Input" : 4044,
+    "Van Input" : 0,
+    "Vbn Input" : 0,
+    "Vcn Input" : 0,
     "System Status"	: "",
     "Output State" : "",
     "Battery Voltage" : 0,

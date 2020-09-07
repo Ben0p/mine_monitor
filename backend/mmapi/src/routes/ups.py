@@ -115,7 +115,7 @@ class ups_modules(Resource):
 
     def get(self):
         # Get solar modules
-        ups_modules = DB['ups_modules'].find()
+        ups_modules = DB['ups_modules'].find().sort("location",pymongo.ASCENDING)
 
         return(jsonify(json.loads(dumps(ups_modules))))
 
@@ -132,17 +132,17 @@ class ups_status(Resource):
                     "_id" : "$module_uid",
                     "unix" : { "$first": "$unix" },
                     "status" : { "$first": "$status" },
-                    "state" : { "$first": "$state" },
-                    "van_in" : { "$first": "$van_in" },
-                    "vbn_in" : { "$first": "$vbn_in" },
-                    "vcn_in" : { "$first": "vcn_in" },
-                    "batt_volts" : { "$first": "$batt_volts" },
-                    "va_out" : { "$first": "$va_out" },
-                    "load_precent" : { "$first": "$load_precent" },
-                    "pf_out" : { "$first": "$pf_out" },
+                    "phases" : { "$first": "$phases" },
+                    "batt_status" : { "$first": "$batt_status" },
+                    "batt_icon" : { "$first": "$batt_icon" },
+                    "load_percent" : { "$first": "$load_precent" },
+                    "load_status" : { "$first": "$load_status" },
+                    "load_icon" : { "$first": "$load_icon" },
                     "batt_remaining" : { "$first": "$batt_remaining" },
                     "kw_out" : { "$first": "$kw_out" },
                     "temp" : { "$first": "$temp" },
+                    "temp_status" : { "$first": "$temp_status" },
+                    "temp_icon" : { "$first": "$temp_icon" },
                 }
             }
         ])
