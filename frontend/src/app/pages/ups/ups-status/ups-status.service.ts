@@ -10,7 +10,7 @@ import { Ups } from './ups-status';
   providedIn: 'root'
 })
 export class UpsStatusService {
-  private upsUrl = 'http://localhost:5000/api/ups/status';
+  private upsUrl = 'https://solmm01.fmg.local/api/ups/status';
 
   getUpsStatus() {
     return this.http.get<Ups[]>(this.upsUrl)

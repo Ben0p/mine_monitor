@@ -9,7 +9,7 @@ import { Module } from './ups-modules';
   providedIn: 'root'
 })
 export class UpsModuleService {
-  private modulesUrl = 'http://localhost:5000/api/ups/modules';
+  private modulesUrl = 'https://solmm01.fmg.local/api/ups/modules';
 
   getUpsModules() {
     return this.http.get<Module[]>(this.modulesUrl)
