@@ -253,8 +253,9 @@ class map_sds(Resource):
 
         '''
         REMEMBER to remove the -2880 when deploying to server running on UTC
+        ONLY this, no other changes to times
         '''
-        utc_unix = time.time() -28800
+        utc_unix = time.time()
 
         # -8 hours -30 minutes
         start = datetime.datetime.fromtimestamp(utc_unix - 1800)

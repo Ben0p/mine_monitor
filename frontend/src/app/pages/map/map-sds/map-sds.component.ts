@@ -41,7 +41,7 @@ export class MapSdsComponent implements OnInit {
       .subscribe(
         value => console.log(viewer.clockViewModel.currentTime)
       )
-      */
+      
 
 
       const subject = new Subject();
@@ -53,7 +53,7 @@ export class MapSdsComponent implements OnInit {
         )
         .subscribe(val => console.log(viewer.clockViewModel.currentTime));
       
-
+    */
 
 
     /** 
