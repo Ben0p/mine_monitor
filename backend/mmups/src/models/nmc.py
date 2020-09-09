@@ -18,16 +18,18 @@ def walk(host, oid):
                               UdpTransportTarget((host, 161)),
                               ContextData(),
                               ObjectType(ObjectIdentity(oid)),
+                              lookupMib=False,
+                              lexicographicMode=False
                               ):
 
         if errorIndication:
             print(errorIndication, file=sys.stderr)
-            break
+            return(False)
 
         elif errorStatus:
             print('%s at %s' % (errorStatus.prettyPrint(),
                                 errorIndex and varBinds[int(errorIndex) - 1][0] or '?'), file=sys.stderr)
-            break
+            return(False)
 
         else:
             oid, value = varBinds[0]
@@ -47,44 +49,60 @@ def walk(host, oid):
 def getData(ups):
     # Get all SNMP values
     ''' 
-    Start: 1.3.6.1.2.1.33.1.{i}
-        Battery Charge: 1.3.6.1.2.1.33.1.2.4.0
-        Voltage: 1.3.6.1.2.1.33.1.3.3.1.3.1
-        Load: 1.3.6.1.2.1.33.1.4.4.1.5.1
-        Out: 1.3.6.1.2.1.33.1.9.8.0
+    Inputs:
+        Start: 1.3.6.1.2.1.33.1
+            Battery Charge %: 1.3.6.1.2.1.33.1.2.4.0
+            Input Voltage:    1.3.6.1.2.1.33.1.3.3.1.3.1
+    
+    Outputs:
+        Start: 1.3.6.1.4.1.534.1.4
+            Load %:    1.3.6.1.4.1.534.1.4.1.0
+            Watts Out: 1.3.6.1.4.1.534.1.4.4.1.4.1
 
-    Start: 1.3.6.1.4.1.705.1.8.{i}
-        Temp: 1.3.6.1.4.1.705.1.8.1.0
-        Humidity: 1.3.6.1.4.1.705.1.8.2.0
+    Environmental
+        Start: 1.3.6.1.4.1.705.1.8
+            Temp:     1.3.6.1.4.1.705.1.8.1.0
+            Humidity: 1.3.6.1.4.1.705.1.8.2.0
     '''
 
-    # Power values
-    power_results = walk(ups['ip'], '1.3.6.1.2.1.33.1')
-    # Environmental results
-    env_results = walk(ups['ip'], '1.3.6.1.4.1.705.1.8')
-
-    # Get values
+    ups_data = {
+        'online' : False,
+        'batt_remaining' : 0,
+        'load_percent' : 0,
+        'volts_in' : 0,
+        'kw_out' : 0,
+        'temp' : 0,
+        'module_uid' : ups['_id']
+    }
 
     try:
-        ups_data = {
-            'online' : True,
-            'batt_remaining' : int(power_results[f'1.3.6.1.2.1.33.1.2.4.0']),
-            'load_percent' : int(power_results[f'1.3.6.1.2.1.33.1.4.4.1.5.1']),
-            'volts_in' : int(power_results[f'1.3.6.1.2.1.33.1.3.3.1.3.1']),
-            'kw_out' : int(power_results[f'1.3.6.1.2.1.33.1.9.8.0']) / 10,
-            'temp' : int(env_results[f'1.3.6.1.4.1.705.1.8.1.0']) / 10,
-            'module_uid' : ups['_id']
-        }
+        # Battery %
+        batt_remaining = walk(ups['ip'], '1.3.6.1.2.1.33.1.2.4')
+
+        # If online:
+        if batt_remaining:
+            # Input
+            volts_in = walk(ups['ip'], '1.3.6.1.2.1.33.1.3.3.1.3')
+            # Output
+            load_percent = walk(ups['ip'], '1.3.6.1.4.1.534.1.4.1')
+            kw_out = walk(ups['ip'], '1.3.6.1.4.1.534.1.4.4.1.4')
+            # Environmental results
+            temp = walk(ups['ip'], '1.3.6.1.4.1.705.1.8.1')
+
+        # Get values
+
+            ups_data = {
+                'online' : True,
+                'batt_remaining' : int(batt_remaining[f'1.3.6.1.2.1.33.1.2.4.0']),
+                'volts_in' : int(volts_in[f'1.3.6.1.2.1.33.1.3.3.1.3.1']),
+                'load_percent' : int(load_percent[f'1.3.6.1.4.1.534.1.4.1.0']),
+                'kw_out' : int(kw_out[f'1.3.6.1.4.1.534.1.4.4.1.4.1']) / 1000,
+                'temp' : int(temp[f'1.3.6.1.4.1.705.1.8.1.0']) / 10,
+                'module_uid' : ups['_id']
+            }
     except:
-        ups_data = {
-            'online' : False,
-            'batt_remaining' : 0,
-            'load_percent' : 0,
-            'volts_in' : 0,
-            'kw_out' : 0,
-            'temp' : 0,
-            'module_uid' : ups['_id']
-        }
+        print("Failed to process values")
+
 
     return(ups_data)
 
