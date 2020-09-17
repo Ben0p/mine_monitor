@@ -1,3 +1,4 @@
+from env.sol import env
 
 from pysnmp.hlapi import *
 import sys
@@ -14,7 +15,7 @@ def walk(host, oid):
          errorStatus,
          errorIndex,
          varBinds) in nextCmd(SnmpEngine(),
-                              CommunityData('m4DDt6ca', mpModel=0),
+                              CommunityData(env['ups_snmp'], mpModel=0),
                               UdpTransportTarget((host, 161)),
                               ContextData(),
                               ObjectType(ObjectIdentity(oid)),

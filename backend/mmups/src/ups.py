@@ -7,7 +7,8 @@ from models import pxgx, nmc
 
 
 # Initialize mongo
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+CLIENT = pymongo.MongoClient(
+    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
 
 
@@ -19,23 +20,51 @@ def getUPSs():
 
 def updateDB(ups):
 
+    # Historical
     DB['ups_data'].insert_one(
         {
-            'module_uid' : ups['module_uid'],
-            "unix" : time.time(),
-            "status" : ups['status'],
-            "phases" : ups['phases'],
-            "load_precent" : ups['load_percent'],
-            "load_status" : ups['load_status'],
-            "load_icon" : ups['load_icon'],
-            "batt_remaining" : ups['batt_remaining'],
-            "batt_status" : ups['batt_status'],
-            "batt_icon" : ups['batt_icon'],
-            "kw_out" : ups['kw_out'],
-            "temp" : ups['temp'],
-            "temp_status" : ups['temp_status'],
-            "temp_icon" : ups['temp_icon'],
+            'module_uid': ups['module_uid'],
+            "unix": time.time(),
+            "status": ups['status'],
+            "phases": ups['phases'],
+            "load_percent": ups['load_percent'],
+            "load_status": ups['load_status'],
+            "load_icon": ups['load_icon'],
+            "batt_remaining": ups['batt_remaining'],
+            "batt_status": ups['batt_status'],
+            "batt_icon": ups['batt_icon'],
+            "kw_out": ups['kw_out'],
+            "temp": ups['temp'],
+            "temp_status": ups['temp_status'],
+            "temp_icon": ups['temp_icon'],
         }
+    )
+
+    # Live
+    DB['ups_live'].find_one_and_update(
+        {
+            'module_uid': ups['module_uid'],
+        },
+        {
+            '$set': {
+                'module_uid': ups['module_uid'],
+                "unix": time.time(),
+                "status": ups['status'],
+                "phases": ups['phases'],
+                "load_percent": ups['load_percent'],
+                "load_status": ups['load_status'],
+                "load_icon": ups['load_icon'],
+                "batt_remaining": ups['batt_remaining'],
+                "batt_status": ups['batt_status'],
+                "batt_icon": ups['batt_icon'],
+                "kw_out": ups['kw_out'],
+                "temp": ups['temp'],
+                "temp_status": ups['temp_status'],
+                "temp_icon": ups['temp_icon'],
+            }
+        },
+        upsert=True
+
     )
 
 
@@ -45,8 +74,8 @@ def truncate_data(seconds):
 
     DB['ups_data'].delete_many(
         {
-            'unix' : {
-                '$lte' : time.time() - seconds
+            'unix': {
+                '$lte': time.time() - seconds
             }
         },
     )
@@ -67,15 +96,13 @@ def poll():
                 processed = nmc.poll(ups)
 
             updateDB(processed)
-        
+
         print("Truncate Data")
         truncate_data(604800)
         print("Sleep 10sec")
         time.sleep(10)
 
-        
+
 if __name__ == "__main__":
 
     poll()
-    
-

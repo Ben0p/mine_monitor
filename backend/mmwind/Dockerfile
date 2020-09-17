@@ -1,23 +1,13 @@
-FROM python:3.7-alpine
+FROM python:3.8.0-alpine
 
-RUN apk update
-RUN apk add curl gcc libc-dev g++ libffi-dev libxml2 unixodbc-dev mariadb-dev postgresql-dev
-RUN apk add freetds freetds-dev
+RUN sed -i -e 's/v3\.4/edge/g' /etc/apk/repositories  && \
+    apk --no-cache add alpine-sdk librdkafka-dev openssl-dev libffi-dev unixodbc unixodbc-dev freetds-dev python python-dev py-pip build-base
 
-#Download the desired package(s)
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.5.2.2-1_amd64.apk
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.5.2.1-1_amd64.apk
+RUN pip install cython==0.28.5
 
-#Install the package(s)
-RUN apk add --allow-untrusted msodbcsql17_17.5.2.2-1_amd64.apk
-RUN apk add --allow-untrusted mssql-tools_17.5.2.1-1_amd64.apk
+RUN pip install git+https://github.com/pymssql/pymssql.git
 
-#Python
-RUN pip install --upgrade pip
-RUN pip install pyodbc
 RUN pip install pymongo
-
-ADD odbcinst.ini /etc/odbcinst.ini
 
 COPY src /app
 WORKDIR /app/src

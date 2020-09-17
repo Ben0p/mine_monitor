@@ -12,13 +12,15 @@ from flask import jsonify, request
 import datetime
 
 # Initialize mongo connection one time
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+CLIENT = pymongo.MongoClient(
+    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
+
 
 def windDirection(deg):
     deg = float(deg)
     direction = 'N'
-    
+
     if deg >= 349 and deg <= 11:
         direction = 'N'
     elif deg >= 12 and deg <= 33:
@@ -46,13 +48,14 @@ def windDirection(deg):
     elif deg >= 259 and deg <= 281:
         direction = 'W'
     elif deg >= 282 and deg <= 303:
-        direction = 'WNW'        
+        direction = 'WNW'
     elif deg >= 304 and deg <= 326:
         direction = 'NW'
     elif deg >= 327 and deg <= 348:
-        direction = 'NNW'    
+        direction = 'NNW'
 
     return(direction)
+
 
 def windKnots(speed):
     knots = float(speed) * 1.943844
@@ -60,14 +63,16 @@ def windKnots(speed):
 
     return(knots)
 
+
 def windKmh(speed):
     kmh = float(speed) * 3.6
     kmh = round(kmh, 2)
 
     return(kmh)
 
+
 def windHour(name):
-    
+
     current_hour = int(time.strftime('%Y%m%d%H'))
     max_hour = 0
 
@@ -77,15 +82,16 @@ def windHour(name):
         hours = wind_minute['hour']
     except:
         hours = []
-    
+
     # I ROFLed over this one
     if len(hours) >= 1:
         for hour in hours:
             if hour['hour'] > max_hour:
                 max_hour = hour['hour']
-    
+
     eight_hours = time.time() + 28800
-    formatted_time = time.strftime('%d/%m/%Y %H00', time.localtime(eight_hours))
+    formatted_time = time.strftime(
+        '%d/%m/%Y %H00', time.localtime(eight_hours))
 
     if current_hour > max_hour:
 
@@ -109,35 +115,32 @@ def windHour(name):
                 'name': name,
             },
             {
-                '$push' : {
-                    'hour' : {
+                '$push': {
+                    'hour': {
                         'utc': datetime.datetime.utcnow(),
-                        'unix' : time.time(),
+                        'unix': time.time(),
                         'time': formatted_time,
                         'hour': current_hour,
-                        'ms' : {
-                            'max' : maximum,
-                            'min' : minimum,
-                            'avg' : average
+                        'ms': {
+                            'max': maximum,
+                            'min': minimum,
+                            'avg': average
                         },
-                        'knots' : {
-                            'max' : max_knots,
-                            'min' : min_knots,
-                            'avg' : avg_knots
+                        'knots': {
+                            'max': max_knots,
+                            'min': min_knots,
+                            'avg': avg_knots
                         },
-                        'kmh' : {
-                            'max' : max_kmh,
-                            'min' : min_kmh,
-                            'avg' : avg_kmh
+                        'kmh': {
+                            'max': max_kmh,
+                            'min': min_kmh,
+                            'avg': avg_kmh
                         },
                     },
                 },
             },
-            upsert = True
+            upsert=True
         )
-
-
-
 
 
 class wind_collect(Resource):
@@ -158,22 +161,23 @@ class wind_collect(Resource):
         kmh = windKmh(args['speedV'])
 
         eight_hours = time.time() + 28800
-        formatted_time = time.strftime('%d/%m/%Y %X', time.localtime(eight_hours))
+        formatted_time = time.strftime(
+            '%d/%m/%Y %X', time.localtime(eight_hours))
 
         DB['wind_live'].find_one_and_update(
             {
-                'name':args['name']
+                'name': args['name']
             },
             {
                 '$set': {
-                    'mac' : args['mac'],
+                    'mac': args['mac'],
                     'ip': request.remote_addr,
-                    'name' : args['name'],
-                    'degrees' : args['directionV'],
-                    'direction' : direction,
-                    'ms' : args['speedV'],
-                    'knots' : knots,
-                    'kmh' : kmh,
+                    'name': args['name'],
+                    'degrees': args['directionV'],
+                    'direction': direction,
+                    'ms': args['speedV'],
+                    'knots': knots,
+                    'kmh': kmh,
                 }
             },
             upsert=True
@@ -181,23 +185,23 @@ class wind_collect(Resource):
 
         DB['wind_history'].update(
             {
-                'name':args['name'],
+                'name': args['name'],
             },
             {
-                '$push' : {
-                    'minute' : {
+                '$push': {
+                    'minute': {
                         'utc': datetime.datetime.utcnow(),
-                        'unix' : time.time(),
+                        'unix': time.time(),
                         'time': formatted_time,
-                        'degrees' : args['directionV'],
-                        'direction' : direction,
-                        'ms' : args['speedV'],
-                        'knots' : knots,
-                        'kmh' : kmh,
+                        'degrees': args['directionV'],
+                        'direction': direction,
+                        'ms': args['speedV'],
+                        'knots': knots,
+                        'kmh': kmh,
                     },
                 },
             },
-            upsert = True
+            upsert=True
         )
 
         DB['wind_history'].update(
@@ -205,15 +209,15 @@ class wind_collect(Resource):
                 'name': args['name'],
             },
             {
-                '$pull' : {
-                    'minute' : {
-                        'unix' : { 
-                            '$lte': time.time() - 3600 # 1 hour
+                '$pull': {
+                    'minute': {
+                        'unix': {
+                            '$lte': time.time() - 3600  # 1 hour
                         },
                     },
-                    'hours' : {
-                        'unix' : { 
-                            '$lte': time.time() - 172800 # 48 hours
+                    'hours': {
+                        'unix': {
+                            '$lte': time.time() - 172800  # 48 hours
                         }
                     }
                 }
@@ -231,6 +235,7 @@ class wind_all(Resource):
 
         return(jsonify(json.loads(dumps(winds))))
 
+
 class wind_minute(Resource):
 
     def get(self, name, units):
@@ -244,19 +249,18 @@ class wind_minute(Resource):
         time = [minute['time'] for minute in speed['minute']]
         speed = [minute[units] for minute in speed['minute']]
 
-
         result = {
-            'name' : name,
-            'time'  : time,
-            'speed' : speed
+            'name': name,
+            'time': time,
+            'speed': speed
         }
-
 
         return(jsonify(json.loads(dumps(result))))
 
+
 class wind_hour(Resource):
 
-    def get(self, name, units):
+    def get(self, uid):
 
         time = []
 
@@ -272,53 +276,43 @@ class wind_hour(Resource):
         knots_min = []
         knots_avg = []
 
-        speed = DB['wind_history'].find_one(
+        time_now = datetime.datetime.now()
+        time_hour = time_now - datetime.timedelta(hours=1)
+
+        hour_data = DB['wind_data'].find(
             {
-                'name': name,
+                ''
+                'timestamp': {
+                    '$lt': time_now,
+                    '$gte': time_hour
+                }
             }
         )
 
-        if 'hour' in speed:
-            for hour in speed['hour']:
-                time.append(hour['time'])
-
-                ms_max.append(hour['ms']['max'])
-                ms_min.append(hour['ms']['min'])
-                ms_avg.append(hour['ms']['avg'])
-
-                kmh_max.append(hour['kmh']['max'])
-                kmh_min.append(hour['kmh']['min'])
-                kmh_avg.append(hour['kmh']['avg'])
-
-                knots_max.append(hour['knots']['max'])
-                knots_min.append(hour['knots']['min'])
-                knots_avg.append(hour['knots']['avg'])
-
-            result = {
-                'name' : name,
-                'time'  : time,
-                'ms': {
-                    'max' : ms_max,
-                    'min' : ms_min,
-                    'avg' : ms_avg,
-                },
-                'kmh' : {
-                    'max' : kmh_max,
-                    'min' : kmh_min,
-                    'avg' : kmh_avg,
-                },
-                'knots' : {
-                    'max' : knots_max,
-                    'min' : knots_min,
-                    'avg' : knots_avg,
-                }
+        '''
+        result = {
+            'name': name,
+            'time': time,
+            'ms': {
+                'max': ms_max,
+                'min': ms_min,
+                'avg': ms_avg,
+            },
+            'kmh': {
+                'max': kmh_max,
+                'min': kmh_min,
+                'avg': kmh_avg,
+            },
+            'knots': {
+                'max': knots_max,
+                'min': knots_min,
+                'avg': knots_avg,
             }
+        }
+        '''
 
-        else:
-            result = []
+        return(jsonify(json.loads(dumps(hour_data))))
 
-
-        return(jsonify(json.loads(dumps(result))))
 
 class wind_info(Resource):
 
@@ -327,5 +321,3 @@ class wind_info(Resource):
         wind = DB['wind_live'].find_one({'name': name})
 
         return(jsonify(json.loads(dumps(wind))))
-
-

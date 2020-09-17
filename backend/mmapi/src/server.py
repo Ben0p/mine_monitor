@@ -75,10 +75,10 @@ API.add_resource(check, "/api/check")
 API.add_resource(auth, "/api/auth")
 
 # Wind
-API.add_resource(wind_collect, '/api/wind/<string:name>')
+API.add_resource(wind_collect, '/api/wind/collector/<string:name>')
 API.add_resource(wind_all, '/api/wind/all')
 API.add_resource(wind_minute, '/api/wind/minute/<string:name>/<string:units>')
-API.add_resource(wind_hour, '/api/wind/hour/<string:name>/<string:units>')
+API.add_resource(wind_hour, '/api/wind/hour/<string:uid>')
 API.add_resource(wind_info, '/api/wind/info/<string:name>')
 
 # Tetra

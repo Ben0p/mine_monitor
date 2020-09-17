@@ -12,7 +12,6 @@ from flask import jsonify, request, Response
 import datetime
 
 
-
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
 DB = CLIENT[env['database']]
@@ -72,7 +71,7 @@ class ups_create(Resource):
         }
 
         try:
-            DB['ups_data'].insert_one(blank_data)
+            DB['ups_live'].insert_one(blank_data)
             return({'success': True, 'message': 'Created {}'.format(args['name'])})
         except:
             # Delete the module if the blank data fails to insert (Frontend wigs out)
@@ -147,7 +146,13 @@ class ups_delete(Resource):
                 },
             )
 
-            total_del = module_del_count.deleted_count + data_del_count.deleted_count 
+            live_del_count = DB['ups_live'].delete_many(
+                {
+                    "module_uid": ObjectId(oid),
+                },
+            )
+
+            total_del = module_del_count.deleted_count + data_del_count.deleted_count + live_del_count.deleted_count
 
             if total_del > 0:
                 return({'success': True, 'message': 'Deleted {} objects.'.format(total_del)})
@@ -188,27 +193,24 @@ class ups_status(Resource):
 
     def get(self):
 
+
         # Get most recent
-        ups_status = DB['ups_data'].aggregate([
-            { "$sort": { "unix": -1 } },
-            { 
-                "$group" : {
-                    "_id" : "$module_uid",
-                    "unix" : { "$first": "$unix" },
-                    "status" : { "$first": "$status" },
-                    "phases" : { "$first": "$phases" },
-                    "batt_status" : { "$first": "$batt_status" },
-                    "batt_icon" : { "$first": "$batt_icon" },
-                    "load_percent" : { "$first": "$load_precent" },
-                    "load_status" : { "$first": "$load_status" },
-                    "load_icon" : { "$first": "$load_icon" },
-                    "batt_remaining" : { "$first": "$batt_remaining" },
-                    "kw_out" : { "$first": "$kw_out" },
-                    "temp" : { "$first": "$temp" },
-                    "temp_status" : { "$first": "$temp_status" },
-                    "temp_icon" : { "$first": "$temp_icon" },
-                }
-            }
-        ])
+        ups_live = DB['ups_live'].find()
+        ups_modules = DB['ups_modules'].find()
+
+
+        modules = {}
+        for module in ups_modules:
+            modules[str(module['_id'])] = module
+
+        lives = []
+        for live in ups_live:
+            module_id = str(live['module_uid'])
+            live['name'] = modules[module_id]['name']
+            live['location'] = modules[module_id]['location']
+            live['ip'] = modules[module_id]['ip']
+            live['type'] = modules[module_id]['type']
+            lives.append(live)
+
         
-        return(jsonify(json.loads(dumps(ups_status))))
+        return(jsonify(json.loads(dumps(lives))))

@@ -16,16 +16,18 @@ TODO:
 '''
 
 # Initialize mongo
-CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
+CLIENT = pymongo.MongoClient(
+    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
 
 # Initialize SQL
 cnxn = pymssql.connect(
-    server = env['pcs_sql_server'],
-    user = f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
-    password = env['pcs_sql_password']
+    server=env['pcs_sql_server'],
+    user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
+    password=env['pcs_sql_password']
 )
 cursor = cnxn.cursor()
+
 
 def poll_anemometers():
 
@@ -36,19 +38,18 @@ def poll_anemometers():
         [Data] \
         FROM [SOLOPFReports].[PCS].[DataPublish] \
         where Subscriber = 'solmm01' \
-        order by Timestamp desc")  
+        order by Timestamp desc")
     rows = cursor.fetchall()
 
     # Iterate rows (should only be one anyway)
     for row in rows:
 
-
         # Get time object and format it
         timestamp = row[0]
         time_string = timestamp.strftime('%d/%m/%Y %H:%M:%S')
-        print("-"*30)
+        print("-"*32)
         print(f"Time Stamp: {time_string}")
-        print("-"*30)
+        print("-"*32)
 
         # Load json data
         data = json.loads(row[2])
@@ -58,7 +59,7 @@ def poll_anemometers():
 
             module = DB['wind_modules'].find_one(
                 {
-                    'tag' : key,
+                    'tag': key,
                 }
             )
 
@@ -70,19 +71,23 @@ def poll_anemometers():
                     kmh = ms * 3.6
                     kmh = round(kmh, 2)
                     knots = ms * 1.944
-                    knots = round(knots,2)
+                    knots = round(knots, 2)
 
                 # Print out the data points (for each unit)
                 print(f"{module['name']}:")
                 for datapoint in value:
                     try:
-                        datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
+                        datapoint_time = datetime.datetime.strptime(
+                            datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
                     except ValueError:
-                        datapoint_time = datetime.datetime.strptime(datapoint['T'], '%Y-%m-%dT%H:%M:%S')
+                        datapoint_time = datetime.datetime.strptime(
+                            datapoint['T'], '%Y-%m-%dT%H:%M:%S')
 
                     # Add time offset and format to readable string
-                    datapoint_time = datapoint_time + datetime.timedelta(hours=env['time_offset'])
-                    datapoint_time_string = datapoint_time.strftime('%d/%m/%Y %H:%M:%S')
+                    datapoint_time = datapoint_time + \
+                        datetime.timedelta(hours=env['time_offset'])
+                    datapoint_time_string = datapoint_time.strftime(
+                        '%d/%m/%Y %H:%M:%S')
 
                     if kmh <= 20:
                         speed = 'slow'
@@ -102,40 +107,71 @@ def poll_anemometers():
                     else:
                         online = True
 
-                    
                     print(f"    {datapoint_time} - {datapoint['V']} m/s")
 
-                
                 # Insert into mongo DB
 
                 DB['wind_live'].find_one_and_update(
-                            {
-                                'name' : module['name'],
-                            },
-                            {
-                                '$set': {
-                                    'type' : "speed",
+                    {
+                        'name': module['name'],
+                    },
+                    {
+                        '$set': {
+                            'type': "speed",
                                     'name': module['name'],
-                                    'timestamp' : datapoint_time,
-                                    'time' : datapoint_time_string,
-                                    'ms' : ms,
-                                    'kmh' : kmh,
-                                    'knots' : knots,
-                                    'online' : online,
-                                    'speed' : speed,
-                                    'status' : status,
-                                    'description' : module['description'],
-                                    'tag' : module['tag']
-                                }
-                            },
-                            upsert=True
-                        )
+                                    'module_uid' : module['_id'],
+                                    'timestamp': datapoint_time,
+                                    'time': datapoint_time_string,
+                                    'ms': ms,
+                                    'kmh': kmh,
+                                    'knots': knots,
+                                    'online': online,
+                                    'speed': speed,
+                                    'status': status,
+                                    'description': module['description'],
+                                    'tag': module['tag']
+                        }
+                    },
+                    upsert=True
+                )
 
+                DB['wind_data'].insert_one(
+                    {
+
+                        'type': "speed",
+                        'name': module['name'],
+                        'timestamp': datapoint_time,
+                        'time': datapoint_time_string,
+                        'ms': ms,
+                        'kmh': kmh,
+                        'knots': knots,
+                        'online': online,
+                        'speed': speed,
+                        'status': status,
+                        'description': module['description'],
+                        'tag': module['tag']
+
+                    }
+                )
+
+
+def truncate_data(seconds):
+    ''' Delete UPS data older than 1 week
+    '''
+
+    DB['wind_data'].delete_many(
+        {
+            'unix': {
+                '$lte': time.time() - seconds
+            }
+        },
+    )
 
 
 if __name__ == "__main__":
 
     while True:
         poll_anemometers()
+        truncate_data(604800)
 
         time.sleep(10)

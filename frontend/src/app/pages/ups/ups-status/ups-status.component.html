@@ -1,4 +1,4 @@
-<nb-card  *ngIf="ups$ | async as upss">
+<nb-card *ngIf="ups$ | async as upss">
     <nb-list>
         <nb-list-item class="item">
             <span>Name</span>
@@ -11,6 +11,10 @@
         </nb-list-item>
         <nb-list-item class="item" *ngFor="let ups of upss">
             <span>
+                <a style="cursor: pointer;" href="http://{{ups.ip}}/" target="_blank">
+                    <nb-icon [icon]="'external-link-outline'" class="icon status-primary"> </nb-icon>
+                </a>
+
                 {{ ups.location }}
             </span>
             <span>

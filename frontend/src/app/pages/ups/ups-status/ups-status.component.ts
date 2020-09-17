@@ -1,9 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { catchError, map, tap, shareReplay } from 'rxjs/operators';
-import { Subject, EMPTY, combineLatest } from 'rxjs';
+import { Subject, combineLatest, EMPTY } from 'rxjs';
 
 import { UpsStatusService } from './ups-status.service';
-import { UpsModuleService } from '../ups-modules/ups-modules.service';
 
 
 @Component({
@@ -18,19 +17,17 @@ export class UpsStatusComponent {
 
   constructor(
     private upsStatusService: UpsStatusService,
-    private upsModuleService: UpsModuleService,
   ) { }
 
-  mergeById = ([t, s]) => t.map(p => Object.assign({}, p, s.find(q => p._id.$oid === q._id.$oid)));
+  ups$ = this.upsStatusService.ups$
+  .pipe(
+    catchError(err => {
+      this.errorMessageSubject.next(err);
+      return EMPTY
+    })
+  );
 
-  ups$ = combineLatest([
-    this.upsModuleService.ups$,
-    this.upsStatusService.ups$
-  ])
-    .pipe(
-      map(this.mergeById),
-      shareReplay(1)
-    );
+
 }
 
 
