@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'https://solmm01.fmg.local/api/wind/';
+const APIurl: String = 'http://localhost:5000/api/wind/';
 
 @Injectable({
   providedIn: 'root',
@@ -59,16 +59,15 @@ export class WindService {
     );
   }
 
-
-  getWindMinute(name, units): Observable<any> {
-    return this.http.get(APIurl + "minute/" + name + "/" + units).pipe(
+  getWindHour(uid): Observable<any> {
+    return this.http.get(APIurl + "hour/" + uid).pipe(
       map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );
   }
 
-  getWindHour(name, units): Observable<any> {
-    return this.http.get(APIurl + "hour/" + name + "/" + units).pipe(
+  getWindDay(uid): Observable<any> {
+    return this.http.get(APIurl + "day/" + uid).pipe(
       map(this.extractData),
       catchError(this.handleError<any>("failed"))
     );

@@ -11,14 +11,14 @@ import { ActivatedRoute } from '@angular/router';
 
 export class DetailComponent implements OnInit {
 
-  name: any;
+  uid: any;
 
   constructor(
     private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
-    this.name = this.route.snapshot.paramMap.get('name');
+    this.uid = this.route.snapshot.paramMap.get('uid');
   }
 
 }

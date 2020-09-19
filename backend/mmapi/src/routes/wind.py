@@ -70,6 +70,12 @@ def windKmh(speed):
 
     return(kmh)
 
+def avg(speeds):
+
+    average = sum(speeds) / len(speeds)
+    average = round(average, 2)
+    return(average)
+
 
 def windHour(name):
 
@@ -236,82 +242,32 @@ class wind_all(Resource):
         return(jsonify(json.loads(dumps(winds))))
 
 
-class wind_minute(Resource):
-
-    def get(self, name, units):
-
-        speed = DB['wind_history'].find_one(
-            {
-                'name': name,
-            }
-        )
-
-        time = [minute['time'] for minute in speed['minute']]
-        speed = [minute[units] for minute in speed['minute']]
-
-        result = {
-            'name': name,
-            'time': time,
-            'speed': speed
-        }
-
-        return(jsonify(json.loads(dumps(result))))
-
-
 class wind_hour(Resource):
 
     def get(self, uid):
 
-        time = []
-
-        ms_max = []
-        ms_min = []
-        ms_avg = []
-
-        kmh_max = []
-        kmh_min = []
-        kmh_avg = []
-
-        knots_max = []
-        knots_min = []
-        knots_avg = []
-
-        time_now = datetime.datetime.now()
-        time_hour = time_now - datetime.timedelta(hours=1)
-
-        hour_data = DB['wind_data'].find(
+        module = DB['wind_history'].find_one(
             {
-                ''
-                'timestamp': {
-                    '$lt': time_now,
-                    '$gte': time_hour
-                }
+                'module_uid' : ObjectId(uid),
+                'range' : 'hour'
             }
-        )
+        )        
 
-        '''
-        result = {
-            'name': name,
-            'time': time,
-            'ms': {
-                'max': ms_max,
-                'min': ms_min,
-                'avg': ms_avg,
-            },
-            'kmh': {
-                'max': kmh_max,
-                'min': kmh_min,
-                'avg': kmh_avg,
-            },
-            'knots': {
-                'max': knots_max,
-                'min': knots_min,
-                'avg': knots_avg,
+        return(jsonify(json.loads(dumps(module))))
+
+
+class wind_day(Resource):
+
+    def get(self, uid):
+
+        module = DB['wind_history'].find_one(
+            {
+                'module_uid' : ObjectId(uid),
+                'range' : 'day'
             }
-        }
-        '''
+        )        
 
-        return(jsonify(json.loads(dumps(hour_data))))
+        return(jsonify(json.loads(dumps(module))))
 
 
 class wind_info(Resource):

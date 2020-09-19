@@ -14,7 +14,7 @@ const routes: Routes = [{
       component: AllComponent,
     },
     {
-      path: ':name',
+      path: ':uid',
       component: DetailComponent,
     },
   ],

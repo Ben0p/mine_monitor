@@ -1,13 +1,12 @@
 from env.sol import env
 
 import pymssql
-#import pyodbc
-
 import json
 import datetime
 import time
 import pymongo
 
+from history import hour, day, month
 
 '''
 TODO:
@@ -54,6 +53,8 @@ def poll_anemometers():
         # Load json data
         data = json.loads(row[2])
 
+        module_uids = []
+
         # Iterate over aneometers in json (dictionary) object
         for key, value in data.items():
 
@@ -64,6 +65,8 @@ def poll_anemometers():
             )
 
             if module:
+
+                module_uids.append(module['_id'])
 
                 if module['units'] == 'ms':
                     # Speed unit conversions
@@ -140,6 +143,7 @@ def poll_anemometers():
 
                         'type': "speed",
                         'name': module['name'],
+                        'module_uid' : module['_id'],
                         'timestamp': datapoint_time,
                         'time': datapoint_time_string,
                         'ms': ms,
@@ -153,6 +157,9 @@ def poll_anemometers():
 
                     }
                 )
+    
+    return(module_uids)
+
 
 
 def truncate_data(seconds):
@@ -171,7 +178,16 @@ def truncate_data(seconds):
 if __name__ == "__main__":
 
     while True:
-        poll_anemometers()
+        module_uids = poll_anemometers()
+        # Process historical data
+        for module_uid in module_uids:
+            # Process last hour
+            hour.process(DB, module_uid)
+            # Process last day
+            day.process(DB, module_uid)
+            # Process last month
+            month.process(DB, module_uid)
+
         truncate_data(604800)
 
         time.sleep(10)

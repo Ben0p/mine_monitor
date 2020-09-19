@@ -8,7 +8,7 @@ import { WindService } from '../../../@core/data/wind.service'
   styleUrls: ['./wind-line-chart.component.scss'],
 })
 export class WindLineChartComponent implements OnInit, OnDestroy {
-  @Input() name: string;
+  @Input() uid: string;
   @Input() range: string;
 
   data: any;
@@ -18,6 +18,7 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   interval: any;
   colors: any;
   unit = 'kmh';
+  name: string;
 
   constructor(
     private theme: NbThemeService,
@@ -81,17 +82,20 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    if (this.range == 'minute') {
-      this.wind.getWindMinute(this.name, this.unit).subscribe(
+    if (this.range == 'hour') {
+      this.wind.getWindHour(this.uid).subscribe(
         (speeds: {}) => {
+          this.name = speeds['name']
           this.windspeed = speeds;
           this.loadData(this.windspeed)
         }
       );
-    } else if (this.range == 'hour') {
-      this.wind.getWindHour(this.name, this.unit).subscribe(
+    } else if (this.range == 'day') {
+      this.wind.getWindDay(this.uid).subscribe(
         (speeds: {}) => {
+          this.name = speeds['name']
           this.windspeed = speeds;
+          console.log(speeds)
           this.loadData(this.windspeed)
         }
       );
@@ -99,10 +103,11 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    console.log(this.uid)
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 10000);
+    }, 30000);
   }
 
   ngOnDestroy(): void {
@@ -111,42 +116,29 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   loadData(windspeed) {
-    if (this.range == 'minute') {
-      this.data = {
-        labels: windspeed['time'],
-        datasets: [{
-          data: windspeed['speed'],
-          label: 'avg',
-          backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
-          borderColor: this.colors.primary,
-        }
-        ],
-      };
-    } else if (this.range == 'hour') {
-      this.data = {
-        labels: windspeed['time'],
-        datasets: [{
-          data: windspeed[this.unit]['max'],
-          label: 'max',
-          backgroundColor: NbColorHelper.hexToRgbA(this.colors.danger, 0.3),
-          borderColor: this.colors.danger,
-        },
-        {
-          data: windspeed[this.unit]['min'],
-          label: 'min',
-          backgroundColor: NbColorHelper.hexToRgbA(this.colors.success, 0.3),
-          borderColor: this.colors.success,
-        },
-        {
-          data: windspeed[this.unit]['avg'],
-          label: 'avg',
-          backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
-          borderColor: this.colors.primary,
-        }
-        ],
-      };
 
-    }
+    this.data = {
+      labels: windspeed['time'],
+      datasets: [{
+        data: windspeed[this.unit]['max'],
+        label: 'max',
+        backgroundColor: NbColorHelper.hexToRgbA(this.colors.danger, 0.3),
+        borderColor: this.colors.danger,
+      },
+      {
+        data: windspeed[this.unit]['min'],
+        label: 'min',
+        backgroundColor: NbColorHelper.hexToRgbA(this.colors.success, 0.3),
+        borderColor: this.colors.success,
+      },
+      {
+        data: windspeed[this.unit]['avg'],
+        label: 'avg',
+        backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
+        borderColor: this.colors.primary,
+      }
+      ],
+    };
 
   }
 
