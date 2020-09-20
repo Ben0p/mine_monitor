@@ -59,6 +59,13 @@ export class WindService {
     );
   }
 
+  getWindMinute(uid): Observable<any> {
+    return this.http.get(APIurl + "minute/" + uid).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
+
   getWindHour(uid): Observable<any> {
     return this.http.get(APIurl + "hour/" + uid).pipe(
       map(this.extractData),

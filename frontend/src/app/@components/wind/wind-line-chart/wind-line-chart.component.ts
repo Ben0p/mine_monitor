@@ -82,7 +82,15 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   refreshData() {
-    if (this.range == 'hour') {
+    if (this.range == 'minute') {
+      this.wind.getWindMinute(this.uid).subscribe(
+        (speeds: {}) => {
+          this.name = speeds['name']
+          this.windspeed = speeds;
+          this.loadData(this.windspeed)
+        }
+      );
+    } else if (this.range == 'hour') {
       this.wind.getWindHour(this.uid).subscribe(
         (speeds: {}) => {
           this.name = speeds['name']
@@ -107,7 +115,7 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();
-    }, 30000);
+    }, 10000);
   }
 
   ngOnDestroy(): void {
@@ -117,28 +125,44 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
 
   loadData(windspeed) {
 
-    this.data = {
-      labels: windspeed['time'],
-      datasets: [{
-        data: windspeed[this.unit]['max'],
-        label: 'max',
-        backgroundColor: NbColorHelper.hexToRgbA(this.colors.danger, 0.3),
-        borderColor: this.colors.danger,
-      },
-      {
-        data: windspeed[this.unit]['min'],
-        label: 'min',
-        backgroundColor: NbColorHelper.hexToRgbA(this.colors.success, 0.3),
-        borderColor: this.colors.success,
-      },
-      {
-        data: windspeed[this.unit]['avg'],
-        label: 'avg',
-        backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
-        borderColor: this.colors.primary,
-      }
-      ],
-    };
+    if (this.range == 'minute') {
+      this.data = {
+        labels: windspeed['time'],
+        datasets: [
+          {
+            data: windspeed[this.unit]['speed'],
+            label: 'Speed',
+            backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
+            borderColor: this.colors.primary,
+          }
+        ],
+      };
+    } else {
+      this.data = {
+        labels: windspeed['time'],
+        datasets: [{
+          data: windspeed[this.unit]['max'],
+          label: 'max',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.danger, 0.3),
+          borderColor: this.colors.danger,
+        },
+        {
+          data: windspeed[this.unit]['min'],
+          label: 'min',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.success, 0.3),
+          borderColor: this.colors.success,
+        },
+        {
+          data: windspeed[this.unit]['avg'],
+          label: 'avg',
+          backgroundColor: NbColorHelper.hexToRgbA(this.colors.primary, 0.3),
+          borderColor: this.colors.primary,
+        }
+        ],
+      };
+    }
+
+
 
   }
 

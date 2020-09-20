@@ -5,41 +5,52 @@ import json
 import datetime
 import time
 import pymongo
+from bson import ObjectId
 
-from history import hour, day, month
+from history import minute, hour, day, month
 
-'''
-TODO:
-    - try except around sql connection and query, exception = offline.
-    - handle no data in json = offline
-'''
+
 
 # Initialize mongo
 CLIENT = pymongo.MongoClient(
     f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
 
-# Initialize SQL
-cnxn = pymssql.connect(
-    server=env['pcs_sql_server'],
-    user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
-    password=env['pcs_sql_password']
-)
-cursor = cnxn.cursor()
+
+def pollSQL():
+    ''' Performs SQL query and returns rows
+    '''
+    
+    try:
+        # Initialize SQL connection
+        cnxn = pymssql.connect(
+            server=env['pcs_sql_server'],
+            user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
+            password=env['pcs_sql_password']
+        )
+        cursor = cnxn.cursor()
+    except:
+        return(False)
+
+    if cursor:
+        # SQL Query
+        cursor.execute("SELECT top 1 \
+            [Timestamp], \
+            [Subscriber], \
+            [Data] \
+            FROM [SOLOPFReports].[PCS].[DataPublish] \
+            where Subscriber = 'solmm01' \
+            order by Timestamp desc")
+        rows = cursor.fetchall()
+        return(rows)
+    else:
+        return(False)
 
 
-def poll_anemometers():
-
-    # SQL Query
-    cursor.execute("SELECT top 1 \
-        [Timestamp], \
-        [Subscriber], \
-        [Data] \
-        FROM [SOLOPFReports].[PCS].[DataPublish] \
-        where Subscriber = 'solmm01' \
-        order by Timestamp desc")
-    rows = cursor.fetchall()
-
+def processData(rows):
+    ''' Processes data in each row returned by the SQL query
+        Returns processed dictionary array
+    '''
     # Iterate rows (should only be one anyway)
     for row in rows:
 
@@ -53,7 +64,8 @@ def poll_anemometers():
         # Load json data
         data = json.loads(row[2])
 
-        module_uids = []
+        # Reset results
+        results = {}
 
         # Iterate over aneometers in json (dictionary) object
         for key, value in data.items():
@@ -66,8 +78,13 @@ def poll_anemometers():
 
             if module:
 
-                module_uids.append(module['_id'])
+                # Create module dictionary in the results dictionary
+                # Also resets it for next module iteration
+                module_uid = str(module['_id'])
+                results[module_uid] = {}
+                results[module_uid]['datapoints'] = []
 
+                # Check speed units
                 if module['units'] == 'ms':
                     # Speed unit conversions
                     ms = float(value[-1]['V'])
@@ -76,13 +93,16 @@ def poll_anemometers():
                     knots = ms * 1.944
                     knots = round(knots, 2)
 
-                # Print out the data points (for each unit)
+                # Print out the name
                 print(f"{module['name']}:")
+                # Iterate datapoints in the value
                 for datapoint in value:
                     try:
+                        # If there is milliseconds
                         datapoint_time = datetime.datetime.strptime(
                             datapoint['T'], '%Y-%m-%dT%H:%M:%S.%f')
                     except ValueError:
+                        # If there is no milliseconds
                         datapoint_time = datetime.datetime.strptime(
                             datapoint['T'], '%Y-%m-%dT%H:%M:%S')
 
@@ -92,6 +112,7 @@ def poll_anemometers():
                     datapoint_time_string = datapoint_time.strftime(
                         '%d/%m/%Y %H:%M:%S')
 
+                    # Process the speed status
                     if kmh <= 20:
                         speed = 'slow'
                         status = 'success'
@@ -110,40 +131,11 @@ def poll_anemometers():
                     else:
                         online = True
 
+                    # Print the result
                     print(f"    {datapoint_time} - {datapoint['V']} m/s")
 
-                # Insert into mongo DB
-
-                DB['wind_live'].find_one_and_update(
-                    {
-                        'name': module['name'],
-                    },
-                    {
-                        '$set': {
-                            'type': "speed",
-                                    'name': module['name'],
-                                    'module_uid' : module['_id'],
-                                    'timestamp': datapoint_time,
-                                    'time': datapoint_time_string,
-                                    'ms': ms,
-                                    'kmh': kmh,
-                                    'knots': knots,
-                                    'online': online,
-                                    'speed': speed,
-                                    'status': status,
-                                    'description': module['description'],
-                                    'tag': module['tag']
-                        }
-                    },
-                    upsert=True
-                )
-
-                DB['wind_data'].insert_one(
-                    {
-
-                        'type': "speed",
-                        'name': module['name'],
-                        'module_uid' : module['_id'],
+                    # Construct dictionary of values
+                    anemometer = {
                         'timestamp': datapoint_time,
                         'time': datapoint_time_string,
                         'ms': ms,
@@ -152,33 +144,81 @@ def poll_anemometers():
                         'online': online,
                         'speed': speed,
                         'status': status,
-                        'description': module['description'],
-                        'tag': module['tag']
-
                     }
-                )
-    
-    return(module_uids)
+
+                    # Append results to dictionary of anemometer uids
+                    results[module_uid]['datapoints'].append(anemometer)
+
+    return(results)
 
 
-
-def truncate_data(seconds):
-    ''' Delete UPS data older than 1 week
+def getLatest(anemometers):
+    ''' Takes list of processed anemometer data
+        Returns most recent data point for each anemometer
     '''
 
-    DB['wind_data'].delete_many(
-        {
-            'unix': {
-                '$lte': time.time() - seconds
-            }
-        },
-    )
+    latest = []
+
+    # Get uid and data
+    for key, value in anemometers.items():
+        # Get last item in datapoints list
+        # (always in order from SQL)
+        latest_data = value['datapoints'][-1]
+        latest_data['module_uid'] = ObjectId(key)
+
+        # Append to latest list
+        latest.append(latest_data)
+
+    return(latest)
 
 
-if __name__ == "__main__":
+def insertLive(anemometers):
+    ''' Takes array of anemometer dictionaries
+        Inserts each anemometer dictionary into MongoDB collection
+    '''
+    
+    for anemometer in anemometers:
+        # Insert into mongo DB
+        DB['wind_live'].find_one_and_update(
+            {
+                'module_uid': anemometer['module_uid'],
+            },
+            {
+                '$set': {
+                    'module_uid' : anemometer['module_uid'],
+                    'timestamp' : anemometer['timestamp'],
+                    'time' : anemometer['time'],
+                    'ms' : anemometer['ms'],
+                    'kmh' : anemometer['kmh'],
+                    'knots' : anemometer['knots'],
+                    'online' : anemometer['online'],
+                    'speed' : anemometer['speed'],
+                    'status' : anemometer['status']
+                }
+            },
+            upsert=True
+        )
 
+
+def run():
+    ''' Main run loop
+    '''
     while True:
-        module_uids = poll_anemometers()
+        # Get data from SQL
+        rows = pollSQL()
+
+        if rows:
+            # Process data
+            anemometers = processData(rows)
+            # Get most recent time stamp
+            latest = getLatest(anemometers)
+            # Insert live data
+            insertLive(latest)
+            # Process current minute
+            minute.process(DB, anemometers)
+
+
+        '''
         # Process historical data
         for module_uid in module_uids:
             # Process last hour
@@ -189,5 +229,12 @@ if __name__ == "__main__":
             month.process(DB, module_uid)
 
         truncate_data(604800)
+        '''
 
-        time.sleep(10)
+        time.sleep(5)
+
+
+
+if __name__ == "__main__":
+
+    run()

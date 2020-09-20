@@ -236,10 +236,66 @@ class wind_collect(Resource):
 class wind_all(Resource):
 
     def get(self):
+        module_ids = {}
+        new_winds = []
 
+        modules = DB['wind_modules'].find()
         winds = DB['wind_live'].find().sort("name", pymongo.ASCENDING)
 
-        return(jsonify(json.loads(dumps(winds))))
+        for module in modules:
+            module_ids[module['_id']] = module
+
+        for wind in winds:
+            module_info = module_ids[wind['module_uid']]
+            wind['tag'] = module_info['tag']
+            wind['name'] = module_info['name']
+            wind['description'] = module_info['description']
+            wind['units'] = module_info['units']
+            wind['type'] = module_info['type']
+            new_winds.append(wind)
+
+        return(jsonify(json.loads(dumps(new_winds))))
+
+class wind_minute(Resource):
+
+    def get(self, uid):
+
+        module = DB['wind_modules'].find_one(
+            {
+                '_id' : ObjectId(uid),
+            }
+        ) 
+        
+        history = DB['wind_history'].find_one(
+            {
+                'module_uid' : ObjectId(uid),
+                'range' : 'minute'
+            }
+        ) 
+
+        data = {
+            'module_uid' : ObjectId(uid),
+            'range' : 'minute',
+            'name' : module['name'],
+            'time' : [],
+            'kmh' : {
+                'speed' : []
+            },
+            'ms' : {
+                'speed' : []
+            },
+            'knots' : {
+                'speed' : []
+            },
+        }
+
+        for datapoint in history['datapoints']:
+            data['time'].append(datapoint['time'])
+            data['kmh']['speed'].append(datapoint['kmh'])
+            data['ms']['speed'].append(datapoint['ms'])
+            data['knots']['speed'].append(datapoint['knots'])
+
+        return(jsonify(json.loads(dumps(data))))
 
 
 class wind_hour(Resource):
