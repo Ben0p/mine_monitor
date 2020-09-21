@@ -3,8 +3,7 @@ from env.sol import env
 import datetime
 import pymongo
 from bson import ObjectId
-
-
+import time
 
 def formatData(anemometers):
     '''
@@ -28,47 +27,45 @@ def insertDB(DB, formatted):
 
     for anemometer in formatted:
 
-        DB['wind_history'].update(
-            {
-                'module_uid': anemometer['module_uid'],
-                'range': anemometer['range']
-            },
-            {
-                '$set': {
+        for datapoint in anemometer['datapoints']:
+
+            timestamp = datapoint['timestamp']
+            second = timestamp.strftime('%Y%m%d%H%M%S')
+
+            DB['wind_history'].find_one_and_update(
+                {
                     'module_uid': anemometer['module_uid'],
                     'range': anemometer['range'],
+                    'second': second
                 },
-                '$push': {
-                    'datapoints': {
-                        '$each' : anemometer['datapoints']
-                        }
+                {
+                    '$set':
+                        {
+                            'module_uid': anemometer['module_uid'],
+                            'range': anemometer['range'],
+                            'second': second,
+                            'timestamp': timestamp,
+                            'time' : datapoint['time'],
+                            'unix': datapoint['unix'],
+                            'ms': datapoint['ms'],
+                            'kmh': datapoint['kmh'],
+                            'knots': datapoint['knots'],
+                        },
                 },
-            },
-            upsert=True
-        )
+                upsert=True
+            )
 
 
 def purge(DB):
 
-    time_now = datetime.datetime.now()
-    time_minute = time_now - datetime.timedelta(minutes=1)
-
-    DB['wind_history'].update_many(
+    DB['wind_history'].delete_many(
         {
             'range': 'minute',
-        },
-        {
-            '$pull': {
-                'datapoints': {
-                    'timestamp': {
-                        '$lte': time_minute
-                    },
-                }
+            'unix': {
+                '$lte': time.time() - 180
             }
         },
     )
-
-
 
 
 def process(DB, anemometers):
@@ -76,7 +73,7 @@ def process(DB, anemometers):
         Processes current minute data
         Inserts into historical data collection 
     '''
+
     formatted = formatData(anemometers)
     insertDB(DB, formatted)
     purge(DB)
-

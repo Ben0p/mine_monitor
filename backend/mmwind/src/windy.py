@@ -220,20 +220,8 @@ def run():
             minute.process(DB, anemometers)
             # Process current hour
             hour.process(DB)
-
-
-        '''
-        # Process historical data
-        for module_uid in module_uids:
-            # Process last hour
-            hour.process(DB, module_uid)
-            # Process last day
-            day.process(DB, module_uid)
-            # Process last month
-            month.process(DB, module_uid)
-
-        truncate_data(604800)
-        '''
+            # Process current day
+            # day.process(DB)
 
         time.sleep(5)
 

@@ -3,249 +3,163 @@ from env.sol import env
 import datetime
 import pymongo
 from bson import ObjectId
+import time
 
 
-def avg(speeds):
-    try:
-        average = sum(speeds) / len(speeds)
-        average = round(average, 2)
-    except ZeroDivisionError:
-        average = 0
+def getRange():
 
-    return(average)
+    # Get the seconds range of the last mintute from now
+    last_minute = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    year = int(last_minute.strftime('%Y'))
+    month = int(last_minute.strftime('%m'))
+    day = int(last_minute.strftime('%d'))
+    hour = int(last_minute.strftime('%H'))
+    minute = int(last_minute.strftime('%M'))
+    minute_timestamp = datetime.datetime(year, month, day, hour, minute)
+    start = datetime.datetime(year, month, day, hour, minute, 00)
+    end = datetime.datetime(year, month, day, hour, minute, 59)
+    time = minute_timestamp.strftime('%d/%m/%Y %H:%M')
+    unix = minute_timestamp.timestamp()
+    minute_str = minute_timestamp.strftime('%Y%m%d%H%M')
 
+    minute_range = {
+        'start' : start,
+        'end' : end,
+        'timestamp' : minute_timestamp,
+        'time' : time,
+        'minute' : minute_str,
+        'unix' : unix
+    }
 
-def getMinutes(DB):
-
-    minutes = DB['wind_history'].find(
-        {
-            'range': 'minute'
-        }
-    )
-
-    return(minutes)
-
-
-def genMinuteList():
-    ''' Generates list of minutes (HHMM) for the past hour
-    '''
-
-    minute_dicts = {}
-
-    # Time now
-    time_now = datetime.datetime.now()
-    # I don't know
-    start = time_now - datetime.timedelta(minutes=60)
-
-    year = int(time_now.strftime('%Y'))
-    month = int(time_now.strftime('%m'))
-    day = int(time_now.strftime('%d'))
-
-    first = time_now.strftime('%H')
-    first = f"{first}00"
-    first = int(first)
-
-    last = start.strftime('%H')
-    last = f"{last}60"
-    last = int(last)
-
-    start = start.strftime('%H%M')
-    start = int(start)
-    end = time_now.strftime('%H%M')
-    end = int(end) + 1
-
-    for i in range(start, last, 1):
-        i = f'{i:04}'
-        timestamp = datetime.datetime(year, month, day, int(i[:2]), int(i[-2:]))
-        minute_dicts[i] = {
-            'timestamp': timestamp,
-            'time' : timestamp.strftime('%y/%m/%d %H:%M'),
-            'kmh': [],
-            'ms': [],
-            'knots': []
-        }
-
-    for i in range(first, end, 1):
-        i = f'{i:04}'
-        timestamp = datetime.datetime(year, month, day, int(i[:2]), int(i[-2:]))
-        minute_dicts[i] = {
-            'timestamp': timestamp,
-            'time' : timestamp.strftime('%y/%m/%d %H:%M'),
-            'kmh': [],
-            'ms': [],
-            'knots': []
-        }
-
-    return(minute_dicts)
+    return(minute_range)
 
 
-def formatData(DB, minutes, minute_dicts):
+def getLastMinute(DB, minute_range):
 
-    for anemometer in minutes:
-        # Set initial dictionary values
-        data = {}
-        data['module_uid'] = ObjectId(anemometer['module_uid'])
-        data['range'] = 'hour'
+    previous_minutes = []
 
-        for datapoint in anemometer['datapoints']:
-            minute = datapoint['timestamp']
-            minute = minute.strftime('%H%M')
-            try:
-                minute_dicts[minute]['kmh'].append(datapoint['kmh'])
-                minute_dicts[minute]['ms'].append(datapoint['ms'])
-                minute_dicts[minute]['knots'].append(datapoint['knots'])
-            except:
-                pass
+    start = minute_range['start']
+    end = minute_range['end']
 
-        for key, value in minute_dicts.items():
+    modules = DB['wind_modules'].find()
 
-            DB['wind_history'].update(
-                {
-                    'module_uid': ObjectId(anemometer['module_uid']),
-                    'range': 'hour'
-                },
-                {
-                    '$set': {
-                        'module_uid': ObjectId(anemometer['module_uid']),
-                        'range': 'hour',
-                        f'minutes.{key}.timestamp' : value['timestamp'],
-                        f'minutes.{key}.time' : value['time'],
-                    },
-                    '$push': {
-                        f'minutes.{key}.kmh': {
-                            '$each': value['kmh']
-                        },
-                        f'minutes.{key}.ms': {
-                            '$each': value['ms']
-                        },
-                        f'minutes.{key}.knots': {
-                            '$each': value['knots']
-                        }
-                    },
-                },
-                upsert=True
-            )
+    for module in modules:
 
+        previous_minute = DB['wind_history'].find(
+            {
+                'module_uid' : module['_id'],
+                'range' : 'minute',
+                'timestamp' :
+                    {
+                        '$lt': end,
+                        '$gte': start
+                    }
 
-def averageData(DB):
-
-    hour_data = DB['wind_history'].find(
-        {
-            'range': 'hour'
-        }
-    )
-
-    for anemometer in hour_data:
-
-        datapoints = []
-
-        for key, value in anemometer['minutes'].items():
-            data = {}
-
-            timestamp = value['timestamp']
-            time = value['time']
-
-            if len(value['kmh']) > 0:
-
-                kmh_avg = avg(value['kmh'])
-                kmh_max = max(value['kmh'])
-                kmh_min = min(value['kmh'])
-
-                ms_avg = avg(value['ms'])
-                ms_max = max(value['ms'])
-                ms_min = min(value['ms'])
-            
-                knots_avg = avg(value['knots'])
-                knots_max = max(value['knots'])
-                knots_min = min(value['knots'])
-            
-            else:
-                kmh_avg = 0
-                kmh_max = 0
-                kmh_min = 0
-
-                ms_avg = 0
-                ms_max = 0
-                ms_min = 0
-            
-                knots_avg = 0
-                knots_max = 0
-                knots_min = 0
-        
-
-            data['timestamp'] = timestamp
-            data['time'] = time
-            data['kmh'] = {
-                'min' : kmh_min,
-                'avg' : kmh_avg,
-                'max' : kmh_max
             }
-            data['ms'] = {
-                'min' : ms_min,
-                'avg' : ms_avg,
-                'max' : ms_max
-            }
-            data['knots'] = {
-                'min' : knots_min,
-                'avg' : knots_avg,
-                'max' : knots_max
+        )
+        previous_minutes.append(list(previous_minute))
+    return(previous_minutes)
+
+
+def processMinute(DB, last_minutes, minute_range):
+
+    averaged_minutes = []
+
+    for last_minute in last_minutes:
+        try:
+            kmh_max = max(d['kmh'] for d in last_minute)
+            kmh_avg = sum(d['kmh'] for d in last_minute) / len(last_minute)
+            kmh_avg = round(kmh_avg, 2)
+            kmh_min = min(d['kmh'] for d in last_minute)
+
+            ms_max = max(d['ms'] for d in last_minute)
+            ms_avg = sum(d['ms'] for d in last_minute) / len(last_minute)
+            ms_avg = round(ms_avg, 2)
+            ms_min = min(d['ms'] for d in last_minute)
+
+            knots_max = max(d['knots'] for d in last_minute)
+            knots_avg = sum(d['knots'] for d in last_minute) / len(last_minute)
+            knots_avg = round(knots_avg, 2)
+            knots_min = min(d['knots'] for d in last_minute)
+
+            averaged_minute = {
+                'module_uid' : last_minute[0]['module_uid'],
+                'range' : 'hour',
+                'minute' : minute_range['minute'],
+                'time' : minute_range['time'],
+                'timestamp' : minute_range['timestamp'],
+                'unix' : minute_range['unix'],
+                'kmh_max' : kmh_max,
+                'kmh_avg' : kmh_avg,
+                'kmh_min' : kmh_min,
+                'ms_max' : ms_max,
+                'ms_avg' : ms_avg,
+                'ms_min' : ms_min,
+                'knots_max' : knots_max,
+                'knots_avg' : knots_avg,
+                'knots_min' : knots_min
             }
 
-            datapoints.append(data)
+            averaged_minutes.append(averaged_minute)
+ 
+        except ValueError:
+            pass
+        except IndexError:
+            pass
     
+    return(averaged_minutes)
 
+
+def insertDB(DB, averaged_minutes):
+
+    for minute in averaged_minutes:
         DB['wind_history'].find_one_and_update(
             {
-                'module_uid': anemometer['module_uid'],
-                'range': anemometer['range']
+                'module_uid' : minute['module_uid'],
+                'range' : minute['range'],
+                'minute' : minute['minute']
             },
             {
                 '$set': {
-                    'module_uid': anemometer['module_uid'],
-                    'range': anemometer['range'],
-                    'datapoints' : datapoints
+                    'module_uid' : minute['module_uid'],
+                    'range' : minute['range'],
+                    'minute' : minute['minute'],
+                    'time' : minute['time'],
+                    'timestamp' : minute['timestamp'],
+                    'unix' : minute['unix'],
+                    'kmh_max' : minute['kmh_max'],
+                    'kmh_avg' : minute['kmh_avg'],
+                    'kmh_min' : minute['kmh_min'],
+                    'ms_max' : minute['ms_max'],
+                    'ms_avg' : minute['ms_avg'],
+                    'ms_min' : minute['ms_min'],
+                    'knots_max' : minute['knots_max'],
+                    'knots_avg' : minute['knots_avg'],
+                    'knots_min' : minute['knots_min']
                 }
             },
             upsert=True
         )
 
+
 def purge(DB):
+    ''' Purge older than 2 hours
+    '''
 
-    time_now = datetime.datetime.now()
-    time_hour = time_now - datetime.timedelta(minutes=60)
-
-    anemometers = DB['wind_history'].find(
+    DB['wind_history'].delete_many(
         {
-            'range' : 'hour'
-        }
-    )
-
-    for anemometer in anemometers:
-        purged_minutes = {}
-
-        minutes = anemometer['minutes']
-
-        for key, value in minutes.items():
-            if value['timestamp'] > time_hour:
-                purged_minutes[key] = value
-
-        DB['wind_history'].find_one_and_update(
-            {
-                'range': 'hour',
-                'module_uid' : anemometer['module_uid']
-            },
-            {
-                '$set' : {
-                    'minutes' : purged_minutes
-                }
+            'range': 'hour',
+            'unix': {
+                '$lte': time.time() - 7200
             }
-        )
+        },
+    )
 
 
 def process(DB):
 
-    minutes = getMinutes(DB)
-    minute_dicts = genMinuteList()
-    formatData(DB, minutes, minute_dicts)
-    averageData(DB)
+    minute_range = getRange()
+    last_minutes = getLastMinute(DB, minute_range)
+    averaged_minutes = processMinute(DB, last_minutes, minute_range)
+    insertDB(DB, averaged_minutes)
     purge(DB)
