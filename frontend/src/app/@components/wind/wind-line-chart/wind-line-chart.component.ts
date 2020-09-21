@@ -111,7 +111,6 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.uid)
     this.refreshData();
     this.interval = setInterval(() => {
       this.refreshData();

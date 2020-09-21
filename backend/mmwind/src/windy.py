@@ -111,6 +111,7 @@ def processData(rows):
                         datetime.timedelta(hours=env['time_offset'])
                     datapoint_time_string = datapoint_time.strftime(
                         '%d/%m/%Y %H:%M:%S')
+                    datapoint_unix = datapoint_time.timestamp()
 
                     # Process the speed status
                     if kmh <= 20:
@@ -138,6 +139,7 @@ def processData(rows):
                     anemometer = {
                         'timestamp': datapoint_time,
                         'time': datapoint_time_string,
+                        'unix' : datapoint_unix,
                         'ms': ms,
                         'kmh': kmh,
                         'knots': knots,
@@ -216,6 +218,8 @@ def run():
             insertLive(latest)
             # Process current minute
             minute.process(DB, anemometers)
+            # Process current hour
+            hour.process(DB)
 
 
         '''

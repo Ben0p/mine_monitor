@@ -53,7 +53,7 @@ def purge(DB):
     time_now = datetime.datetime.now()
     time_minute = time_now - datetime.timedelta(minutes=1)
 
-    DB['wind_history'].update(
+    DB['wind_history'].update_many(
         {
             'range': 'minute',
         },

@@ -265,7 +265,7 @@ class wind_minute(Resource):
                 '_id' : ObjectId(uid),
             }
         ) 
-        
+
         history = DB['wind_history'].find_one(
             {
                 'module_uid' : ObjectId(uid),
@@ -298,18 +298,62 @@ class wind_minute(Resource):
         return(jsonify(json.loads(dumps(data))))
 
 
+
 class wind_hour(Resource):
 
     def get(self, uid):
 
-        module = DB['wind_history'].find_one(
+        module = DB['wind_modules'].find_one(
+            {
+                '_id' : ObjectId(uid),
+            }
+        ) 
+        
+        history = DB['wind_history'].find_one(
             {
                 'module_uid' : ObjectId(uid),
                 'range' : 'hour'
             }
-        )        
+        ) 
 
-        return(jsonify(json.loads(dumps(module))))
+        data = {
+            'module_uid' : ObjectId(uid),
+            'range' : 'hour',
+            'name' : module['name'],
+            'time' : [],
+            'kmh' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+            'ms' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+            'knots' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+        }
+
+        for datapoint in history['datapoints']:
+            data['time'].append(datapoint['time'])
+
+            data['kmh']['max'].append(datapoint['kmh']['max'])
+            data['kmh']['avg'].append(datapoint['kmh']['avg'])
+            data['kmh']['min'].append(datapoint['kmh']['min'])
+
+            data['ms']['max'].append(datapoint['ms']['max'])
+            data['ms']['avg'].append(datapoint['ms']['avg'])
+            data['ms']['min'].append(datapoint['ms']['min'])
+
+            data['knots']['max'].append(datapoint['knots']['max'])
+            data['knots']['avg'].append(datapoint['knots']['avg'])
+            data['knots']['min'].append(datapoint['knots']['min'])
+
+        return(jsonify(json.loads(dumps(data))))
 
 
 class wind_day(Resource):
