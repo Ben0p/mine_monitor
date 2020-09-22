@@ -3,7 +3,6 @@ from env.sol import env
 import datetime
 import pymongo
 from bson import ObjectId
-import time
 
 def formatData(anemometers):
     '''
@@ -46,7 +45,6 @@ def insertDB(DB, formatted):
                             'second': second,
                             'timestamp': timestamp,
                             'time' : datapoint['time'],
-                            'unix': datapoint['unix'],
                             'ms': datapoint['ms'],
                             'kmh': datapoint['kmh'],
                             'knots': datapoint['knots'],
@@ -58,11 +56,13 @@ def insertDB(DB, formatted):
 
 def purge(DB):
 
+    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+
     DB['wind_history'].delete_many(
         {
             'range': 'minute',
-            'unix': {
-                '$lte': time.time() - 180
+            'timestamp': {
+                '$lte': local_time - datetime.timedelta(minutes=2)
             }
         },
     )

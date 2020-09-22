@@ -366,7 +366,7 @@ class wind_day(Resource):
             }
         ) 
         
-        history = DB['wind_history'].find_one(
+        history = DB['wind_history'].find(
             {
                 'module_uid' : ObjectId(uid),
                 'range' : 'day'
@@ -395,20 +395,20 @@ class wind_day(Resource):
             },
         }
 
-        for datapoint in history['datapoints']:
+        for datapoint in history:
             data['time'].append(datapoint['time'])
 
-            data['kmh']['max'].append(datapoint['kmh']['max'])
-            data['kmh']['avg'].append(datapoint['kmh']['avg'])
-            data['kmh']['min'].append(datapoint['kmh']['min'])
+            data['kmh']['max'].append(datapoint['kmh_max'])
+            data['kmh']['avg'].append(datapoint['kmh_avg'])
+            data['kmh']['min'].append(datapoint['kmh_min'])
 
-            data['ms']['max'].append(datapoint['ms']['max'])
-            data['ms']['avg'].append(datapoint['ms']['avg'])
-            data['ms']['min'].append(datapoint['ms']['min'])
+            data['ms']['max'].append(datapoint['ms_max'])
+            data['ms']['avg'].append(datapoint['ms_avg'])
+            data['ms']['min'].append(datapoint['ms_min'])
 
-            data['knots']['max'].append(datapoint['knots']['max'])
-            data['knots']['avg'].append(datapoint['knots']['avg'])
-            data['knots']['min'].append(datapoint['knots']['min'])
+            data['knots']['max'].append(datapoint['knots_max'])
+            data['knots']['avg'].append(datapoint['knots_avg'])
+            data['knots']['min'].append(datapoint['knots_min'])
 
         return(jsonify(json.loads(dumps(data))))
 

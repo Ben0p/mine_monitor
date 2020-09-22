@@ -3,9 +3,9 @@ from env.sol import env
 import pymssql
 import json
 import datetime
-import time
 import pymongo
 from bson import ObjectId
+import time
 
 from history import minute, hour, day, month
 
@@ -107,11 +107,12 @@ def processData(rows):
                             datapoint['T'], '%Y-%m-%dT%H:%M:%S')
 
                     # Add time offset and format to readable string
+                    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+
                     datapoint_time = datapoint_time + \
                         datetime.timedelta(hours=env['time_offset'])
                     datapoint_time_string = datapoint_time.strftime(
                         '%d/%m/%Y %H:%M:%S')
-                    datapoint_unix = datapoint_time.timestamp()
 
                     # Process the speed status
                     if kmh <= 20:
@@ -125,7 +126,7 @@ def processData(rows):
                         status = 'danger'
 
                     # Offline if time stamp is older than 30sec
-                    if datapoint_time < datetime.datetime.fromtimestamp(time.time() - 30):
+                    if datapoint_time  < local_time - datetime.timedelta(seconds=30):
                         online = False
                         speed = 'stop'
                         status = 'primary'
@@ -139,7 +140,6 @@ def processData(rows):
                     anemometer = {
                         'timestamp': datapoint_time,
                         'time': datapoint_time_string,
-                        'unix' : datapoint_unix,
                         'ms': ms,
                         'kmh': kmh,
                         'knots': knots,
@@ -206,6 +206,7 @@ def run():
     ''' Main run loop
     '''
     while True:
+
         # Get data from SQL
         rows = pollSQL()
 
@@ -221,7 +222,7 @@ def run():
             # Process current hour
             hour.process(DB)
             # Process current day
-            # day.process(DB)
+            day.process(DB)
 
         time.sleep(5)
 

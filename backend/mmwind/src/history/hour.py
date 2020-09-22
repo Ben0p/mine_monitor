@@ -3,13 +3,14 @@ from env.sol import env
 import datetime
 import pymongo
 from bson import ObjectId
-import time
 
 
 def getRange():
 
     # Get the seconds range of the last mintute from now
-    last_minute = datetime.datetime.now() - datetime.timedelta(minutes=1)
+    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+
+    last_minute = local_time - datetime.timedelta(minutes=1)
     year = int(last_minute.strftime('%Y'))
     month = int(last_minute.strftime('%m'))
     day = int(last_minute.strftime('%d'))
@@ -19,7 +20,6 @@ def getRange():
     start = datetime.datetime(year, month, day, hour, minute, 00)
     end = datetime.datetime(year, month, day, hour, minute, 59)
     time = minute_timestamp.strftime('%d/%m/%Y %H:%M')
-    unix = minute_timestamp.timestamp()
     minute_str = minute_timestamp.strftime('%Y%m%d%H%M')
 
     minute_range = {
@@ -28,7 +28,7 @@ def getRange():
         'timestamp' : minute_timestamp,
         'time' : time,
         'minute' : minute_str,
-        'unix' : unix
+        'local_time' : local_time
     }
 
     return(minute_range)
@@ -88,7 +88,6 @@ def processMinute(DB, last_minutes, minute_range):
                 'minute' : minute_range['minute'],
                 'time' : minute_range['time'],
                 'timestamp' : minute_range['timestamp'],
-                'unix' : minute_range['unix'],
                 'kmh_max' : kmh_max,
                 'kmh_avg' : kmh_avg,
                 'kmh_min' : kmh_min,
@@ -126,7 +125,6 @@ def insertDB(DB, averaged_minutes):
                     'minute' : minute['minute'],
                     'time' : minute['time'],
                     'timestamp' : minute['timestamp'],
-                    'unix' : minute['unix'],
                     'kmh_max' : minute['kmh_max'],
                     'kmh_avg' : minute['kmh_avg'],
                     'kmh_min' : minute['kmh_min'],
@@ -146,11 +144,13 @@ def purge(DB):
     ''' Purge older than 2 hours
     '''
 
+    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+
     DB['wind_history'].delete_many(
         {
             'range': 'hour',
             'unix': {
-                '$lte': time.time() - 7200
+                '$lte': local_time - datetime.timedelta(hours=2)
             }
         },
     )
