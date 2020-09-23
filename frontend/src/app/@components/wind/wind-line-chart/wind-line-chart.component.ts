@@ -107,6 +107,15 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
           this.loadData(this.windspeed)
         }
       );
+    } else if (this.range == 'month') {
+      this.wind.getWindMonth(this.uid).subscribe(
+        (speeds: {}) => {
+          this.name = speeds['name']
+          this.windspeed = speeds;
+          console.log(speeds)
+          this.loadData(this.windspeed)
+        }
+      );
     }
   }
 
@@ -160,8 +169,6 @@ export class WindLineChartComponent implements OnInit, OnDestroy {
         ],
       };
     }
-
-
 
   }
 

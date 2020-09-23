@@ -41,12 +41,14 @@ class auth(Resource):
         s = Server(f"{env['dc_ip']}", use_ssl=True, tls=tls_configuration)
 
         try:
+            print("Connecting")
             c = Connection(s, user=f"{env['domain']}\\{args['email']}",
                            password=f"{args['password']}", check_names=True, lazy=False, raise_exceptions=True)
             c.open()
             c.bind()
-            result['authenticated'] = True
             result['connected'] = True
+
+            print("Connected")
 
 
 
@@ -59,7 +61,7 @@ class auth(Resource):
         except LDAPOperationsErrorResult:
             return(make_response(jsonify(result), 404))
 
-        if result['authenticated']:
+        if result['connected']:
             c.search(
                 search_base= env['base_ou'],
                 search_filter=f"(&(objectclass=person)(sAMAccountName={args['email']}))",
@@ -108,7 +110,8 @@ class auth(Resource):
                 except KeyError:
                     result['phone'] = ''
 
-                    
+            
+            result['authenticated'] = True
             if result['admin'] == True:
                 result['role'] = 'admin'
             if result['view'] == True and result['admin'] == False:

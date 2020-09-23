@@ -1,25 +1,38 @@
 from env.sol import env
 
 import datetime
+import pytz
 import pymongo
 from bson import ObjectId
 
 
 def getRange():
 
-    # Get the seconds range of the last hour from now
-    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+    # Get local time and make it timezone aware
+    local_time = datetime.datetime.now()
+    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
 
+    # Get time for the last hour
     last_hour = local_time - datetime.timedelta(hours=1)
     year = int(last_hour.strftime('%Y'))
     month = int(last_hour.strftime('%m'))
     day = int(last_hour.strftime('%d'))
     hour = int(last_hour.strftime('%H'))
+
     hour_timestamp = datetime.datetime(year, month, day, hour)
+    hour_timestamp = hour_timestamp.replace(tzinfo=pytz.timezone(env['timezone']))
+
     start = datetime.datetime(year, month, day, hour, 0)
+    start = start.replace(tzinfo=pytz.timezone(env['timezone']))
+
     end = datetime.datetime(year, month, day, hour, 59)
-    time = hour_timestamp.strftime('%d/%m/%Y %H:00')
-    hour_str = hour_timestamp.strftime('%Y%m%d%H%M')
+    end = end.replace(tzinfo=pytz.timezone(env['timezone']))
+
+    time = hour_timestamp + datetime.timedelta(hours=env['local_offset'])
+    time = time.strftime('%d/%m/%Y %H:%M')
+
+    hour_str = hour_timestamp + datetime.timedelta(hours=env['local_offset'])
+    hour_str = hour_str.strftime('%Y%m%d%H%M')
 
     hour_range = {
         'start' : start,
@@ -142,12 +155,13 @@ def insertDB(DB, averaged_hours):
 def purge(DB):
     ''' Purge older than 2 days
     '''
-    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+    local_time = datetime.datetime.now()
+    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
 
     DB['wind_history'].delete_many(
         {
-            'range': 'hour',
-            'unix': {
+            'range': 'day',
+            'timestamp': {
                 '$lte': local_time - datetime.timedelta(days=2)
             }
         },

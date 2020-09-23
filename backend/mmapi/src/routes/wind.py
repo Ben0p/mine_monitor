@@ -13,7 +13,7 @@ import datetime
 
 # Initialize mongo connection one time
 CLIENT = pymongo.MongoClient(
-    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}/")
+    f"mongodb://{env['mongodb_ops_ip']}:{env['mongodb_ops_port']}/")
 DB = CLIENT[env['database']]
 
 
@@ -376,6 +376,63 @@ class wind_day(Resource):
         data = {
             'module_uid' : ObjectId(uid),
             'range' : 'day',
+            'name' : module['name'],
+            'time' : [],
+            'kmh' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+            'ms' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+            'knots' : {
+                'max' : [],
+                'avg' : [],
+                'min' : [],
+            },
+        }
+
+        for datapoint in history:
+            data['time'].append(datapoint['time'])
+
+            data['kmh']['max'].append(datapoint['kmh_max'])
+            data['kmh']['avg'].append(datapoint['kmh_avg'])
+            data['kmh']['min'].append(datapoint['kmh_min'])
+
+            data['ms']['max'].append(datapoint['ms_max'])
+            data['ms']['avg'].append(datapoint['ms_avg'])
+            data['ms']['min'].append(datapoint['ms_min'])
+
+            data['knots']['max'].append(datapoint['knots_max'])
+            data['knots']['avg'].append(datapoint['knots_avg'])
+            data['knots']['min'].append(datapoint['knots_min'])
+
+        return(jsonify(json.loads(dumps(data))))
+
+
+class wind_month(Resource):
+
+    def get(self, uid):
+
+        module = DB['wind_modules'].find_one(
+            {
+                '_id' : ObjectId(uid),
+            }
+        ) 
+        
+        history = DB['wind_history'].find(
+            {
+                'module_uid' : ObjectId(uid),
+                'range' : 'month'
+            }
+        ) 
+
+        data = {
+            'module_uid' : ObjectId(uid),
+            'range' : 'month',
             'name' : module['name'],
             'time' : [],
             'kmh' : {

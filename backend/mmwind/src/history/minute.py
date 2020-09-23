@@ -1,6 +1,7 @@
 from env.sol import env
 
 import datetime
+import pytz
 import pymongo
 from bson import ObjectId
 
@@ -56,7 +57,8 @@ def insertDB(DB, formatted):
 
 def purge(DB):
 
-    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+    local_time = datetime.datetime.now()
+    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
 
     DB['wind_history'].delete_many(
         {
@@ -66,7 +68,6 @@ def purge(DB):
             }
         },
     )
-
 
 def process(DB, anemometers):
     ''' Takes anemometer list of dictionaries

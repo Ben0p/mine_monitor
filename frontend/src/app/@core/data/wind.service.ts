@@ -11,7 +11,7 @@ const httpOptions = {
   }),
 };
 
-const APIurl: String = 'http://localhost:5000/api/wind/';
+const APIurl: String = 'https://solmm01.fmg.local/api/wind/';
 
 @Injectable({
   providedIn: 'root',
@@ -80,6 +80,12 @@ export class WindService {
     );
   }
 
+  getWindMonth(uid): Observable<any> {
+    return this.http.get(APIurl + "month/" + uid).pipe(
+      map(this.extractData),
+      catchError(this.handleError<any>("failed"))
+    );
+  }
 
   dangerToast(position, status, message, code) {
     var preventDuplicates = true

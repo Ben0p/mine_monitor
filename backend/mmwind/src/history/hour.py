@@ -1,26 +1,39 @@
 from env.sol import env
 
 import datetime
+import pytz
 import pymongo
 from bson import ObjectId
 
 
 def getRange():
 
-    # Get the seconds range of the last mintute from now
-    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+    # Get local time and make it timezone aware
+    local_time = datetime.datetime.now()
+    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
 
+    # Get the seconds range of the last mintute from now
     last_minute = local_time - datetime.timedelta(minutes=1)
     year = int(last_minute.strftime('%Y'))
     month = int(last_minute.strftime('%m'))
     day = int(last_minute.strftime('%d'))
     hour = int(last_minute.strftime('%H'))
     minute = int(last_minute.strftime('%M'))
+
     minute_timestamp = datetime.datetime(year, month, day, hour, minute)
+    minute_timestamp = minute_timestamp.replace(tzinfo=pytz.timezone(env['timezone']))
+
     start = datetime.datetime(year, month, day, hour, minute, 00)
+    start = start.replace(tzinfo=pytz.timezone(env['timezone']))
+
     end = datetime.datetime(year, month, day, hour, minute, 59)
-    time = minute_timestamp.strftime('%d/%m/%Y %H:%M')
-    minute_str = minute_timestamp.strftime('%Y%m%d%H%M')
+    end = end.replace(tzinfo=pytz.timezone(env['timezone']))
+
+    time = minute_timestamp + datetime.timedelta(hours=env['local_offset'])
+    time = time.strftime('%d/%m/%Y %H:%M')
+
+    minute_str = minute_timestamp + datetime.timedelta(hours=env['local_offset'])
+    minute_str = minute_str.strftime('%Y%m%d%H%M')
 
     minute_range = {
         'start' : start,
@@ -38,9 +51,6 @@ def getLastMinute(DB, minute_range):
 
     previous_minutes = []
 
-    start = minute_range['start']
-    end = minute_range['end']
-
     modules = DB['wind_modules'].find()
 
     for module in modules:
@@ -51,8 +61,8 @@ def getLastMinute(DB, minute_range):
                 'range' : 'minute',
                 'timestamp' :
                     {
-                        '$lt': end,
-                        '$gte': start
+                        '$lt': minute_range['end'],
+                        '$gte': minute_range['start']
                     }
 
             }
@@ -144,12 +154,13 @@ def purge(DB):
     ''' Purge older than 2 hours
     '''
 
-    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+    local_time = datetime.datetime.now()
+    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
 
     DB['wind_history'].delete_many(
         {
             'range': 'hour',
-            'unix': {
+            'timestamp': {
                 '$lte': local_time - datetime.timedelta(hours=2)
             }
         },

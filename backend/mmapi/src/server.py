@@ -14,7 +14,7 @@ import copy
 import jwt
 import datetime
 
-from routes.wind import wind_collect, wind_all, wind_minute, wind_hour, wind_day, wind_info
+from routes.wind import wind_collect, wind_all, wind_minute, wind_hour, wind_day, wind_month, wind_info
 from routes.alerts import alert_all, alert_display, alert_detail, alert_overview, alert_modules, alert_zones, alert_zones_create, \
     alert_zones_update, alert_zones_delete, alert_zones_list, alert_types, alert_status, alert_create, alert_update, alert_delete, \
     alert_wz
@@ -80,6 +80,7 @@ API.add_resource(wind_all, '/api/wind/all')
 API.add_resource(wind_minute, '/api/wind/minute/<string:uid>')
 API.add_resource(wind_hour, '/api/wind/hour/<string:uid>')
 API.add_resource(wind_day, '/api/wind/day/<string:uid>')
+API.add_resource(wind_month, '/api/wind/month/<string:uid>')
 API.add_resource(wind_info, '/api/wind/info/<string:name>')
 
 # Tetra

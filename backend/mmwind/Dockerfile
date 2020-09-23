@@ -8,6 +8,7 @@ RUN pip install cython==0.28.5
 RUN pip install git+https://github.com/pymssql/pymssql.git
 
 RUN pip install pymongo
+RUN pip install pytz
 
 COPY src /app
 WORKDIR /app/src

@@ -6,6 +6,7 @@ import datetime
 import pymongo
 from bson import ObjectId
 import time
+import pytz
 
 from history import minute, hour, day, month
 
@@ -56,6 +57,8 @@ def processData(rows):
 
         # Get time object and format it
         timestamp = row[0]
+        # Make timezone aware
+        timestamp = timestamp.replace(tzinfo=pytz.timezone(env['timezone']))
         time_string = timestamp.strftime('%d/%m/%Y %H:%M:%S')
         print("-"*32)
         print(f"Time Stamp: {time_string}")
@@ -106,13 +109,16 @@ def processData(rows):
                         datapoint_time = datetime.datetime.strptime(
                             datapoint['T'], '%Y-%m-%dT%H:%M:%S')
 
-                    # Add time offset and format to readable string
-                    local_time = datetime.datetime.now() + datetime.timedelta(hours=env['local_offset'])
+                    # Make timezone aware
+                    datapoint_time = datapoint_time.replace(tzinfo=pytz.timezone('Etc/GMT+0'))
 
-                    datapoint_time = datapoint_time + \
-                        datetime.timedelta(hours=env['time_offset'])
-                    datapoint_time_string = datapoint_time.strftime(
-                        '%d/%m/%Y %H:%M:%S')
+                    # Add time offset and format to readable string
+                    local_time = datetime.datetime.now()
+                    local_time = local_time.replace(tzinfo=pytz.timezone(env['timezone']))
+
+                    # Time String
+                    datapoint_time_string = datapoint_time + datetime.timedelta(hours=8)
+                    datapoint_time_string = datapoint_time_string.strftime('%d/%m/%Y %H:%M:%S')
 
                     # Process the speed status
                     if kmh <= 20:
@@ -134,7 +140,7 @@ def processData(rows):
                         online = True
 
                     # Print the result
-                    print(f"    {datapoint_time} - {datapoint['V']} m/s")
+                    print(f"    {datapoint_time_string} - {datapoint['V']} m/s")
 
                     # Construct dictionary of values
                     anemometer = {
@@ -223,6 +229,8 @@ def run():
             hour.process(DB)
             # Process current day
             day.process(DB)
+            # Process current month
+            month.process(DB)
 
         time.sleep(5)
 
