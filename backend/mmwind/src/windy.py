@@ -24,12 +24,14 @@ def pollSQL():
     
     try:
         # Initialize SQL connection
+        print("Connecting to SQL...")
         cnxn = pymssql.connect(
             server=env['pcs_sql_server'],
             user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
             password=env['pcs_sql_password']
         )
         cursor = cnxn.cursor()
+        print("Connected to SQL")
     except:
         return(False)
 
