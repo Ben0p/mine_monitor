@@ -27,26 +27,6 @@ SQL = mysql.connector.connect(
 )
 
 
-def getMaintenance(CURSOR):
-    # Execute MySQL query
-    CURSOR.execute("SELECT * from databasemaintenancevalues;")
-    myresult = CURSOR.fetchall()
-
-    next_maint = myresult[0][2]
-    next_maint = time.mktime(next_maint.timetuple())
-    
-    maint_start = next_maint - (30 * 60)
-    maint_end = next_maint + (2 * 60 * 60)
-    time_remaining = maint_end - time.time()
-    time_remaining = round(time_remaining)
-
-    if maint_start < time.time() < maint_end:
-        under_maintenance = True
-    else:
-        under_maintenance = False
-    
-    return(under_maintenance, time_remaining)
-
 
 
 def main():
@@ -60,16 +40,6 @@ def main():
 
     while True:
         CURSOR = SQL.cursor()
-        # Get DB maintenance time
-        under_maintenance, time_remaining = getMaintenance(CURSOR)
-
-        # Sleep for 60 and skip iteration if under maintenance
-        if under_maintenance:
-            print(f"DB under maintenance, sleeping for {time_remaining} sec...")
-            CURSOR.close()
-            time.sleep(time_remaining)
-            continue
-
 
         nodes.tetraNodes(CURSOR, DB)
         time.sleep(0.5)

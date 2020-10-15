@@ -69,7 +69,7 @@ def tetraNodes(CURSOR, DB):
             color = 'offline'
             online = False
             load = 100
-            radios = 0
+            radios += 0
             ts_idle = 0
             ts_in = 0
             ts_gr = 0
