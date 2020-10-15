@@ -22,6 +22,7 @@ def connectSQL():
     ''' Connects to SQL
     '''
     
+
     try:
         # Initialize SQL connection
         print("Connecting to SQL...")
@@ -33,8 +34,9 @@ def connectSQL():
         cursor = cnxn.cursor()
         print("Connected to SQL")
         return(cursor)
-    except:
-        return(False)
+    except pymssql.OperationalError:
+        print("Unable to connect")
+
 
 
 def pollSQL(cursor):
@@ -51,6 +53,30 @@ def pollSQL(cursor):
         return(rows)
     else:
         return(False)
+
+
+def insertOffline():
+    ''' Inserts offline data into mongo
+    '''
+
+    modules = DB['wind_modules'].find()
+
+    for module in modules:
+
+        DB['wind_live'].find_one_and_update(
+            {
+                'module_uid': module['_id'],
+            },
+            {
+                '$set': {
+                    'module_uid' : module['_id'],
+                    'online' : False,
+                    'status' : 'primary',
+                    'speed' : 'stop'
+                }
+            },
+            upsert=True
+        )
 
 
 def processData(rows):
@@ -246,7 +272,9 @@ def run():
                     month.process(DB)
 
                 time.sleep(5)
-        time.sleep(30)
+        else:
+            insertOffline()
+            time.sleep(30)
 
 
 
