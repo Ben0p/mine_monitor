@@ -18,23 +18,26 @@ CLIENT = pymongo.MongoClient(
 DB = CLIENT[env['database']]
 
 
-def pollSQL():
-    ''' Performs SQL query and returns rows
+def connectSQL():
+    ''' Connects to SQL
     '''
     
-    #try:
+    try:
         # Initialize SQL connection
-    print("Connecting to SQL...")
-    cnxn = pymssql.connect(
-        server=env['pcs_sql_server'],
-        user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
-        password=env['pcs_sql_password']
-    )
-    cursor = cnxn.cursor()
-    print("Connected to SQL")
-    #except:
-    #    return(False)
+        print("Connecting to SQL...")
+        cnxn = pymssql.connect(
+            server=env['pcs_sql_server'],
+            user=f"{env['pcs_sql_domain']}\\{env['pcs_sql_username']}",
+            password=env['pcs_sql_password']
+        )
+        cursor = cnxn.cursor()
+        print("Connected to SQL")
+        return(cursor)
+    except:
+        return(False)
 
+
+def pollSQL(cursor):
     if cursor:
         # SQL Query
         cursor.execute("SELECT top 1 \
@@ -213,28 +216,37 @@ def insertLive(anemometers):
 def run():
     ''' Main run loop
     '''
+
+   
     while True:
-
+        cursor = connectSQL()
         # Get data from SQL
-        rows = pollSQL()
+        
+        if cursor:
+            while True:
+                try:
+                    rows = pollSQL(cursor)
+                except:
+                    break
+        
+                if rows:
+                    # Process data
+                    anemometers = processData(rows)
+                    # Get most recent time stamp
+                    latest = getLatest(anemometers)
+                    # Insert live data 
+                    insertLive(latest)
+                    # Process current minute
+                    minute.process(DB, anemometers)
+                    # Process current hour
+                    hour.process(DB)
+                    # Process current day
+                    day.process(DB)
+                    # Process current month
+                    month.process(DB)
 
-        if rows:
-            # Process data
-            anemometers = processData(rows)
-            # Get most recent time stamp
-            latest = getLatest(anemometers)
-            # Insert live data
-            insertLive(latest)
-            # Process current minute
-            minute.process(DB, anemometers)
-            # Process current hour
-            hour.process(DB)
-            # Process current day
-            day.process(DB)
-            # Process current month
-            month.process(DB)
-
-        time.sleep(5)
+                time.sleep(5)
+        time.sleep(30)
 
 
 

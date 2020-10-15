@@ -28,10 +28,10 @@ def getRange():
     end = end.replace(tzinfo=pytz.timezone(env['timezone']))
 
     time = day_timestamp + datetime.timedelta(hours=env['local_offset'])
-    time = time.strftime('%d/%m/%Y %H:%M')
+    time = time.strftime('%d/%m/%Y')
 
     day_str = day_timestamp + datetime.timedelta(hours=env['local_offset'])
-    day_str = day_str.strftime('%Y%m%d%H%M')
+    day_str = day_str.strftime('%Y%m%d')
 
     day_range = {
         'start' : start,
