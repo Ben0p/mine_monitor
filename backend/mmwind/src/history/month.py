@@ -96,7 +96,7 @@ def processHour(DB, last_days, day_range):
             averaged_day = {
                 'module_uid' : last_day[0]['module_uid'],
                 'range' : 'month',
-                'day' : day_range['hour'],
+                'day' : day_range['day'],
                 'time' : day_range['time'],
                 'timestamp' : day_range['timestamp'],
                 'kmh_max' : kmh_max,

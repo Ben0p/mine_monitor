@@ -1,12 +1,13 @@
 from env.sol import env
 
-import pymssql
+import pyodbc
 import json
 import datetime
 import pymongo
 from bson import ObjectId
 import time
 import pytz
+from subprocess import Popen, PIPE, TimeoutExpired
 
 from history import minute, hour, day, month
 
@@ -17,28 +18,33 @@ CLIENT = pymongo.MongoClient(
     f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
 
+def kerberos():
+
+    '''
+    password = "5U!Y7$gaxS!NVnO78l$c"
+
+    kinit = '/usr/bin/kinit'
+    kinit_args = [ kinit, 'svc.solmm' ]
+    kinit = Popen(kinit_args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    kinit.stdin.write(f'{password}\n'.encode())
+    '''
+    pass
+
 
 def connectSQL():
     ''' Connects to SQL
     '''
-    
-    try:
-        # Initialize SQL connection
-        print("Connecting to SQL...")
 
-        cnxn = pymssql.connect(
-            server=env['pcs_sql_ip'],
-            user=f"{env['domain']}\\{env['pcs_sql_username']}",
-            password=env['pcs_sql_password']
-        )
-        cursor = cnxn.cursor()
+    driver = '{ODBC Driver 17 for SQL Server}'
 
-        print("Connected to SQL")
-        return(cursor)
+    cnxn = pyodbc.connect(
+        f"Trusted_connection=yes; \
+        DRIVER={driver}; \
+        KERBEROS=True; \
+        SERVER=SOLOPSRS02.fmg.local;")
 
-    except pymssql.OperationalError:
-        print("Unable to connect")
-
+    cursor = cnxn.cursor()
+    return(cursor)
 
 
 def pollSQL(cursor):
@@ -247,6 +253,7 @@ def run():
 
    
     while True:
+        kerberos()
         cursor = connectSQL()
         # Get data from SQL
         
