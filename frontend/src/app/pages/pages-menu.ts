@@ -30,6 +30,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
           resource: 'dashboards'
         },
       },
+      {
+        title: 'Towers',
+        icon: 'keypad-outline',
+        link: '/pages/dashboards/towers',
+        data: {
+          permission: 'view',
+          resource: 'dashboards'
+        },
+      }
     ]
   },
   {

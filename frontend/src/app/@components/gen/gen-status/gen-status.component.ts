@@ -13,6 +13,7 @@ export class GenStatusComponent {
   @Input() fuel: any;
   @Input() level: any;
   @Input() color: any;
+  @Input() temp: any;
 
   constructor() { }
 

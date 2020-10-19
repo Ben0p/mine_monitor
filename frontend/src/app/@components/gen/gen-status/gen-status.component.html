@@ -41,9 +41,24 @@
     <div  *ngIf="level">
       <nb-progress-bar [value]="level" status="{{color}}">{{level}}%</nb-progress-bar>
     </div>
-
     <div  *ngIf="level == null">
       <nb-progress-bar [value]="100" status="primary">Unknown</nb-progress-bar>
+    </div>
+
+    <div  *ngIf="temp !== 0" class="temp">
+      <nb-progress-bar [value]="100" status="primary">
+        <nb-icon icon="home-outline"></nb-icon>
+        <nb-icon icon="thermometer-outline"></nb-icon>
+        {{temp}}°C
+      </nb-progress-bar>
+    </div>
+
+    <div  *ngIf="temp == 0" class="temp">
+      <nb-progress-bar [value]="100" status="primary">
+        <nb-icon icon="home-outline"></nb-icon>
+        <nb-icon icon="thermometer-outline"></nb-icon>
+        Unknown
+      </nb-progress-bar>
     </div>
 
   </nb-card-body>

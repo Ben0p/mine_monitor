@@ -23,7 +23,7 @@ from routes.tetra import tetra_node_all, tetra_node_load, tetra_node_subscribers
     tetra_call_history, tetra_subscriber_detail, tetra_subscriber_update
 from routes.solar import solar_create, solar_update, solar_delete, solar_controllers, solar_data
 from routes.gen import gen_create, gen_update, gen_delete, gen_modules, gen_status
-from routes.dash import dash_power
+from routes.dash import dash_power, dash_towers
 from routes.fm import fm_live, fm_modules, fm_create, fm_update, fm_delete
 from routes.map import test_czml, test_tetra, tetra_all, map_layers, map_sds, map_sds_range
 from routes.ups import ups_create, ups_update, ups_delete, ups_modules, ups_status, ups_list
@@ -53,6 +53,7 @@ class check(Resource):
 # Map URL's to resource classes
 # Dashboards
 API.add_resource(dash_power, "/api/dash/power")
+API.add_resource(dash_towers, "/api/dash/towers")
 
 # Alerts
 API.add_resource(alert_all, "/api/alerts/all")

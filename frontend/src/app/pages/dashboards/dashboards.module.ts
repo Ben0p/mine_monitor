@@ -19,7 +19,8 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardsComponent } from './dashboards.component';
 import { ComponentsModule } from '../../@components/components.module';
 import { DashAlertsTetraComponent } from './dash-alerts-tetra/dash-alerts-tetra.component';
-import { DashPowerComponent } from './dash-power/dash-power.component'
+import { DashPowerComponent } from './dash-power/dash-power.component';
+import { DashTowersComponent } from './dash-towers/dash-towers.component'
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { DashPowerComponent } from './dash-power/dash-power.component'
     DashboardsComponent,
     DashAlertsTetraComponent,
     DashPowerComponent,
+    DashTowersComponent,
   ],
   imports: [
     DashboardsRoutingModule,
