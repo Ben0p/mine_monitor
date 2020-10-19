@@ -154,9 +154,10 @@ def modelE2242(module):
     # Get all SNMP values
     ''' 
     AI0:
-    value = 1.3.6.1.4.1.8691.10.2242.10.2.1.4.0
-    min = 1.3.6.1.4.1.8691.10.2242.10.2.1.5.0
-    max = 1.3.6.1.4.1.8691.10.2242.10.2.1.6.0
+    Start = 1.3.6.1.4.1.8691.10.2242.10.2.1
+    values = 1.3.6.1.4.1.8691.10.2242.10.2.1.4
+    min = 1.3.6.1.4.1.8691.10.2242.10.2.1.5
+    max = 1.3.6.1.4.1.8691.10.2242.10.2.1.6
 
     DI0:
     start = 1.3.6.1.4.1.8691.10.2242.10.1.1.4.{i}
@@ -176,6 +177,7 @@ def modelE2242(module):
         except KeyError:
             di[f'di_{i}'] = None
 
+    # Oil
     try:
         oil = di[module['oil_di']]
 
@@ -188,11 +190,13 @@ def modelE2242(module):
     except KeyError:
         oil = None
     
+    # Flex
     try:
         flex = di[module['flex_di']]
     except KeyError:
         flex = None
     
+    # Fuel 
     try:
         fuel = di[module['fuel_di']]
     except KeyError:
@@ -212,8 +216,14 @@ def modelE2242(module):
     
 
 
-    ai_input = module['level_ai']
-    level = int(ai[ai_input])
+    level = int(ai[module['level_ai']])
+    # temp
+    try:
+        temp = int(ai[module['temp_ai']])
+    except KeyError:
+        temp = False
+
+    # Fuel
     try:
         fuel_min = int(module['fuel_min'])
         fuel_max = int(module['fuel_max'])
@@ -235,12 +245,19 @@ def modelE2242(module):
     elif fuel_level <= 30:
         fuel_color = "danger"
 
+    if temp:
+        temp = (((temp / 65535)*20)*1000)-273
+        temp = int(temp)
+    else:
+        temp = 0
+
     status = {
         'oil' : oil,
         'flex' : flex,
         'fuel' : fuel,
         'fuel_level' : fuel_level,
         'fuel_color' : fuel_color,
+        'temp' : temp,
         'di' : di,
         'ai' : ai
     }
@@ -286,6 +303,7 @@ if __name__ == '__main__':
                         'oil' : status['oil'],
                         'flex' : status['flex'],
                         'fuel' : status['fuel'],
+                        'temp' : status['temp'],
                         'fuel_level' : status['fuel_level'],
                         'fuel_color' : status['fuel_color']
                     }
