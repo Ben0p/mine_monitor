@@ -14,6 +14,7 @@ import {
 
 import { RouterModule } from '@angular/router';
 import { DashboardsRoutingModule, routedComponents } from './dashboards-routing.module';
+import { NbSecurityModule } from '@nebular/security';
 
 import { ThemeModule } from '../../@theme/theme.module';
 import { DashboardsComponent } from './dashboards.component';
@@ -40,7 +41,8 @@ import { DashTowersComponent } from './dash-towers/dash-towers.component'
     NbTabsetModule,
     NbAlertModule,
     ComponentsModule,
-    RouterModule
+    RouterModule,
+    NbSecurityModule
   ],
 })
 export class DashboardsModule { }

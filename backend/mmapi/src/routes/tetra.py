@@ -190,94 +190,43 @@ class tetra_subscriber_detail(Resource):
 
     def get(self, issi):
 
-        sql = reconnectSQL()
-        cursor = sql.cursor()
-        
-        # Execute MySQL query
-        cursor.execute(f"SELECT \
-            Timestamp, \
-            OriginatingNodeNo, \
-            UserDataLength, \
-            Rssi, \
-            MsDistance, \
-            UserData \
-            FROM sdsdata \
-            WHERE CallingSsi = {issi} \
-            AND UserDataLength = 129 \
-            ORDER BY Timestamp \
-            DESC LIMIT 1;"
+        filter={
+            'issi': int(issi)
+        }
+        sort=list({
+            'unix': -1
+        }.items())
+        limit=1
+
+        results = DB['sds_data'].find(
+            filter=filter,
+            sort=sort,
+            limit=limit
         )
 
-        myresult = cursor.fetchall()
-
-        # Placeholder default values
-        detail = {
-            'timestamp' : 'None',
-            'node' : 'None',
-            'gps' : False,
-            'rssi' : 'None',
-            'distance' :'None',
-            'location' : {
-                'location' : {
-                    'latitude' : {
-                        'decimal_degrees' : 'None',
-                        'meridian' : ''
-                    },
-                    'longitude' : {
-                        'decimal_degrees' : 'None',
-                        'meridian' : ''
-                    },
-                    'altitude' : {
-                        'meters' : 'None'
-                    },
-                    'uncertainty' : 'None'
-                },
-                'velocity' : {
-                    'kmh' : 'None'
-                },
-                'time' : {
-                    'local' : 'None'
-                },
-            }
-        }
-
-
         try:
-            hex_string = myresult[0][5].hex()
-            hex_string = hex_string.rstrip("0")
-            location = sds(str(hex_string))
-            lat = location['location']['latitude']['decimal_degrees']
-            lon = location['location']['longitude']['decimal_degrees']
-            maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
-            location['location']['maps_url'] = maps_url
-
-            time = myresult[0][0] + datetime.timedelta(hours=8)
-            time = time.strftime('%d/%m/%Y %H:%M:%S')
-
-            node_name = DB['tetra_nodes'].find_one(
-                {
-                    'node_number' : myresult[0][1],
-                },
-                {'_id': False}
-            )
-
-            if myresult[0][2] ==  129:
-                gps = True
-            elif myresult[0][2] == 44:
-                gps = False
-
-
+            results = results[0]
+            timestamp = str(results['processed_time'] + datetime.timedelta(hours=8))
+            lat = results['decimal_degrees']['latitude']
+            lon = results['decimal_degrees']['longitude']
+            url = f"https://www.google.com/maps/search/?api=1&query={lat},{lon}"
 
             detail = {
-                'timestamp' : time,
-                'node' : node_name['node_description'],
-                'gps' : gps,
-                'rssi' : myresult[0][3] * -1,
-                'distance' : myresult[0][4],
-                'location' : location
+                'timestamp' : timestamp,
+                'node' : results['node'],
+                'gps' : True,
+                'rssi' : results['rssi'],
+                'location' : results['decimal_degrees'],
+                'maps_url' : url,
+                'accuracy' : results['uncertainty'],
+                'velocity' : results['velocity'],
+                'direction' : results['direction'],
+                'angle' : results['angle']
             }
         except IndexError:
-            return(detail)
+            detail = {
+                  'gps' : False,
+            }
 
  
         return(jsonify(json.loads(dumps(detail))))

@@ -1,22 +1,18 @@
-<ng2-smart-table 
-[settings]="subscriberSettings"
-[source]="subscriberSource"
-(userRowSelect)="onSelect(detail, $event)"
-(editConfirm)="onDialog(dialog, 'edit', $event)"
->
+<ng2-smart-table [settings]="subscriberSettings" [source]="subscriberSource" (userRowSelect)="onSelect(detail, $event)"
+  (editConfirm)="onDialog(dialog, 'edit', $event)">
 </ng2-smart-table>
 
 <ng-template #dialog let-data let-ref="dialogRef">
   <nb-card status="danger">
-      <nb-card-header>Warning</nb-card-header>
-      <nb-card-body>{{ data }}</nb-card-body>
-      <nb-card-footer>
-          <div class=wrapper>
-              <button nbButton (click)="onModifyConfirm(true); ref.close()">Yes</button>
-              &nbsp;&nbsp;
-              <button nbButton (click)="onModifyConfirm(false); ref.close()">No</button>
-          </div>
-      </nb-card-footer>
+    <nb-card-header>Warning</nb-card-header>
+    <nb-card-body>{{ data }}</nb-card-body>
+    <nb-card-footer>
+      <div class=wrapper>
+        <button nbButton (click)="onModifyConfirm(true); ref.close()">Yes</button>
+        &nbsp;&nbsp;
+        <button nbButton (click)="onModifyConfirm(false); ref.close()">No</button>
+      </div>
+    </nb-card-footer>
   </nb-card>
 </ng-template>
 
@@ -54,7 +50,7 @@
                 picture='../../../assets/icons/radio-outline.svg'></nb-user>
             </nb-list-item>
             <nb-list-item>
-              <nb-user size="medium" name="RSSI" title="{{rssi}} {{rssi_units}}"showInitials=false
+              <nb-user size="medium" name="RSSI" title="{{rssi}} {{rssi_units}}" showInitials=false
                 picture='../../../assets/icons/wifi-outline.svg'></nb-user>
             </nb-list-item>
           </nb-list>
@@ -62,14 +58,30 @@
         <nb-tab tabTitle="Location" tabIcon="pin-outline" responsive>
           <nb-list>
             <nb-list-item>
-              GPS Time: {{gps_time}}<br>
-              Latitude: {{latitude}} {{lat_meridian}}<br>
-              Longitude: {{longitude}} {{lon_meridian}}<br>
-              Altitude: {{altitude}} {{units}}<br>
-              Accuracy: {{accuracy}} {{units}}<br>
-              Speed: {{speed}} {{speed_units}} <br>
-              Angle: {{angle}} {{angle_units}} <br>
-              Direction: {{direction}} <br>
+              Time: {{gps_time}}
+            </nb-list-item>
+            <nb-list-item>
+              Latitude: {{latitude}}
+            </nb-list-item>
+            <nb-list-item>
+              Longitude: {{longitude}}
+            </nb-list-item>
+            <nb-list-item>
+              Altitude: {{altitude}} {{units}}
+            </nb-list-item>
+            <nb-list-item>
+              Accuracy: {{accuracy}} {{units}}
+            </nb-list-item>
+            <nb-list-item>
+              Speed: {{speed}} {{speed_units}}
+            </nb-list-item>
+            <nb-list-item>
+              Angle: {{angle}} {{angle_units}}
+            </nb-list-item>
+            <nb-list-item>
+              Direction: {{direction}}
+            </nb-list-item>
+            <nb-list-item>
               URL: <a target="_blank" href="{{maps_url}}">{{link_text}}</a>
             </nb-list-item>
           </nb-list>

@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import {
   NbCardModule
 } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -25,6 +26,7 @@ import { DetailComponent } from './detail/detail.component';
     CommonModule,
     ComponentsModule,
     NbCardModule,
+    NbSecurityModule
   ]
 })
 export class WindModule { }

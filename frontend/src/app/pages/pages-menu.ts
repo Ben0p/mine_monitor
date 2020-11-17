@@ -101,7 +101,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'power-outline',
     data: {
       permission: 'view',
-      resource: 'settings'
+      resource: 'power'
     },
     children: [
       {
@@ -173,7 +173,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
             icon: 'edit-outline',
             link: '/pages/ups/edit',
             data: {
-              permission: 'admin',
+              permission: 'view',
               resource: 'ups_edit'
             },
           },
@@ -233,7 +233,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'music-outline',
     data: {
       permission: 'view',
-      resource: 'gen'
+      resource: 'fm'
     },
     children: [
       {

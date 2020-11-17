@@ -8,6 +8,7 @@ import {
   NbIconModule,
 } from '@nebular/theme';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { NbSecurityModule } from '@nebular/security';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -30,6 +31,7 @@ import { FmEditComponent } from './fm-edit/fm-edit.component';
     NbButtonModule,
     NbIconModule,
     Ng2SmartTableModule,
+    NbSecurityModule
   ]
 })
 export class FmModule { }

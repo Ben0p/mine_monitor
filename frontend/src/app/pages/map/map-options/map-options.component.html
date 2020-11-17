@@ -10,6 +10,9 @@
     <nb-card>
         <nb-card-body>
             <div class="row">
+                <nb-checkbox (checkedChange)="toggle('sky', $event)" [checked]="sky">Sky Base Globe</nb-checkbox>
+            </div>
+            <div class="row">
                 <nb-checkbox (checkedChange)="toggle('tetra', $event)" [checked]="tetra">Tetra Positions</nb-checkbox>
             </div>
             <div class="row">

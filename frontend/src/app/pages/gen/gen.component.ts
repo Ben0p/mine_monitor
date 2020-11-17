@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'ngx-gen',
   template: `
-    <router-outlet></router-outlet>
+    <router-outlet *nbIsGranted="['view', 'gen']"></router-outlet>
   `,
 })
 

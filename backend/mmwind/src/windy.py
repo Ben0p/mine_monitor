@@ -13,8 +13,7 @@ from history import minute, hour, day, month
 
 
 # Initialize mongo
-CLIENT = pymongo.MongoClient(
-    f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
+CLIENT = pymongo.MongoClient(f"mongodb://{env['mongodb_ip']}:{env['mongodb_port']}")
 DB = CLIENT[env['database']]
 
 
@@ -247,14 +246,17 @@ def run():
 
    
     while True:
+
+        # Connect to SQL
         cursor = connectSQL()
-        # Get data from SQL
         
+        # If authenticated and connected OK:        
         if cursor:
             while True:
                 try:
                     rows = pollSQL(cursor)
                 except:
+                    # On ANY error break from loop and insert offline data
                     break
         
                 if rows:
@@ -275,11 +277,14 @@ def run():
 
                 time.sleep(5)
         else:
+            # If not authenticated or some polling error
             insertOffline()
+            # Sleep as to not spam out the authentication
             time.sleep(30)
 
 
 
 if __name__ == "__main__":
-
+''' Main
+'''
     run()

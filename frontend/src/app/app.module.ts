@@ -60,6 +60,7 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'wind_all',
             'tetra',
             'tetra_nodes',
+            'power',
             'tetra_subscribers',
             'solar',
             'solar_controllers',
@@ -82,6 +83,16 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'fm_edit',
             'solar_edit',
             'ups_edit'
+          ],
+        },
+        generators: {
+          view: [
+            'power',
+            'gen',
+            'gen_status',
+            'settings',
+            'settings_style',
+
           ],
         },
       },

@@ -280,37 +280,43 @@ def weatherZone():
 
     json_data = json.loads(response.text)
     locations = json_data['countries'][0]['locations']
+
     
     for location in locations:
-        for alert in location['alerts']:
-            if alert['embargo_period'] != 'Infinite' and alert['alert_type'] == 'LIGHTNING':
-                print(f"{location['name']} - {alert['status']}")
-                if alert['status'] == "CLEAR":
-                    state = 'All Clear'
-                    status = "success"
-                    icon = "checkmark-circle-2-outline"
-                elif alert['status'] == "Alpha":
-                    state = 'A Alert'
-                    status = 'info'
-                    icon = 'flash-outline'
-                elif alert['status'] == "Bravo":
-                    state = 'B Alert'
-                    status = 'warning'
-                    icon = 'flash-outline'
-                elif alert['status'] == "Charlie":
-                    state = 'C Alert'
-                    status = 'danger'
-                    icon = 'flash-outline'
-                else:
-                    status = 'primary'
-                    state = 'Offline'
-                    icon = 'close-circle-outline'
-            elif alert['embargo_period'] == 'Infinite' and alert['alert_type'] == 'LIGHTNING':
-                print(f"{location['name']} - {alert['status']}")
-                if alert['status'] == "CLEAR":
-                    state = 'All Clear'
-                    status = "success"
-                    icon = "checkmark-circle-2-outline"
+        try:
+            for alert in location['alerts']:
+                if alert['embargo_period'] != 'Infinite' and alert['alert_type'] == 'LIGHTNING':
+                    print(f"{location['name']} - {alert['status']}")
+                    if alert['status'] == "CLEAR":
+                        state = 'All Clear'
+                        status = "success"
+                        icon = "checkmark-circle-2-outline"
+                    elif alert['status'] == "Alpha":
+                        state = 'A Alert'
+                        status = 'info'
+                        icon = 'flash-outline'
+                    elif alert['status'] == "Bravo":
+                        state = 'B Alert'
+                        status = 'warning'
+                        icon = 'flash-outline'
+                    elif alert['status'] == "Charlie":
+                        state = 'C Alert'
+                        status = 'danger'
+                        icon = 'flash-outline'
+                    else:
+                        status = 'primary'
+                        state = 'Unknown'
+                        icon = 'close-circle-outline'
+                elif alert['embargo_period'] == 'Infinite' and alert['alert_type'] == 'LIGHTNING':
+                    print(f"{location['name']} - {alert['status']}")
+                    if alert['status'] == "CLEAR":
+                        state = 'All Clear'
+                        status = "success"
+                        icon = "checkmark-circle-2-outline"
+        except KeyError:
+            status = 'primary'
+            state = 'Unknown'
+            icon = 'close-circle-outline'
 
         DB['alert_wz'].find_one_and_update(
             {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MapRoutingModule, routedComponents } from './map-routing.module';
 
 import { ComponentsModule } from '../../@components/components.module';
+import { NbSecurityModule } from '@nebular/security';
 
 import {
   NbButtonModule,
@@ -34,6 +35,7 @@ import { MapOptionsComponent } from './map-options/map-options.component';
     NbPopoverModule,
     NbCardModule,
     NbCheckboxModule,
+    NbSecurityModule,
     AngularCesiumModule.forRoot(
       {
         fixEntitiesShadows: false,

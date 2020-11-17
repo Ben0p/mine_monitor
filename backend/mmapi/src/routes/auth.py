@@ -41,14 +41,11 @@ class auth(Resource):
         s = Server(f"{env['dc_ip']}", use_ssl=True, tls=tls_configuration)
 
         try:
-            print("Connecting")
             c = Connection(s, user=f"{env['domain']}\\{args['email']}",
                            password=f"{args['password']}", check_names=True, lazy=False, raise_exceptions=True)
             c.open()
             c.bind()
             result['connected'] = True
-
-            print("Connected")
 
 
 
@@ -80,6 +77,8 @@ class auth(Resource):
                         result['view'] = True
                     if CN == env['admin']:
                         result['admin'] = True
+                    if CN == env['generators']:
+                        result['generators'] = True
 
                 try:
                     result['mail'] = e_dict['mail'][0]
@@ -114,8 +113,16 @@ class auth(Resource):
             result['authenticated'] = True
             if result['admin'] == True:
                 result['role'] = 'admin'
-            if result['view'] == True and result['admin'] == False:
+            elif result['view'] == True and result['admin'] == False:
                 result['role'] = 'view'
+            elif result['generators'] == True and result['admin'] == False:
+                result['role'] = 'generators'
+            else:
+                result['authenticated'] = False
+            
+            print(f"{result['display_name']} - {result['role']}")
+
+            
 
             token = jwt.encode(result, args['password'], algorithm='HS256')
             response = {'token' : token.decode("utf-8")}

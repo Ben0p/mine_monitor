@@ -17,6 +17,7 @@ export class MapOptionsComponent implements OnInit {
   lanes: boolean = true;
   zones: boolean = true;
   blocks: boolean = true;
+  sky: boolean = true;
   viewer: any;
   layers: any;
   billboards: any;
@@ -49,6 +50,10 @@ export class MapOptionsComponent implements OnInit {
     if (layer == 'blocks') {
       this.blocks = checked;
       this.layers._layers[2].show = checked
+    }
+    if (layer == 'sky') {
+      this.sky = checked;
+      this.layers._layers[1].show = checked
     }
   }
 

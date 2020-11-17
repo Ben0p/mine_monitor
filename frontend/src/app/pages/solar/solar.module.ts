@@ -8,6 +8,7 @@ import {
   NbButtonModule,
   NbIconModule,
 } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -31,7 +32,8 @@ import { SolarEditComponent } from './solar-edit/solar-edit.component';
     NbCardModule,
     NbButtonModule,
     NbIconModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    NbSecurityModule
   ]
 })
 export class SolarModule { }

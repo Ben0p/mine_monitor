@@ -8,6 +8,7 @@ import {
   NbButtonModule,
   NbIconModule,
 } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
 
 import { ComponentsModule } from '../../@components/components.module';
 
@@ -30,7 +31,8 @@ import { UpsEditComponent } from './ups-edit/ups-edit.component';
     NbCardModule,
     NbButtonModule,
     NbIconModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    NbSecurityModule
   ]
 })
 export class UpsModule { }

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'ngx-solar',
   template: `
-    <router-outlet></router-outlet>
+    <router-outlet *nbIsGranted="['view', 'solar']"></router-outlet>
   `,
 })
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from '../../@auth/auth-guard.service';
 
 import { DashboardsComponent } from './dashboards.component';
 import { DashAlertsTetraComponent } from './dash-alerts-tetra/dash-alerts-tetra.component'

@@ -174,7 +174,12 @@ def processData(data):
                     'velocity' : location['velocity']['kmh'],
                     'velocity_color' : velocity_color,
                     'direction' : location['direction']['direction'],
-                    'angle' : location['direction']['angle']
+                    'angle' : location['direction']['angle'],
+                    'decimal_degrees' : {
+                        'latitude' : location['location']['latitude']['decimal_degrees'],
+                        'longitude' : location['location']['longitude']['decimal_degrees'],
+                        'altitude' : location['location']['altitude']['meters']
+                    }
             },
         )
     finish_process_time = time.time()
