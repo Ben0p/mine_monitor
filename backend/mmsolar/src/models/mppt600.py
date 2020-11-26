@@ -85,6 +85,7 @@ def getColor(volts, target):
 
     return(color)
 
+
 def parse(tristar):
     '''
     Gets tristar data via modbus and writes to tristar_data db

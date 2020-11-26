@@ -126,6 +126,6 @@ class gen_status(Resource):
 
     def get(self):
         # Get zone list
-        gen_status = DB['gen_status'].find().sort("name", pymongo.ASCENDING)
+        gen_status = DB['gen_status'].find().sort("name", 1)
         
         return(jsonify(json.loads(dumps(gen_status))))

@@ -17,12 +17,12 @@ def toFloat16(value):
     return(result)
 
 
-c = ModbusClient(host='172.19.246.193', port=502, auto_open=True, timeout=1)
+c = ModbusClient(host='172.19.64.181', port=502, auto_open=True, timeout=1)
 
 # Read up to modbus register 60
-values = c.read_holding_registers(66, 1)
+values = c.read_holding_registers(0, 60)
 
-
+print(values)
 
 for i, value in enumerate(values):
 

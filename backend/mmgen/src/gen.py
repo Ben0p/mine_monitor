@@ -182,11 +182,17 @@ def modelE2242(module):
         oil = di[module['oil_di']]
 
         # Reverse logic, activated input = not running
-        # Explicitly defined because None was being read as False
-        if oil == True:
-            oil = False
-        elif oil == False:
-            oil = True
+        # Boolean explicitly defined because None was being read as False
+        if module['oil_pol'] == 'no':
+            if oil == True:
+                oil = False
+            elif oil == False:
+                oil = True
+        elif module['oil_pol'] == 'nc':
+            if oil == True:
+                oil = True
+            elif oil == False:
+                oil = False
     except KeyError:
         oil = None
     
