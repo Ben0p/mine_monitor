@@ -10,6 +10,7 @@ export class DashPowerComponent implements OnInit, OnDestroy {
 
   sites: any;
   interval: any;
+  loaded = false;
 
   constructor(
     private dash: DashService,
@@ -31,6 +32,7 @@ export class DashPowerComponent implements OnInit, OnDestroy {
       (
         data: {}) => {
         this.sites = data;
+        this.loaded = true
       }
     )
   }

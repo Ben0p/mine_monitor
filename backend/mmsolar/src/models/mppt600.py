@@ -21,6 +21,7 @@ def toFloat16(value):
 
     return(result)
 
+
 def targetVoltage(target, batt):
     ''' Caclulates target voltage, accounts for night mode
     '''
@@ -30,14 +31,47 @@ def targetVoltage(target, batt):
 
     if target < 1:
         if batt <= 18:
-            sys_v = 14
+            target = 12.65
+            low = 11.89
         elif 18 < batt <= 30:
-            sys_v = 28
+            target = 25.3
+            low = 23.78
         elif batt >= 30:
-            sys_v = 57
-        return(sys_v)
+            target = 50.6
+            low = 47.56
     else:
-        return(target)
+        if batt <= 18:
+            low = 11.89
+        elif 18 < batt <= 30:
+            low = 23.78
+        elif batt >= 30:
+            low = 47.56
+    
+    return(target, low)
+
+
+def calcSOC(batt_volts, target, low):
+    ''' Calculates the state of charge % (decimal)
+    '''
+
+    batt_volts = float(batt_volts)
+    
+    _range = target - low
+    charge = batt_volts - low
+    soc = (charge / _range) * 100
+    soc = int(soc)
+
+    return(soc)
+
+def percentage(total, value):
+
+    total = float(total)
+    value = float(value)
+
+    percentage = (value / total) * 100
+    percentage = int(percentage)
+
+    return(percentage)
 
 
 def chargeState(state):
@@ -61,21 +95,17 @@ def chargeState(state):
     return(states[str(state)])
 
 
-def getColor(volts, target):
+def getColor(soc):
     ''' Turns percentage into color
     '''
 
-    volts = float(volts)
-    target = float(target)
-
     try:
-        p = (volts/target)*100
 
-        if p <= 75:
+        if soc <= 75:
             color = "danger"
-        elif 75 < p <= 90:
+        elif 75 < soc <= 90:
             color = "warning"
-        elif 90 < p:
+        elif 90 < soc:
             color = "success"
         else:
             color = "info"
@@ -103,7 +133,7 @@ def parse(tristar):
         c = ModbusClient(host=tristar['ip'], port=502, auto_open=True, timeout=1)
 
         # Read up to modbus register 60
-        values = c.read_holding_registers(0, 60)
+        values = c.read_holding_registers(0, 80)
 
         if values:
             # Save modbus values to dictionary
@@ -121,46 +151,45 @@ def parse(tristar):
                 'T_hs': values[35],
                 'charge_state': values[50],
                 'vb_ref' : values[51],
-                'power_out_shadow': values[58]
+                'power_out_shadow': values[58],
+                'va_max_daily' : values[66]
             }
 
             # Save converted values to dictionary
             live_values = {
                 'online' : True,
-                'batt_volts': toFloat16(
-                    raw_values['adc_vb_f_med']),
-                'batt_current': toFloat16(
-                    raw_values['adc_ib_f_shadow']),
-                'solar_volts': toFloat16(
-                    raw_values['adc_va_f']),
-                'solar_current': toFloat16(
-                    raw_values['adc_ia_f_shadow']),
-                'charge_state': chargeState(
-                    raw_values['charge_state']),
-                'batt_target': targetVoltage(
-                    raw_values['vb_ref'],
-                    raw_values['adc_vb_f_med']),
-                'output_power': toFloat16(
-                    raw_values['power_out_shadow']
-                ),
-                'heatsink_temp': raw_values['T_hs']
+                'batt' : {},
+                'solar' : {},
+                'charge_state': chargeState(raw_values['charge_state']),
+                'output_power': toFloat16(raw_values['power_out_shadow']),
+                'heatsink_temp': raw_values['T_hs'],
             }
+            
+            # Calc values
+            batt_volts = toFloat16(raw_values['adc_vb_f_med'])
+            target_voltage, minimum_voltage = targetVoltage(raw_values['vb_ref'], raw_values['adc_vb_f_med'])
+            soc = calcSOC(batt_volts, target_voltage, minimum_voltage)
 
-            live_values['color'] = getColor(live_values['batt_volts'], live_values['batt_target'])
+            # Battery
+            live_values['batt']['volts'] = batt_volts
+            live_values['batt']['current']: toFloat16(raw_values['adc_ib_f_shadow'])
+            live_values['batt']['target'] = target_voltage
+            live_values['batt']['min'] = minimum_voltage
+            live_values['batt']['color'] = getColor(soc)
+            live_values['batt']['soc'] = soc
+
+            # Solar
+            live_values['solar']['volts'] = toFloat16(raw_values['adc_va_f'])
+            live_values['solar']['current'] = toFloat16(raw_values['adc_ia_f_shadow'])
+            live_values['solar']['max'] = toFloat16(raw_values['va_max_daily'])
+            live_values['solar']['percentage'] = percentage(live_values['solar']['max'], live_values['solar']['volts'])
+            live_values['solar']['color'] = getColor(live_values['solar']['percentage'])
+
 
         # Blank values if there is no connection
         else: 
             live_values = {
                 'online' : False,
-                'batt_volts': '',
-                'batt_current': '',
-                'solar_volts': '',
-                'solar_current': '',
-                'charge_state': '',
-                'batt_target' : '',
-                'output_power': '',
-                'heatsink_temp': '',
-                'color' : 'info'
             }
 
         # Check for changes
@@ -195,6 +224,7 @@ def parse(tristar):
             )
 
         except:
+
             # Dump into tristar_data collection
             db['solar_data'].find_one_and_update(
                 {

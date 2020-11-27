@@ -43,8 +43,8 @@ class dash_power(Resource):
 
     def get(self):
         # Get zone list
-        gen_status = DB['gen_status'].find()
-        solar_data = DB['solar_data'].find()
+        gen_status = DB['gen_status'].find().sort("name", 1)
+        solar_data = DB['solar_data'].find().sort("name", 1)
 
         power_dash = {
             'gens' : gen_status,

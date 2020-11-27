@@ -10,6 +10,7 @@ import { SolarService } from '../../../@core/data/solar.service'
 export class SolarControllersComponent implements OnInit, OnDestroy  {
   solar_datas: Object;
   interval: any;
+  loaded = false;
 
   constructor(
     private solar: SolarService,
@@ -17,6 +18,7 @@ export class SolarControllersComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
     this.refreshData();
+    this.loaded = true
     this.interval = setInterval(() => {
       this.refreshData();
     }, 10000);

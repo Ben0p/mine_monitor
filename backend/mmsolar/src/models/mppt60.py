@@ -24,14 +24,48 @@ def targetVoltage(hi, lo, target, batt):
 
     if target < 1:
         if batt <= 18:
-            sys_v = 14
+            target = 12.65
+            low = 11.89
         elif 18 < batt <= 30:
-            sys_v = 28
+            target = 25.3
+            low = 23.78
         elif batt >= 30:
-            sys_v = 57
-        return(sys_v)
+            target = 50.6
+            low = 47.56
     else:
-        return(target)
+        if batt <= 18:
+            low = 11.89
+        elif 18 < batt <= 30:
+            low = 23.78
+        elif batt >= 30:
+            low = 47.56
+    
+    return(target, low)
+
+
+def calcSOC(batt_volts, target, low):
+    ''' Calculates the state of charge % (decimal)
+    '''
+
+    batt_volts = float(batt_volts)
+    
+    _range = target - low
+    charge = batt_volts - low
+    soc = (charge / _range) * 100
+    soc = int(soc)
+
+    return(soc)
+
+
+def percentage(total, value):
+
+    total = float(total)
+    value = float(value)
+
+    percentage = (value / total) * 100
+    percentage = int(percentage)
+
+    return(percentage)
 
 
 def calcCurrent(hi, lo, i):
@@ -74,21 +108,18 @@ def chargeState(state):
 
     return(states[str(state)])
 
-def getColor(volts, target):
+
+def getColor(soc):
     ''' Turns percentage into color
     '''
 
-    volts = float(volts)
-    target = float(target)
-
     try:
-        p = (volts/target)*100
 
-        if p <= 75:
+        if soc <= 75:
             color = "danger"
-        elif 75 < p <= 90:
+        elif 75 < soc <= 90:
             color = "warning"
-        elif 90 < p:
+        elif 90 < soc:
             color = "success"
         else:
             color = "info"
@@ -116,7 +147,7 @@ def parse(tristar):
         c = ModbusClient(host=tristar['ip'], port=502, auto_open=True, timeout=1)
 
         # Read up to modbus register 60
-        values = c.read_holding_registers(0, 60)
+        values = c.read_holding_registers(0, 80)
 
         if values:
             # Save modbus values to dictionary
@@ -134,47 +165,87 @@ def parse(tristar):
                 'T_hs': values[35],
                 'charge_state': values[50],
                 'vb_ref' : values[51],
-                'power_out_shadow': values[58]
+                'power_out_shadow': values[58],
+                'va_max_daily' : values[66]
             }
 
             # Save converted values to dictionary
             live_values = {
                 'online' : True,
-                'batt_volts': calcVolts(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['adc_vb_f_med']),
-                'batt_current': calcCurrent(
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['adc_ib_f_shadow']),
-                'solar_volts': calcVolts(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['adc_va_f']),
-                'solar_current': calcCurrent(
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['adc_ia_f_shadow']),
-                'charge_state': chargeState(
-                    raw_values['charge_state']),
-                'batt_target': targetVoltage(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['vb_ref'],
-                    raw_values['adc_vb_f_med'],
-                    ),
-                'output_power': calcPower(
-                    raw_values['V_PU_hi'],
-                    raw_values['V_PU_lo'],
-                    raw_values['I_PU_hi'],
-                    raw_values['I_PU_lo'],
-                    raw_values['power_out_shadow']
-                ),
+                'batt' : {},
+                'solar' : {},
+                'charge_state': chargeState(raw_values['charge_state']),
                 'heatsink_temp': raw_values['T_hs'],
             }
 
-            live_values['color'] = getColor(live_values['batt_volts'], live_values['batt_target'])
+            # Calc values
+            batt_volts = calcVolts(
+                        raw_values['V_PU_hi'],
+                        raw_values['V_PU_lo'],
+                        raw_values['adc_vb_f_med']
+                    )
+            
+            target_voltage, minimum_voltage = targetVoltage(
+                        raw_values['V_PU_hi'],
+                        raw_values['V_PU_lo'],
+                        raw_values['vb_ref'],
+                        raw_values['adc_vb_f_med'],
+                    )
+            
+            batt_current = calcCurrent(
+                        raw_values['I_PU_hi'],
+                        raw_values['I_PU_lo'],
+                        raw_values['adc_ib_f_shadow']
+                    )
+            
+            soc = calcSOC(
+                        batt_volts,
+                        target_voltage,
+                        minimum_voltage
+                    )
+            
+            solar_volts = calcVolts(
+                        raw_values['V_PU_hi'],
+                        raw_values['V_PU_lo'],
+                        raw_values['adc_va_f']
+                    )
+
+            solar_max = calcVolts(
+                        raw_values['V_PU_hi'],
+                        raw_values['V_PU_lo'],
+                        raw_values['va_max_daily']
+                    )
+            
+            solar_current = calcCurrent(
+                        raw_values['I_PU_hi'],
+                        raw_values['I_PU_lo'],
+                        raw_values['adc_ia_f_shadow']
+                    )
+            
+            output_power  = calcPower(
+                        raw_values['V_PU_hi'],
+                        raw_values['V_PU_lo'],
+                        raw_values['I_PU_hi'],
+                        raw_values['I_PU_lo'],
+                        raw_values['power_out_shadow']
+                    )
+
+            live_values['output_power'] = output_power
+
+            # Battery
+            live_values['batt']['volts'] = batt_volts
+            live_values['batt']['current'] = batt_current
+            live_values['batt']['target'] = target_voltage
+            live_values['batt']['min'] = minimum_voltage
+            live_values['batt']['color'] = getColor(soc)
+            live_values['batt']['soc'] = soc
+
+            # Solar
+            live_values['solar']['volts'] = solar_volts
+            live_values['solar']['current'] = solar_current
+            live_values['solar']['max'] = solar_max
+            live_values['solar']['percentage'] = percentage(live_values['solar']['max'], live_values['solar']['volts'])
+            live_values['solar']['color'] = getColor(live_values['solar']['percentage'])
 
 
         # Blank values if there is no connection
