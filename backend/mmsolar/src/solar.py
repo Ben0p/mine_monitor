@@ -79,9 +79,6 @@ def main():
                 print(f"{time.strftime('%d/%m/%Y %X')} - Stopped {oid}")
 
 
-
-
-
         time.sleep(10)
 
 

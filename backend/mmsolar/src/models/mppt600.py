@@ -46,6 +46,9 @@ def targetVoltage(target, batt):
             low = 23.78
         elif batt >= 30:
             low = 47.56
+
+    if batt > target:
+        target = batt
     
     return(target, low)
 
@@ -101,11 +104,11 @@ def getColor(soc):
 
     try:
 
-        if soc <= 75:
+        if soc <= 50:
             color = "danger"
-        elif 75 < soc <= 90:
+        elif 50 < soc <= 80:
             color = "warning"
-        elif 90 < soc:
+        elif 80 < soc:
             color = "success"
         else:
             color = "info"
