@@ -47,8 +47,36 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
     }, 10000);
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     clearInterval(this.interval);
+  }
+
+  ordinal_suffix_of(i) {
+    var j = i % 10,
+      k = i % 100;
+    if (j == 1 && k != 11) {
+      return i + "st";
+    }
+    if (j == 2 && k != 12) {
+      return i + "nd";
+    }
+    if (j == 3 && k != 13) {
+      return i + "rd";
+    }
+    return i + "th";
+  }
+
+  getDate(unix) {
+
+    var time = new Date(unix)
+    var daystring = new Intl.DateTimeFormat('en-AU', { weekday: 'long' }).format(time)
+    var date = time.getDate()
+    var datestring = this.ordinal_suffix_of(date)
+    var monthstring = new Intl.DateTimeFormat('en-AU', { month: 'long' }).format(time)
+    var yearstring = new Intl.DateTimeFormat('en-AU', { year: 'numeric' }).format(time)
+
+    var finaltimestring = `${daystring}, ${monthstring} ${datestring} ${yearstring}`
+    return (finaltimestring)
   }
 
   refreshData() {

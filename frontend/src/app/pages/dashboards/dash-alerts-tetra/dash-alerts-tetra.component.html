@@ -77,13 +77,13 @@
         </nb-card>
       </div>
       <div class="col-xxl-4">
-        <nb-card style="height: 470px;">
+        <nb-card *ngFor="let wind_data of wind_datas" style="height: 470px;">
           <nb-card-header>
-            Wind Rose
+            Wind Rose: {{getDate(wind_data.date.$date)}}
           </nb-card-header>
           <nb-card-body style="overflow: hidden;">
             <div class="row">
-              <div *ngFor="let wind_data of wind_datas" class="col-xxl-12">
+              <div class="col-xxl-12">
                 <ngx-weather-wind-direction [data]=wind_data>
                 </ngx-weather-wind-direction>
               </div>

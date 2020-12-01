@@ -56,6 +56,7 @@ export class WeatherWindDirectionComponent implements AfterViewInit, OnDestroy {
         {
           angleAxis: {
             type: 'category',
+            startAngle: 101,
             animation: false,
             axisLine: {
               lineStyle: {
