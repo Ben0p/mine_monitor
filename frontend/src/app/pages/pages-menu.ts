@@ -182,23 +182,43 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Wind',
+    title: "Weather",
     icon: 'umbrella-outline',
     data: {
       permission: 'view',
-      resource: 'wind'
+      resource: 'weather'
     },
     children: [
       {
-        title: 'All',
-        icon: 'keypad-outline',
+        title: 'Wind',
+        icon: 'umbrella-outline',
         link: '/pages/wind/all',
         data: {
           permission: 'view',
-          resource: 'wind_all'
+          resource: 'wind'
         },
-      },
-    ]
+        children : [
+          {
+            title: 'Speeds',
+            icon: 'trending-up-outline',
+            link: '/pages/wind/all',
+            data: {
+              permission: 'view',
+              resource: 'wind_all'
+            },
+          },
+          {
+            title: 'Direction',
+            link: '/pages/weather/wind',
+            icon: 'navigation-2-outline',
+            data: {
+              permission: 'view',
+              resource: 'weather_wind'
+            },
+          }
+        ]
+      }
+    ],
   },
   {
     title: 'Tetra',

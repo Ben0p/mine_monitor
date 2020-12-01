@@ -27,6 +27,7 @@ from routes.dash import dash_power, dash_towers
 from routes.fm import fm_live, fm_modules, fm_create, fm_update, fm_delete
 from routes.map import test_czml, test_tetra, tetra_all, map_layers, map_sds, map_sds_range
 from routes.ups import ups_create, ups_update, ups_delete, ups_modules, ups_status, ups_list
+from routes.weather import weather_wind
 
 """ Main rest API router
 """
@@ -133,6 +134,8 @@ API.add_resource(ups_modules, '/api/ups/modules')
 API.add_resource(ups_status, '/api/ups/status')
 API.add_resource(ups_list, '/api/ups/list')
 
+# UPS
+API.add_resource(weather_wind, "/api/weather/wind")
 
 if __name__ == "__main__":
     # Run flask

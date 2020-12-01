@@ -6,9 +6,10 @@ from selenium import webdriver
 import time
 import pymongo
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
+from charts import windrose
 
 
 # Initialize mongo
@@ -66,8 +67,11 @@ def parse(report, data):
         #2020-11-27T16:00:00Z
         timestamp = datetime.strptime(datapoints[0], '%Y-%m-%dT%H:%M:%SZ')
         timestamp.replace(tzinfo=pytz.timezone('Etc/GMT-0'))
+        date = timestamp + timedelta(hours=8)
+        date = date.replace(hour=00, minute=00)
 
         values['timestamp'] = timestamp
+        values['date'] = date
         values['description'] = description
         values['type'] = report['type']
         values['span'] = report['span']
@@ -121,14 +125,21 @@ def process_reports(driver):
 
 def run():
 
+
     chrome_options = set_chrome_options()
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(options=chrome_options)
+
 
     while True:
 
         authenticate(driver)
         process_reports(driver)
-        time.sleep(10)
+
+        windrose.generate(DB)
+        # Sleep 12 hours
+        print(f"{time.strftime('%d/%m/%Y %X')} - Sleeping for 12 hours")
+        driver.close()
+        time.sleep(60*60*12)
 
     
 

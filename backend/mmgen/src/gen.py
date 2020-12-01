@@ -252,7 +252,7 @@ def modelE2242(module):
         fuel_color = "danger"
 
     if temp:
-        temp = (((temp / 65535)*20)*1000)-278
+        temp = (((temp / 65535)*20)*1000)-273 + module['temp_offset']
         temp = int(temp)
     else:
         temp = 0

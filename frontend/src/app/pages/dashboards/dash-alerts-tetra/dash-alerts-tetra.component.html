@@ -1,6 +1,6 @@
-<div class="row">
-  <div class="col-xxl-3">
-    <nb-card>
+<div class="row" style="height: 1230px;">
+  <div class="col-xxl-3" style="height: 100%">
+    <nb-card style="height: 100%">
       <nb-card-header>
         Alerts - Weather Zone
       </nb-card-header>
@@ -61,16 +61,31 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-xxl-8">
+      <div class="col-xxl-4">
         <nb-card>
           <nb-card-header>
             Wind
           </nb-card-header>
           <nb-card-body>
             <div class="row">
-              <div *ngFor="let wind of winds" class="col-xxl-4">
+              <div *ngFor="let wind of winds" class="col-xxl-6">
                 <ngx-wind-speed-card *ngIf="wind.type=='speed'" [location]="wind.name" [speed]="wind.speed"
                   [info]="wind.kmh" [status]="wind.status" [on]="wind.online"></ngx-wind-speed-card>
+              </div>
+            </div>
+          </nb-card-body>
+        </nb-card>
+      </div>
+      <div class="col-xxl-4">
+        <nb-card style="height: 470px;">
+          <nb-card-header>
+            Wind Rose
+          </nb-card-header>
+          <nb-card-body style="overflow: hidden;">
+            <div class="row">
+              <div *ngFor="let wind_data of wind_datas" class="col-xxl-12">
+                <ngx-weather-wind-direction [data]=wind_data>
+                </ngx-weather-wind-direction>
               </div>
             </div>
           </nb-card-body>
@@ -83,7 +98,7 @@
           </nb-card-header>
           <nb-card-body>
             <div class="row">
-              <div *ngFor="let fm of fmLive" class="col-xxl-6">
+              <div *ngFor="let fm of fmLive" class="col-xxl-12">
                 <ngx-fm-live [station]="fm.station" [state]="fm.state" [artist]="fm.artist" [song]="fm.song"
                   [t_minus]="fm.t_minus">
                 </ngx-fm-live>

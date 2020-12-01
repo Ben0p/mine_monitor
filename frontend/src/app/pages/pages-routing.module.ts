@@ -60,6 +60,11 @@ const routes: Routes = [{
         .then(m => m.UpsModule),
     },
     {
+      path: 'weather',
+      loadChildren: () => import('./weather/weather.module')
+        .then(m => m.WeatherModule),
+    },
+    {
       path: '',
       redirectTo: 'dashboards/alerts-tetra',
       pathMatch: 'full',

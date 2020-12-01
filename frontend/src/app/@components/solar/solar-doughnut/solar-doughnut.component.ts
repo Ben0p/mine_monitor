@@ -1,8 +1,6 @@
 import { delay } from 'rxjs/operators';
 import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
-import { getLocaleDateFormat } from '@angular/common';
-import { EllipsoidGeodesic, OrthographicOffCenterFrustum } from 'cesium';
 
 declare const echarts: any;
 

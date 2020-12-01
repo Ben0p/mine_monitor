@@ -48,6 +48,8 @@ import { GenStatusComponent } from './gen/gen-status/gen-status.component';
 
 import { FmLiveComponent } from './fm/fm-live/fm-live.component';
 
+import { WeatherWindDirectionComponent } from './weather/wind-direction/weather-wind-direction.component';
+
 
 
 @NgModule({
@@ -75,6 +77,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         SolarDoughnutComponent,
         GenStatusComponent,
         FmLiveComponent,
+        WeatherWindDirectionComponent,
     ],
     imports: [
         CommonModule,
@@ -116,6 +119,7 @@ import { FmLiveComponent } from './fm/fm-live/fm-live.component';
         SolarDoughnutComponent,
         GenStatusComponent,
         FmLiveComponent,
+        WeatherWindDirectionComponent,
     ]
 })
 

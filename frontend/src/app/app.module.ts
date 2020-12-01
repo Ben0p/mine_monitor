@@ -70,7 +70,9 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'fm_status',
             'map',
             'ups',
-            'ups_status'
+            'ups_status',
+            'weather',
+            'weather_wind'
           ],
         },
         admin: {
