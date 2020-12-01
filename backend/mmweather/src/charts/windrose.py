@@ -64,19 +64,18 @@ def generate(DB):
     for location in DB['weather_data'].distinct('location',  {'type': 'Atmospheric'}):
         locations.append(location)
 
-    print(locations)
-
     # End date time (Yesterday 16:00 pm)
     end_timestamp = datetime.today() - timedelta(days=1)
     end_timestamp = end_timestamp.replace(
         hour=15, minute=59, second=59, microsecond=00)
     end_timestamp.replace(tzinfo=pytz.timezone('Etc/GMT-0'))
-    print(end_timestamp)
     # Start 24 hours before yesterday 16:00 pm
     start_timestamp = end_timestamp - timedelta(days=1)
     start_timestamp = start_timestamp.replace(
         hour=16, minute=00, second=00, microsecond=00)
-    print(start_timestamp)
+
+    print(f"Start: {start_timestamp} Etc/GMT-0")
+    print(f"  End: {end_timestamp} Etc/GMT-0")
 
     for location in locations:
         # Get the astmospheric data (contains wind)
