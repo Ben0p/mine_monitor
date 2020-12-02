@@ -65,7 +65,7 @@ def tetraNodes(CURSOR, DB):
         online = True
 
         # Override if offline   
-        if x[0].timestamp() < (time.time()+ env['time_offset'] -10):
+        if x[0].timestamp() < (time.time()+ env['time_offset'] -15):
             color = 'offline'
             online = False
             load = 100

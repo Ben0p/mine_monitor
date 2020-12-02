@@ -125,12 +125,9 @@ def process_reports(driver):
 
 def run():
 
-
-    chrome_options = set_chrome_options()
-    driver = webdriver.Chrome(options=chrome_options)
-
-
     while True:
+        chrome_options = set_chrome_options()
+        driver = webdriver.Chrome(options=chrome_options)
 
         authenticate(driver)
         process_reports(driver)

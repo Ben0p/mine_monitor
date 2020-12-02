@@ -65,7 +65,7 @@ def generate(DB):
         locations.append(location)
 
     # End date time (Yesterday 16:00 pm)
-    end_timestamp = datetime.today() - timedelta(days=1)
+    end_timestamp = datetime.today()
     end_timestamp = end_timestamp.replace(
         hour=15, minute=59, second=59, microsecond=00)
     end_timestamp.replace(tzinfo=pytz.timezone('Etc/GMT-0'))

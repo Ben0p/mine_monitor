@@ -22,10 +22,18 @@ class weather_wind(Resource):
 
     def get(self):
 
+        filter={
+            'type': 'windrose'
+        }
+        sort=list({
+            'date': -1
+        }.items())
+        limit=1
+
         windrose = DB['weather_charts'].find(
-            {
-                'type': 'windrose',
-            }
+            filter=filter,
+            sort=sort,
+            limit=limit
         )
 
         return(jsonify(json.loads(dumps(windrose))))
