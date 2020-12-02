@@ -20,6 +20,7 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
   individualCalls: any;
   sdsCalls: any;
   interval: any;
+  interval2: any;
   fmLive: any;
   alertsLoaded: boolean = false;
   radiosLoaded: boolean = false;
@@ -29,7 +30,6 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
   fmLoaded: boolean = true;
   winds: Object;
   wind_datas: Object;
-
 
 
   constructor(
@@ -45,10 +45,17 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       this.refreshData();
     }, 10000);
+
+    this.refreshWeather()
+    this.interval2 = setInterval(() => {
+      this.refreshData();
+    }, 60000);
+    
   }
 
   ngOnDestroy() {
     clearInterval(this.interval);
+    clearInterval(this.interval2);
   }
 
   ordinal_suffix_of(i) {
@@ -127,6 +134,9 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
         this.winds = data;
       }
     )
+  }
+
+  refreshWeather(){
     this.weather.getWeatherWind().subscribe(
       (data: {}) => {
         this.wind_datas = data;
