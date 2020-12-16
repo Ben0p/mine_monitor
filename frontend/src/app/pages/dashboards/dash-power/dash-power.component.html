@@ -10,7 +10,7 @@
           <div class="row">
             <div *ngFor="let gen of sites.gens" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
               <ngx-gen-status [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel"
-                [level]="gen.fuel_level" [color]="gen.fuel_color" [temp]="gen.temp">
+                [level]="gen.fuel_level" [color]="gen.fuel_color" [temps]="gen.temps">
               </ngx-gen-status>
             </div>
           </div>

@@ -128,14 +128,25 @@ def run():
     while True:
         chrome_options = set_chrome_options()
         driver = webdriver.Chrome(options=chrome_options)
+        try:
+            authenticate(driver)
+            process_reports(driver)
+        except:
+            print("Bot violated the second law of robotics")
+            driver.close()
+            time.sleep(60 * 60)
+            continue
+        
+        try:
+            windrose.generate(DB)
+        except:
+            print("Data probably not available yet.")
+            driver.close()
+            time.sleep(60 * 60)
+            continue
 
-        authenticate(driver)
-        process_reports(driver)
-
-        windrose.generate(DB)
         # Sleep 12 hours
         print(f"{time.strftime('%d/%m/%Y %X')} - Sleeping for 12 hours")
-        driver.close()
         time.sleep(60*60*12)
 
     

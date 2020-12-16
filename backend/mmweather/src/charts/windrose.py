@@ -65,7 +65,7 @@ def generate(DB):
         locations.append(location)
 
     # End date time (Yesterday 16:00 pm)
-    end_timestamp = datetime.today()
+    end_timestamp = datetime.today() - timedelta(days=1)
     end_timestamp = end_timestamp.replace(
         hour=15, minute=59, second=59, microsecond=00)
     end_timestamp.replace(tzinfo=pytz.timezone('Etc/GMT-0'))
@@ -91,6 +91,7 @@ def generate(DB):
         )
 
         # Iterate over data
+        print(f"Found: {atmospherics.count()} data points.")
         for atmos in atmospherics:
             # If there is direction data
             if atmos['WD (deg)']:

@@ -48,7 +48,7 @@ export class DashAlertsTetraComponent implements OnInit, OnDestroy {
 
     this.refreshWeather()
     this.interval2 = setInterval(() => {
-      this.refreshData();
+      this.refreshWeather();
     }, 60000);
     
   }

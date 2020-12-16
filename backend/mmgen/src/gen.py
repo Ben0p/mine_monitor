@@ -53,6 +53,35 @@ def walk(host, oid):
     return(results)
 
 
+def tempStatus(temp):
+    '''Returns temp, color, icon for a temp value
+    '''
+
+    temp = '{:.1f}'.format(round(temp, 1))
+    temp = float(temp)
+
+    if temp < 30:
+        status = {
+            'temp' : temp,
+            'color' : 'info',
+            'icon' : 'thermometer-minus-outline'
+        }
+    elif 30 <= temp < 40:
+        status = {
+            'temp' : temp,
+            'color' : 'warning',
+            'icon' : 'thermometer-plus-outline'
+        }
+    elif 40 <= temp:
+        status = {
+            'temp' : temp,
+            'color' : 'danger',
+            'icon' : 'thermometer-plus-outline'
+        }
+    
+    return(status)
+
+
 def modelE2210(module):
     # Get all SNMP values
     results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2210')
@@ -223,11 +252,22 @@ def modelE2242(module):
 
 
     level = int(ai[module['level_ai']])
+
     # temp
     try:
         temp = int(ai[module['temp_ai']])
     except KeyError:
         temp = False
+    # temp2
+    try:
+        temp2 = int(ai[module['temp2_ai']])
+    except KeyError:
+        temp2 = False
+    # temp3
+    try:
+        temp3 = int(ai[module['temp3_ai']])
+    except KeyError:
+        temp3 = False
 
     # Fuel
     try:
@@ -251,11 +291,26 @@ def modelE2242(module):
     elif fuel_level <= 30:
         fuel_color = "danger"
 
+    # Calc temps
     if temp:
         temp = (((temp / 65535)*20)*1000)-273 + module['temp_offset']
-        temp = int(temp)
+        temp = tempStatus(temp)
     else:
-        temp = 0
+        temp = False
+
+    if temp2:
+        temp2 = (((temp2 / 65535)*20)*1000)-273 + module['temp_offset']
+        temp2 = tempStatus(temp2)
+    else:
+        temp2 = False
+    
+    if temp3:
+        temp3 = (((temp3 / 65535)*20)*1000)-273 + module['temp_offset']
+        temp3 = tempStatus(temp3)
+    else:
+        temp3 = False
+
+    temps = [temp, temp2, temp3]
 
     status = {
         'oil' : oil,
@@ -263,7 +318,7 @@ def modelE2242(module):
         'fuel' : fuel,
         'fuel_level' : fuel_level,
         'fuel_color' : fuel_color,
-        'temp' : temp,
+        'temps' : temps,
         'di' : di,
         'ai' : ai
     }
@@ -309,7 +364,7 @@ if __name__ == '__main__':
                         'oil' : status['oil'],
                         'flex' : status['flex'],
                         'fuel' : status['fuel'],
-                        'temp' : status['temp'],
+                        'temps' : status['temps'],
                         'fuel_level' : status['fuel_level'],
                         'fuel_color' : status['fuel_color']
                     }

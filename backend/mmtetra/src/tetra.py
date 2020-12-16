@@ -10,7 +10,7 @@ import time
 import datetime
 import mysql.connector
 
-from queries import nodes, subs, groups, calls
+from queries import nodes, subs, groups, calls, gps
 
 
 # Initialize mongo connection one time
@@ -41,6 +41,7 @@ def main():
     while True:
         CURSOR = SQL.cursor()
 
+        '''
         nodes.tetraNodes(CURSOR, DB)
         time.sleep(0.5)
         calls.group(CURSOR, DB, seconds=60)
@@ -48,6 +49,7 @@ def main():
         calls.individual(CURSOR, DB, seconds=60)
         time.sleep(0.5)
         calls.sds(CURSOR, DB, seconds=60)
+
 
         group_count += 1
         subscriber_count += 1
@@ -68,7 +70,9 @@ def main():
             subscriber_count = 0
             time.sleep(2)
             subs.tetraSubscribers(CURSOR, DB)
+        '''
 
+        gps.faultyGPS(CURSOR, DB)
         CURSOR.close()
         print("Closed cursor, sleeping for 10 sec")
         time.sleep(10)
