@@ -10,3 +10,8 @@ services:
     ports:
     - "80:80"
     - "443:443"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: 5
+        max-size: 10m

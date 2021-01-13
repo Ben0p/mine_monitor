@@ -42,7 +42,7 @@ export class MapComponent implements OnInit, OnDestroy {
       animation: true,
       shouldAnimate: true,
       homeButton: true,
-      geocoder: false,
+      geocoder: true,
       navigationHelpButton: true,
       navigationInstructionsInitiallyVisible: false,
       mapMode2D: Cesium.MapMode2D.ROTATE,
