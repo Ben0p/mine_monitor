@@ -6,7 +6,6 @@ import json
 import time
 import urllib3
 
-
 # Disable unsigned cert warning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -74,20 +73,30 @@ def getLocations(s, DB):
 
 def run():
 
-    session = auth()
-    DB = initMongo()
-    
     while True:
 
-        # Asset list
-        getAssests(session, DB)
-        print("Retrieved assets")
+        session = auth()
+        DB = initMongo()
 
-        # Locations
-        getLocations(session, DB)
-        print("Retrieved locations")
+        while True:
 
-        print("Sleep 60 sec")
+            try:
+
+                # Asset list
+                getAssests(session, DB)
+                print("Retrieved assets")
+
+                # Locations
+                getLocations(session, DB)
+                print("Retrieved locations")
+
+                print("Sleep 60 sec")
+                time.sleep(60)
+
+            except json.decoder.JSONDecodeError:
+                print("Exception, re-authenticating.")
+                break
+        
         time.sleep(60)
 
 

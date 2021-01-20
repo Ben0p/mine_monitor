@@ -64,13 +64,13 @@ def tempStatus(temp):
         status = {
             'temp' : temp,
             'color' : 'info',
-            'icon' : 'thermometer-minus-outline'
+            'icon' : 'thermometer-outline'
         }
     elif 30 <= temp < 40:
         status = {
             'temp' : temp,
             'color' : 'warning',
-            'icon' : 'thermometer-plus-outline'
+            'icon' : 'thermometer-outline'
         }
     elif 40 <= temp:
         status = {
@@ -194,134 +194,151 @@ def modelE2242(module):
 
     # DI snmp results
     di_results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2242.10.1.1.4')
-    # AI snmp results
-    ai_results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2242.10.2.1')
+
+    if di_results:
+        # AI snmp results
+        ai_results = walk(module['ip'], '1.3.6.1.4.1.8691.10.2242.10.2.1')
 
 
-    # Get DI values
-    di = {}
-    for i in range(5):
+        # Get DI values
+        di = {}
+        for i in range(5):
+            try:
+                di[f'di_{i}'] = di_results[f'1.3.6.1.4.1.8691.10.2242.10.1.1.4.{i}']
+            except KeyError:
+                di[f'di_{i}'] = None
+
+        # Oil
         try:
-            di[f'di_{i}'] = di_results[f'1.3.6.1.4.1.8691.10.2242.10.1.1.4.{i}']
+            oil = di[module['oil_di']]
+
+            # Reverse logic, activated input = not running
+            # Boolean explicitly defined because None was being read as False
+            if module['oil_pol'] == 'no':
+                if oil == True:
+                    oil = False
+                elif oil == False:
+                    oil = True
+            elif module['oil_pol'] == 'nc':
+                if oil == True:
+                    oil = True
+                elif oil == False:
+                    oil = False
         except KeyError:
-            di[f'di_{i}'] = None
-
-    # Oil
-    try:
-        oil = di[module['oil_di']]
-
-        # Reverse logic, activated input = not running
-        # Boolean explicitly defined because None was being read as False
-        if module['oil_pol'] == 'no':
-            if oil == True:
-                oil = False
-            elif oil == False:
-                oil = True
-        elif module['oil_pol'] == 'nc':
-            if oil == True:
-                oil = True
-            elif oil == False:
-                oil = False
-    except KeyError:
-        oil = None
-    
-    # Flex
-    try:
-        flex = di[module['flex_di']]
-    except KeyError:
-        flex = None
-    
-    # Fuel 
-    try:
-        fuel = di[module['fuel_di']]
-    except KeyError:
-        fuel = None
-
-    # Get AI values
-    ai = {}
-    for i in range(4):
+            oil = None
+        
+        # Flex
         try:
-            ai[f'ai_{i}'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.4.{i}']
-            ai[f'ai_{i}_min'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.5.{i}']
-            ai[f'ai_{i}_max'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.6.{i}']
+            flex = di[module['flex_di']]
         except KeyError:
-            ai[f'ai_{i}'] = None
-            ai[f'ai_{i}_min'] = None
-            ai[f'ai_{i}_max'] = None
-    
+            flex = None
+        
+        # Fuel 
+        try:
+            fuel = di[module['fuel_di']]
+        except KeyError:
+            fuel = None
+
+        # Get AI values
+        ai = {}
+        for i in range(4):
+            try:
+                ai[f'ai_{i}'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.4.{i}']
+                ai[f'ai_{i}_min'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.5.{i}']
+                ai[f'ai_{i}_max'] = ai_results[f'1.3.6.1.4.1.8691.10.2242.10.2.1.6.{i}']
+            except KeyError:
+                ai[f'ai_{i}'] = None
+                ai[f'ai_{i}_min'] = None
+                ai[f'ai_{i}_max'] = None
+        
 
 
-    level = int(ai[module['level_ai']])
+        level = int(ai[module['level_ai']])
 
-    # temp
-    try:
-        temp = int(ai[module['temp_ai']])
-    except KeyError:
-        temp = False
-    # temp2
-    try:
-        temp2 = int(ai[module['temp2_ai']])
-    except KeyError:
-        temp2 = False
-    # temp3
-    try:
-        temp3 = int(ai[module['temp3_ai']])
-    except KeyError:
-        temp3 = False
 
-    # Fuel
-    try:
-        fuel_min = int(module['fuel_min'])
-        fuel_max = int(module['fuel_max'])
-    except KeyError:
-        fuel_min = 1
-        fuel_max = 1
+        # temp
+        try:
+            temp = int(ai[module['temp_ai']])
+        except KeyError:
+            temp = False
+        # temp2
+        try:
+            temp2 = int(ai[module['temp2_ai']])
+        except KeyError:
+            temp2 = False
+        # temp3
+        try:
+            temp3 = int(ai[module['temp3_ai']])
+        except KeyError:
+            temp3 = False
 
-    fuel_range = fuel_max - fuel_min
-    fuel_level = ((level-fuel_min) / fuel_range) * 100
-    fuel_level = round(fuel_level)
+        # Fuel
+        try:
+            fuel_min = int(module['fuel_min'])
+            fuel_max = int(module['fuel_max'])
+        except KeyError:
+            fuel_min = 1
+            fuel_max = 1
 
-    if fuel_level > 100:
-        fuel_level = 100
-        fuel_color = "success"
-    if 70 <= fuel_level <= 100:
-        fuel_color = "success"
-    elif 30 <= fuel_level < 70:
-        fuel_color = "warning"
-    elif fuel_level <= 30:
-        fuel_color = "danger"
+        fuel_range = fuel_max - fuel_min
+        fuel_level = ((level-fuel_min) / fuel_range) * 100
+        fuel_level = round(fuel_level)
 
-    # Calc temps
-    if temp:
-        temp = (((temp / 65535)*20)*1000)-273 + module['temp_offset']
-        temp = tempStatus(temp)
+        if fuel_level > 100:
+            fuel_level = 100
+            fuel_color = "success"
+        if 70 <= fuel_level <= 100:
+            fuel_color = "success"
+        elif 30 <= fuel_level < 70:
+            fuel_color = "warning"
+        elif fuel_level <= 30:
+            fuel_color = "danger"
+
+        # Calc temps
+        if temp:
+            temp = (((temp / 65535)*20)*1000)-273 + module['temp_offset']
+            temp = tempStatus(temp)
+        else:
+            temp = False
+
+        if temp2:
+            temp2 = (((temp2 / 65535)*20)*1000)-273 + module['temp_offset']
+            temp2 = tempStatus(temp2)
+        else:
+            temp2 = False
+        
+        if temp3:
+            temp3 = (((temp3 / 65535)*20)*1000)-273 + module['temp_offset']
+            temp3 = tempStatus(temp3)
+        else:
+            temp3 = False
+
+        temps = [temp, temp2, temp3]
+
+        status = {
+            'online' : True,
+            'oil' : oil,
+            'flex' : flex,
+            'fuel' : fuel,
+            'fuel_level' : fuel_level,
+            'fuel_color' : fuel_color,
+            'temps' : temps,
+            'di' : di,
+            'ai' : ai,
+        }
+
     else:
-        temp = False
-
-    if temp2:
-        temp2 = (((temp2 / 65535)*20)*1000)-273 + module['temp_offset']
-        temp2 = tempStatus(temp2)
-    else:
-        temp2 = False
-    
-    if temp3:
-        temp3 = (((temp3 / 65535)*20)*1000)-273 + module['temp_offset']
-        temp3 = tempStatus(temp3)
-    else:
-        temp3 = False
-
-    temps = [temp, temp2, temp3]
-
-    status = {
-        'oil' : oil,
-        'flex' : flex,
-        'fuel' : fuel,
-        'fuel_level' : fuel_level,
-        'fuel_color' : fuel_color,
-        'temps' : temps,
-        'di' : di,
-        'ai' : ai
-    }
+        status = {
+            'online' : False,
+            'oil' : None,
+            'flex' : None,
+            'fuel' : None,
+            'fuel_level' : None,
+            'fuel_color' : None,
+            'temps' : None,
+            'di' : None,
+            'ai' : None,
+        }
 
     return(status)
 
@@ -359,6 +376,7 @@ if __name__ == '__main__':
                         'ip': module['ip'],
                         'name': module['name'],
                         'module_oid' : module['_id'],
+                        'online' : status['online'],
                         'di' : status['di'],
                         'ai' : status['ai'],
                         'oil' : status['oil'],

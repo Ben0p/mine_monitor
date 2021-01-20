@@ -106,7 +106,7 @@ def insertDB(cur, locations):
     for location in locations:
         # Update row with new data
         cur.execute(f"UPDATE inspections \
-            SET (complete, point) =\
+            SET (complete, point) = \
             ( False, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
             WHERE name = '{location['name']}';")
         

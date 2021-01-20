@@ -7,6 +7,7 @@ import { Component, Input, OnDestroy } from '@angular/core';
 })
 export class GenStatusComponent {
 
+  @Input() online: boolean;
   @Input() name: any;
   @Input() oil: any;
   @Input() flex: any;
@@ -17,7 +18,6 @@ export class GenStatusComponent {
 
 
   constructor() { 
-    console.log(this.temps)
   }
     
 

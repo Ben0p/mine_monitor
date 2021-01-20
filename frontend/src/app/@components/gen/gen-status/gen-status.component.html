@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card *ngIf="online">
   <nb-card-header>
     {{name}}
   </nb-card-header>
@@ -43,6 +43,55 @@
     </div>
     <div *ngIf="level == null">
       <nb-progress-bar [value]="100" status="primary">Unknown</nb-progress-bar>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let temp of temps" class=col-4>
+        <div style="margin-top: 5px;">
+          <nb-progress-bar *ngIf="temp" [value]="100" status="{{temp.color}}">
+            <nb-icon [icon]="temp.icon"></nb-icon>
+            {{temp.temp}}°C
+          </nb-progress-bar>
+        </div>
+      </div>
+    </div>
+
+  </nb-card-body>
+</nb-card>
+
+
+
+<nb-card *ngIf="!online">
+  <nb-card-header>
+    {{name}} - OFFLINE
+  </nb-card-header>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-4">
+        <div class="row">
+          <div class="col-2">
+            <button nbButton [status]="'disabled'" hero>Flex</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-2">
+            <button nbButton [status]="'disabled'" hero>fuel</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-8">
+
+        <div class="unknown-wrapper">
+          <nb-icon icon="settings-2-outline" class="unknown"></nb-icon> <br>
+          Unknown
+        </div>
+      </div>
+
+    </div>
+    <div>
+      <nb-progress-bar [value]="100" status="disabled">Unknown</nb-progress-bar>
     </div>
 
     <div class="row">
