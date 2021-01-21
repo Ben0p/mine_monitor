@@ -56,6 +56,7 @@ def getInspectionDetails(inspections):
     '''
     '''
     details = []
+    sites = []
 
     for inspection in inspections['audits']:
         results = S.get(f"https://api.safetyculture.io/audits/{inspection['audit_id']}", headers = HEADERS)
@@ -64,8 +65,13 @@ def getInspectionDetails(inspections):
         results['created_at'] = datetime.strptime(results['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         results['modified_at'] = datetime.strptime(results['modified_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         details.append(results)
+
+        try:
+            sites.append(results['audit_data']['site']['name'])
+        except KeyError:
+            pass
     
-    return(details)
+    return(details, sites)
 
 
 def updateDB(inspections):
@@ -91,11 +97,10 @@ def run():
 
     after = getWeek()
     inspections = getInspections(after)
-    inspections = getInspectionDetails(inspections)
+    inspections, sites = getInspectionDetails(inspections)
     updateDB(inspections)
 
-
-
+    return(sites)
 
 
 if __name__ == "__main__":

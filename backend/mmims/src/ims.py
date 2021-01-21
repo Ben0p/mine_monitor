@@ -37,17 +37,7 @@ def getAssests(s, DB):
     assets = s.get(env.ims_assets_url, verify=False)
     assets = assets.json()
 
-    for asset in assets:
-
-        DB['ims_assets'].find_one_and_update(
-            {
-                'id' : asset['id'],
-            },
-            {
-                '$set': asset
-            },
-            upsert=True
-        )
+    return(assets)
 
 
 def getLocations(s, DB):
@@ -57,14 +47,36 @@ def getLocations(s, DB):
     locations = s.get(env.ims_locations_url, verify=False)
     locations = locations.json()
 
-    for location in locations:
+    return(locations)
 
-        DB['ims_locations'].find_one_and_update(
+
+def updateLocation(assets, locations):
+    ''' Looks up asset id in the locations and combines the two
+    '''
+
+    updated = []
+
+    for asset in assets:
+        # I don't know, copied this form stack overflow
+        asset['location'] = next((item for item in locations if item["asset_id"] == asset['id']), None)
+
+        updated.append(asset)
+
+    return(updated)
+
+
+def updateDB(DB, assets):
+    ''' Upserts asssets with latest location into MongoDB
+    '''
+
+    for asset in assets:
+
+        DB['ims_assets'].find_one_and_update(
             {
-                'asset_id' : location['asset_id'],
+                'id' : asset['id'],
             },
             {
-                '$set': location
+                '$set': asset
             },
             upsert=True
         )
@@ -83,12 +95,20 @@ def run():
             try:
 
                 # Asset list
-                getAssests(session, DB)
+                assets = getAssests(session, DB)
                 print("Retrieved assets")
 
                 # Locations
-                getLocations(session, DB)
+                locations = getLocations(session, DB)
                 print("Retrieved locations")
+
+                # Combine location in to asset
+                assets = updateLocation(assets, locations)
+                print("Updated locations")
+
+                # Updated DB
+                updateDB(DB, assets)
+                print("Updated DB")
 
                 print("Sleep 60 sec")
                 time.sleep(60)

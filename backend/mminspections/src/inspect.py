@@ -3,7 +3,7 @@ from env.sol import env
 import psycopg2
 import pymongo
 import time
-
+import iauditor
 
 def connect():
     ''' Connects to PostgreSLQL database and return cursor object
@@ -79,7 +79,7 @@ def getLocations(DB):
     return(locations)
 
 
-def parseLocations(assets, locations):
+def parseLocations(sites, assets, locations):
     ''' 
     '''
 
@@ -90,11 +90,15 @@ def parseLocations(assets, locations):
         # Looks up asset id in the locations and combines the two
         asset['location'] = next((item['location'] for item in locations if item["asset_id"] == asset['id']), None)
 
+        if asset['name'] in sites:
+            asset['complete'] = True
+
         # Skip if no location
         if asset['location'] == None:
             continue
 
         processed.append(asset)
+    
 
     return(processed)
 
@@ -104,20 +108,24 @@ def insertDB(cur, locations):
     '''
 
     for location in locations:
-        # Update row with new data
-        cur.execute(f"UPDATE inspections \
-            SET (complete, point) = \
-            ( False, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
-            WHERE name = '{location['name']}';")
-        
-        # Insert new row if nothing was updated
-        if cur.rowcount == 0:
-            cur.execute(f"INSERT INTO inspections \
-                (name, complete, point) \
-                VALUES \
-                ('{location['name']}', True, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
-            ")          
 
+        try:
+            if location['complete']:
+                # Update row with new data
+                cur.execute(f"UPDATE inspections \
+                    SET (complete, point) = \
+                    ( True, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
+                    WHERE name = '{location['name']}';")
+                
+                # Insert new row if nothing was updated
+                if cur.rowcount == 0:
+                    cur.execute(f"INSERT INTO inspections \
+                        (name, complete, point) \
+                        VALUES \
+                        ('{location['name']}', True, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
+                    ")          
+        except KeyError:
+            pass
 
 
 def run():
@@ -134,16 +142,15 @@ def run():
     while True:
         assets = getAssets(DB)
         locations = getLocations(DB)
-        locations = parseLocations(assets, locations)
 
-        # TODO: Get inspection status here
+        # Process iauditor audits for current work week
+        sites = iauditor.run()
+
+        locations = parseLocations(sites, assets, locations)
 
         insertDB(cur, locations)
 
-
-        cur.close()
-        conn.commit()
-
+        print("Sleep 60sec")
         time.sleep(60)
 
 
