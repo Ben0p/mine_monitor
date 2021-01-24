@@ -72,7 +72,9 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'ups',
             'ups_status',
             'weather',
-            'weather_wind'
+            'weather_wind',
+            'inspections',
+            'inspections_list'
           ],
         },
         admin: {
@@ -84,7 +86,8 @@ import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
             'alerts_edit',
             'fm_edit',
             'solar_edit',
-            'ups_edit'
+            'ups_edit',
+            'inspections_upload',
           ],
         },
         generators: {

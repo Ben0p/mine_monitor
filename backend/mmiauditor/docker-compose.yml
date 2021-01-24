@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+  app:
+    build: .
+    volumes:
+     - .:/app
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    restart:
+      always

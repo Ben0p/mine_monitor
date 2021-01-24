@@ -28,6 +28,7 @@ from routes.fm import fm_live, fm_modules, fm_create, fm_update, fm_delete
 from routes.map import test_czml, test_tetra, tetra_all, map_layers, map_sds, map_sds_range
 from routes.ups import ups_create, ups_update, ups_delete, ups_modules, ups_status, ups_list
 from routes.weather import weather_wind
+from routes.inspections import inspections_upload
 
 """ Main rest API router
 """
@@ -136,6 +137,9 @@ API.add_resource(ups_list, '/api/ups/list')
 
 # UPS
 API.add_resource(weather_wind, "/api/weather/wind")
+
+# Inpsections
+API.add_resource(inspections_upload, "/api/inspections/upload")
 
 if __name__ == "__main__":
     # Run flask

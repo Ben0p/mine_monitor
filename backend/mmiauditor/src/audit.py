@@ -3,14 +3,16 @@ from env.sol import env
 import requests
 import pymongo
 from datetime import datetime, timedelta
-import pytz
+import time
 
 
 '''
 Get all audits:
     https://api.safetyculture.io/audits/search?field=audit_id&field=modified_at
 Specific audit
-    https://api.safetyculture.io/audits/audit_2f01e3f495474e1a87cf4cce47d1710d
+    https://api.safetyculture.io/audits/{audit id}
+Templates
+    https://api.safetyculture.io/templates/search?field=template_id&field=modified_at&field=name
 
 '''
 
@@ -39,6 +41,21 @@ def getWeek():
     return(start)
 
 
+def getLatest():
+    ''' Get most recent audit retrieved or start of week if none
+    '''
+
+    result = DB['ia_inspections'].find().sort([('modified_at', -1)]).limit(1)
+
+    if result.count() > 0:
+        result = result[0]['modified_at']
+    else:
+        result = False
+
+    return(result)
+
+
+
 def getInspections(after):
     ''' Get all inspections after (after: ISO Datetime)
     '''
@@ -53,25 +70,20 @@ def getInspections(after):
 
 
 def getInspectionDetails(inspections):
-    '''
+    ''' For each inspection, get the details
     '''
     details = []
-    sites = []
 
     for inspection in inspections['audits']:
         results = S.get(f"https://api.safetyculture.io/audits/{inspection['audit_id']}", headers = HEADERS)
 
         results = results.json()
+        # Convert date time strings to datetime object
         results['created_at'] = datetime.strptime(results['created_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         results['modified_at'] = datetime.strptime(results['modified_at'], '%Y-%m-%dT%H:%M:%S.%fZ')
         details.append(results)
 
-        try:
-            sites.append(results['audit_data']['site']['name'])
-        except KeyError:
-            pass
-    
-    return(details, sites)
+    return(details)
 
 
 def updateDB(inspections):
@@ -95,12 +107,25 @@ def run():
     ''' Main run loop
     '''
 
-    after = getWeek()
-    inspections = getInspections(after)
-    inspections, sites = getInspectionDetails(inspections)
-    updateDB(inspections)
+    while True:
 
-    return(sites)
+        latest = getLatest()
+
+        # In the event the collection has been dropped or something
+        if not latest:
+            latest = getWeek()
+
+        print(f"Last inspection : {latest}")
+
+        inspections = getInspections(latest)
+        inspections = getInspectionDetails(inspections)
+        print("Retrieved new inspections")
+
+        updateDB(inspections)
+        print("Updated DB")
+
+        print("Sleep 60 sec")
+        time.sleep(60)
 
 
 if __name__ == "__main__":

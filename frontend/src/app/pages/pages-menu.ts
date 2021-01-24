@@ -286,6 +286,34 @@ export const MENU_ITEMS: NbMenuItem[] = [
     },
   },
   {
+    title: "Inspections",
+    icon: 'clipboard-outline',
+    data: {
+      permission: 'view',
+      resource: 'inspections'
+    },
+    children: [
+      {
+        title: 'Upload',
+        icon: 'cloud-upload-outline',
+        link: '/pages/inspections/upload',
+        data: {
+          permission: 'view',
+          resource: 'inspections_upload'
+        },
+      },
+      {
+        title: 'List',
+        icon: 'list-outline',
+        link: '/pages/inspections/list',
+        data: {
+          permission: 'view',
+          resource: 'inspections_list'
+        },
+      },
+    ],
+  },
+  {
     title: 'Settings',
     icon: 'options-2-outline',
     data: {

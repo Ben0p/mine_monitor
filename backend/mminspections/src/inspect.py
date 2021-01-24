@@ -3,10 +3,11 @@ from env.sol import env
 import psycopg2
 import pymongo
 import time
-import iauditor
+from datetime import datetime, timedelta
 
-def connect():
-    ''' Connects to PostgreSLQL database and return cursor object
+
+def initPSQL():
+    ''' Connects to PostgreSQL database and return cursor object
     '''
 
     conn = psycopg2.connect(
@@ -27,21 +28,16 @@ def createTable(cur):
         Runs one time on script start up
     '''
 
-    cur.execute("CREATE TABLE IF NOT EXISTS \
-        inspections \
-        (gid serial, \
-        name text, \
-        complete boolean, \
-        point geometry(Point, 4326));"
-    )
+    cur.execute("CREATE TABLE IF NOT EXISTS inspections (gid serial, name text, color_hex text, opacity text, point geometry(Point, 4326));")
 
 
 def initMongo():
     ''' Initialize MongoDB connection
         Returns connection
     '''
-    
-    CLIENT = pymongo.MongoClient(f"mongodb://{env.mongodb_ip}:{env.mongodb_port}")
+
+    CLIENT = pymongo.MongoClient(
+        f"mongodb://{env.mongodb_ip}:{env.mongodb_port}")
     DB = CLIENT[env.database]
 
     return(DB)
@@ -53,79 +49,191 @@ def getAssets(DB):
 
     assets = DB['ims_assets'].find(
         {
-            '$or' : [
-                {'type_id' : 1},
-                {'type_id' : 4},
+            '$or': [
+                {'type_id': 1},
+                {'type_id': 4},
             ],
-            '$and' : [
-                {'is_deleted' : False}
+            '$and': [
+                {'is_deleted': False}
             ]
         }
     )
 
-    assets= list(assets)
+    assets = list(assets)
 
     return(assets)
 
 
-def getLocations(DB):
-    ''' Gets latest loation of each asset
+def getWeek():
+    ''' Get the start of the work week (Sunday midnight)
     '''
 
-    locations = DB['ims_locations'].find()
+    # Today
+    start = datetime.now()
+    # Start of work week (Monday)
+    start = start - timedelta(days=start.weekday())
+    # Make it midnight
+    start = start.replace().replace(hour=0, minute=0, second=0, microsecond=0)
 
-    locations = list(locations)
-
-    return(locations)
+    return(start)
 
 
-def parseLocations(sites, assets, locations):
-    ''' 
+def getAudits(DB, work_week):
+    ''' Gets the pre-processed audits from MongoDB for the current work week
+        Only gets specified audit temaple names
     '''
 
-    processed = [] 
+    audits = DB['ia_inspections'].find(
+        {
+            '$or': [
+                {'template_data.metadata.name': "Tier 1 Tower Inspections"},
+                {'template_data.metadata.name': "Trailer Inspection/Impedance check"},
+                {'template_data.metadata.name': "Tier 2 Tower Inspection/Impedance check"},
+            ],
+            '$and': [
+                {
+                    'modified_at': {
+                        '$gte': work_week
+                    }
+                }
+            ]
+        }
+    )
+
+    audits = list(audits)
+
+    return(audits)
+
+
+def getOrders(DB, work_week):
+    ''' Gets the pre-processed SAP work orders for the current work week
+    '''
+
+    orders = DB['inspections'].find(
+        {
+            'Earlstartdate': {
+                '$gte': work_week
+            }
+        }
+    )
+
+    orders = list(orders)
+
+    return(orders)
+
+
+def matchOrders(ims_assets, work_orders):
+    ''' Finds asset name matches in the work orders
+    '''
+
+    matched_assets = []
+
+    for asset in ims_assets:
+
+        asset_name = asset['name'].replace('-', '')
+
+        for work_order in work_orders:
+            if asset_name in work_order['FunctionalLoc']:
+                matched_assets.append(asset)
+ 
+    return(matched_assets)
+
+
+def matchAudits(assets, audits):
+    ''' Matches assets with audits
+    '''
+    
+    matched_audits = []
 
     for asset in assets:
-        # I don't know, copied this form stack overflow
-        # Looks up asset id in the locations and combines the two
-        asset['location'] = next((item['location'] for item in locations if item["asset_id"] == asset['id']), None)
+        for audit in audits:
+            try:
+                if asset['name'] in audit['audit_data']['site']['name']:
+                    matched_audits.append(asset)
+                site = True
+            except KeyError:
+                site = False
+        
+            if not site:
+                if asset['name'] in audit['audit_data']['name']:
+                    matched_audits.append(asset)
+    
+    return(matched_audits)
 
-        if asset['name'] in sites:
-            asset['complete'] = True
 
-        # Skip if no location
-        if asset['location'] == None:
-            continue
+def processResults(matched_assets, ims_assets, matched_audits):
+    ''' Prepares results for insertion into PostGreSQL
+    '''
 
-        processed.append(asset)
+    final_results = []
+
+    # Not due for inspection
+    for ims_asset in ims_assets:
+        
+        if ims_asset['location']:
+            asset = {}
+            asset['display'] = False
+            asset['name'] = ims_asset['name']
+            asset['color_hex'] = '#ff3d71'
+            asset['lon'] = str(ims_asset['location']['location'][0])
+            asset['lat'] = str(ims_asset['location']['location'][1])
+        else:
+            pass
+
+        final_results.append(asset)
+    
+    # Due for inspeciton
+    for matched_asset in matched_assets:
+
+        asset = {}
+        asset['display'] = True
+        asset['name'] = matched_asset['name']
+        asset['color_hex'] = '#ff3d71'
+        asset['lon'] = str(matched_asset['location']['location'][0])
+        asset['lat'] = str(matched_asset['location']['location'][1])
+        final_results.append(asset)
+
+    # Complete
+    for matched_audit in matched_audits:
+
+        for i in range(len(final_results)):
+            if final_results[i]['name'] == matched_audit['name']:
+                del final_results[i]
+                break
+
+        asset = {}
+        asset['display'] = True
+        asset['name'] = matched_audit['name']
+        asset['color_hex'] = '#00d68f'
+        asset['lon'] = str(matched_audit['location']['location'][0])
+        asset['lat'] = str(matched_audit['location']['location'][1])
+        final_results.append(asset)
     
 
-    return(processed)
+    return(final_results)
+        
 
 
-def insertDB(cur, locations):
+def insertDB(cur, results):
     ''' Update (insert) data into PostgreSQL db
     '''
 
-    for location in locations:
+    for result in results:
+        # Update row with new data
+        cur.execute(f"UPDATE inspections SET (display, color_hex, point) =\
+            ({result['display']}, \
+            '{result['color_hex']}',\
+            ST_SetSRID(ST_MakePoint({result['lon']},\
+            {result['lat']}), 4326))\
+            WHERE name = '{result['name']}';")
 
-        try:
-            if location['complete']:
-                # Update row with new data
-                cur.execute(f"UPDATE inspections \
-                    SET (complete, point) = \
-                    ( True, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
-                    WHERE name = '{location['name']}';")
-                
-                # Insert new row if nothing was updated
-                if cur.rowcount == 0:
-                    cur.execute(f"INSERT INTO inspections \
-                        (name, complete, point) \
-                        VALUES \
-                        ('{location['name']}', True, ST_SetSRID(ST_MakePoint({location['location'][0]},{location['location'][1]}), 4326)) \
-                    ")          
-        except KeyError:
-            pass
+        # Insert new row if nothing was updated
+        if cur.rowcount == 0:
+            cur.execute(f"INSERT INTO inspections \
+                (name, display, color_hex, point) \
+                VALUES \
+                ('{result['name']}', {result['display']}, '{result['color_hex']}', ST_SetSRID(ST_MakePoint({result['lon']},{result['lat']}), 4326)) \
+            ")
 
 
 def run():
@@ -133,22 +241,39 @@ def run():
     '''
     # Establish PostgreSQL connection and create table if it doesn't exist
     # ONCE per script startup
-    cur, conn = connect()
-    createTable(cur)
+    cur, conn = initPSQL()
+    
+    #createTable(cur)
 
     # Initialize Mongo connection
     DB = initMongo()
 
     while True:
-        assets = getAssets(DB)
-        locations = getLocations(DB)
 
-        # Process iauditor audits for current work week
-        sites = iauditor.run()
+        # Get IMS assets with locations
+        ims_assets = getAssets(DB)
 
-        locations = parseLocations(sites, assets, locations)
+        # Get current week
+        work_week = getWeek()
 
-        insertDB(cur, locations)
+        # Get iAuditor audites for current work week
+        audits = getAudits(DB, work_week)
+
+        # Get SAP work orders for current work week
+        work_orders = getOrders(DB, work_week)
+
+        # Match and filter work orders with assets
+        matched_assets = matchOrders(ims_assets, work_orders)
+
+        # Match audits with filtered assets
+        matched_audits = matchAudits(matched_assets, audits)
+
+        # Colorize
+        final_results = processResults(matched_assets, ims_assets, matched_audits)
+
+        insertDB(cur, final_results)
+
+        conn.commit()
 
         print("Sleep 60sec")
         time.sleep(60)

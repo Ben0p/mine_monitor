@@ -1,0 +1,11 @@
+<nb-card size="small">
+    <nb-card-body>
+        <nb-form-field>
+            <input type="file" id="file" nbInput fullWidth (change)="handleFileInput($event.target.files)">
+            <button nbSuffix nbButton ghost (click)="submit()">
+                <nb-icon [icon]="'cloud-upload-outline'" pack="eva" [attr.aria-label]="'Upload file'">
+                </nb-icon>
+            </button>
+        </nb-form-field>
+    </nb-card-body>
+</nb-card>
