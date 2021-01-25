@@ -70,8 +70,10 @@ def getWeek():
 
     # Today
     start = datetime.now()
+    start = start + timedelta(hours=env.time_offset)
     # Start of work week (Monday)
     start = start - timedelta(days=start.weekday())
+
     # Make it midnight
     start = start.replace().replace(hour=0, minute=0, second=0, microsecond=0)
 
@@ -243,6 +245,7 @@ def run():
     # ONCE per script startup
     cur, conn = initPSQL()
     
+    # Create table disabled because not really required (left it in for reference)
     #createTable(cur)
 
     # Initialize Mongo connection
@@ -250,30 +253,45 @@ def run():
 
     while True:
 
+        start_time = time.time()
         # Get IMS assets with locations
         ims_assets = getAssets(DB)
+        print(f"Retrieved {len(ims_assets)} IMS assets")
 
         # Get current week
         work_week = getWeek()
+        print(f"Current week start: {work_week}")
 
         # Get iAuditor audites for current work week
         audits = getAudits(DB, work_week)
+        print(f"Retrieved {len(audits)} audits")
 
         # Get SAP work orders for current work week
         work_orders = getOrders(DB, work_week)
+        print(f"Retrieved {len(work_orders)} work orders")
 
         # Match and filter work orders with assets
         matched_assets = matchOrders(ims_assets, work_orders)
+        print(f"Matched {len(matched_assets)} work orders")
 
         # Match audits with filtered assets
         matched_audits = matchAudits(matched_assets, audits)
+        print(f"Matched {len(matched_audits)} audits")
 
         # Colorize
         final_results = processResults(matched_assets, ims_assets, matched_audits)
+        print(f"Processed {len(final_results)} assets")
 
         insertDB(cur, final_results)
+        print(f"Updated layer")
 
         conn.commit()
+
+        finish_time = time.time()
+        total_time = finish_time - start_time
+        total_time = round(total_time, 2)
+
+        print(f"Completed in {total_time} seconds")
 
         print("Sleep 60sec")
         time.sleep(60)

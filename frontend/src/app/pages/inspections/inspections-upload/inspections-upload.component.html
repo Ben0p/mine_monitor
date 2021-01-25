@@ -2,10 +2,22 @@
     <nb-card-body>
         <nb-form-field>
             <input type="file" id="file" nbInput fullWidth (change)="handleFileInput($event.target.files)">
+
+        </nb-form-field>
+        <h3>Drag and drop .csv here</h3>
+        <h3>or</h3>
+        <label for="file">
+            <h3>Browse for file</h3>
             <button nbSuffix nbButton ghost (click)="submit()">
                 <nb-icon [icon]="'cloud-upload-outline'" pack="eva" [attr.aria-label]="'Upload file'">
                 </nb-icon>
             </button>
-        </nb-form-field>
+        </label>
     </nb-card-body>
 </nb-card>
+
+
+<button nbSuffix nbButton ghost (click)="submit()">
+    <nb-icon [icon]="'cloud-upload-outline'" pack="eva" [attr.aria-label]="'Upload file'">
+    </nb-icon>
+</button>
