@@ -26,56 +26,60 @@ class inspections_upload(Resource):
             file = request.files['file']
 
             if '.csv' in file.filename:
-                stream = io.StringIO(
-                    file.stream.read().decode("UTF8"), newline=None)
-                count = 0
-                headers = {}
+                try:
+                    stream = io.StringIO(
+                        file.stream.read().decode("UTF8"), newline=None)
+                    count = 0
+                    headers = {}
 
-                for row_number, row in enumerate(stream):
-                    values = {}
-                    count += 1
-                    row = row.strip()
-                    row = row.split(',')
+                    for row_number, row in enumerate(stream):
+                        values = {}
+                        count += 1
+                        row = row.strip()
+                        row = row.split(',')
 
-                    if row_number == 0:
+                        if row_number == 0:
+                            for col_number, column in enumerate(row):
+                                column = column.replace(" ", "")
+                                column = column.replace(".", "")
+                                headers[col_number] = column
+                            continue
+
                         for col_number, column in enumerate(row):
-                            column = column.replace(" ", "")
-                            column = column.replace(".", "")
-                            headers[col_number] = column
-                        continue
+                            
+                            values[headers[col_number]] = column
+                            
+                            if headers[col_number] == "Earlstartdate":
+                                date = datetime.datetime.strptime(values[headers[col_number]], '%d/%m/%Y')
+                                values[headers[col_number]] = date
 
-                    for col_number, column in enumerate(row):
-                        
-                        values[headers[col_number]] = column
-                        
-                        if headers[col_number] == "Earlstartdate":
-                            date = datetime.datetime.strptime(values[headers[col_number]], '%d/%m/%Y')
-                            values[headers[col_number]] = date
+                            # lists
+                            integers = ['Number', 'Order']
+                            floats = ['Actualwork', 'Normalduration', 'Work']
 
-                        # lists
-                        integers = ['Number', 'Order']
-                        floats = ['Actualwork', 'Normalduration', 'Work']
+                            if headers[col_number] in integers:
+                                values[headers[col_number]] = int(column)
+                            if headers[col_number] in floats:
+                                values[headers[col_number]] = float(column)
 
-                        if headers[col_number] in integers:
-                            values[headers[col_number]] = int(column)
-                        if headers[col_number] in floats:
-                            values[headers[col_number]] = float(column)
-                        
+                        DB['inspections'].find_one_and_update(
+                            {
+                                'Order': values['Order'],
+                            },
+                            {
+                                '$set': values
+                            },
+                            upsert=True
+                        )
 
-
-
-                    DB['inspections'].find_one_and_update(
-                        {
-                            'Order': values['Order'],
-                        },
-                        {
-                            '$set': values
-                        },
-                        upsert=True
-                    )
-
-                return({'success': True, 'message': f'Processed {count} rows OK!'})
+                    # All good
+                    return({'success': True, 'message': f'Processed {count} rows OK!'})
+                # Error in processing (probably not a SAP export)
+                except:
+                    return({'success': False, 'message': f'Error processing {file.filename}'})
+            # Not a .csv
             else:
                 return({'success': False, 'message': f'"{file.filename}" isn\'t a .csv'})
+        # No file
         else:
             return({'success': False, 'message': f'No file recieved.'})

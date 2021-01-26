@@ -10,13 +10,15 @@ import {
   NbButtonModule,
   NbIconModule,
   NbInputModule,
-  NbFormFieldModule
+  NbFormFieldModule,
+  NbProgressBarModule,
 } from '@nebular/theme';
 
 import { InspectionsRoutingModule, routedComponents } from './inspections-routing.module';
 import { InspectionsComponent } from './inspections.component';
 import { InspectionsListComponent } from './inspections-list/inspections-list.component';
 import { InspectionsUploadComponent } from './inspections-upload/inspections-upload.component';
+import { DndDirective } from './inspections-upload/dnd.directive';
 
 
 
@@ -25,7 +27,8 @@ import { InspectionsUploadComponent } from './inspections-upload/inspections-upl
     ...routedComponents,
     InspectionsComponent,
     InspectionsListComponent,
-    InspectionsUploadComponent
+    InspectionsUploadComponent,
+    DndDirective
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,11 @@ import { InspectionsUploadComponent } from './inspections-upload/inspections-upl
     NbButtonModule,
     NbIconModule,
     NbInputModule,
-    NbFormFieldModule
+    NbFormFieldModule,
+    NbProgressBarModule
+  ],
+  bootstrap: [
+    InspectionsUploadComponent
   ]
 })
 

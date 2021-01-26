@@ -1,23 +1,41 @@
-<nb-card size="small">
-    <nb-card-body>
-        <nb-form-field>
-            <input type="file" id="file" nbInput fullWidth (change)="handleFileInput($event.target.files)">
-
-        </nb-form-field>
-        <h3>Drag and drop .csv here</h3>
-        <h3>or</h3>
-        <label for="file">
-            <h3>Browse for file</h3>
-            <button nbSuffix nbButton ghost (click)="submit()">
-                <nb-icon [icon]="'cloud-upload-outline'" pack="eva" [attr.aria-label]="'Upload file'">
-                </nb-icon>
-            </button>
-        </label>
-    </nb-card-body>
-</nb-card>
-
-
-<button nbSuffix nbButton ghost (click)="submit()">
-    <nb-icon [icon]="'cloud-upload-outline'" pack="eva" [attr.aria-label]="'Upload file'">
-    </nb-icon>
-</button>
+<div class="container" appDnd (fileDropped)="onFileDropped($event)">
+    <input type="file" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)" />
+    <nb-icon class="top-icon" [icon]="'cloud-upload-outline'" pack="eva"></nb-icon>
+    <h3>Drag and drop file here</h3>
+    <h3>or</h3>
+    <label for="fileDropRef">Browse for file</label>
+</div>
+<div class="files-list">
+    <div class="single-file" *ngFor="let file of files; let i = index">
+        <nb-icon class="file" [icon]="'file-text-outline'" pack="eva"></nb-icon>
+        <div class="info">
+            <h4 class="name">
+                {{ file?.name }}
+            </h4>
+            <p class="size">
+                {{ formatBytes(file?.size) }}
+            </p>
+            <nb-progress-bar [value]="file?.progress" size="tiny" [displayValue]="true" status="primary">
+            </nb-progress-bar>
+            <div class="response">
+                <div *ngIf="file?.response">
+                    <p *ngIf="file?.response && file?.progress != 100">
+                        <nb-icon [icon]="'loader-outline'" pack="eva" class="uploading-icon"></nb-icon>Processing...
+                    </p>
+                    <p *ngIf="file?.response.success && file?.progress == 100" class="success-icon">
+                        <nb-icon [icon]="'checkmark-circle-2-outline'" pack="eva"></nb-icon>{{file?.response.message}}
+                    </p>
+                    <p *ngIf="!file?.response.success && file?.progress == 100" class="danger-icon">
+                        <nb-icon [icon]="'close-circle-outline'" pack="eva"></nb-icon>{{file?.response.message}}
+                    </p>
+                </div>
+                <div *ngIf="!file?.response && file?.progress == 100">
+                    <p class="danger-icon">
+                        <nb-icon [icon]="'close-circle-outline'" pack="eva"></nb-icon>No response from server
+                    </p>
+                </div>
+            </div>
+        </div>
+        <nb-icon class="delete" [icon]="'trash-2-outline'" pack="eva" (click)="deleteFile(i)"></nb-icon>
+    </div>
+</div>
