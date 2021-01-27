@@ -95,8 +95,12 @@ def run():
             try:
 
                 # Asset list
-                assets = getAssests(session, DB)
-                print("Retrieved assets")
+                try:
+                    assets = getAssests(session, DB)
+                    print("Retrieved assets")
+                except requests.exceptions.ConnectionError:
+                    print("Exception, re-authenticating.")
+                    break
 
                 # Locations
                 locations = getLocations(session, DB)
