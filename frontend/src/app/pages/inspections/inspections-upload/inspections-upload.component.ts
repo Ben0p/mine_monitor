@@ -104,7 +104,7 @@ export class InspectionsUploadComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', file);
 
-    this.http.post('https://solmm01.fmg.local/api/inspections/upload', formData)
+    this.http.post('http://localhost:5000/api/inspections/upload', formData)
       .subscribe(res => {
         this.files[fileIndex].response = res
         console.log(this.files)

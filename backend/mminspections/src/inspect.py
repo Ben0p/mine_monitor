@@ -113,9 +113,18 @@ def getOrders(DB, work_week):
 
     orders = DB['inspections'].find(
         {
-            'Earlstartdate': {
-                '$gte': work_week
-            }
+            "$or": [
+                {
+                    'Earlstartdate': {
+                        '$gte': work_week
+                    }
+                },
+                {
+                    'Basstartdate': {
+                        '$gte': work_week
+                    }
+                }
+            ]
         }
     )
 
@@ -137,14 +146,14 @@ def matchOrders(ims_assets, work_orders):
         for work_order in work_orders:
             if asset_name in work_order['FunctionalLoc']:
                 matched_assets.append(asset)
- 
+
     return(matched_assets)
 
 
 def matchAudits(assets, audits):
     ''' Matches assets with audits
     '''
-    
+
     matched_audits = []
 
     for asset in assets:
@@ -155,11 +164,11 @@ def matchAudits(assets, audits):
                 site = True
             except KeyError:
                 site = False
-        
+
             if not site:
                 if asset['name'] in audit['audit_data']['name']:
                     matched_audits.append(asset)
-    
+
     return(matched_audits)
 
 
@@ -171,7 +180,7 @@ def processResults(matched_assets, ims_assets, matched_audits):
 
     # Not due for inspection
     for ims_asset in ims_assets:
-        
+
         if ims_asset['location']:
             asset = {}
             asset['display'] = False
@@ -179,21 +188,22 @@ def processResults(matched_assets, ims_assets, matched_audits):
             asset['color_hex'] = '#ff3d71'
             asset['lon'] = str(ims_asset['location']['location'][0])
             asset['lat'] = str(ims_asset['location']['location'][1])
-        else:
-            pass
+
 
         final_results.append(asset)
-    
+
     # Due for inspeciton
     for matched_asset in matched_assets:
 
-        asset = {}
-        asset['display'] = True
-        asset['name'] = matched_asset['name']
-        asset['color_hex'] = '#ff3d71'
-        asset['lon'] = str(matched_asset['location']['location'][0])
-        asset['lat'] = str(matched_asset['location']['location'][1])
-        final_results.append(asset)
+        if matched_asset['location']:
+            asset = {}
+            asset['display'] = True
+            asset['name'] = matched_asset['name']
+            asset['color_hex'] = '#ff3d71'
+            asset['lon'] = str(matched_asset['location']['location'][0])
+            asset['lat'] = str(matched_asset['location']['location'][1])
+            final_results.append(asset)
+
 
     # Complete
     for matched_audit in matched_audits:
@@ -210,10 +220,8 @@ def processResults(matched_assets, ims_assets, matched_audits):
         asset['lon'] = str(matched_audit['location']['location'][0])
         asset['lat'] = str(matched_audit['location']['location'][1])
         final_results.append(asset)
-    
 
     return(final_results)
-        
 
 
 def insertDB(cur, results):
@@ -244,9 +252,10 @@ def run():
     # Establish PostgreSQL connection and create table if it doesn't exist
     # ONCE per script startup
     cur, conn = initPSQL()
-    
+    conn.autocommit = True
+
     # Create table disabled because not really required (left it in for reference)
-    #createTable(cur)
+    # createTable(cur)
 
     # Initialize Mongo connection
     DB = initMongo()
@@ -279,7 +288,8 @@ def run():
         print(f"Matched {len(matched_audits)} audits")
 
         # Colorize
-        final_results = processResults(matched_assets, ims_assets, matched_audits)
+        final_results = processResults(
+            matched_assets, ims_assets, matched_audits)
         print(f"Processed {len(final_results)} assets")
 
         insertDB(cur, final_results)

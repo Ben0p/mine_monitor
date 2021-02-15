@@ -42,6 +42,7 @@ class inspections_upload(Resource):
                             for col_number, column in enumerate(row):
                                 column = column.replace(" ", "")
                                 column = column.replace(".", "")
+                                column = column.replace("\ufeff", "")
                                 headers[col_number] = column
                             continue
 
@@ -49,7 +50,7 @@ class inspections_upload(Resource):
                             
                             values[headers[col_number]] = column
                             
-                            if headers[col_number] == "Earlstartdate":
+                            if headers[col_number] in ["Earlstartdate", "Basstartdate"]:
                                 date = datetime.datetime.strptime(values[headers[col_number]], '%d/%m/%Y')
                                 values[headers[col_number]] = date
 
