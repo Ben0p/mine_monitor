@@ -1,0 +1,13 @@
+<nb-card>
+  <nb-card-body>
+    <div class="status">
+      <div [ngClass]="{'playing': state === 'Playing', 'stopped': state !== 'Playing'}">
+      </div>
+    </div>
+    <div class="track">
+      <b style="font-size: 18px;">{{station}}</b> <br>
+      {{artist}} - {{song}} <br>
+      {{state}}: T-{{t_minus}}
+    </div>
+  </nb-card-body>
+</nb-card>

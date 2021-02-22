@@ -1,0 +1,82 @@
+$blinker_width: 40px;
+$blinker_height: 20px;
+$blinker_margin-top: 15px;
+$blinker_margin-left: 20px;
+$common-height: 84px;
+
+.trailer_container {
+    height: $common-height;
+    width: 155px;
+    margin: auto;
+    overflow: hidden;
+}
+
+.trailer {
+    background-image: url("../../../../assets/images/bc.PNG");
+    background-repeat: no-repeat;
+    background-size: 150px auto;
+    background-position: center top;
+    margin: auto;
+    width: 155px;
+    height: $common-height;
+}
+
+.bc_row {
+    height: $common-height;
+}
+
+.trailer_B_on {
+    border-radius: 5px;
+    background: yellow;
+    width: $blinker_width;
+    height: $blinker_height;
+    margin-left: $blinker_margin-left;
+    margin-top: $blinker_margin-top;
+    box-shadow: 0px 0px 59px 34px rgba(255, 241, 117, 0.8);
+    animation: blinker 1s linear infinite;
+}
+
+.trailer_B_off {
+    border-radius: 5px;
+    background: yellow;
+    width: $blinker_width;
+    height: $blinker_height;
+    margin-left: $blinker_margin-left;
+    margin-top: $blinker_margin-top;
+}
+
+.trailer_C_on {
+    border-radius: 5px;
+    background: red;
+    width: $blinker_width;
+    height: $blinker_height;
+    margin-left: $blinker_margin-left;
+    margin-top: $blinker_margin-top;
+    box-shadow: 0px 0px 59px 34px rgba(255, 106, 106, 0.8);
+    animation: blinker 1s linear infinite;
+}
+
+.trailer_C_off {
+    border-radius: 5px;
+    background: red;
+    width: $blinker_width;
+    height: $blinker_height;
+    margin-left: $blinker_margin-left;
+    margin-top: $blinker_margin-top;
+}
+
+.offline_container {
+    height: 250px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+
+.offline {
+    position: absolute;
+    top: -9999px;
+    bottom: -9999px;
+    left: -9999px;
+    right: -9999px;
+    margin: auto;
+  }

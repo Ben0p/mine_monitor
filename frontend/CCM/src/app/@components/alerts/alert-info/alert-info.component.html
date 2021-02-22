@@ -1,0 +1,93 @@
+<nb-card *ngIf="alert.type != 'Trailer'">
+  <nb-card-header>
+      <nb-icon icon="info-outline"></nb-icon>Information
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item>
+        <b><nb-icon icon="bookmark-outline"></nb-icon>Name</b><br>
+        <span class="subtitle-2">{{alert.name}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="pin-outline"></nb-icon>Location</b><br>
+        <span class="subtitle-2">{{alert.location}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="globe-2-outline"></nb-icon>Zone</b><br>
+        <span class="subtitle-2">{{alert.zone}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="wifi-outline"></nb-icon>IP Address</b><br>
+        <span class="subtitle-2">{{alert.ip}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="options-2-outline"></nb-icon>Type</b><br>
+        <span class="subtitle-2">{{alert.type}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="clipboard-outline"></nb-icon>UID</b><br>
+        <span class="subtitle-2">{{uid}}</span>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>
+<nb-card *ngIf="alert.type == 'Trailer'">
+  <nb-card-header>
+      <nb-icon icon="info-outline"></nb-icon>Information
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list>
+      <nb-list-item>
+        <b><nb-icon icon="pin-outline"></nb-icon>Location</b><br>
+        <span class="subtitle-2">{{alert.location}}</span>
+      </nb-list-item>
+      <nb-list-item>
+        <b><nb-icon icon="options-2-outline"></nb-icon>Type</b><br>
+        <span class="subtitle-2">{{alert.type}}</span>
+      </nb-list-item>
+      <nb-list-item *ngFor="let module of alert.modules">
+        <b>{{module.name}}</b><br>
+        <table>
+          <tr>
+            <td>
+              <div class="column1">
+                <nb-icon icon="globe-2-outline"></nb-icon>Zone
+              </div>
+            </td>
+            <td>
+              <div class="column2">
+                {{module.zone}}
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <nb-icon icon="wifi-outline"></nb-icon>IP
+            </td>
+            <td>
+              {{module.ip}}
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <nb-icon icon="swap-outline"></nb-icon>Latency
+            </td>
+            <td>
+              {{module.latency}}ms
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <nb-icon icon="clipboard-outline"></nb-icon>UID
+            </td>
+            <td>
+              <div class="column2">
+                {{module.uid}}
+              </div>
+            </td>
+          </tr>
+        </table>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>

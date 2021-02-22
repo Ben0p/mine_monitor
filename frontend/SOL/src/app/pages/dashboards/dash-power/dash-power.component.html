@@ -1,0 +1,49 @@
+<div *ngIf="loaded">
+
+  <div class="row">
+    <div class="col-xxl-12">
+      <nb-card>
+        <nb-card-header>
+          Generators
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div *ngFor="let gen of sites.gens" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+              <ngx-gen-status [online]="gen.online" [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel"
+                [level]="gen.fuel_level" [color]="gen.fuel_color" [temps]="gen.temps">
+              </ngx-gen-status>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xxl-12">
+      <nb-card>
+        <nb-card-header>
+          Solar Controllers
+        </nb-card-header>
+        <nb-card-body>
+          <div class="row">
+            <div *ngFor="let solar_data of sites.solars" class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+              <nb-card style="height:300px">
+                <nb-card-header>
+                  {{solar_data.name}}
+                </nb-card-header>
+                <nb-card-body>
+                  <ngx-solar-doughnut [data] = solar_data>
+                  </ngx-solar-doughnut>
+                </nb-card-body>
+                <nb-card-footer>
+                  State: {{solar_data.live.charge_state}}
+                </nb-card-footer>
+              </nb-card>
+            </div>
+          </div>
+        </nb-card-body>
+      </nb-card>
+    </div>
+  </div>
+</div>

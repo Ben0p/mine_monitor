@@ -1,6 +1,0 @@
-<div class="row">
-  <div *ngFor="let wind of winds" class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-    <ngx-wind-speed-card *ngIf="wind.type=='speed'" [location]="wind.name" [speed]="wind.speed" [info]="wind.kmh"
-      [status]="wind.status" [on]="wind.online" routerLink="/pages/wind/{{wind.module_uid.$oid}}" style="cursor: pointer;"></ngx-wind-speed-card>
-  </div>
-</div>

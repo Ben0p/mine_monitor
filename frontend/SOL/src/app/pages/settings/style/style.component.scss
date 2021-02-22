@@ -1,0 +1,22 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+
+  .setting-icon {
+    font-size: 1.5rem;
+  }
+
+  .settings-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0;
+  }
+
+  .switcher {
+    width: 12rem;
+  }
+}

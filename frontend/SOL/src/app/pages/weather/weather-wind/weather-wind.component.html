@@ -1,0 +1,15 @@
+<div *ngIf="loaded">
+    <div class="row" *nbIsGranted="['view', 'weather_wind']">
+        <div *ngFor="let wind_data of wind_datas" class="col-12">
+            <nb-card>
+                <nb-card-header>
+                   Wind Speed and Direction - {{wind_data.location}}
+                </nb-card-header>
+                <nb-card-body>
+                    <ngx-weather-wind-direction [data]=wind_data>
+                    </ngx-weather-wind-direction>
+                </nb-card-body>
+            </nb-card>
+        </div>
+    </div>
+</div>

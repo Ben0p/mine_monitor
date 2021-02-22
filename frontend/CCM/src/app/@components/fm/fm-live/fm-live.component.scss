@@ -1,0 +1,40 @@
+@import '../../../@theme/styles/themes';
+@import '~@nebular/theme/styles/global/breakpoints';
+@import '~bootstrap/scss/mixins/breakpoints';
+
+
+
+.container {
+    width: 100%;
+    height: 100%;
+  }
+
+.status {
+    width: 5%;
+    height: 100%;
+    float: left;
+    border-radius: nb-theme(card-border-radius);
+    margin-left: -4px;
+}
+
+.playing {
+    background-color: nb-theme(color-success-400);
+    height: 100%;
+    width: 100%;
+}
+
+.stopped {
+    background-color: nb-theme(color-danger-400);
+    height: 100%;
+    width: 100%;
+}
+
+.track {
+    padding-left: 4px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+nb-card {
+    height: 6rem;
+}

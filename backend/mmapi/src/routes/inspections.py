@@ -26,7 +26,7 @@ class inspections_upload(Resource):
             file = request.files['file']
 
             if '.csv' in file.filename:
-                try:
+                #try:
                     stream = io.StringIO(
                         file.stream.read().decode("UTF8"), newline=None)
                     count = 0
@@ -51,7 +51,10 @@ class inspections_upload(Resource):
                             values[headers[col_number]] = column
                             
                             if headers[col_number] in ["Earlstartdate", "Basstartdate"]:
-                                date = datetime.datetime.strptime(values[headers[col_number]], '%d/%m/%Y')
+                                try:
+                                    date = datetime.datetime.strptime(values[headers[col_number]], '%d/%m/%Y')
+                                except ValueError:
+                                    date = datetime.datetime.strptime(values[headers[col_number]], '%Y%m%d')
                                 values[headers[col_number]] = date
 
                             # lists
@@ -76,8 +79,8 @@ class inspections_upload(Resource):
                     # All good
                     return({'success': True, 'message': f'Processed {count} rows OK!'})
                 # Error in processing (probably not a SAP export)
-                except:
-                    return({'success': False, 'message': f'Error processing {file.filename}'})
+                #except:
+                #    return({'success': False, 'message': f'Error processing {file.filename}'})
             # Not a .csv
             else:
                 return({'success': False, 'message': f'"{file.filename}" isn\'t a .csv'})

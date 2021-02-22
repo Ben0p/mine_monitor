@@ -1,7 +1,0 @@
-<div class="row" *nbIsGranted="['view', 'gen_status']">
-  <div *ngFor="let gen of gen$" class="col-xxl-2 col-xl-3 col-lg-4 col-md-4 col-sm-6">
-    <ngx-gen-status [online]="gen.online" [name]="gen.name" [oil]="gen.oil" [flex]="gen.flex" [fuel]="gen.fuel"
-      [level]="gen.fuel_level" [color]="gen.fuel_color" [temps]="gen.temps">
-    </ngx-gen-status>
-  </div>
-</div>
