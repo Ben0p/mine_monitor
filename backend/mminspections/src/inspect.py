@@ -146,6 +146,9 @@ def matchOrders(ims_assets, work_orders):
         for work_order in work_orders:
             if asset_name in work_order['FunctionalLoc']:
                 matched_assets.append(asset)
+            elif asset['note']:
+                if work_order['FunctionalLoc'] in asset['note']:
+                    matched_assets.append(asset)
 
     return(matched_assets)
 
